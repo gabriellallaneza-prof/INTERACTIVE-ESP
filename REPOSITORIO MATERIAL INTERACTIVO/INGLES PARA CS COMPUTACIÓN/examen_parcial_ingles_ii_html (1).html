@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen Parcial Inglés II - TUDAI</title>
+    
+    <!-- Tailwind CSS para los estilos visuales -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM (Librerías principales) -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    
+    <!-- Babel (Para compilar JSX en el navegador) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Estilos personalizados para la barra de desplazamiento -->
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+        .custom-scrollbar:hover::-webkit-scrollbar-thumb { background-color: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800">
+    
+    <!-- Contenedor principal de React -->
+    <div id="root"></div>
+
+    <!-- Lógica de la Aplicación -->
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- ICONOS VECTORIALES (SVG Integrados para evitar dependencias externas) ---
+        const IconBookOpen = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>;
+        const IconCheckCircle = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>;
+        const IconAlertCircle = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>;
+        const IconFileText = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>;
+        const IconSave = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>;
+        const IconSend = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>;
+        const IconChevronRight = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="9 18 15 12 9 6"></polyline></svg>;
+        const IconLoader = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>;
+
+        // --- URL DEL GOOGLE APPS SCRIPT (Recepción Centralizada) ---
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzYyp5DIW8Q3k9jWSb8ndJY7I8xzxArtx8rZRFTspRtjgxPwI6eKza6nk8Qsp8Qidq/exec';
+
+        // --- DATOS ACADÉMICOS DEL EXAMEN ---
+        const EXAM_DATA = {
+          subtitles: [
+            "What is a mobile application?",
+            "Transactions on mobile applications",
+            "Specific types of services by means of mobile application",
+            "Types of software for building mobile application",
+            "The goals of mobile application",
+            "Mobile applications and mobile technology development",
+            "Advantages, disadvantages and challenges",
+            "Case study of mobile applications of China",
+            "The impact of Gen AI on the development of Apps"
+          ],
+          keywords: [
+            "Smart home, Smart grid, Internet of things, Smart power control",
+            "Online Social Networks, Monetization, Value Creation, Online Revenue",
+            "Requirements, Plan, Design, Develop, Release, Track and Monitor",
+            "Social Media, Recommender Systems, User security",
+            "Mobile application, Mobile technology, Evolution, Application types",
+            "Software, Hardware, Service platforms, Cloud computing"
+          ],
+          trueFalse: [
+            { id: 'tf1', statement: "Las apps móviles son un tipo de software que puede funcionar tanto en dispositivos inteligentes como computadoras de escritorio o notebooks." },
+            { id: 'tf2', statement: "El proceso de desarrollo de aplicaciones ha permanecido invariable a pesar de las nuevas tecnologías desarrolladas con IA." },
+            { id: 'tf3', statement: "Las aplicaciones híbridas siempre requieren una instalación en el dispositivo, posteriormente pueden requerir, o no, conectividad para funcionar correctamente." },
+            { id: 'tf4', statement: "Según los autores las apps pueden mejorar la productividad y ahorrar tiempo." },
+            { id: 'tf5', statement: "El desarrollo de aplicaciones móviles apunta a llegar a un nicho de usuarios específicos y atender requerimientos efímeros." }
+          ],
+          pronouns: [
+            { id: 'pr1', sentence: "It is a result of recent technological innovations.", word: "It", options: ["una aplicación", "smartphone", "tablet", "tecnología"] },
+            { id: 'pr2', sentence: "That is why many experts believe that because of the simple nature of SMS payments, they will continue to be a prospective area...", word: "they", options: ["los expertos", "los smartphones", "los pagos vía dispositivos", "las tarjetas de crédito"] },
+            { id: 'pr3', sentence: "Because of such things, people started to change their attitude to communication.", word: "such things", options: ["la inclusión de funciones innovadoras", "los primeros teléfonos móviles", "los desarrollos privados", "la fabricación estandarizada"] },
+            { id: 'pr4', sentence: "Most of these people prefer mobile applications because they are easy in use and perform tasks instantly.", word: "they", options: ["las aplicaciones", "los usuarios", "las tareas", "las redes de comunicación"] }
+          ],
+          explanations: [
+            "In this increasingly digital world, it is not surprising that money will follow suit as well.",
+            "The widespread use of mobile devices in various settings, including buses, trains, offices, colleges, and universities, can be disruptive to others."
+          ],
+          summaries: [
+            { id: 'res1', title: 'Resumen 1', text: 'This article comprehensively examines the evolution of mobile applications within the context of rapidly advancing mobile technology, encompassing mobile communication, hardware, and software development. The authors trace the developmental trajectory of mobile applications, highlighting the pivotal role of software in shaping the features of mobile phones in the contemporary digital age.' },
+            { id: 'res2', title: 'Resumen 2', text: 'Este artículo examina exhaustivamente la evolución de las aplicaciones móviles en el contexto del rápido avance de la tecnología móvil, que abarca la comunicación móvil, el hardware y el desarrollo de software. El trabajo subraya el impacto transformador del nuevo software, las plataformas de servicios y los kits de desarrollo de software (SDK), lo que lleva al surgimiento de plataformas dominantes como Android e iOS.' },
+            { id: 'res3', title: 'Resumen 3', text: 'Este artículo explora la evolución de las aplicaciones móviles dentro del contexto del avance de la tecnología móvil, incluyendo la comunicación, el hardware y el software. Se enfatiza la atención prestada a las telecomunicaciones móviles por parte de fabricantes, proveedores de servicios, desarrolladores e investigadores de TI, centrándose en la evolución de estas aplicaciones y los retos futuros.' },
+            { id: 'res4', title: 'Resumen 4', text: 'Bueno, este artículo habla sobre cómo han cambiado las aplicaciones de los celulares, ¿viste? O sea, esas cosas que bajamos para usar el celu para todo. Resulta que la tecnología de los celulares cambió un montón en poco tiempo. Cambió la forma en que hablamos por teléfono, los aparatos en sí y también los programas que hacen que funcionen.' }
+          ]
+        };
+
+        // --- COMPONENTE PRINCIPAL ---
+        function App() {
+          const [submitting, setSubmitting] = useState(false);
+          const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+          const [studentName, setStudentName] = useState('');
+          
+          const [hasStarted, setHasStarted] = useState(false);
+          const [isBlocked, setIsBlocked] = useState(false);
+          const [warnings, setWarnings] = useState(0);
+          const [examFinished, setExamFinished] = useState(false);
+
+          const [answers, setAnswers] = useState({
+            subtitles: {},
+            keyword: '',
+            trueFalse: {},
+            tfJustifications: {},
+            pronouns: {},
+            explanations: {},
+            summary: '',
+            summaryJustification: ''
+          });
+
+          // Anti-cheat: Bloqueo de visibilidad (detectar si cambia de pestaña)
+          useEffect(() => {
+            if (!hasStarted) return;
+
+            const handleVisibilityChange = () => {
+              if (document.hidden) {
+                setIsBlocked(true);
+                setWarnings(prev => prev + 1);
+              }
+            };
+
+            document.addEventListener("visibilitychange", handleVisibilityChange);
+
+            return () => {
+              document.removeEventListener("visibilitychange", handleVisibilityChange);
+            };
+          }, [hasStarted]);
+
+          const startExam = () => {
+            if (!studentName.trim()) {
+              showToast("Por favor, ingresa tu nombre y apellido antes de comenzar.", "error");
+              return;
+            }
+            setHasStarted(true);
+          };
+
+          const resumeExam = () => {
+            setIsBlocked(false);
+          };
+
+          const showToast = (message, type) => {
+            setToast({ show: true, message, type });
+            setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 4500);
+          };
+
+          // Manejar envío directo a Google Sheets
+          const submitExam = async () => {
+            if (!studentName.trim()) {
+              showToast("Por favor, ingresa tu nombre y apellido antes de enviar.", "error");
+              return;
+            }
+
+            setSubmitting(true);
+            
+            // Estructuración académica del payload para Sheets
+            const payload = {
+              studentName: studentName,
+              subtitles: EXAM_DATA.subtitles.map((sub, i) => `${sub}: Sec. ${answers.subtitles[i] || '-'}`).join('\n'),
+              keywords: answers.keyword || 'Sin responder',
+              trueFalse: EXAM_DATA.trueFalse.map((q) => {
+                const val = answers.trueFalse[q.id];
+                const res = val === 'true' ? 'Verdadero' : val === 'false' ? 'Falso' : 'Sin responder';
+                const just = val === 'false' ? ` | Just: ${answers.tfJustifications[q.id] || 'Sin justificar'}` : '';
+                return `- ${q.statement} \n  R: ${res}${just}`;
+              }).join('\n\n'),
+              pronouns: EXAM_DATA.pronouns.map(q => `${q.word}: ${answers.pronouns[q.id] || '-'}`).join('\n'),
+              explanations: EXAM_DATA.explanations.map((exp, idx) => `"${exp}"\n  R: ${answers.explanations[idx] || '-'}`).join('\n\n'),
+              summary: `${answers.summary || 'Sin responder'}\nJustificación: ${answers.summaryJustification || 'Sin justificar'}`,
+              warnings: warnings
+            };
+
+            try {
+              // Petición asíncrona no-cors al servicio web de Google
+              const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'text/plain;charset=utf-8',
+                },
+                body: JSON.stringify(payload)
+              });
+
+              setExamFinished(true);
+            } catch (error) {
+              console.error("Error en el envío:", error);
+              showToast("Error de conexión al enviar el examen. Revise su internet e intente de nuevo.", "error");
+            } finally {
+              setSubmitting(false);
+            }
+          };
+
+          // --- VISTAS DEL COMPONENTE ---
+
+          // Vista 1: Pantalla de Inicio
+          if (!hasStarted) {
+            return (
+              <div className="flex items-center justify-center min-h-screen bg-slate-50 p-4">
+                <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+                  <IconBookOpen className="w-16 h-16 text-blue-600 mx-auto mb-4" />
+                  <h1 className="text-2xl font-bold text-slate-800 mb-2">Examen Parcial: Inglés II</h1>
+                  <p className="text-sm text-slate-500 mb-6 font-medium">Ingeniería en Sistemas / TUDAI</p>
+                  
+                  <div className="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-md text-sm text-left mb-6">
+                    <span className="font-bold block mb-1">⚠️ AVISO DE SEGURIDAD</span>
+                    El examen está siendo monitoreado por el sistema de la cátedra. Si cambia de pestaña o minimiza el navegador web, <strong>el examen se bloqueará</strong> y se registrará una advertencia en su hoja de calificaciones.
+                  </div>
+                  
+                  <input 
+                    type="text" 
+                    placeholder="Ingrese su Apellido y Nombre completo" 
+                    className="w-full px-4 py-3 border border-slate-300 rounded-md mb-6 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                    value={studentName}
+                    onChange={(e) => setStudentName(e.target.value)}
+                  />
+                  <button onClick={startExam} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md transition-colors shadow-md">
+                    Comenzar Examen
+                  </button>
+                </div>
+                
+                {toast.show && (
+                  <div className="fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center bg-red-100 text-red-800 border border-red-200">
+                    <IconAlertCircle className="w-5 h-5 mr-2" />
+                    {toast.message}
+                  </div>
+                )}
+              </div>
+            );
+          }
+
+          // Vista 2: Examen Finalizado
+          if (examFinished) {
+            return (
+              <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+                <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+                  <IconCheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                  <h1 className="text-3xl font-bold text-slate-800 mb-4">¡Examen Entregado!</h1>
+                  <p className="text-slate-600 mb-6 text-lg">
+                    Muchas gracias, <strong>{studentName}</strong>.
+                  </p>
+                  <div className="bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-lg text-sm text-left mb-6">
+                    Sus respuestas han sido encriptadas y guardadas correctamente en la base de datos central de la cátedra mediante Google Sheets. Ya puede cerrar esta ventana con seguridad.
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          // Vista 3: Entorno de Evaluación (Pantalla Dividida)
+          return (
+            <div className="min-h-screen bg-slate-50 font-sans text-slate-800 flex flex-col">
+              
+              {/* Notificaciones */}
+              {toast.show && (
+                <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center transition-all ${toast.type === 'success' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'}`}>
+                  {toast.type === 'success' ? <IconCheckCircle className="w-5 h-5 mr-2" /> : <IconAlertCircle className="w-5 h-5 mr-2" />}
+                  {toast.message}
+                </div>
+              )}
+
+              {/* Cabecera Principal */}
+              <header className="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-blue-600 p-2 rounded-lg hidden sm:block">
+                      <IconFileText className="text-white w-5 h-5" />
+                    </div>
+                    <div>
+                      <h1 className="text-lg font-bold text-slate-900 leading-tight">Examen Parcial: Inglés II</h1>
+                      <p className="text-xs font-semibold text-slate-500">
+                        Alumno/a: <span className="text-slate-800">{studentName}</span> | Alertas: <span className={warnings > 0 ? "text-red-600 font-bold" : "text-slate-800"}>{warnings}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2 sm:space-x-4">
+                    <button 
+                      onClick={submitExam}
+                      disabled={submitting}
+                      className="flex items-center px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors shadow-sm disabled:opacity-70"
+                    >
+                      {submitting ? <IconLoader className="w-4 h-4 mr-2 animate-spin" /> : <IconSend className="w-4 h-4 mr-2" />}
+                      {submitting ? 'Procesando...' : 'Entregar Examen'}
+                    </button>
+                  </div>
+                </div>
+              </header>
+
+              {/* Contenido a Pantalla Dividida */}
+              <div className="flex-1 max-w-7xl mx-auto w-full flex flex-col md:flex-row overflow-hidden h-[calc(100vh-4rem)]">
+                
+                {/* Panel Izquierdo: Texto Académico */}
+                <div className="w-full md:w-1/2 lg:w-5/12 bg-white border-r border-slate-200 overflow-y-auto p-6 lg:p-8 custom-scrollbar">
+                  <div className="flex items-center text-blue-600 mb-6">
+                    <IconBookOpen className="w-5 h-5 mr-2" />
+                    <h2 className="text-xl font-bold">Texto Fuente</h2>
+                  </div>
+                  
+                  <article className="prose prose-slate prose-sm max-w-none text-justify">
+                    <h1 className="text-2xl font-bold mb-4">EVOLUTION OF MOBILE APPLICATIONS</h1>
+                    
+                    <p className="font-bold text-slate-400 mb-1 mt-6">Sección 1</p>
+                    <p>A mobile application is a software application designed to run on mobile devices such as smartphones and tablet computers. <strong>It</strong> is a result of recent technological innovations. Mobile applications have appeared because of the convergence of media, information technology, Internet and advanced technologies. In addition, for many years, mobile telecommunications have been under investigation by mobile device manufactures, mobile service providers, application developers, and many researchers. However, the most interesting area for research is mobile application evolution.</p>
+                    
+                    <p className="font-bold text-slate-400 mb-1 mt-6">Sección 2</p>
+                    <p>Mobile devices and smartphones can be still considered as new ideas in the technology community. Compared to personal computers and laptops, the common mobile smartphones have only been around for a couple of years now. This leads to an interesting area of discussion on mobile payments online. <strong>In this increasingly digital world, it is not surprising that money will follow suit as well.</strong> Recent trends show that digital money kept in mobile wallets will soon replace physical cash and even credit cards. <strong>We</strong> can buy most products and services online these days via our laptops and mobile devices. SMS payments are currently one of the most popular methods. That is why many experts believe that because of the simple nature of SMS payments, <strong>they</strong> will continue to be a prospective area in mobile payments.</p>
+
+                    <p className="font-bold text-slate-400 mb-1 mt-6">Sección 3</p>
+                    <p>There are four specific types of services, which can be made of mobile application: Browser Access (native browser), Hybrid Apps – Web (requires Internet), Hybrid Apps – Mixed (install application and function may require Internet. <strong>This category</strong> also includes medical apps), and Native Apps (installed in the device).</p>
+
+                    <p className="font-bold text-slate-400 mb-1 mt-6">Sección 4</p>
+                    <p>With a small investment, you can create and manage your mobile site or application using platforms like Appery.io, Mobile Roadie, TheAppbuilder, Good Barber, AppMachine, etc.</p>
+
+                    <p className="font-bold text-slate-400 mb-1 mt-6">Sección 5</p>
+                    <p>The goal for developing mobile applications is to provide conditions when maximum number of users use applications for maximum time. This means that the app developed should have the appropriate quality and purpose. Applications should meet requirements: conformance to purposes, reach majority of users, security, user-friendly, supporting continuous improvement.</p>
+
+                    <p className="font-bold text-slate-400 mb-1 mt-6">Sección 6</p>
+                    <p><strong>3.1 How do applications facilitate society?</strong> Quick search of job vacancy, quick communication, considerable cost saving, saving time and increasing productivity, entertainment. <br/>
+                    <strong>3.2 Generations:</strong> The handset manufacturers designed and developed mobile phones of the first-generation. The competition was fierce and trade secrets were guarded. Because of <strong>such things</strong>, people started to change their attitude to communication. <br/>
+                    <strong>3.3 Why necessary?</strong> Almost 80% of people are online through mobile devices. Most of these people prefer mobile applications because <strong>they</strong> are easy in use and perform tasks instantly.</p>
+
+                    <p className="font-bold text-slate-400 mb-1 mt-6">Sección 7 & 8</p>
+                    <p><strong>Advantages:</strong> Apps are a constant reminder of your business, increase customer engagement, reduce costs. <br/>
+                    <strong>Disadvantages:</strong> <strong>The widespread use of mobile devices in various settings, including buses, trains, offices, colleges, and universities, can be disruptive to others.</strong> Frequent use of mobile applications can have detrimental effects on human health. <br/>
+                    <strong>Challenges:</strong> Make app visible, platform capability (small screen size, navigation, speed, cost). <br/>
+                    <strong>China Case Study:</strong> China is the biggest mobile phone market. However, most of applications revenue in China are made inside the application, which includes all the purchases inside the app.</p>
+                  </article>
+                </div>
+
+                {/* Panel Derecho: Formulario Interactivo */}
+                <div className="w-full md:w-1/2 lg:w-7/12 bg-slate-50 overflow-y-auto p-6 lg:p-8 custom-scrollbar">
+                  <div className="max-w-3xl mx-auto space-y-10">
+                    
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800 shadow-sm">
+                      <strong>Instrucciones:</strong> Lea el texto a la izquierda y resuelva las consignas en castellano. Al finalizar, presione "Entregar Examen".
+                    </div>
+
+                    {/* Consigna 1 */}
+                    <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                      <div className="flex items-start mb-4">
+                        <span className="flex items-center justify-center bg-blue-600 text-white rounded-full w-6 h-6 text-sm font-bold mr-3 mt-0.5">1</span>
+                        <div>
+                          <h3 className="font-bold text-lg">Organización del Texto</h3>
+                          <p className="text-slate-500 text-sm">Numere los siguientes subtítulos de acuerdo a la Sección del texto (1 al 8). Deje en blanco los que no correspondan.</p>
+                        </div>
+                      </div>
+                      <div className="space-y-3 pl-9">
+                        {EXAM_DATA.subtitles.map((sub, idx) => (
+                          <div key={idx} className="flex items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-100 hover:border-blue-200 transition-colors">
+                            <span className="text-sm text-slate-700">{sub}</span>
+                            <select 
+                              className="ml-4 border border-slate-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 outline-none w-24 bg-white"
+                              value={answers.subtitles[idx] || ''}
+                              onChange={(e) => setAnswers(prev => ({ ...prev, subtitles: { ...prev.subtitles, [idx]: e.target.value } }))}
+                            >
+                              <option value="">--</option>
+                              {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
+                                <option key={num} value={num}>Sección {num}</option>
+                              ))}
+                            </select>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+
+                    {/* Consigna 2 */}
+                    <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                       <div className="flex items-start mb-4">
+                        <span className="flex items-center justify-center bg-blue-600 text-white rounded-full w-6 h-6 text-sm font-bold mr-3 mt-0.5">2</span>
+                        <div>
+                          <h3 className="font-bold text-lg">Palabras Claves</h3>
+                          <p className="text-slate-500 text-sm">Indique cuál de los siguientes grupos de palabras corresponde a las palabras claves del artículo.</p>
+                        </div>
+                      </div>
+                      <div className="space-y-2 pl-9">
+                        {EXAM_DATA.keywords.map((kw, idx) => (
+                          <label key={idx} className="flex items-start p-3 rounded-lg border border-slate-100 hover:bg-blue-50 cursor-pointer transition-colors">
+                            <input 
+                              type="radio" 
+                              name="keywords" 
+                              className="mt-1 w-4 h-4 text-blue-600 border-slate-300 focus:ring-blue-500" 
+                              value={kw}
+                              checked={answers.keyword === kw}
+                              onChange={(e) => setAnswers(prev => ({ ...prev, keyword: e.target.value }))}
+                            />
+                            <span className="ml-3 text-sm text-slate-700">{kw}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </section>
+
+                    {/* Consigna 3 */}
+                    <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                       <div className="flex items-start mb-4">
+                        <span className="flex items-center justify-center bg-blue-600 text-white rounded-full w-6 h-6 text-sm font-bold mr-3 mt-0.5">3</span>
+                        <div>
+                          <h3 className="font-bold text-lg">Verdadero o Falso</h3>
+                          <p className="text-slate-500 text-sm">Indique si las afirmaciones son verdaderas o falsas. Justifique <span className="font-bold">sólo las falsas</span>.</p>
+                        </div>
+                      </div>
+                      <div className="space-y-6 pl-9">
+                        {EXAM_DATA.trueFalse.map((q) => (
+                          <div key={q.id} className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <p className="text-sm font-medium text-slate-800 mb-3">{q.statement}</p>
+                            <div className="flex space-x-6 mb-3">
+                              <label className="flex items-center cursor-pointer">
+                                <input type="radio" name={`tf_${q.id}`} value="true" checked={answers.trueFalse[q.id] === 'true'} onChange={(e) => setAnswers(prev => ({ ...prev, trueFalse: { ...prev.trueFalse, [q.id]: e.target.value } }))} className="w-4 h-4 text-blue-600" />
+                                <span className="ml-2 text-sm">Verdadero</span>
+                              </label>
+                              <label className="flex items-center cursor-pointer">
+                                <input type="radio" name={`tf_${q.id}`} value="false" checked={answers.trueFalse[q.id] === 'false'} onChange={(e) => setAnswers(prev => ({ ...prev, trueFalse: { ...prev.trueFalse, [q.id]: e.target.value } }))} className="w-4 h-4 text-blue-600" />
+                                <span className="ml-2 text-sm">Falso</span>
+                              </label>
+                            </div>
+                            {answers.trueFalse[q.id] === 'false' && (
+                              <div className="mt-3 animate-in fade-in slide-in-from-top-2">
+                                <label className="block text-xs font-semibold text-slate-500 mb-1">Justificación obligatoria:</label>
+                                <textarea 
+                                  className="w-full border border-red-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-red-500 outline-none resize-none"
+                                  rows="2"
+                                  placeholder="Escriba la justificación basada en el texto..."
+                                  value={answers.tfJustifications[q.id] || ''}
+                                  onChange={(e) => setAnswers(prev => ({ ...prev, tfJustifications: { ...prev.tfJustifications, [q.id]: e.target.value } }))}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+
+                    {/* Consigna 4 */}
+                    <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                       <div className="flex items-start mb-4">
+                        <span className="flex items-center justify-center bg-blue-600 text-white rounded-full w-6 h-6 text-sm font-bold mr-3 mt-0.5">4</span>
+                        <div>
+                          <h3 className="font-bold text-lg">Referencias de Pronombres</h3>
+                          <p className="text-slate-500 text-sm">Indique a qué hacen referencia las palabras en negrita.</p>
+                        </div>
+                      </div>
+                      <div className="space-y-4 pl-9">
+                        {EXAM_DATA.pronouns.map((q) => (
+                          <div key={q.id} className="border-b border-slate-100 pb-4 last:border-0 last:pb-0">
+                            <p className="text-sm text-slate-700 italic mb-2">"... {q.sentence.replace(q.word, '')} <strong className="bg-yellow-100 text-slate-900 px-1 rounded">{q.word}</strong> ..."</p>
+                            <select 
+                              className="w-full border border-slate-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-slate-50"
+                              value={answers.pronouns[q.id] || ''}
+                              onChange={(e) => setAnswers(prev => ({ ...prev, pronouns: { ...prev.pronouns, [q.id]: e.target.value } }))}
+                            >
+                              <option value="">Seleccione a qué hace referencia...</option>
+                              {q.options.map((opt, idx) => (
+                                <option key={idx} value={opt}>{opt}</option>
+                              ))}
+                            </select>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+
+                    {/* Consigna 5 */}
+                    <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                       <div className="flex items-start mb-4">
+                        <span className="flex items-center justify-center bg-blue-600 text-white rounded-full w-6 h-6 text-sm font-bold mr-3 mt-0.5">5</span>
+                        <div>
+                          <h3 className="font-bold text-lg">Explicación en Contexto</h3>
+                          <p className="text-slate-500 text-sm">Explique el significado de estas oraciones en el contexto del artículo (en castellano).</p>
+                        </div>
+                      </div>
+                      <div className="space-y-5 pl-9">
+                        {EXAM_DATA.explanations.map((sentence, idx) => (
+                          <div key={idx}>
+                            <p className="text-sm font-medium text-slate-800 bg-slate-100 p-3 rounded-t-md border border-slate-200 border-b-0">
+                              "{sentence}"
+                            </p>
+                            <textarea 
+                              className="w-full border border-slate-200 rounded-b-md p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none min-h-[80px]"
+                              placeholder="Escriba su explicación aquí..."
+                              value={answers.explanations[idx] || ''}
+                              onChange={(e) => setAnswers(prev => ({ ...prev, explanations: { ...prev.explanations, [idx]: e.target.value } }))}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+
+                    {/* Consigna 6 */}
+                    <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-8">
+                       <div className="flex items-start mb-4">
+                        <span className="flex items-center justify-center bg-blue-600 text-white rounded-full w-6 h-6 text-sm font-bold mr-3 mt-0.5">6</span>
+                        <div>
+                          <h3 className="font-bold text-lg">Comprensión Global</h3>
+                          <p className="text-slate-500 text-sm">Lea atentamente los siguientes resúmenes, seleccione el más apropiado y justifique su elección.</p>
+                        </div>
+                      </div>
+                      <div className="pl-9 space-y-6">
+                        <div className="flex flex-col space-y-4">
+                          {EXAM_DATA.summaries.map((res) => (
+                            <label key={res.id} className={`flex flex-col p-4 border rounded-lg cursor-pointer transition-all ${answers.summary === res.title ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500' : 'border-slate-200 hover:border-blue-300 bg-slate-50'}`}>
+                              <div className="flex items-center mb-2">
+                                <input 
+                                  type="radio" 
+                                  name="summary" 
+                                  value={res.title}
+                                  checked={answers.summary === res.title}
+                                  onChange={(e) => setAnswers(prev => ({ ...prev, summary: e.target.value }))}
+                                  className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                                />
+                                <span className="ml-3 font-bold text-slate-800">{res.title}</span>
+                              </div>
+                              <p className="text-sm text-slate-600 ml-7 text-justify">{res.text}</p>
+                            </label>
+                          ))}
+                        </div>
+                        
+                        <div className="mt-4">
+                          <label className="block text-sm font-semibold text-slate-700 mb-2">Justificación de su elección:</label>
+                          <textarea 
+                            className="w-full border border-slate-300 rounded-md p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none min-h-[100px]"
+                            placeholder="¿Por qué este resumen captura mejor la esencia del texto fuente?"
+                            value={answers.summaryJustification || ''}
+                            onChange={(e) => setAnswers(prev => ({ ...prev, summaryJustification: e.target.value }))}
+                          />
+                        </div>
+                      </div>
+                    </section>
+
+                    {/* Botón de envío inferior */}
+                    <div className="pt-4 pb-12 flex justify-end">
+                       <button 
+                        onClick={submitExam}
+                        disabled={submitting}
+                        className="flex items-center px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-70 text-white font-bold rounded-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-lg"
+                      >
+                        {submitting ? <IconLoader className="w-5 h-5 mr-3 animate-spin" /> : null}
+                        {submitting ? 'Enviando a base de datos...' : 'Entregar Examen Oficialmente'}
+                        {!submitting && <IconChevronRight className="w-6 h-6 ml-2" />}
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Modal de Bloqueo Anti-trampa */}
+              {isBlocked && (
+                <div className="fixed inset-0 z-50 bg-red-600 flex flex-col items-center justify-center p-4 text-center">
+                  <IconAlertCircle className="w-24 h-24 text-white mb-6 animate-pulse" />
+                  <h2 className="text-4xl font-bold text-white mb-4">EXAMEN BLOQUEADO</h2>
+                  <p className="text-xl text-red-100 mb-8 max-w-2xl">
+                    Se ha detectado actividad fuera de la pantalla de evaluación. Esta acción ha sido registrada como una advertencia académica.
+                    <br/><br/>
+                    Advertencias actuales: <strong className="text-3xl bg-white text-red-600 px-3 py-1 rounded ml-2">{warnings}</strong>
+                  </p>
+                  <button 
+                    onClick={resumeExam}
+                    className="px-8 py-4 bg-white text-red-600 font-bold rounded-lg text-lg hover:bg-red-50 transition-colors shadow-lg"
+                  >
+                    Asumir Advertencia y Reanudar
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        }
+
+        // --- INICIALIZACIÓN ---
+        const rootElement = document.getElementById('root');
+        const root = ReactDOM.createRoot(rootElement);
+        root.render(<App />);
+    </script>
+</body>
+</html>

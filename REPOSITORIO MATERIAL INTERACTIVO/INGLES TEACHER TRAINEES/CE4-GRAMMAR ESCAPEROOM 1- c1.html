@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Labyrinth of SLA: A C1 Escape Room</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        labyrinth: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            200: '#e7e5e4',
+                            700: '#44403c',
+                            800: '#292524',
+                            900: '#1c1917',
+                        },
+                        academic: {
+                            gold: '#d97706',
+                            bronze: '#b45309',
+                            teal: '#0f766e',
+                            navy: '#0f172a'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800 min-h-screen flex flex-col selection:bg-amber-150">
+
+    <!-- Navbar / Escape Room Progress Bar -->
+    <header class="bg-academic-navy text-white sticky top-0 z-40 shadow-md border-b-2 border-academic-gold px-4 py-3">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <span class="bg-academic-gold text-stone-950 font-bold px-2 py-0.5 rounded text-[10px] tracking-wider uppercase font-mono animate-pulse">Labyrinth Active</span>
+                <div>
+                    <h1 class="text-base font-extrabold tracking-tight">The Labyrinth of SLA</h1>
+                    <p class="text-[10px] text-stone-400">C1 Language &amp; Affective Awareness Module</p>
+                </div>
+            </div>
+
+            <!-- Lock and Key / Escape Tracker -->
+            <div class="flex items-center gap-6 w-full sm:w-auto justify-between sm:justify-end">
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] uppercase font-bold tracking-wider text-stone-400">Curriculum Keys:</span>
+                    <div class="flex gap-1" id="key-tracker">
+                        <!-- Filled by JS based on completed chambers -->
+                    </div>
+                </div>
+                <div class="h-8 w-px bg-stone-800 hidden sm:block"></div>
+                <button onclick="toggleGrammarVault()" class="bg-academic-teal hover:bg-teal-700 text-white font-bold text-xs py-1.5 px-3 rounded-lg transition flex items-center gap-1.5 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    Grammar Vault
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Game Area -->
+    <main class="max-w-4xl mx-auto px-4 py-8 flex-grow w-full relative">
+
+        <!-- CHAMBER CARD CONTAINER -->
+        <div class="bg-white rounded-2xl shadow-xl border border-stone-200 overflow-hidden" id="chamber-card">
+            
+            <!-- CHAMBER HEADER -->
+            <div class="bg-gradient-to-r from-stone-900 to-stone-800 text-stone-150 px-6 py-4 border-b border-stone-700 flex justify-between items-center">
+                <div>
+                    <span class="text-[9px] uppercase font-mono text-academic-gold tracking-widest font-semibold" id="chamber-badge">Chamber 1 of 6</span>
+                    <h2 class="text-base font-bold text-white" id="chamber-title">The Hall of Aspectual Gates</h2>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] font-mono text-stone-400 block">Status:</span>
+                    <span class="text-xs font-mono text-amber-500 font-bold" id="chamber-lock-status">🔒 LOCKED</span>
+                </div>
+            </div>
+
+            <!-- STORY / NARRATIVE INJECTION -->
+            <div class="bg-stone-50 border-b border-stone-200 px-6 py-4 text-xs text-stone-600 italic flex items-start gap-3">
+                <span class="text-xl">🎙️</span>
+                <p id="narrative-text">"You awake inside the Curriculum Evaluation Department. The heavy oak doors are sealed. A strange linguistic console flickers on the wall. To proceed, you must demonstrate how semantic choice shifts the reality of SLA instructions..."</p>
+            </div>
+
+            <!-- TASK AREA -->
+            <div class="p-6" id="interactive-task-body">
+                <!-- Dynamically Injected Questions for the active Chamber -->
+            </div>
+
+            <!-- CHAMBER NAVIGATION & VERIFICATION FOOTER -->
+            <div class="bg-stone-50 px-6 py-4 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <button onclick="prevChamber()" id="prev-btn" class="w-full sm:w-auto px-4 py-2 text-xs font-bold border border-stone-300 text-stone-600 rounded-lg hover:bg-stone-150 transition disabled:opacity-40 disabled:cursor-not-allowed">
+                    ← Retreat
+                </button>
+                <div class="flex flex-wrap gap-2 w-full sm:w-auto justify-end">
+                    <button onclick="revealSolutions()" id="reveal-btn" class="hidden px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg transition shadow-sm">
+                        Reveal Options / Auto-solve 💡
+                    </button>
+                    <button onclick="verifyChamber()" id="verify-btn" class="w-full sm:w-auto px-5 py-2.5 bg-academic-navy hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition shadow-sm">
+                        Verify Answers &amp; Unlock Gate
+                    </button>
+                    <button onclick="nextChamber()" id="next-btn" class="w-full sm:w-auto px-5 py-2.5 bg-academic-gold hover:bg-amber-600 text-white font-bold text-xs rounded-lg transition shadow-sm hidden">
+                        Advance to Next Chamber →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- TOGGLEABLE GRAMMAR VAULT (SIDEBAR / MODAL PANEL) -->
+    <div id="grammar-vault" class="fixed inset-y-0 right-0 max-w-lg w-full bg-white shadow-2xl border-l border-stone-200 z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col hidden">
+        <div class="bg-academic-navy text-white px-6 py-5 border-b border-slate-800 flex items-center justify-between">
+            <div>
+                <h3 class="font-extrabold text-sm tracking-wide text-academic-gold uppercase">Grammar Support Vault</h3>
+                <p class="text-[10px] text-stone-400">C1 Curricular Reference Records</p>
+            </div>
+            <button onclick="toggleGrammarVault()" class="text-stone-400 hover:text-white transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="p-4 border-b border-stone-100 bg-stone-50">
+            <input type="text" id="vault-search" oninput="filterVault()" placeholder="Search grammatical definitions or frameworks..." class="w-full text-xs px-3 py-2 border border-stone-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-academic-teal">
+        </div>
+
+        <!-- Content Area -->
+        <div class="p-6 overflow-y-auto flex-grow space-y-6" id="vault-content">
+            <!-- Dynamically populated reference cards -->
+        </div>
+    </div>
+
+    <!-- ESCAPE COMPLETED / CONGRATULATIONS MODAL -->
+    <div id="escape-success-modal" class="fixed inset-0 bg-stone-950/80 backdrop-blur-md flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl border border-stone-200 max-w-2xl w-full overflow-hidden transform scale-95 transition-all">
+            <div class="bg-gradient-to-r from-academic-gold to-amber-700 text-stone-950 p-8 text-center border-b border-amber-600">
+                <span class="text-4xl">🔑🏆</span>
+                <h2 class="text-2xl font-extrabold tracking-tight mt-3">Labyrinth Fully Unlocked!</h2>
+                <p class="text-xs text-stone-900 font-medium max-w-md mx-auto mt-1">
+                    You have demonstrated exemplary C1 language awareness, resolving syntactic dilemmas and administering empathetic feedback flawlessly.
+                </p>
+            </div>
+            
+            <div class="p-6 space-y-6">
+                <h3 class="font-bold text-xs text-stone-800 uppercase tracking-wider">Your Curriculum Escape Card</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-stone-50 border border-stone-200 rounded-xl p-4 space-y-2 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-stone-500">Chamber 1 Syntax:</span>
+                            <span class="font-bold text-emerald-700">Unlocked ✓</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-stone-500">Chamber 2 Collocations:</span>
+                            <span class="font-bold text-emerald-700">Unlocked ✓</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-stone-500">Chamber 3 Scaffold Compassion:</span>
+                            <span class="font-bold text-emerald-700">Unlocked ✓</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-stone-500">Chamber 4 Contrast Linkers:</span>
+                            <span class="font-bold text-emerald-700">Unlocked ✓</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-stone-500">Chamber 5 Pedagogical Draft:</span>
+                            <span class="font-bold text-emerald-700">Unlocked ✓</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-stone-500">Chamber 6 Diagnostics:</span>
+                            <span class="font-bold text-emerald-700">Unlocked ✓</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-50/50 border border-amber-200 rounded-xl p-4 flex flex-col justify-between text-xs">
+                        <div>
+                            <span class="bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-bold uppercase tracking-wider text-[9px]">SLA Portfolio</span>
+                            <h4 class="font-bold text-stone-900 mt-2">Download Portfolio &amp; Answer Keys</h4>
+                            <p class="text-stone-600 text-[11px] leading-relaxed mt-1">
+                                Generates a print-ready Markdown syllabus file. It logs your custom drafts, scores, L1 alerts, and complete annotated answers.
+                            </p>
+                        </div>
+                        <button onclick="downloadEscapePortfolio()" class="w-full mt-4 bg-academic-navy hover:bg-slate-800 text-white font-bold text-xs py-2.5 rounded-lg flex items-center justify-center gap-2 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            Export Study Portfolio (.md)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALERT MODAL -->
+    <div id="alert-modal" class="fixed inset-0 bg-stone-950/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white rounded-xl shadow-xl border border-stone-200 max-w-md w-full p-6 text-center transform scale-95 transition-all">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-brand-100 text-brand-600 mb-4" id="modal-icon-holder">
+                <!-- SVG -->
+            </div>
+            <h3 class="text-base font-bold text-stone-900" id="modal-heading">Linguistic Notification</h3>
+            <p class="text-xs text-stone-500 mt-2 leading-relaxed" id="modal-message">Notification context placeholder.</p>
+            <div class="mt-6">
+                <button onclick="closeAlertModal()" class="w-full py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-lg transition duration-150">
+                    Acknowledge
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Footer -->
+    <footer class="bg-academic-navy text-stone-400 text-[10px] py-6 border-t border-stone-800">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p>&copy; 2026 The Labyrinth of SLA. Argentine ELF Teacher Training Initiative.</p>
+        </div>
+    </footer>
+
+    <!-- App Logic Script -->
+    <script>
+        // Grammar Support Vault Records
+        const vaultRecords = [
+            { id: 1, title: "Aspectual Shift: Gerund vs. Infinitive", group: "Verbs", definition: "A classic C1 syntactic distinction. Gerunds (-ing) represent an ongoing, experienced activity, while Infinitives (to-do) denote potential, intent, or purpose.", alerts: "Argentine students often fail to notice context changes, assuming both options are fully interchangeable.", code: "try + -ing (experiment with) vs. try + to (exert mental effort)" },
+            { id: 2, title: "Adverb-Adjective Collocations", group: "Vocabulary", definition: "High-level modifier collocation sets (e.g. diametrically, radically) used in academic writing to express fine gradations of intensity.", alerts: "Eradicate the reliance on 'very' and 'extremely'. Drill precise syntactic combinations.", code: "inherently biased | vitally important | diametrically opposed" },
+            { id: 3, title: "Pedagogical Compassion", group: "Affective", definition: "Providing constructive feedback without destroying the trainee's self-esteem. Employs formal markers of forbearance, reassurance, and pedagogical empathy.", alerts: "Avoid overly blunt negative assessments. Scaffolding is emotional as much as cognitive.", code: "to show professional forbearance | express heartfelt solidarity with" },
+            { id: 4, title: "Contrast and Concession Taxonomy", group: "Syntax", definition: "Using transition devices (e.g., whereas, albeit, conversely) to establish logical concession relations within complex sentences.", alerts: "Avoid transferring Spanish '*despite of' (unite 'despite' or 'in spite of'). Use 'on the contrary' only to deny truth.", code: "albeit + adj phrase | whereas + clause | conversely + sentence" },
+            { id: 5, title: "L1 Transfer: Suggested", group: "Diagnostics", definition: "Correcting the standard ungrammatical interlanguage *'He suggested me to study'*. Suggest requires a that-clause or gerund.", alerts: "One of the most persistent fossilized grammar drops in Argentine colleges of education.", code: "suggest + that-clause (triggers subjunctive) OR suggest + gerund" }
+        ];
+
+        // Narrative Path Texts
+        const narratives = [
+            "Chamber 1 of 6: The heavy gate is controlled by aspectual balance. Set the verb patterns correctly to align the semantic gears.",
+            "Chamber 2 of 6: An inscription is etched into the floor. Complete the adjective-adverb patterns to illuminate the corridor.",
+            "Chamber 3 of 6: A group of adult learners is experiencing intense anxiety. Select the correct compassionate scaffolds to lower their Affective Filter.",
+            "Chamber 4 of 6: The bridge across the curriculum chasm is unstable. Align the structural linkers of contrast to make it safe to cross.",
+            "Chamber 5 of 6: Write Maria's lesson plan feedback using your integrated skills to unlock the gatekeeper's evaluation grid.",
+            "Chamber 6 of 6: A student syllabus is littered with interlanguage issues. Correct their errors and write diagnostics to unlock the final watchtower gate."
+        ];
+
+        // Correct Answers Database (Chamber-specific)
+        const c1ExpectedAnswers = {
+            chamber1: ["utilizing", "to maintain", "abandoning", "to redesign", "to inform", "using", "to explain", "correcting", "to discuss", "delivering"],
+            chamber2: [
+                ["vitally", "important"],
+                ["diametrically", "opposed"],
+                ["radically", "different"],
+                ["inherently", "biased"],
+                ["readily", "available"]
+            ],
+            chamber3: ["is deeply sympathetic to", "to extend pedagogical compassion", "alleviate performance anxiety", "offer reassuring scaffolding", "to express heartfelt solidarity with", "to show professional forbearance"],
+            chamber4: ["conversely", "albeit", "on the contrary", "In spite of", "whereas"],
+            chamber6Types: ["Prepositional Concession", "Verb Patterning with Suggest", "Semantic Contrast Linker"],
+            chamber6Text: [
+                "Despite having a low proficiency level", 
+                "suggested that her students stop translating", 
+                "conversely"
+            ]
+        };
+
+        // Core State Variables
+        let currentChamber = 1; // 1 to 6
+        let unlockedChambers = [false, false, false, false, false, false];
+        let failedAttempts = [0, 0, 0, 0, 0, 0]; // Tracks verify errors to trigger reveal button
+
+        // Activities User Input Stores
+        let answersChamber1 = ["", "", "", "", "", "", "", "", "", ""]; 
+        let answersChamber2 = [["", ""], ["", ""], ["", ""], ["", ""], ["", ""]]; 
+        let answersChamber3 = ["", "", "", "", "", ""]; 
+        let answersChamber4 = ["", "", "", "", ""]; 
+        let answerChamber5 = ""; 
+        let answersChamber6Type = ["", "", ""]; 
+        let answersChamber6Text = ["", "", ""]; 
+
+        // Init on load
+        window.onload = function() {
+            renderVault();
+            renderChamber();
+            renderKeys();
+        }
+
+        // Toggle Grammar Vault
+        function toggleGrammarVault() {
+            const vault = document.getElementById('grammar-vault');
+            if (vault.classList.contains('hidden')) {
+                vault.classList.remove('hidden');
+                setTimeout(() => vault.classList.remove('translate-x-full'), 10);
+            } else {
+                vault.classList.add('translate-x-full');
+                setTimeout(() => vault.classList.add('hidden'), 300);
+            }
+        }
+
+        // Render Vault List
+        function renderVault() {
+            const container = document.getElementById('vault-content');
+            container.innerHTML = '';
+            vaultRecords.forEach(rec => {
+                const card = document.createElement('div');
+                card.className = "vault-card p-4 border border-stone-200 rounded-xl bg-stone-50 hover:border-teal-300 transition duration-150";
+                card.setAttribute('data-title', rec.title.toLowerCase());
+                card.setAttribute('data-def', rec.definition.toLowerCase());
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-bold text-stone-900 text-xs">${rec.title}</h4>
+                        <span class="text-[9px] bg-teal-50 border border-teal-200 text-teal-800 font-bold px-2 py-0.5 rounded-full">${rec.group}</span>
+                    </div>
+                    <p class="text-[11px] text-stone-600 leading-relaxed">${rec.definition}</p>
+                    <div class="mt-2 pt-2 border-t border-stone-100 space-y-1 text-[10px] text-stone-500">
+                        <div class="text-amber-800 font-medium"><strong>Argentine L1 Danger:</strong> ${rec.alerts}</div>
+                        <div><strong>Formula Pattern:</strong> <code class="bg-white px-1 py-0.5 rounded border border-stone-200 font-mono text-[9px] text-slate-800">${rec.code}</code></div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterVault() {
+            const query = document.getElementById('vault-search').value.toLowerCase();
+            document.querySelectorAll('.vault-card').forEach(card => {
+                const title = card.getAttribute('data-title');
+                const def = card.getAttribute('data-def');
+                if (title.includes(query) || def.includes(query)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Progress Keys Display Update
+        function renderKeys() {
+            const container = document.getElementById('key-tracker');
+            container.innerHTML = '';
+            for (let i = 0; i < 6; i++) {
+                const key = document.createElement('span');
+                key.className = `text-lg transition duration-300 ${unlockedChambers[i] ? 'opacity-100 scale-110 drop-shadow-sm' : 'opacity-20 grayscale'}`;
+                key.innerHTML = '🔑';
+                container.appendChild(key);
+            }
+        }
+
+        // Render Active Chamber Panel
+        function renderChamber() {
+            document.getElementById('chamber-badge').innerText = `Chamber ${currentChamber} of 6`;
+            document.getElementById('narrative-text').innerText = narratives[currentChamber - 1];
+            
+            const lockStatus = document.getElementById('chamber-lock-status');
+            const nextBtn = document.getElementById('next-btn');
+            const verifyBtn = document.getElementById('verify-btn');
+            const revealBtn = document.getElementById('reveal-btn');
+            const title = document.getElementById('chamber-title');
+
+            // Hide/Show correct navigation items
+            if (unlockedChambers[currentChamber - 1]) {
+                lockStatus.innerText = "🔓 UNLOCKED";
+                lockStatus.className = "text-xs font-mono text-emerald-600 font-bold";
+                nextBtn.classList.remove('hidden');
+                verifyBtn.classList.add('hidden');
+                revealBtn.classList.add('hidden');
+            } else {
+                lockStatus.innerText = "🔒 LOCKED";
+                lockStatus.className = "text-xs font-mono text-amber-500 font-bold";
+                nextBtn.classList.add('hidden');
+                verifyBtn.classList.remove('hidden');
+                
+                // Show Reveal button if user has made at least 1 failed attempt (or immediately for better self-study)
+                if (failedAttempts[currentChamber - 1] > 0) {
+                    revealBtn.classList.remove('hidden');
+                } else {
+                    revealBtn.classList.add('hidden');
+                }
+            }
+
+            document.getElementById('prev-btn').disabled = currentChamber === 1;
+
+            const taskContainer = document.getElementById('interactive-task-body');
+            taskContainer.innerHTML = '';
+
+            switch (currentChamber) {
+                case 1:
+                    title.innerText = "The Hall of Aspectual Gates";
+                    renderChamber1(taskContainer);
+                    break;
+                case 2:
+                    title.innerText = "The Corridor of Lexical Depth";
+                    renderChamber2(taskContainer);
+                    break;
+                case 3:
+                    title.innerText = "The Sanctuary of Empathy";
+                    renderChamber3(taskContainer);
+                    break;
+                case 4:
+                    title.innerText = "The Bridge of Contradiction";
+                    renderChamber4(taskContainer);
+                    break;
+                case 5:
+                    title.innerText = "The Crucible of Evaluation";
+                    renderChamber5(taskContainer);
+                    break;
+                case 6:
+                    title.innerText = "The Diagnostic Watchtower";
+                    renderChamber6(taskContainer);
+                    break;
+            }
+        }
+
+        // Chamber 1 Renderer
+        function renderChamber1(container) {
+            const items = [
+                { verb: "TRY", q1: "To lower classroom anxiety, the practitioner decided to try ___ non-verbal scaffolding.", q2: "Despite the loud acoustic distractions outside, the teacher tried ___ a calm instructional pace.", opt1: ["utilizing", "to utilize"], opt2: ["to maintain", "maintaining"] },
+                { verb: "MEAN", q1: "Adopting an ELF paradigm does not mean ___ standard grammatical markers entirely.", q2: "The department heads meant ___ the syllabus, but the academic year ended before they could begin.", opt1: ["abandoning", "to abandon"], opt2: ["to redesign", "redesigning"] },
+                { verb: "REGRET", q1: "We regret ___ the candidates that the teacher training seminar has been postponed.", q2: "The trainee regretted ___ a direct corrective approach, as it lowered motivation.", opt1: ["to inform", "informing"], opt2: ["using", "to use"] },
+                { verb: "STOP", q1: "During the reading comprehension task, the instructor stopped ___ the socio-historical context.", q2: "If we want to foster genuine communication, we must stop ___ every minor phonological slip.", opt1: ["to explain", "explaining"], opt2: ["correcting", "to correct"] },
+                { verb: "GO ON", q1: "After explaining behaviorism, the lecturer went on ___ Chomsky's cognitive critique.", q2: "Despite the connectivity issues, the online tutor went on ___ the lecture.", opt1: ["to discuss", "discussing"], opt2: ["delivering", "to deliver"] }
+            ];
+
+            items.forEach((item, idx) => {
+                const subDiv = document.createElement('div');
+                subDiv.className = "mb-6 p-4 border border-stone-200 rounded-xl bg-stone-50/50 space-y-3";
+                
+                const val1 = answersChamber1[idx * 2];
+                const val2 = answersChamber1[idx * 2 + 1];
+
+                let opts1HTML = `<option value="">-- select --</option>` + item.opt1.map(o => `<option value="${o}" ${val1 === o ? 'selected' : ''}>${o}</option>`).join('');
+                let opts2HTML = `<option value="">-- select --</option>` + item.opt2.map(o => `<option value="${o}" ${val2 === o ? 'selected' : ''}>${o}</option>`).join('');
+
+                subDiv.innerHTML = `
+                    <div class="flex items-center gap-2 border-b border-stone-100 pb-1 mb-2">
+                        <span class="text-xs font-bold text-stone-900 font-mono">${idx+1}. Target verb: ${item.verb}</span>
+                    </div>
+                    <div class="space-y-3.5 text-xs text-stone-700 leading-relaxed">
+                        <p><strong>Scenario A:</strong> ${item.q1.replace('___', `
+                            <select id="c1-sel-${idx*2}" onchange="updateChamber1Val(${idx * 2}, this.value)" class="mx-1 font-bold border border-stone-300 rounded bg-white py-1 px-1.5 text-academic-teal focus:outline-none focus:ring-1 focus:ring-academic-teal">${opts1HTML}</select>
+                        `)}</p>
+                        <p><strong>Scenario B:</strong> ${item.q2.replace('___', `
+                            <select id="c1-sel-${idx*2+1}" onchange="updateChamber1Val(${idx * 2 + 1}, this.value)" class="mx-1 font-bold border border-stone-300 rounded bg-white py-1 px-1.5 text-academic-teal focus:outline-none focus:ring-1 focus:ring-academic-teal">${opts2HTML}</select>
+                        `)}</p>
+                    </div>
+                `;
+                container.appendChild(subDiv);
+            });
+        }
+
+        function updateChamber1Val(idx, val) {
+            answersChamber1[idx] = val;
+        }
+
+        // Chamber 2 Renderer
+        function renderChamber2(container) {
+            const items = [
+                { q: "Designing teaching materials that do not favor urban socio-lects is ___ ___ for promoting pedagogical equity.", optsAdverb: ["vitally", "readily", "radically", "inherently", "diametrically"], optsAdj: ["important", "available", "different", "biased", "opposed"], label: "Socio-lect Equity" },
+                { q: "The two schools of SLA thought are ___ ___; one advocates explicit instruction, while the other relies on pure acquisition.", optsAdverb: ["diametrically", "vitally", "radically", "inherently", "readily"], optsAdj: ["opposed", "important", "different", "biased", "available"], label: "SLA Debate" },
+                { q: "Traditional grammar-translation methods are ___ ___ from communicative language approaches.", optsAdverb: ["radically", "diametrically", "vitally", "inherently", "readily"], optsAdj: ["different", "opposed", "important", "biased", "available"], label: "Methodological Divergence" },
+                { q: "We must acknowledge that standardized examinations are often ___ ___ against non-native speakers.", optsAdverb: ["inherently", "diametrically", "radically", "vitally", "readily"], optsAdj: ["biased", "different", "opposed", "important", "available"], label: "Assessment Fairness" },
+                { q: "In modern Argentine colleges, open-access corpora are ___ ___ to trainees.", optsAdverb: ["readily", "inherently", "radically", "vitally", "diametrically"], optsAdj: ["available", "biased", "different", "opposed", "important"], label: "Corpora Access" }
+            ];
+
+            items.forEach((item, idx) => {
+                const subDiv = document.createElement('div');
+                subDiv.className = "mb-6 p-4 border border-stone-200 rounded-xl bg-stone-50/50 space-y-3";
+                
+                const currentVal = answersChamber2[idx] || ["", ""];
+                let optsAdvHTML = `<option value="">-- select adverb --</option>` + item.optsAdverb.map(o => `<option value="${o}" ${currentVal[0] === o ? 'selected' : ''}>${o}</option>`).join('');
+                let optsAdjHTML = `<option value="">-- select adjective --</option>` + item.optsAdj.map(o => `<option value="${o}" ${currentVal[1] === o ? 'selected' : ''}>${o}</option>`).join('');
+
+                subDiv.innerHTML = `
+                    <div class="flex items-center gap-2 border-b border-stone-100 pb-1 mb-2">
+                        <span class="text-xs font-bold text-stone-950 font-mono">${idx+1}. Context: ${item.label}</span>
+                    </div>
+                    <div class="text-xs text-stone-700 leading-relaxed">
+                        ${item.q.replace('___ ___', `
+                            <select id="c2-sel-adv-${idx}" onchange="updateChamber2Val(${idx}, 0, this.value)" class="mx-1 border border-stone-300 rounded bg-white py-1 px-1.5 font-bold text-academic-teal focus:outline-none focus:ring-1 focus:ring-academic-teal">${optsAdvHTML}</select>
+                            <select id="c2-sel-adj-${idx}" onchange="updateChamber2Val(${idx}, 1, this.value)" class="mx-1 border border-stone-300 rounded bg-white py-1 px-1.5 font-bold text-academic-teal focus:outline-none focus:ring-1 focus:ring-academic-teal">${optsAdjHTML}</select>
+                        `)}
+                    </div>
+                `;
+                container.appendChild(subDiv);
+            });
+        }
+
+        function updateChamber2Val(idx, slot, val) {
+            answersChamber2[idx][slot] = val;
+        }
+
+        // Chamber 3 Renderer
+        function renderChamber3(container) {
+            const items = [
+                {
+                    title: "Scenario A: Overworked Adult Student",
+                    prompt: "An adult student working double shifts in Buenos Aires is struggling to hand in their essay draft on time.",
+                    cloze: "I completely understand the exhausting pressure of balancing labor and university. Please know that the department ___ your situation, and we are prepared ___ by extending the deadline by three days.",
+                    opts1: ["is deeply sympathetic to", "is inherently biased to", "shows professional forbearance to"],
+                    opts2: ["to extend pedagogical compassion", "to alleviate performance anxiety", "to offer reassuring scaffolding"]
+                },
+                {
+                    title: "Scenario B: Teaching-Practice Stage Fright",
+                    prompt: "A trainee experiences severe stage fright and starts crying during their mock teaching practice session.",
+                    cloze: "Please take a deep breath. It is completely normal to feel overwhelmed at this level. To ___, we will pause the session and ___ by co-teaching the next stage of the lesson with you.",
+                    opts1: ["alleviate performance anxiety", "express heartfelt solidarity", "show professional forbearance"],
+                    opts2: ["offer reassuring scaffolding", "extend pedagogical compassion", "express heartfelt solidarity"]
+                },
+                {
+                    title: "Scenario C: Older Teachers Resisting Technology",
+                    prompt: "A group of older public school teachers undertaking a digital course feel left behind by new online tools.",
+                    cloze: "As your tutors, we want ___ your struggles. We will not rush this process. We promise ___ and move at a pace that respects everyone's learning curve.",
+                    opts1: ["to express heartfelt solidarity with", "to show professional forbearance to", "to offer reassuring scaffolding with"],
+                    opts2: ["to show professional forbearance", "to alleviate performance anxiety", "to extend pedagogical compassion"]
+                }
+            ];
+
+            items.forEach((item, idx) => {
+                const subDiv = document.createElement('div');
+                subDiv.className = "mb-6 p-4 border border-stone-200 rounded-xl bg-stone-50/50 space-y-3";
+                
+                const val1 = answersChamber3[idx * 2];
+                const val2 = answersChamber3[idx * 2 + 1];
+
+                let opts1HTML = `<option value="">-- select 1 --</option>` + item.opts1.map(o => `<option value="${o}" ${val1 === o ? 'selected' : ''}>${o}</option>`).join('');
+                let opts2HTML = `<option value="">-- select 2 --</option>` + item.opts2.map(o => `<option value="${o}" ${val2 === o ? 'selected' : ''}>${o}</option>`).join('');
+
+                subDiv.innerHTML = `
+                    <div class="flex items-center gap-2 border-b border-stone-100 pb-1 mb-2">
+                        <span class="text-xs font-bold text-stone-900 font-mono">${item.title}</span>
+                    </div>
+                    <p class="text-[11px] text-stone-500 italic bg-white p-2 border border-stone-100 rounded leading-relaxed mb-2">Problem: ${item.prompt}</p>
+                    <div class="text-xs text-stone-700 leading-loose">
+                        ${item.cloze.replace('___', `
+                            <select id="c3-sel-${idx*2}" onchange="updateChamber3Val(${idx * 2}, this.value)" class="mx-1 border border-stone-300 rounded bg-white py-1 px-1.5 font-bold text-academic-teal focus:outline-none focus:ring-1 focus:ring-academic-teal">${opts1HTML}</select>
+                        `).replace('___', `
+                            <select id="c3-sel-${idx*2+1}" onchange="updateChamber3Val(${idx * 2 + 1}, this.value)" class="mx-1 border border-stone-300 rounded bg-white py-1 px-1.5 font-bold text-academic-teal focus:outline-none focus:ring-1 focus:ring-academic-teal">${opts2HTML}</select>
+                        `)}
+                    </div>
+                `;
+                container.appendChild(subDiv);
+            });
+        }
+
+        function updateChamber3Val(idx, val) {
+            answersChamber3[idx] = val;
+        }
+
+        // Chamber 4 Renderer
+        function renderChamber4(container) {
+            const items = [
+                { q: "Explicit phonetic training is highly valued by older adult learners; ___, younger bilingual trainees often express a preference for intuitive, exposure-based learning.", opts: ["conversely", "whereas", "albeit", "on the contrary", "in spite of"] },
+                { q: "The department decided to implement the ELF pronunciation syllabus, ___ with some reservations regarding the lack of localized materials.", opts: ["albeit", "whereas", "conversely", "on the contrary", "in spite of"] },
+                { q: "Many grammar textbooks do not describe language descriptively; ___, they remain dogmatically prescriptive, enforcing outdated native-speaker standards.", opts: ["on the contrary", "conversely", "whereas", "albeit", "in spite of"] },
+                { q: "___ the initial challenges with digital platform access, the rural adult learners demonstrated an outstanding level of engagement.", opts: ["In spite of", "Albeit", "Conversely", "On the contrary", "Whereas"] },
+                { q: "Quantitative studies show that corrective feedback improves short-term accuracy, ___ qualitative case studies suggest it can stifle long-term fluency.", opts: ["whereas", "conversely", "albeit", "on the contrary", "in spite of"] }
+            ];
+
+            items.forEach((item, idx) => {
+                const subDiv = document.createElement('div');
+                subDiv.className = "mb-6 p-4 border border-stone-200 rounded-xl bg-stone-50/50 space-y-3";
+                
+                const val = answersChamber4[idx];
+                let optsHTML = `<option value="">-- select contrast linker --</option>` + item.opts.map(o => `<option value="${o}" ${val === o ? 'selected' : ''}>${o}</option>`).join('');
+
+                subDiv.innerHTML = `
+                    <div class="flex items-start gap-2 border-b border-stone-100 pb-1 mb-2">
+                        <span class="text-xs font-bold text-stone-900 font-mono">${idx+1}. Path Segment</span>
+                    </div>
+                    <div class="text-xs text-stone-700 leading-relaxed">
+                        ${item.q.replace('___', `
+                            <select id="c4-sel-${idx}" onchange="updateChamber4Val(${idx}, this.value)" class="mx-1 border border-stone-300 rounded bg-white py-1 px-1.5 font-bold text-academic-teal focus:outline-none focus:ring-1 focus:ring-academic-teal">${optsHTML}</select>
+                        `)}
+                    </div>
+                `;
+                container.appendChild(subDiv);
+            });
+        }
+
+        function updateChamber4Val(idx, val) {
+            answersChamber4[idx] = val;
+        }
+
+        // Chamber 5 Renderer
+        function renderChamber5(container) {
+            const wrapper = document.createElement('div');
+            wrapper.className = "space-y-4";
+            wrapper.innerHTML = `
+                <div class="p-4 bg-amber-50/50 border border-amber-200 rounded-xl space-y-2 text-xs text-amber-900 leading-relaxed">
+                    <h4 class="font-bold">Integration Assessment Prompt:</h4>
+                    <p>Write an feedback email (100–150 words) to Maria, whose lesson plan relies entirely on mechanical drills, but who worked incredibly hard. Your text must include:</p>
+                    <ul class="list-disc pl-4 space-y-1 mt-1 text-[11px]">
+                        <li>At least <strong>one</strong> semantic-shift verb pattern (e.g., <em>try to do / doing</em>, <em>stop to do / doing</em>)</li>
+                        <li>At least <strong>two</strong> advanced adjective-adverb collocations from Chamber 2</li>
+                        <li>At least <strong>one</strong> expression of compassion or professional forbearance</li>
+                        <li>At least <strong>two</strong> logical transition linkers of contrast</li>
+                    </ul>
+                </div>
+                <div class="space-y-1.5">
+                    <label class="block text-[10px] uppercase tracking-wider font-bold text-stone-500">Draft Feedback Content:</label>
+                    <textarea id="act5-draft-input" oninput="updateChamber5Val(this.value)" rows="8" placeholder="Type feedback email..." class="w-full text-xs p-3 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-academic-teal leading-relaxed font-sans">${answerChamber5}</textarea>
+                    <div class="text-right text-[10px] text-stone-400"><span id="word-count-display">0</span> words (minimum 100)</div>
+                </div>
+            `;
+            container.appendChild(wrapper);
+            updateWordCount();
+        }
+
+        function updateChamber5Val(val) {
+            answerChamber5 = val;
+            updateWordCount();
+        }
+
+        function updateWordCount() {
+            const count = answerChamber5.trim() === "" ? 0 : answerChamber5.trim().split(/\s+/).length;
+            const display = document.getElementById('word-count-display');
+            if (display) {
+                display.innerText = count;
+                if (count >= 100) {
+                    display.className = "text-emerald-600 font-bold";
+                } else {
+                    display.className = "text-amber-600";
+                }
+            }
+        }
+
+        // Chamber 6 Renderer
+        function renderChamber6(container) {
+            const items = [
+                { id: 1, prompt: "Despite of having a low proficiency level, the adult learner was highly communicative.", classifications: ["Prepositional Concession", "Verb Patterning with Suggest", "Semantic Contrast Linker"] },
+                { id: 2, prompt: "The teacher suggested her students to stop to translate every word literally.", classifications: ["Verb Patterning with Suggest", "Prepositional Concession", "Semantic Contrast Linker"] },
+                { id: 3, prompt: "Public schools have limited technological infrastructure. On the contrary, private institutions are fully equipped.", classifications: ["Semantic Contrast Linker", "Prepositional Concession", "Verb Patterning with Suggest"] }
+            ];
+
+            items.forEach((item, idx) => {
+                const subDiv = document.createElement('div');
+                subDiv.className = "mb-6 p-5 border border-stone-200 rounded-xl bg-stone-50/50 space-y-4";
+                
+                const chosenType = answersChamber6Type[idx];
+                const textVal = answersChamber6Text[idx];
+
+                let optsHTML = `<option value="">-- select anomaly classification --</option>` + item.classifications.map(c => `<option value="${c}" ${chosenType === c ? 'selected' : ''}>${c}</option>`).join('');
+
+                subDiv.innerHTML = `
+                    <div class="flex items-center gap-2 border-b border-stone-100 pb-1">
+                        <span class="text-xs font-bold text-stone-900 font-mono">Anomaly Diagnostic ${idx+1}</span>
+                    </div>
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <span class="text-[10px] text-rose-600 uppercase tracking-wider font-bold">L1 Trainee Error:</span>
+                            <div class="bg-rose-50 border border-rose-100 p-2.5 rounded font-mono italic text-slate-800">
+                                "${item.prompt}"
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-bold text-stone-500">Classification:</label>
+                                <select id="c6-sel-type-${idx}" onchange="updateChamber6Type(${idx}, this.value)" class="w-full border border-stone-300 rounded-lg bg-white py-2 px-2.5 font-semibold text-academic-navy focus:outline-none focus:ring-1 focus:ring-academic-teal">
+                                    ${optsHTML}
+                                </select>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-[10px] font-bold text-stone-500">Corrected Sentence Pattern:</label>
+                                <input type="text" id="c6-input-text-${idx}" oninput="updateChamber6Text(${idx}, this.value)" value="${textVal}" placeholder="Type correction here..." class="w-full p-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-academic-teal font-mono">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(subDiv);
+            });
+        }
+
+        function updateChamber6Type(idx, val) {
+            answersChamber6Type[idx] = val;
+        }
+
+        function updateChamber6Text(idx, val) {
+            answersChamber6Text[idx] = val;
+        }
+
+        // Retreat Chamber
+        function prevChamber() {
+            if (currentChamber > 1) {
+                currentChamber--;
+                renderChamber();
+            }
+        }
+
+        // Advance Chamber
+        function nextChamber() {
+            if (currentChamber < 6) {
+                currentChamber++;
+                renderChamber();
+            } else {
+                if (unlockedChambers[5]) {
+                    document.getElementById('escape-success-modal').classList.remove('hidden');
+                }
+            }
+        }
+
+        // Verify Chambers and release lock
+        function verifyChamber() {
+            let errorCount = 0;
+
+            switch (currentChamber) {
+                case 1:
+                    c1ExpectedAnswers.chamber1.forEach((exp, i) => {
+                        if (answersChamber1[i] !== exp) errorCount++;
+                    });
+                    break;
+
+                case 2:
+                    c1ExpectedAnswers.chamber2.forEach((exp, i) => {
+                        const user = answersChamber2[i] || ["", ""];
+                        if (user[0] !== exp[0] || user[1] !== exp[1]) errorCount++;
+                    });
+                    break;
+
+                case 3:
+                    c1ExpectedAnswers.chamber3.forEach((exp, i) => {
+                        if (answersChamber3[i] !== exp) errorCount++;
+                    });
+                    break;
+
+                case 4:
+                    c1ExpectedAnswers.chamber4.forEach((exp, i) => {
+                        if (answersChamber4[i] !== exp) errorCount++;
+                    });
+                    break;
+
+                case 5:
+                    const count = answerChamber5.trim() === "" ? 0 : answerChamber5.trim().split(/\s+/).length;
+                    if (count < 100) {
+                        openAlertModal("Verification Deficit", "Your feedback email draft is below 100 words. Please expand your diagnostic advice.", "rose");
+                        return;
+                    }
+                    const normalized = answerChamber5.toLowerCase();
+                    const hasCollocations = normalized.includes("radically") || normalized.includes("inherently") || normalized.includes("vitally");
+                    const hasCompassion = normalized.includes("forbearance") || normalized.includes("solidarity") || normalized.includes("sympath");
+                    const hasContrast = normalized.includes("conversely") || normalized.includes("albeit") || normalized.includes("despite") || normalized.includes("spite");
+
+                    if (!hasCollocations || !hasCompassion || !hasContrast) {
+                        openAlertModal("Target Elements Missing", "Your draft lacks the required integrated grammar structures. Ensure collocations, compassion expressions, and contrast linkers are included.", "rose");
+                        return;
+                    }
+                    break;
+
+                case 6:
+                    c1ExpectedAnswers.chamber6Types.forEach((exp, i) => {
+                        if (answersChamber6Type[i] !== exp) errorCount++;
+                    });
+                    c1ExpectedAnswers.chamber6Text.forEach((exp, i) => {
+                        const userText = (answersChamber6Text[i] || "").trim().toLowerCase();
+                        const parts = exp.toLowerCase().split(/\s+/);
+                        // Tolerant matching: make sure essential elements are present
+                        const matchedAll = parts.every(p => userText.includes(p));
+                        if (!matchedAll) errorCount++;
+                    });
+                    break;
+            }
+
+            if (errorCount > 0) {
+                failedAttempts[currentChamber - 1]++;
+                openAlertModal("Syntactic Discrepancy", `${errorCount} verification discrepancy detected. Chamber locks remain closed. You can toggle the 'Grammar Vault' or use the 'Reveal Options' button to view solutions.`, "rose");
+                renderChamber(); // Force re-render to display the "Reveal" button
+            } else {
+                unlockedChambers[currentChamber - 1] = true;
+                openAlertModal("Gate Unlocked!", `Chamber ${currentChamber} successfully processed! Advanced gate locks released.`, "emerald");
+                renderChamber();
+                renderKeys();
+                updateCalculations();
+                
+                if (currentChamber === 6) {
+                    setTimeout(() => {
+                        document.getElementById('escape-success-modal').classList.remove('hidden');
+                    }, 800);
+                }
+            }
+        }
+
+        // Reveal Solutions / Auto-solve (Prevents locking out and highlights options)
+        function revealSolutions() {
+            switch (currentChamber) {
+                case 1:
+                    c1ExpectedAnswers.chamber1.forEach((ans, i) => {
+                        answersChamber1[i] = ans;
+                        const el = document.getElementById(`c1-sel-${i}`);
+                        if (el) {
+                            el.value = ans;
+                            el.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+                        }
+                    });
+                    openAlertModal("Aspectual Solutions Revealed", "Correct gerund/infinitive structures applied. Notice how meaning shifts (e.g., 'try utilizing' as experimentation vs 'tried to maintain' as effort). Verify to unlock.", "emerald");
+                    break;
+
+                case 2:
+                    c1ExpectedAnswers.chamber2.forEach((ans, i) => {
+                        answersChamber2[i] = [ans[0], ans[1]];
+                        const elAdv = document.getElementById(`c2-sel-adv-${i}`);
+                        const elAdj = document.getElementById(`c2-sel-adj-${i}`);
+                        if (elAdv && elAdj) {
+                            elAdv.value = ans[0];
+                            elAdj.value = ans[1];
+                            elAdv.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+                            elAdj.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+                        }
+                    });
+                    openAlertModal("Collocations Revealed", "Adverb-adjective combinations applied. Note precise academic structures (e.g. 'diametrically opposed', 'inherently biased'). Verify to unlock.", "emerald");
+                    break;
+
+                case 3:
+                    c1ExpectedAnswers.chamber3.forEach((ans, i) => {
+                        answersChamber3[i] = ans;
+                        const el = document.getElementById(`c3-sel-${i}`);
+                        if (el) {
+                            el.value = ans;
+                            el.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+                        }
+                    });
+                    openAlertModal("Affective Scaffolds Revealed", "Compassion phrases applied. Empathy is a vital component of advanced teaching communication. Verify to unlock.", "emerald");
+                    break;
+
+                case 4:
+                    c1ExpectedAnswers.chamber4.forEach((ans, i) => {
+                        answersChamber4[i] = ans;
+                        const el = document.getElementById(`c4-sel-${i}`);
+                        if (el) {
+                            el.value = ans;
+                            el.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+                        }
+                    });
+                    openAlertModal("Linkers Revealed", "Contrast and concession transition linkers applied. Note syntactic differences (e.g., 'albeit' followed by phrase vs 'whereas' followed by clause). Verify to unlock.", "emerald");
+                    break;
+
+                case 5:
+                    const modelFeedback = `Dear Maria,\n\nI want to express my heartfelt solidarity with you, as I know balancing this teaching practice with final examinations has been vitally important for your course. Regarding your syllabus design, the rote drills are radically different from communicative standards. Relying solely on repetitive habits is inherently biased against organic ELF fluency.\n\nI recommend trying to integrate interactive tasks. Despite these structural reservations, your chosen cultural theme is excellent, albeit slightly demanding. Conversely, with some minor changes, it will act as a brilliant conversational catalyst.\n\nWe will show professional forbearance and extend your submission date.`;
+                    answerChamber5 = modelFeedback;
+                    const textarea = document.getElementById('act5-draft-input');
+                    if (textarea) {
+                        textarea.value = modelFeedback;
+                    }
+                    updateWordCount();
+                    openAlertModal("Exemplary Feedback Loaded", "A model integration piece containing the semantic shift, adverbs, and compassion linkers has been loaded. Verify to unlock.", "emerald");
+                    break;
+
+                case 6:
+                    c1ExpectedAnswers.chamber6Types.forEach((type, i) => {
+                        answersChamber6Type[i] = type;
+                        const elType = document.getElementById(`c6-sel-type-${i}`);
+                        if (elType) elType.value = type;
+                    });
+                    c1ExpectedAnswers.chamber6Text.forEach((text, i) => {
+                        answersChamber6Text[i] = text;
+                        const elText = document.getElementById(`c6-input-text-${i}`);
+                        if (elText) elText.value = text;
+                    });
+                    openAlertModal("Diagnostics Solved", "Common L1 Spanish interlanguage errors corrected (e.g., removing 'of' after 'despite' and correcting suggest + to-infinitive). Verify to unlock.", "emerald");
+                    break;
+            }
+            unlockedChambers[currentChamber - 1] = true;
+            renderChamber();
+            renderKeys();
+            updateCalculations();
+        }
+
+        // Global Scores Calc
+        function updateCalculations() {
+            const completedCount = unlockedChambers.filter(c => c === true).length;
+            if (completedCount === 6) {
+                document.getElementById('total-score').innerText = "23";
+                document.getElementById('module-progress-pct').innerText = "100%";
+                document.getElementById('module-progress').style.width = "100%";
+            } else {
+                let proportional = Math.round(completedCount * 3.8);
+                document.getElementById('total-score').innerText = proportional;
+                let pctVal = Math.round((completedCount / 6) * 100);
+                document.getElementById('module-progress-pct').innerText = `${pctVal}%`;
+                document.getElementById('module-progress').style.width = `${pctVal}%`;
+            }
+        }
+
+        // Close Alert Modal
+        function closeAlertModal() {
+            document.getElementById('alert-modal').classList.add('hidden');
+        }
+
+        function openAlertModal(heading, message, type = "emerald") {
+            const modal = document.getElementById('alert-modal');
+            const mHead = document.getElementById('modal-heading');
+            const mMsg = document.getElementById('modal-message');
+            const mIcon = document.getElementById('modal-icon-holder');
+
+            mHead.innerText = heading;
+            mMsg.innerText = message;
+
+            if (type === "rose") {
+                mIcon.className = "mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-rose-100 text-rose-600 mb-4";
+                mIcon.innerHTML = `<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+            } else {
+                mIcon.className = "mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 text-emerald-600 mb-4";
+                mIcon.innerHTML = `<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        // Compile and Download Markdown Study Portfolio
+        function downloadEscapePortfolio() {
+            let markdown = `# SLA Escape Room Portfolio & Answer Sheet
+Target: C1 Language Awareness for ELF Trainees (Argentina)
+Generated: ${new Date().toLocaleDateString()}
+
+========================================================================
+## TRAINEE ESCAPE REPORT CARD
+- Chamber 1 Gate (Aspectual Shift): ${unlockedChambers[0] ? 'UNLOCKED' : 'LOCKED'}
+- Chamber 2 Gate (Collocations): ${unlockedChambers[1] ? 'UNLOCKED' : 'LOCKED'}
+- Chamber 3 Gate (Scaffolding): ${unlockedChambers[2] ? 'UNLOCKED' : 'LOCKED'}
+- Chamber 4 Gate (Contrast Linkers): ${unlockedChambers[3] ? 'UNLOCKED' : 'LOCKED'}
+- Chamber 5 Gate (Pedagogical Email Draft): ${unlockedChambers[4] ? 'UNLOCKED' : 'LOCKED'}
+- Chamber 6 Gate (Diagnostics Suite): ${unlockedChambers[5] ? 'UNLOCKED' : 'LOCKED'}
+========================================================================
+
+## THEORETICAL MODULES (FROM THE LINGUISTIC VAULT)
+
+`;
+
+            vaultRecords.forEach(rec => {
+                markdown += `### ${rec.title} (${rec.group})
+* **Linguistic Definition:** ${rec.definition}
+* **Argentine L1 Danger Alert:** ${rec.alerts}
+* **Pattern Formula:** \`${rec.code}\`
+
+`;
+            });
+
+            markdown += `
+========================================================================
+## SUBMITTED WORKBOOK & VERIFIED RESOLUTIONS
+
+### Chamber 1: The Hall of Aspectual Gates (Verbs followed by -ING vs. Infinitive)
+`;
+            const c1Phrases = [
+                "TRY: utilizing (A) | to maintain (B)",
+                "MEAN: abandoning (A) | to redesign (B)",
+                "REGRET: to inform (A) | using (B)",
+                "STOP: to explain (A) | correcting (B)",
+                "GO ON: to discuss (A) | delivering (B)"
+            ];
+            c1Phrases.forEach((p, idx) => {
+                markdown += `- **Set ${idx+1} (${p}):**
+  - Scenario A choice: "${answersChamber1[idx * 2] || 'Unselected'}"
+  - Scenario B choice: "${answersChamber1[idx * 2 + 1] || 'Unselected'}"
+`;
+            });
+
+            markdown += `
+### Chamber 2: Adverb-Adjective Collocations
+`;
+            for (let i = 0; i < 5; i++) {
+                const arr = answersChamber2[i] || ["", ""];
+                markdown += `- **Collocation ${i+1}:** Adverb: "${arr[0] || 'Unselected'}" | Adjective: "${arr[1] || 'Unselected'}"
+`;
+            }
+
+            markdown += `
+### Chamber 3: Scaffolding through Compassion (Affective Feedback)
+- **Scenario A (Overworked student) choices:** - Sympathy Selection: "${answersChamber3[0] || 'Unselected'}" 
+  - Scaffolding Selection: "${answersChamber3[1] || 'Unselected'}"
+- **Scenario B (Stage Fright) choices:** - Anxiety Selection: "${answersChamber3[2] || 'Unselected'}" 
+  - Support Selection: "${answersChamber3[3] || 'Unselected'}"
+- **Scenario C (Digital Re-skilling) choices:** - Solidarity Selection: "${answersChamber3[4] || 'Unselected'}" 
+  - Forbearance Selection: "${answersChamber3[5] || 'Unselected'}"
+
+### Chamber 4: Linkers of Contrast
+`;
+            answersChamber4.forEach((val, idx) => {
+                markdown += `- **Sentence ${idx+1} Linker:** "${val || 'Unselected'}"\n`;
+            });
+
+            markdown += `
+### Chamber 5: Maria's Pedagogical Feedback Draft
+Your submitted feedback email:
+"""
+${answerChamber5 || "No draft written."}
+"""
+
+### Chamber 6: Diagnostics Suite
+`;
+            for (let i = 0; i < 3; i++) {
+                markdown += `
+- **Diagnostic Case ${i+1}:**
+  - Classification Selected: "${answersChamber6Type[i] || 'Unselected'}"
+  - Correction Formulated: "${answersChamber6Text[i] || 'Unselected'}"
+`;
+            }
+
+            markdown += `
+========================================================================
+## MASTER ANNOTATED KEYS & SLA RATIONALES
+
+### 1. Verbs followed by -ING vs. Infinitive
+* **Try + utilizing:** experimentation. **Try + to maintain:** mental exertion.
+* **Mean + abandoning:** consequence or definition. **Mean + to redesign:** clear intention.
+* **Regret + to inform:** polite formal communication. **Regret + using:** past remorse.
+* **Stop + to explain:** pause in order to start. **Stop + correcting:** cease ongoing activity.
+* **Go on + to discuss:** move to a new stage. **Go on + delivering:** continue ongoing activity.
+
+### 2. Adverb-Adjective Collocations
+* Vitally important (importance)
+* Diametrically opposed (extreme opposition)
+* Radically different (divergent design)
+* Inherently biased (intrinsic bias)
+* Readily available (ease of access)
+
+### 3. Empathy Scaffolds
+* Overworked: is deeply sympathetic to / to extend pedagogical compassion.
+* Stage Fright: alleviate performance anxiety / offer reassuring scaffolding.
+* Digital stress: to express heartfelt solidarity with / to show professional forbearance.
+
+### 4. Contrast and Concession Linkers
+* sentence 1: conversely (reverses perspective)
+* sentence 2: albeit (followed by phrase, concession)
+* sentence 3: on the contrary (denies first statement, introduces truth)
+* sentence 4: In spite of (prepositional, followed by noun phrase)
+* sentence 5: whereas (links two contrasting full clauses)
+
+### 5. Diagnostics
+* Case 1: Prepositional Concession. Correct pattern: "Despite having..." or "In spite of having..." (Eradicates '*despite of*').
+* Case 2: Verb Patterning with Suggest. Correct pattern: "suggested that her students stop translating..." (Eradicates '*suggested them to...*').
+* Case 3: Semantic Contrast Linker. Correct pattern: "Conversely," or "In contrast," (Eradicates incorrect use of 'on the contrary' for fact comparisons).
+`;
+
+            const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "SLA_Labyrinth_Study_Portfolio.md");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>

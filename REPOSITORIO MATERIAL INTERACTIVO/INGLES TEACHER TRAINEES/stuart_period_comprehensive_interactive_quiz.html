@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Stuart Period (1603-1714) Master Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .royal-font {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e1b4b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <header class="border-b border-indigo-950/60 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-amber-500 to-yellow-300 p-2.5 rounded-xl shadow-lg shadow-amber-500/10">
+                    <svg class="w-6 h-6 text-slate-950" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9s2.015-9 4.5-9yM3 9h18M3 15h18"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="royal-font text-xl md:text-2xl font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-indigo-200">The Stuart Dynasty</h1>
+                    <p class="text-xs text-indigo-300 tracking-wider font-semibold uppercase">Comprehensive History & Literature Master Class</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button onclick="downloadQuizFile()" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-medium text-sm rounded-xl transition duration-300 shadow-lg shadow-emerald-950/30 transform active:scale-95">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path>
+                    </svg>
+                    Download Offline App
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center py-10 px-4">
+        <div class="max-w-4xl w-full bg-slate-900/60 border border-indigo-950/80 rounded-2xl p-6 md:p-10 shadow-2xl backdrop-blur-sm">
+            
+            <!-- Welcome/Start Screen -->
+            <div id="intro-screen" class="space-y-6">
+                <div class="text-center space-y-4">
+                    <span class="px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold rounded-full uppercase tracking-widest">Interactive Exam</span>
+                    <h2 class="royal-font text-3xl md:text-5xl font-bold text-slate-100">Test Your Knowledge of Stuart Britain</h2>
+                    <p class="text-slate-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+                        Embark on a rigorous 30-question interactive exploration of the Stuart Period (1603-1714). This specialized academic quiz targets constitutional milestones, radical Interregnum movements, Restoration culture, the transition to the contract state, and global empire.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 py-4">
+                    <div class="bg-slate-950/40 p-4 rounded-xl border border-indigo-950/40 text-center">
+                        <span class="block text-2xl font-bold text-amber-400">30</span>
+                        <span class="text-xs text-slate-400">Advanced Questions</span>
+                    </div>
+                    <div class="bg-slate-950/40 p-4 rounded-xl border border-indigo-950/40 text-center">
+                        <span class="block text-2xl font-bold text-indigo-400">No Regional Ties</span>
+                        <span class="text-xs text-slate-400">Pure Stuart History</span>
+                    </div>
+                    <div class="bg-slate-950/40 p-4 rounded-xl border border-indigo-950/40 text-center">
+                        <span class="block text-2xl font-bold text-teal-400">Instant Explanation</span>
+                        <span class="text-xs text-slate-400">In-Depth Feedback</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center justify-center gap-4">
+                    <button onclick="startQuiz()" class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-lg rounded-xl transition duration-300 transform active:scale-95 shadow-xl shadow-indigo-950/50">
+                        Begin Master Quiz
+                    </button>
+                    <p class="text-xs text-slate-500">Perfect for Advanced Historical Studies & EFL Academic Prep</p>
+                </div>
+            </div>
+
+            <!-- Quiz Gameplay Screen (Hidden by default) -->
+            <div id="quiz-screen" class="hidden space-y-6">
+                <!-- Status Row -->
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-indigo-300 font-semibold uppercase tracking-wider" id="category-indicator">Category: Loading...</span>
+                    <span class="text-slate-400 font-medium" id="question-tracker">Question 1 of 30</span>
+                </div>
+
+                <!-- Custom Progress Bar -->
+                <div class="w-full h-2 bg-slate-950 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-gradient-to-r from-amber-500 to-indigo-500 transition-all duration-300" style="width: 0%"></div>
+                </div>
+
+                <!-- Question Prompt -->
+                <div class="bg-slate-950/30 p-6 rounded-xl border border-indigo-950/40">
+                    <h3 id="question-text" class="royal-font text-lg md:text-2xl font-semibold leading-relaxed text-slate-100">
+                        Question Loading...
+                    </h3>
+                </div>
+
+                <!-- Multiple Choice Grid -->
+                <div id="options-container" class="grid grid-cols-1 gap-4">
+                    <!-- Option buttons generated via JS -->
+                </div>
+
+                <!-- Explanation / Feedback Panel (Hidden until choice selection) -->
+                <div id="feedback-panel" class="hidden bg-indigo-950/20 border border-indigo-500/20 p-5 rounded-xl space-y-3">
+                    <div class="flex items-center gap-2">
+                        <span id="feedback-icon-container"></span>
+                        <span id="feedback-title" class="font-bold text-base">Feedback</span>
+                    </div>
+                    <p id="feedback-text" class="text-sm text-slate-300 leading-relaxed"></p>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="flex justify-end pt-4">
+                    <button id="next-button" onclick="handleNextStep()" disabled class="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-30 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition duration-300">
+                        Submit Answer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Screen (Hidden by default) -->
+            <div id="results-screen" class="hidden space-y-8">
+                <div class="text-center space-y-4">
+                    <h2 class="royal-font text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500">Exam Assessment Complete</h2>
+                    <p class="text-slate-400 max-w-lg mx-auto">Your historical performance matrix has been successfully calculated. Review your scores below.</p>
+                </div>
+
+                <!-- Score Dashboard Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <!-- Score Meter -->
+                    <div class="flex flex-col items-center justify-center p-6 bg-slate-950/40 rounded-2xl border border-indigo-950/40">
+                        <div class="relative w-40 h-40 flex items-center justify-center">
+                            <!-- SVG Circle -->
+                            <svg class="absolute inset-0 w-full h-full transform -rotate-90">
+                                <circle cx="80" cy="80" r="70" class="stroke-slate-900" stroke-width="12" fill="transparent"/>
+                                <circle id="score-circle" cx="80" cy="80" r="70" class="stroke-amber-500 transition-all duration-1000" stroke-width="12" fill="transparent" stroke-dasharray="440" stroke-dashoffset="440" stroke-linecap="round"/>
+                            </svg>
+                            <div class="text-center">
+                                <span id="score-percent" class="text-4xl font-extrabold text-amber-200">0%</span>
+                                <span class="block text-xs text-slate-400 mt-1">Accuracy Grade</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <p class="text-lg font-bold text-slate-200" id="score-text">Score: 0 / 30</p>
+                            <p class="text-xs text-indigo-300 mt-1 uppercase tracking-widest font-bold" id="rank-badge">Rank: Novice</p>
+                        </div>
+                    </div>
+
+                    <!-- Category Strengths -->
+                    <div class="space-y-4">
+                        <h4 class="text-sm font-bold uppercase tracking-wider text-indigo-300 border-b border-indigo-950 pb-2">Topic Mastery Breakdown</h4>
+                        
+                        <div class="space-y-3" id="category-breakdown-list">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Answer Review Area -->
+                <div class="space-y-4">
+                    <h3 class="royal-font text-2xl font-bold text-slate-100 border-b border-indigo-950 pb-2">Historical Review & Key Learnings</h3>
+                    <div id="review-questions-list" class="space-y-4 max-h-[350px] overflow-y-auto pr-2">
+                        <!-- Populated dynamically with incorrect items first -->
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                    <button onclick="restartQuiz()" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition duration-300">
+                        Retake Master Quiz
+                    </button>
+                    <button onclick="window.print()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded-xl transition duration-300 border border-indigo-950">
+                        Print / Save Report PDF
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer with informative copy -->
+    <footer class="text-center py-6 text-xs text-slate-500 border-t border-indigo-950/30 bg-slate-950">
+        <div class="max-w-6xl mx-auto px-4 space-y-1">
+            <p>&copy; 2026. Standalone Academic Resource on early modern British history.</p>
+            <p>Designed strictly under academic historical structures. Dynamic content offline compatible.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Quiz Questions Data (Total 30 carefully structured questions)
+        const quizQuestions = [
+            {
+                id: 1,
+                category: "Constitutional Theory",
+                question: "Which political philosophy, asserted by James I in 'The True Law of Free Monarchies' (1598), argued that kings derive their authority directly from God and are entirely unaccountable to Parliament?",
+                options: [
+                    "The Divine Right of Kings",
+                    "The Social Contract Doctrine",
+                    "Constitutional Monarchy",
+                    "Parliamentary Supremacy"
+                ],
+                correctAnswer: "The Divine Right of Kings",
+                explanation: "James I's 'The True Law of Free Monarchies' formulated his absolute defense of the Divine Right of Kings, asserting that monarchs are designated by God and therefore exempt from temporal laws or parliamentary veto."
+            },
+            {
+                id: 2,
+                category: "Constitutional Theory",
+                question: "What landmark 1641 Act of Parliament mandated that the legislative body must convene at least once every three years, preventing the King from ruling indefinitely without legislative oversight?",
+                options: [
+                    "The Triennial Act",
+                    "The Habeas Corpus Act",
+                    "The Petition of Right",
+                    "The Bill of Rights"
+                ],
+                correctAnswer: "The Triennial Act",
+                explanation: "The Triennial Act of 1641 was a milestone piece of legislation passed by the Long Parliament. It legally bound the monarch to call parliament at least once every three years, targeting the personal rule of Charles I."
+            },
+            {
+                id: 3,
+                category: "Constitutional Theory",
+                question: "During the 'Personal Rule' of Charles I (1629–1640), what obsolete non-parliamentary tax was resurrected and extended to inland counties, provoking widespread legal resistance?",
+                options: [
+                    "Ship Money",
+                    "Tonnage and Poundage",
+                    "The Benevolence Tax",
+                    "The Hearth Tax"
+                ],
+                correctAnswer: "Ship Money",
+                explanation: "Ship Money was historically a coastal defense tax levied on maritime ports in times of war. Charles I controversially extended it inland and in peacetime as a mechanism to raise revenue without needing to call Parliament."
+            },
+            {
+                id: 4,
+                category: "Interregnum & Radicalism",
+                question: "The execution of King Charles I in January 1649 was a watershed moment in European history. What specific legal charge was leveled against him by the specially convened High Court of Justice?",
+                options: [
+                    "High treason against the people of England",
+                    "Ecclesiastical heresy and blasphemy",
+                    "Violating the Magna Carta",
+                    "Conspiring with foreign powers to overthrow Scotland"
+                ],
+                correctAnswer: "High treason against the people of England",
+                explanation: "The Rump Parliament charged Charles I with high treason against the people of England, arguing that as king, his duty was to serve the common good and that he broke this public contract by waging war on his own citizens."
+            },
+            {
+                id: 5,
+                category: "Interregnum & Radicalism",
+                question: "Which radical Interregnum group, led by figures like Gerrard Winstanley, advocated for communal land cultivation and the dismantling of private property enclosures?",
+                options: [
+                    "The Diggers",
+                    "The Fifth Monarchists",
+                    "The Levellers",
+                    "The Ranters"
+                ],
+                correctAnswer: "The Diggers",
+                explanation: "The Diggers (who called themselves the True Levellers) occupied waste lands and common enclosures to farm them cooperatively, proposing an early modern form of agrarian communism and rejecting landlord hierarchy."
+            },
+            {
+                id: 6,
+                category: "Interregnum & Radicalism",
+                question: "In the autumn of 1647, the New Model Army held a series of historic debates concerning a new, democratic constitution for England, pitting radical levellers against army grandees. What were these debates called?",
+                options: [
+                    "The Putney Debates",
+                    "The Whitehall Conferences",
+                    "The Westminster Assemblies",
+                    "The Uxbridge Treaty negotiations"
+                ],
+                correctAnswer: "The Putney Debates",
+                explanation: "The Putney Debates were a series of discussions within the Parliamentary New Model Army concerning the 'Agreement of the People', a radical manifesto calling for near-universal male suffrage, religious toleration, and democratic reform."
+            },
+            {
+                id: 7,
+                category: "Interregnum & Radicalism",
+                question: "What title did Oliver Cromwell assume in December 1653 after dismissing the Rump Parliament and dissolving the short-lived Barebone's Parliament?",
+                options: [
+                    "Lord Protector",
+                    "Lord Chancellor",
+                    "King in Parliament",
+                    "Supreme Governor of the Commonwealth"
+                ],
+                correctAnswer: "Lord Protector",
+                explanation: "Cromwell assumed the title of 'Lord Protector' under England's first written constitution, the Instrument of Government, establishing a military executive protectorate over England, Scotland, and Ireland."
+            },
+            {
+                id: 8,
+                category: "Literature & Culture",
+                question: "In an advanced history and literature setting, studying the shifting political views of which epic poet helps students explore the transition from republican optimism to post-Restoration disillusionment?",
+                options: [
+                    "John Milton",
+                    "Andrew Marvell",
+                    "John Donne",
+                    "Alexander Pope"
+                ],
+                correctAnswer: "John Milton",
+                explanation: "John Milton was a staunch defender of the Commonwealth and served as Secretary for Foreign Tongues under Cromwell. His late masterpieces (like Paradise Lost) explore motifs of political fall, freedom, and post-Restoration disappointment."
+            },
+            {
+                id: 9,
+                category: "Literature & Culture",
+                question: "The Restoration Settlement of 1660 brought Charles II back to the throne. What cultural institution, strictly closed by the Puritans in 1642, was immediately re-authorized, transforming the English public sphere?",
+                options: [
+                    "The public theaters",
+                    "The coffeehouses",
+                    "The Royal Society",
+                    "Cathedral choirs"
+                ],
+                correctAnswer: "The public theaters",
+                explanation: "The Restoration immediately saw the lifting of the Puritan ban on theatrical performance. Charles II granted patents to two theatre companies, re-establishing commercial plays with a bold, provocative visual culture."
+            },
+            {
+                id: 10,
+                category: "Literature & Culture",
+                question: "John Dryden's celebrated 1681 political poem 'Absalom and Achitophel' uses biblical allegory to defend Charles II during which major constitutional crisis?",
+                options: [
+                    "The Exclusion Crisis",
+                    "The Popish Plot",
+                    "The Rye House Plot",
+                    "The Glorious Revolution"
+                ],
+                correctAnswer: "The Exclusion Crisis",
+                explanation: "Dryden utilized biblical allegories (representing Charles II as King David) in 'Absalom and Achitophel' to discredit the Whigs who were attempting to legally exclude the Catholic Duke of York from the line of succession."
+            },
+            {
+                id: 11,
+                category: "Constitutional Theory",
+                question: "The political polarization of the late Stuart period gave rise to two historic parties: the Whigs and the Tories. What was the foundational ideological stance of the early Tories?",
+                options: [
+                    "Divine right, hereditary succession, and strong royal prerogative",
+                    "Supremacy of Parliament, toleration for dissenters, and economic protectionism",
+                    "Total abolition of the monarchical state in favor of a new Republic",
+                    "Suppression of the Anglican Church in favor of a Presbyterial model"
+                ],
+                correctAnswer: "Divine right, hereditary succession, and strong royal prerogative",
+                explanation: "The original Tories formed around a defense of the Crown, supporting the absolute validity of hereditary succession, strong royal power, and the supremacy of the established High Anglican Church."
+            },
+            {
+                id: 12,
+                category: "Constitutional Theory",
+                question: "What controversial action by James II in 1687 bypassed Parliament by using the royal dispensing power to suspend penal laws against Catholics and Protestant dissenters?",
+                options: [
+                    "The Declaration of Indulgence",
+                    "The Test Act Repeal",
+                    "The Clarendon Code",
+                    "The Treaty of Dover"
+                ],
+                correctAnswer: "The Declaration of Indulgence",
+                explanation: "The Declaration of Indulgence bypassed Parliamentary laws, unilaterally granting freedom of worship to Roman Catholics and Protestant Nonconformists. This alarmed Protestants who saw it as an abusive exercise of absolute prerogative."
+            },
+            {
+                id: 13,
+                category: "Constitutional Theory",
+                question: "The Glorious Revolution of 1688 resulted in James II being replaced by which joint monarchs?",
+                options: [
+                    "William III and Mary II",
+                    "William of Orange and Queen Anne",
+                    "George I and Sophia",
+                    "Charles II and Catherine of Braganza"
+                ],
+                correctAnswer: "William III and Mary II",
+                explanation: "The Glorious Revolution established the joint sovereignty of Mary II (James II's Protestant daughter) and her Dutch husband, William of Orange, who was invited to defend English liberties."
+            },
+            {
+                id: 14,
+                category: "Constitutional Theory",
+                question: "Which foundational constitutional document, accepted by William and Mary in 1689, barred Catholics from the throne, outlawed peacetime standing armies without consent, and guaranteed free parliamentary elections?",
+                options: [
+                    "The Bill of Rights",
+                    "The Act of Settlement",
+                    "The Triennial Act",
+                    "The Petition of Right"
+                ],
+                correctAnswer: "The Bill of Rights",
+                explanation: "The Bill of Rights (1689) limited the power of the Crown and permanently secured critical legislative rights of Parliament, placing England firmly on the path to a constitutional monarchy."
+            },
+            {
+                id: 15,
+                category: "Constitutional Theory",
+                question: "Which 1689 legislative act, introduced alongside the Bill of Rights, granted freedom of public worship to Protestant Nonconformists, but explicitly excluded Roman Catholics and Unitarians?",
+                options: [
+                    "The Toleration Act",
+                    "The Test Act",
+                    "The Act of Uniformity",
+                    "The Licensing Act"
+                ],
+                correctAnswer: "The Toleration Act",
+                explanation: "The Toleration Act of 1689 allowed Protestant Dissenters (like Baptists and Congregationalists) to have their own places of worship and ministers, though it preserved civil penalties and excluded Catholics."
+            },
+            {
+                id: 16,
+                category: "Constitutional Theory",
+                question: "John Locke's 'Two Treatises of Government' (1689) provided the intellectual justification for the Glorious Revolution. What is the core premise of Locke's Social Contract?",
+                options: [
+                    "Government is a trust created to protect natural rights, and citizens can dissolve it if that trust is broken",
+                    "Sovereignty is absolute and indivisible, and citizens must yield all rights to prevent social chaos",
+                    "The ruler is divinely appointed and subject to no human trial or constitutional limitation",
+                    "All wealth and property must be managed in common ownership to prevent inequality"
+                ],
+                correctAnswer: "Government is a trust created to protect natural rights, and citizens can dissolve it if that trust is broken",
+                explanation: "Locke argued that legitimate political authority rests on the consent of the governed, structured to safeguard human rights. If the sovereign abuses that power and breaches the contract, the citizens have the right to alter or replace them."
+            },
+            {
+                id: 17,
+                category: "Global Empire",
+                question: "The Act of Union in 1707 dissolved the independent parliaments of Edinburgh and Westminster to create which new sovereign political entity?",
+                options: [
+                    "The Kingdom of Great Britain",
+                    "The United Kingdom of Great Britain and Ireland",
+                    "The British Empire and Commonwealth",
+                    "The Anglo-Scottish Confederation"
+                ],
+                correctAnswer: "The Kingdom of Great Britain",
+                explanation: "The 1707 Act of Union formally united the crowns and legislative assemblies of England and Scotland, forming the single unified nation of 'The Kingdom of Great Britain'."
+            },
+            {
+                id: 18,
+                category: "Global Empire",
+                question: "The Act of Union in 1707 was met with significant public opposition in Scotland. Which prominent Scottish poet later famously described the Scottish treaty-makers as a 'parcel of rogues in a nation' bought with English gold?",
+                options: [
+                    "Robert Burns",
+                    "Walter Scott",
+                    "Allan Ramsay",
+                    "James Boswell"
+                ],
+                correctAnswer: "Robert Burns",
+                explanation: "Robert Burns, in his bitter 1791 nationalistic poem 'Such a Parcel of Rogues in a Nation', lamented the 1707 Act of Union, claiming Scotland's independence was sold off for monetary bribes to Scottish elites."
+            },
+            {
+                id: 19,
+                category: "Global Empire",
+                question: "What highly lucrative economic concession did Great Britain secure from Spain in the 1713 Treaty of Utrecht, turbocharging its transatlantic slave-trading mercantile empire?",
+                options: [
+                    "The Asiento de Negros",
+                    "The Methuen Treaty advantages",
+                    "The Navigation Acts exemption",
+                    "The East India Company charter"
+                ],
+                correctAnswer: "The Asiento de Negros",
+                explanation: "The 'Asiento' was the exclusive legal contract granted by the Spanish Crown to supply enslaved Africans to Spanish colonies, a monopoly secured by Britain at Utrecht that became a core engine of its 18th-century mercantile wealth."
+            },
+            {
+                id: 20,
+                category: "Global Empire",
+                question: "Which series of protectionist trade laws, first enacted under the Commonwealth in 1651, aimed to restrict colonial trade to English shipping and directly challenged Dutch maritime hegemony?",
+                options: [
+                    "The Navigation Acts",
+                    "The Mercantilist Ordinances",
+                    "The Stamp Acts",
+                    "The Declaratory Acts"
+                ],
+                correctAnswer: "The Navigation Acts",
+                explanation: "The Navigation Acts restricted colonial trade strictly to English ships, shipping hubs, and crews, forming the commercial backbone of England's imperial strategy and leading directly to several Anglo-Dutch naval conflicts."
+            },
+            {
+                id: 21,
+                category: "Global Empire",
+                question: "What structural economic change during the late Stuart period transformed how the state funded its military operations, leading directly to the creation of the Bank of England in 1694?",
+                options: [
+                    "The Financial Revolution",
+                    "The Industrial Revolution",
+                    "The Agrarian Revolution",
+                    "The Commercial Deregulation"
+                ],
+                correctAnswer: "The Financial Revolution",
+                explanation: "The Financial Revolution introduced modern public credit, a long-term national debt funded by parliament, and the Bank of England. This transformed Britain's military-fiscal capability and financed its global rise."
+            },
+            {
+                id: 22,
+                category: "Literature & Culture",
+                question: "The collapse of licensing laws and censorship in the 1640s created an unprecedented boom in printing. What cheap, small, and inexpensive print format became the primary battleground for political and religious debate?",
+                options: [
+                    "The Pamphlet",
+                    "The Folio Anthology",
+                    "The Peer-Reviewed Academic Journal",
+                    "The Broadside Novel"
+                ],
+                correctAnswer: "The Pamphlet",
+                explanation: "Inexpensive, rapidly produced paper pamphlets became the early modern equivalent of public opinion feeds, disseminating radical ideas, propaganda, and intense debates across the nation during the Civil War."
+            },
+            {
+                id: 23,
+                category: "Constitutional Theory",
+                question: "In the famous frontispiece of Thomas Hobbes's 'Leviathan' (1651), the sovereign's massive body is visually constructed out of hundreds of tiny individual citizens. What core political idea does this imagery illustrate?",
+                options: [
+                    "The state's authority is constructed from the collective submission of its citizens through a social contract",
+                    "The divine status of the monarch as a giant being made by direct miracle",
+                    "The physical execution and subjugation of rebel soldiers",
+                    "The total equality of rights of every citizen under a federal representative assembly"
+                ],
+                correctAnswer: "The state's authority is constructed from the collective submission of its citizens through a social contract",
+                explanation: "The frontispiece represents the social contract where individuals hand over their natural rights to create a unified, ultimate sovereign entity (the Leviathan) to protect them from mutual self-destruction."
+            },
+            {
+                id: 24,
+                category: "Literature & Culture",
+                question: "What classical architectural masterpiece designed by Inigo Jones served as the backdrop for the execution of Charles I, standing as a stark symbol of the fall of Stuart absolute majesty?",
+                options: [
+                    "The Banqueting House at Whitehall",
+                    "Hampton Court Palace",
+                    "Greenwich Hospital",
+                    "Somerset House"
+                ],
+                correctAnswer: "The Banqueting House at Whitehall",
+                explanation: "Charles I walked out of a window of the classical Banqueting House at Whitehall on January 30, 1649, to step onto the scaffold built for his execution, dramatically contrasting Stuart absolute pageantry with republican justice."
+            },
+            {
+                id: 25,
+                category: "Literature & Culture",
+                question: "What catastrophic 1666 event destroyed over 13,000 houses and key public structures in London, prompting a massive architectural rebuilding of the city led by Sir Christopher Wren?",
+                options: [
+                    "The Great Fire of London",
+                    "The Great Plague",
+                    "The Dutch Naval Raid on the Thames",
+                    "The Great Storm of London"
+                ],
+                correctAnswer: "The Great Fire of London",
+                explanation: "The Great Fire of London swept through the medieval city in September 1666, destroying the old city structure. This led to a complete rebuilding effort, giving rise to classical designs, including Sir Christopher Wren's St. Paul's Cathedral."
+            },
+            {
+                id: 26,
+                category: "Literature & Culture",
+                question: "Aphra Behn, one of the first professional female writers of the Restoration, wrote the pioneering 1688 novella 'Oroonoko'. What complex, global theme does this text explore?",
+                options: [
+                    "The cruelty of the transatlantic slave trade and the concept of royal sovereignty",
+                    "The defense of strict Puritan restrictions on theatrical dress and makeup",
+                    "The technical science of agricultural systems in modern Europe",
+                    "A direct praise of James II's military tactics during the French Wars"
+                ],
+                correctAnswer: "The cruelty of the transatlantic slave trade and the concept of royal sovereignty",
+                explanation: "Behn's Oroonoko tells the tragic story of an African prince enslaved in Surinam. It explores the moral conflicts of early empire, the cruelties of the middle passage, and the concept of innate majesty."
+            },
+            {
+                id: 27,
+                category: "Literature & Culture",
+                question: "The religious laws passed during the early Restoration aimed to enforce absolute conformity to the Anglican Church. What collective name was given to Protestants who refused to accept the Book of Common Prayer?",
+                options: [
+                    "Nonconformists or Dissenters",
+                    "Cavaliers",
+                    "Jacobites",
+                    "Anglican Traditionalists"
+                ],
+                correctAnswer: "Nonconformists or Dissenters",
+                explanation: "Protestants (such as Puritans, Presbyterians, and Quakers) who refused to conform to the state Church of England's rituals were legally classified as Nonconformists or religious Dissenters."
+            },
+            {
+                id: 28,
+                category: "Global Empire",
+                question: "What major global conflict, ending in 1713, served as the backdrop for the final years of the Stuart dynasty under Queen Anne, securing Britain's position as a dominant European power?",
+                options: [
+                    "The War of the Spanish Succession",
+                    "The Seven Years' War",
+                    "The Thirty Years' War",
+                    "The War of the Austrian Succession"
+                ],
+                correctAnswer: "The War of the Spanish Succession",
+                explanation: "The War of the Spanish Succession (1701–1714) occupied Queen Anne's entire reign. It limited French hegemony, preserved the balance of power, and established Great Britain as a supreme naval and commercial power."
+            },
+            {
+                id: 29,
+                category: "Literature & Culture",
+                question: "How did the legal status of women on the English stage change during the Restoration of Charles II?",
+                options: [
+                    "Women were legally permitted to perform professionally on stage for the first time",
+                    "Women were banned from even attending public theatrical venues without male accompaniment",
+                    "Women were officially named as the exclusive direct owners of all theater buildings",
+                    "Women were banned from writing or drafting plays, restricting them only to minor choral roles"
+                ],
+                correctAnswer: "Women were legally permitted to perform professionally on stage for the first time",
+                explanation: "By royal decree in 1660, Charles II permitted female roles to be acted by actual women, ending the traditional English practice of teenage boys performing female roles in drag."
+            },
+            {
+                id: 30,
+                category: "Literature & Culture",
+                question: "From a pedagogical perspective, why is analyzing Stuart-era political pamphlets particularly useful in advanced communicative language studies?",
+                options: [
+                    "To study how persuasive, rhetorical language is engineered to influence public opinion during crises",
+                    "To learn outdated, obsolete spellings that are required in modern science writing",
+                    "To prove that early modern printmakers had zero comprehension of basic grammar rules",
+                    "To practice transcribing ancient Latin manuscripts into standard contemporary English"
+                ],
+                correctAnswer: "To study how persuasive, rhetorical language is engineered to influence public opinion during crises",
+                explanation: "Stuart pamphlets are masterpieces of persuasion. Studying them allows students to deconstruct rhetorical models, bias, emotional appeals, and polemical structures in public debates."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let selectedOption = null;
+        let hasSubmitted = false;
+        let userAnswers = []; // Records user choices and results
+
+        // Categories tracking
+        const categoriesList = ["Constitutional Theory", "Interregnum & Radicalism", "Literature & Culture", "Global Empire"];
+
+        function startQuiz() {
+            document.getElementById('intro-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            hasSubmitted = false;
+            selectedOption = null;
+            
+            // UI elements
+            const question = quizQuestions[currentQuestionIndex];
+            document.getElementById('category-indicator').innerText = `Category: ${question.category}`;
+            document.getElementById('question-tracker').innerText = `Question ${currentQuestionIndex + 1} of ${quizQuestions.length}`;
+            
+            const pct = ((currentQuestionIndex) / quizQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+            
+            document.getElementById('question-text').innerText = question.question;
+
+            // Generate Options HTML
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach(option => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = "w-full text-left p-4 rounded-xl border border-indigo-950 bg-slate-900/40 hover:bg-slate-900/90 hover:border-indigo-500/40 transition duration-200 text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium";
+                button.innerText = option;
+                button.onclick = () => selectOption(button, option);
+                optionsContainer.appendChild(button);
+            });
+
+            // Reset Next/Submit button states
+            const nextButton = document.getElementById('next-button');
+            nextButton.innerText = "Submit Answer";
+            nextButton.disabled = true;
+
+            // Hide feedback panel
+            document.getElementById('feedback-panel').classList.add('hidden');
+        }
+
+        function selectOption(buttonElement, optionText) {
+            if (hasSubmitted) return; // Prevent clicking after submission
+
+            selectedOption = optionText;
+
+            // Reset styles on all options
+            const optionsContainer = document.getElementById('options-container');
+            Array.from(optionsContainer.children).forEach(child => {
+                child.className = "w-full text-left p-4 rounded-xl border border-indigo-950 bg-slate-900/40 hover:bg-slate-900/90 hover:border-indigo-500/40 transition duration-200 text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium";
+            });
+
+            // Apply selected styling
+            buttonElement.className = "w-full text-left p-4 rounded-xl border-2 border-indigo-500 bg-indigo-950/20 text-slate-100 font-semibold focus:outline-none";
+
+            // Enable submit button
+            document.getElementById('next-button').disabled = false;
+        }
+
+        function handleNextStep() {
+            if (!hasSubmitted) {
+                // Perform Submission validation
+                submitAnswer();
+            } else {
+                // Advance to next question
+                currentQuestionIndex++;
+                if (currentQuestionIndex < quizQuestions.length) {
+                    loadQuestion();
+                } else {
+                    showResults();
+                }
+            }
+        }
+
+        function submitAnswer() {
+            hasSubmitted = true;
+            const question = quizQuestions[currentQuestionIndex];
+            const isCorrect = (selectedOption === question.correctAnswer);
+
+            // Record choice status
+            userAnswers.push({
+                questionId: question.id,
+                questionText: question.question,
+                category: question.category,
+                selected: selectedOption,
+                correct: question.correctAnswer,
+                isCorrect: isCorrect,
+                explanation: question.explanation
+            });
+
+            // Visual feedback update on options
+            const optionsContainer = document.getElementById('options-container');
+            Array.from(optionsContainer.children).forEach(child => {
+                const optText = child.innerText;
+                if (optText === question.correctAnswer) {
+                    // Highlight correct answer in bold green
+                    child.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-950/20 text-emerald-300 font-bold flex items-center justify-between";
+                    child.innerHTML = `<span>${optText}</span> <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path></svg>`;
+                } else if (optText === selectedOption && !isCorrect) {
+                    // Highlight selected incorrect answer in red
+                    child.className = "w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-950/20 text-rose-300 font-bold flex items-center justify-between";
+                    child.innerHTML = `<span>${optText}</span> <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>`;
+                } else {
+                    // Mute other answers
+                    child.className = "w-full text-left p-4 rounded-xl border border-indigo-950/20 bg-slate-900/10 text-slate-500 opacity-60";
+                }
+            });
+
+            // Reveal explanation panel
+            const feedbackPanel = document.getElementById('feedback-panel');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+            const feedbackIconContainer = document.getElementById('feedback-icon-container');
+
+            feedbackPanel.classList.remove('hidden');
+            feedbackText.innerText = question.explanation;
+
+            if (isCorrect) {
+                feedbackPanel.className = "bg-emerald-950/10 border border-emerald-500/20 p-5 rounded-xl space-y-2";
+                feedbackTitle.className = "font-bold text-base text-emerald-400";
+                feedbackTitle.innerText = "Correct Assessment";
+                feedbackIconContainer.innerHTML = `<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"></path></svg>`;
+            } else {
+                feedbackPanel.className = "bg-rose-950/10 border border-rose-500/20 p-5 rounded-xl space-y-2";
+                feedbackTitle.className = "font-bold text-base text-rose-400";
+                feedbackTitle.innerText = "Incorrect Assessment";
+                feedbackIconContainer.innerHTML = `<svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path></svg>`;
+            }
+
+            // Set progress bar to current step completion
+            const finalPct = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${finalPct}%`;
+
+            // Adjust button to next step
+            const nextButton = document.getElementById('next-button');
+            nextButton.innerText = (currentQuestionIndex === quizQuestions.length - 1) ? "View Final Assessment" : "Next Question";
+        }
+
+        function showResults() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
+
+            const correctCount = userAnswers.filter(a => a.isCorrect).length;
+            const accuracyPercent = Math.round((correctCount / quizQuestions.length) * 100);
+
+            // Trigger visual celebratory confetti on high scores
+            if (accuracyPercent >= 70) {
+                confetti({
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 }
+                });
+            }
+
+            // Animate Score Gauge SVG Stroke Dashoffset
+            const scoreCircle = document.getElementById('score-circle');
+            const circumference = 2 * Math.PI * 70; // 439.82
+            const offset = circumference - (accuracyPercent / 100) * circumference;
+            scoreCircle.style.strokeDashoffset = offset;
+
+            document.getElementById('score-percent').innerText = `${accuracyPercent}%`;
+            document.getElementById('score-text').innerText = `Score: ${correctCount} / ${quizQuestions.length}`;
+
+            // Rank assignment
+            let rank = "Novice Scholar";
+            let rankColor = "text-slate-400";
+            if (accuracyPercent >= 90) {
+                rank = "Regius Professor of History";
+                rankColor = "text-amber-400";
+            } else if (accuracyPercent >= 75) {
+                rank = "Parliamentary Grandee";
+                rankColor = "text-indigo-300";
+            } else if (accuracyPercent >= 50) {
+                rank = "Exclusion Era Pamphleteer";
+                rankColor = "text-teal-300";
+            }
+            const rankBadge = document.getElementById('rank-badge');
+            rankBadge.innerText = `Rank: ${rank}`;
+            rankBadge.className = `text-xs mt-1 uppercase tracking-widest font-extrabold ${rankColor}`;
+
+            // Calculate category breakdown
+            const categoryStats = {};
+            categoriesList.forEach(cat => {
+                categoryStats[cat] = { correct: 0, total: 0 };
+            });
+
+            userAnswers.forEach(ans => {
+                if (categoryStats[ans.category]) {
+                    categoryStats[ans.category].total++;
+                    if (ans.isCorrect) categoryStats[ans.category].correct++;
+                }
+            });
+
+            // Populate category breakdown list with custom HTML progress bars
+            const breakdownList = document.getElementById('category-breakdown-list');
+            breakdownList.innerHTML = '';
+
+            for (const [cat, stats] of Object.entries(categoryStats)) {
+                if (stats.total === 0) continue;
+                const catPct = Math.round((stats.correct / stats.total) * 100);
+                
+                const statItem = document.createElement('div');
+                statItem.className = "space-y-1";
+                statItem.innerHTML = `
+                    <div class="flex justify-between text-xs font-semibold">
+                        <span class="text-slate-400">${cat}</span>
+                        <span class="text-indigo-300">${stats.correct}/${stats.total} (${catPct}%)</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+                        <div class="h-full bg-indigo-500" style="width: ${catPct}%"></div>
+                    </div>
+                `;
+                breakdownList.appendChild(statItem);
+            }
+
+            // Populating visual list of answered questions (sorting incorrect items first for review)
+            const sortedReviews = [...userAnswers].sort((a, b) => a.isCorrect - b.isCorrect);
+            const reviewList = document.getElementById('review-questions-list');
+            reviewList.innerHTML = '';
+
+            sortedReviews.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `p-4 rounded-xl border ${item.isCorrect ? 'bg-emerald-950/5 border-emerald-900/40 text-emerald-300' : 'bg-rose-950/5 border-rose-900/40 text-rose-300'} space-y-2`;
+                
+                itemDiv.innerHTML = `
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded ${item.isCorrect ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}">
+                            ${item.isCorrect ? 'Correct' : 'Incorrect'}
+                        </span>
+                        <span class="text-xs text-slate-500 font-semibold">${item.category}</span>
+                    </div>
+                    <p class="text-slate-200 font-medium text-sm leading-relaxed">${item.questionText}</p>
+                    <div class="text-xs space-y-1 pt-1 border-t border-slate-800/60">
+                        <div><span class="text-slate-400 font-semibold">Selected Choice:</span> <span class="${item.isCorrect ? 'text-emerald-400 font-semibold' : 'text-rose-400 font-semibold'}">${item.selected || 'None'}</span></div>
+                        ${!item.isCorrect ? `<div><span class="text-slate-400 font-semibold">Correct Authority:</span> <span class="text-emerald-400 font-bold">${item.correct}</span></div>` : ''}
+                        <div class="text-slate-300 italic mt-1.5 text-[11px] leading-relaxed"><span class="font-bold text-slate-400 not-italic">History Core:</span> ${item.explanation}</div>
+                    </div>
+                `;
+                reviewList.appendChild(itemDiv);
+            });
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            selectedOption = null;
+            hasSubmitted = false;
+            userAnswers = [];
+
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        /**
+         * Captures the active HTML document tree and triggers a browser file export.
+         * This compiles the code seamlessly so the user can save it offline.
+         */
+        function downloadQuizFile() {
+            try {
+                // Fetch the complete live document outer code
+                const pageMarkup = document.documentElement.outerHTML;
+                const blob = new Blob([pageMarkup], { type: 'text/html' });
+                const blobURL = URL.createObjectURL(blob);
+                
+                // Construct virtual dynamic anchor
+                const link = document.createElement('a');
+                link.href = blobURL;
+                link.download = 'Stuart_Dynasty_Master_Quiz.html';
+                
+                // Append, trigger, and detach
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Revoke URL memory allocation
+                setTimeout(() => URL.revokeObjectURL(blobURL), 100);
+            } catch (err) {
+                console.error("Critical: Could not export raw app content.", err);
+            }
+        }
+    </script>
+</body>
+</html>

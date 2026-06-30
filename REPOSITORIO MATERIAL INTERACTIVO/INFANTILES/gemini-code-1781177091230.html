@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Tren de las Donas</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0f7fa 0%, #f3e5f5 100%);
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #6c5ce7;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 0px #fff;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .instruction { color: #ff6b8b; font-size: 1.3rem; font-weight: bold; margin-bottom: 30px; text-align: center; }
+        
+        /* Vías/Contenedor del tren */
+        .train-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            background: rgba(255,255,255,0.5);
+            padding: 20px 40px;
+            border-radius: 50px;
+            border: 4px dashed #b2bec3;
+        }
+
+        .wagon {
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.3rem;
+            color: #ff7675;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+            border: 4px solid #ff7675;
+        }
+        .wagon.missing {
+            border: 4px dashed #6c5ce7;
+            background: #f0edf6;
+            color: #6c5ce7;
+            font-size: 2.5rem;
+        }
+
+        /* Opciones de respuesta escritas en palabras */
+        .choices-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 650px;
+            width: 100%;
+        }
+
+        .choice-card {
+            background: #fff;
+            padding: 15px 25px;
+            border-radius: 20px;
+            border: 4px solid #00cec9;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2d3436;
+            cursor: pointer;
+            box-shadow: 0 6px 0px #00b894;
+            transition: all 0.2s;
+            text-align: center;
+            min-width: 140px;
+        }
+        .choice-card:hover { transform: translateY(-3px); box-shadow: 0 9px 0px #00b894; }
+        .choice-card:active { transform: translateY(3px); box-shadow: 0 2px 0px #00b894; }
+
+        .feedback { height: 35px; font-size: 1.5rem; font-weight: bold; margin-top: 25px; }
+        .correct { color: #2ecc71; }
+        .incorrect { color: #e74c3c; }
+    </style>
+</head>
+<body>
+
+    <h1>¡El Tren de las Donas Numéricas! 🚂</h1>
+    <div class="instruction">¿Qué número falta en el vagón para completar el tren?</div>
+
+    <div class="train-container" id="train"></div>
+    <div class="choices-container" id="choices"></div>
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        const nombresCastellano = {
+            1: "uno", 2: "dos", 3: "tres", 4: "cuatro", 5: "cinco", 6: "seis", 7: "siete", 8: "ocho", 9: "nueve", 10: "diez",
+            11: "once", 12: "doce", 13: "trece", 14: "catorce", 15: "quince", 16: "dieciséis", 17: "diecisiete", 18: "dieciocho", 19: "diecinueve", 20: "veinte",
+            21: "veintiuno", 22: "veintidós", 23: "veintitrés", 24: "veinticuatro", 25: "veinticinco", 26: "veintiséis", 27: "veintisiete", 28: "veintiocho", 29: "veintinueve", 30: "treinta",
+            31: "treinta y uno", 32: "treinta y dos", 33: "treinta y tres", 34: "treinta y cuatro", 35: "treinta y cinco", 36: "treinta y seis", 37: "treinta y siete", 38: "treinta y ocho", 39: "treinta y nueve", 40: "cuarenta",
+            41: "cuarenta y uno", 42: "cuarenta y dos", 43: "cuarenta y tres", 44: "cuarenta y cuatro", 45: "cuarenta y cinco", 46: "cuarenta y seis", 47: "cuarenta y siete", 48: "cuarenta y ocho", 49: "cuarenta y nueve", 50: "cincuenta",
+            51: "cincuenta y uno", 52: "cincuenta y dos", 53: "cincuenta y tres", 54: "cincuenta y cuatro", 55: "cincuenta y cinco", 56: "cincuenta y seis", 57: "cincuenta y siete", 58: "cincuenta y ocho", 59: "cincuenta y nueve", 60: "sesenta",
+            61: "sesenta y uno", 62: "sesenta y dos", 63: "sesenta y tres", 64: "sesenta y cuatro", 65: "sesenta y cinco", 66: "sesenta y seis", 67: "sesenta y siete", 68: "sesenta y ocho", 69: "sesenta y nueve", 70: "setenta"
+        };
+
+        let targetNumber = 0;
+        let activeRound = true;
+
+        function buildTrain() {
+            activeRound = true;
+            document.getElementById('feedback').innerText = "";
+            
+            // Elegir base de secuencia entre el 1 y el 68 para que quepan 3 vagones
+            let start = Math.floor(Math.random() * 68) + 1;
+            let sequence = [start, start + 1, start + 2];
+            
+            // Elegir cuál ocultar (índice 0, 1 o 2)
+            let missingIndex = Math.floor(Math.random() * 3);
+            targetNumber = sequence[missingIndex];
+
+            // Renderizar tren
+            const train = document.getElementById('train');
+            train.innerHTML = "";
+            sequence.forEach((num, index) => {
+                const wagon = document.createElement('div');
+                if(index === missingIndex) {
+                    wagon.className = "wagon missing";
+                    wagon.innerText = "?";
+                } else {
+                    wagon.className = "wagon";
+                    wagon.innerText = num;
+                }
+                train.appendChild(wagon);
+            });
+
+            // Generar opciones en palabras
+            let options = [targetNumber];
+            while(options.length < 3) {
+                let randomNum = Math.floor(Math.random() * 70) + 1;
+                if(!options.includes(randomNum)) options.push(randomNum);
+            }
+            options.sort(() => 0.5 - Math.random());
+
+            // Renderizar tarjetas de opciones
+            const choicesContainer = document.getElementById('choices');
+            choicesContainer.innerHTML = "";
+            options.forEach(num => {
+                const card = document.createElement('div');
+                card.className = "choice-card";
+                card.innerText = nombresCastellano[num];
+                card.onclick = () => checkSelection(num);
+                choicesContainer.appendChild(card);
+            });
+        }
+
+        function checkSelection(selected) {
+            if(!activeRound) return;
+            const fb = document.getElementById('feedback');
+
+            if(selected === targetNumber) {
+                activeRound = false;
+                fb.innerText = "¡Súper bien! El tren avanza 🚂💨";
+                fb.className = "feedback correct";
+                setTimeout(buildTrain, 1800);
+            } else {
+                fb.innerText = "Prueba con otra palabra ✨";
+                fb.className = "feedback incorrect";
+            }
+        }
+
+        window.onload = buildTrain;
+    </script>
+</body>
+</html>

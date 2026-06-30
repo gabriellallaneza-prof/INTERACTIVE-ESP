@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Memotec de Donas Numéricas! 1 al 70</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@600;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffeef8 0%, #e6f7ff 100%);
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #ff6b8b;
+            font-size: 2.6rem;
+            text-shadow: 2px 2px 0px #fff, 4px 4px 0px #ffccd5;
+            margin-bottom: 8px;
+        }
+
+        p {
+            color: #6c5ce7;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        /* Contenedor del tablero */
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 750px;
+            width: 100%;
+            perspective: 1000px;
+        }
+
+        @media (max-width: 600px) {
+            .game-container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
+            h1 { font-size: 2rem; }
+            p { font-size: 1rem; }
+        }
+
+        /* Tarjeta / Dona */
+        .card {
+            aspect-ratio: 1;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            transform: rotateY(180deg) scale(0.95);
+            pointer-events: none;
+            animation: celebrate 0.5s ease-in-out alternate 2;
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            border: 6px solid #fff;
+        }
+
+        /* Reverso (Dona glaseada con chispas) */
+        .card-back {
+            background: #ff85a2;
+            background-image: 
+                radial-gradient(circle at 50% 50%, transparent 24%, #ff6b8b 25%, #ff6b8b 36%, transparent 37%),
+                radial-gradient(circle at 30% 30%, #fff 4%, transparent 5%),
+                radial-gradient(circle at 70% 40%, #ffeaa7 5%, transparent 6%),
+                radial-gradient(circle at 40% 70%, #a29bfe 5%, transparent 6%),
+                radial-gradient(circle at 65% 75%, #55efc4 4%, transparent 5%);
+            transform: rotateY(0deg);
+        }
+
+        /* Frente (Revela el contenido) */
+        .card-front {
+            background: #fff;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* Centro de la dona frontal */
+        .card-front::before {
+            content: '';
+            position: absolute;
+            width: 32%;
+            height: 32%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffeef8 0%, #e6f7ff 100%);
+            border: 4px solid #fff;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+
+        .content-text {
+            position: relative;
+            z-index: 2;
+            font-family: 'Fredoka One', cursive;
+            word-break: break-word;
+            line-height: 1.2;
+            user-select: none;
+        }
+
+        /* Tipografías diferenciadas por tipo de tarjeta */
+        .type-number .content-text {
+            font-size: 2.8rem;
+            color: #ff6b8b;
+            text-shadow: 1px 1px 0px #fff;
+        }
+
+        .type-word .content-text {
+            font-size: 1.1rem;
+            color: #6c5ce7;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            padding: 4px;
+        }
+
+        @media (max-width: 600px) {
+            .type-number .content-text { font-size: 2rem; }
+            .type-word .content-text { font-size: 0.85rem; }
+        }
+
+        /* Botón de reinicio */
+        .btn-reset {
+            margin-top: 30px;
+            padding: 14px 40px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4rem;
+            color: #fff;
+            background: #00cec9;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0px #00b894, 0 10px 20px rgba(0,206,201,0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-reset:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px #00b894, 0 5px 10px rgba(0,206,201,0.3);
+        }
+
+        .btn-reset:hover {
+            background: #01e2dd;
+        }
+
+        /* Animación de acierto */
+        @keyframes celebrate {
+            0% { transform: rotateY(180deg) scale(0.95); }
+            100% { transform: rotateY(180deg) scale(1.1); box-shadow: 0 0 20px #ff85a2; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>¡Memotec de Donas! 🍩</h1>
+        <p>Encuentra el número y cómo se escribe</p>
+    </header>
+
+    <div class="game-container" id="tablero"></div>
+
+    <button class="btn-reset" onclick="initGame()">¡Jugar de nuevo!</button>
+
+    <script>
+        // Mapeo exhaustivo de números del 1 al 70 en castellano académico
+        const numerosCastellano = {
+            1: "uno", 2: "dos", 3: "tres", 4: "cuatro", 5: "cinco", 6: "seis", 7: "siete", 8: "ocho", 9: "nueve", 10: "diez",
+            11: "once", 12: "doce", 13: "trece", 14: "catorce", 15: "quince", 16: "dieciséis", 17: "diecisiete", 18: "dieciocho", 19: "diecinueve", 20: "veinte",
+            21: "veintiuno", 22: "veintidós", 23: "veintitrés", 24: "veinticuatro", 25: "veinticinco", 26: "veintiséis", 27: "veintisiete", 28: "veintiocho", 29: "veintinueve", 30: "treinta",
+            31: "treinta y uno", 32: "treinta y dos", 33: "treinta y tres", 34: "treinta y cuatro", 35: "treinta y cinco", 36: "treinta y seis", 37: "treinta y siete", 38: "treinta y ocho", 39: "treinta y nueve", 40: "cuarenta",
+            41: "cuarenta y uno", 42: "cuarenta y dos", 43: "cuarenta y tres", 44: "cuarenta y cuatro", 45: "cuarenta y cinco", 46: "cuarenta y seis", 47: "cuarenta y siete", 48: "cuarenta y ocho", 49: "cuarenta y nueve", 50: "cincuenta",
+            51: "cincuenta y uno", 52: "cincuenta y dos", 53: "cincuenta y tres", 54: "cincuenta y cuatro", 55: "cincuenta y cinco", 56: "cincuenta y seis", 57: "cincuenta y siete", 58: "cincuenta y ocho", 59: "cincuenta y nueve", 60: "sesenta",
+            61: "sesenta y uno", 62: "sesenta y dos", 63: "sesenta y tres", 64: "sesenta y cuatro", 65: "sesenta y cinco", 66: "sesenta y seis", 67: "sesenta y siete", 68: "sesenta y ocho", 69: "sesenta y nueve", 70: "setenta"
+        };
+
+        let firstCard = null;
+        let secondCard = null;
+        let lockBoard = false;
+
+        // Selección aleatoria de 6 pares (12 tarjetas en total) para evitar sobrecarga cognitiva
+        function getRandomPairs(obj, count) {
+            const keys = Object.keys(obj);
+            const shuffledKeys = keys.sort(() => 0.5 - Math.random());
+            const selectedKeys = shuffledKeys.slice(0, count);
+            
+            let cards = [];
+            selectedKeys.forEach(key => {
+                cards.push({ id: key, value: key, type: 'number' });
+                cards.push({ id: key, value: obj[key], type: 'word' });
+            });
+            
+            return cards.sort(() => 0.5 - Math.random());
+        }
+
+        function initGame() {
+            const tablero = document.getElementById('tablero');
+            tablero.innerHTML = '';
+            firstCard = null;
+            secondCard = null;
+            lockBoard = false;
+
+            const deck = getRandomPairs(numerosCastellano, 6);
+
+            deck.forEach(item => {
+                const cardEl = document.createElement('div');
+                cardEl.classList.add('card');
+                cardEl.dataset.id = item.id;
+
+                cardEl.innerHTML = `
+                    <div class="card-face card-back"></div>
+                    <div class="card-face card-front type-${item.type}">
+                        <span class="content-text">${item.value}</span>
+                    </div>
+                `;
+
+                cardEl.addEventListener('click', flipCard);
+                tablero.appendChild(cardEl);
+            });
+        }
+
+        function flipCard() {
+            if (lockBoard) return;
+            if (this === firstCard) return;
+
+            this.classList.add('flipped');
+
+            if (!firstCard) {
+                firstCard = this;
+                return;
+            }
+
+            secondCard = this;
+            checkMatch();
+        }
+
+        function checkMatch() {
+            let isMatch = firstCard.dataset.id === secondCard.dataset.id;
+            isMatch ? disableCards() : unflipCards();
+        }
+
+        function disableCards() {
+            firstCard.classList.add('matched');
+            secondCard.classList.add('matched');
+            resetBoard();
+        }
+
+        document.addEventListener('touchmove', function (event) {
+            if (event.scale !== 1) { event.preventDefault(); }
+        }, { passive: false });
+
+        function unflipCards() {
+            lockBoard = true;
+            setTimeout(() => {
+                firstCard.classList.remove('flipped');
+                secondCard.classList.remove('flipped');
+                resetBoard();
+            }, 1200);
+        }
+
+        function resetBoard() {
+            [firstCard, secondCard] = [null, null];
+            lockBoard = false;
+        }
+
+        window.onload = initGame;
+    </script>
+</body>
+</html>

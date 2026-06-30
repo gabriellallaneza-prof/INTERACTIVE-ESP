@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAP/ELF Academic Vocabulary Self-Study Module</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                        mono: ['"Fira Code"', 'monospace'],
+                    },
+                    colors: {
+                        academic: {
+                            50: '#f5f7fa',
+                            100: '#e4e9f0',
+                            200: '#cbd5e1',
+                            300: '#94a3b8',
+                            400: '#64748b',
+                            500: '#475569',
+                            600: '#334155',
+                            700: '#1e293b',
+                            800: '#0f172a',
+                            900: '#020617',
+                        },
+                        accent: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                        },
+                        argentina: {
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            400: '#38bdf8',
+                            500: '#0ea5e9'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+        .academic-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="text-academic-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Header / Banner -->
+    <header class="academic-gradient text-white border-b border-academic-700 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-argentina-400 text-academic-900 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">ELF Argentina</span>
+                    <span class="text-academic-300 text-sm">Teacher Education Series</span>
+                </div>
+                <h1 class="text-2xl md:text-3xl font-bold font-serif tracking-tight">Academic Lexis & Register</h1>
+                <p class="text-academic-300 text-sm mt-1 max-w-2xl">An interactive training suite for adult educators transitioning toward English as a Lingua Franca (ELF).</p>
+            </div>
+            <!-- Progress Tracker Indicator -->
+            <div class="bg-academic-800/80 border border-academic-700 rounded-xl p-4 w-full md:w-auto flex flex-col gap-2 shadow-inner">
+                <div class="flex justify-between items-center text-xs text-academic-300 font-semibold gap-10">
+                    <span>OVERALL PROGRESS</span>
+                    <span id="overall-progress-text">0% Completed</span>
+                </div>
+                <div class="w-full bg-academic-700 rounded-full h-2.5">
+                    <div id="overall-progress-bar" class="bg-argentina-400 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between items-center text-[10px] text-academic-400">
+                    <span>Units Mastered: <span id="units-mastered-count" class="font-bold text-white">0</span>/7</span>
+                    <button onclick="resetAllProgress()" class="hover:text-amber-400 transition-colors duration-200 underline">Reset Progress</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Navigation Menu -->
+        <nav class="lg:col-span-1 flex flex-col gap-2">
+            <h2 class="text-xs font-bold text-academic-400 uppercase tracking-widest px-3 mb-2">Module Navigation</h2>
+            
+            <button onclick="switchTab('intro')" id="tab-btn-intro" class="w-full text-left flex items-center justify-between p-3.5 rounded-xl font-medium transition-all duration-200 group bg-academic-100 text-academic-900 border-l-4 border-argentina-500 shadow-sm">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    <span class="text-sm">Introduction</span>
+                </div>
+            </button>
+
+            <!-- Unit Items (generated with dynamic checks) -->
+            <div id="unit-nav-container" class="flex flex-col gap-1">
+                <!-- Unit 1 -->
+                <button onclick="switchTab('unit1')" id="tab-btn-unit1" class="tab-btn w-full text-left flex items-center justify-between p-3 rounded-xl font-medium transition-all duration-200 group text-academic-600 hover:bg-academic-100 hover:text-academic-900">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="flex-shrink-0 text-xs font-mono text-academic-400 bg-academic-200/60 rounded-lg w-6 h-6 flex items-center justify-center group-hover:bg-academic-300/50">U1</span>
+                        <span class="text-sm truncate">Formal vs. Informal</span>
+                    </div>
+                    <span class="status-indicator" id="status-unit1">❌</span>
+                </button>
+                <!-- Unit 2 -->
+                <button onclick="switchTab('unit2')" id="tab-btn-unit2" class="tab-btn w-full text-left flex items-center justify-between p-3 rounded-xl font-medium transition-all duration-200 group text-academic-600 hover:bg-academic-100 hover:text-academic-900">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="flex-shrink-0 text-xs font-mono text-academic-400 bg-academic-200/60 rounded-lg w-6 h-6 flex items-center justify-center group-hover:bg-academic-300/50">U2</span>
+                        <span class="text-sm truncate">Abbreviations</span>
+                    </div>
+                    <span class="status-indicator" id="status-unit2">❌</span>
+                </button>
+                <!-- Unit 3 -->
+                <button onclick="switchTab('unit3')" id="tab-btn-unit3" class="tab-btn w-full text-left flex items-center justify-between p-3 rounded-xl font-medium transition-all duration-200 group text-academic-600 hover:bg-academic-100 hover:text-academic-900">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="flex-shrink-0 text-xs font-mono text-academic-400 bg-academic-200/60 rounded-lg w-6 h-6 flex items-center justify-center group-hover:bg-academic-300/50">U3</span>
+                        <span class="text-sm truncate">Nominalization</span>
+                    </div>
+                    <span class="status-indicator" id="status-unit3">❌</span>
+                </button>
+                <!-- Unit 4 -->
+                <button onclick="switchTab('unit4')" id="tab-btn-unit4" class="tab-btn w-full text-left flex items-center justify-between p-3 rounded-xl font-medium transition-all duration-200 group text-academic-600 hover:bg-academic-100 hover:text-academic-900">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="flex-shrink-0 text-xs font-mono text-academic-400 bg-academic-200/60 rounded-lg w-6 h-6 flex items-center justify-center group-hover:bg-academic-300/50">U4</span>
+                        <span class="text-sm truncate">Academic Adjectives</span>
+                    </div>
+                    <span class="status-indicator" id="status-unit4">❌</span>
+                </button>
+                <!-- Unit 5 -->
+                <button onclick="switchTab('unit5')" id="tab-btn-unit5" class="tab-btn w-full text-left flex items-center justify-between p-3 rounded-xl font-medium transition-all duration-200 group text-academic-600 hover:bg-academic-100 hover:text-academic-900">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="flex-shrink-0 text-xs font-mono text-academic-400 bg-academic-200/60 rounded-lg w-6 h-6 flex items-center justify-center group-hover:bg-academic-300/50">U5</span>
+                        <span class="text-sm truncate">Academic Verbs</span>
+                    </div>
+                    <span class="status-indicator" id="status-unit5">❌</span>
+                </button>
+                <!-- Unit 6 -->
+                <button onclick="switchTab('unit6')" id="tab-btn-unit6" class="tab-btn w-full text-left flex items-center justify-between p-3 rounded-xl font-medium transition-all duration-200 group text-academic-600 hover:bg-academic-100 hover:text-academic-900">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="flex-shrink-0 text-xs font-mono text-academic-400 bg-academic-200/60 rounded-lg w-6 h-6 flex items-center justify-center group-hover:bg-academic-300/50">U6</span>
+                        <span class="text-sm truncate">Academic Adverbs</span>
+                    </div>
+                    <span class="status-indicator" id="status-unit6">❌</span>
+                </button>
+                <!-- Unit 7 -->
+                <button onclick="switchTab('unit7')" id="tab-btn-unit7" class="tab-btn w-full text-left flex items-center justify-between p-3 rounded-xl font-medium transition-all duration-200 group text-academic-600 hover:bg-academic-100 hover:text-academic-900">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="flex-shrink-0 text-xs font-mono text-academic-400 bg-academic-200/60 rounded-lg w-6 h-6 flex items-center justify-center group-hover:bg-academic-300/50">U7</span>
+                        <span class="text-sm truncate">Academic Collocations</span>
+                    </div>
+                    <span class="status-indicator" id="status-unit7">❌</span>
+                </button>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-academic-200 flex flex-col gap-1">
+                <h2 class="text-xs font-bold text-academic-400 uppercase tracking-widest px-3 mb-2">Podcast Capstone</h2>
+                <button onclick="switchTab('podcast')" id="tab-btn-podcast" class="tab-btn w-full text-left flex items-center justify-between p-3 rounded-xl font-medium transition-all duration-200 group text-academic-600 hover:bg-academic-100 hover:text-academic-900">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="flex-shrink-0 text-xs font-mono text-academic-400 bg-academic-200/60 rounded-lg w-6 h-6 flex items-center justify-center group-hover:bg-academic-300/50">🎤</span>
+                        <span class="text-sm truncate font-semibold text-indigo-700">Script Grader & Workshop</span>
+                    </div>
+                    <span id="status-podcast" class="status-indicator">❌</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Dynamic Content Area -->
+        <main class="lg:col-span-3 bg-white border border-academic-200/80 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col min-h-[550px] relative overflow-hidden">
+            
+            <!-- Tab: Intro -->
+            <div id="tab-content-intro" class="tab-pane active flex flex-col h-full">
+                <div class="border-b border-academic-100 pb-4 mb-6">
+                    <span class="text-xs font-semibold text-accent-600 tracking-wider uppercase">Welcome & Pedagogical Overview</span>
+                    <h2 class="text-3xl font-serif text-academic-800 font-bold mt-1">EAP/ELF Self-Study Platform</h2>
+                </div>
+                
+                <p class="text-academic-600 mb-4 leading-relaxed">
+                    This interactive self-study companion supports Argentine English Language educators navigating the 
+                    <strong class="text-academic-800">English as a Lingua Franca (ELF)</strong> paradigm. By looking at academic English 
+                    not as a native-speaker privilege but as a highly conventionalized global code, we empower our professional 
+                    voice and teaching design.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                    <div class="p-4 border border-slate-100 bg-slate-50/50 rounded-xl">
+                        <h3 class="text-sm font-bold text-academic-800 flex items-center gap-2 mb-2">
+                            <svg class="w-4 h-4 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            ELF Concept Integration
+                        </h3>
+                        <p class="text-xs text-academic-500 leading-relaxed">
+                            Academic competence centers on mutual intelligibility and register awareness rather than phonetic emulation.
+                        </p>
+                    </div>
+                    <div class="p-4 border border-slate-100 bg-slate-50/50 rounded-xl">
+                        <h3 class="text-sm font-bold text-academic-800 flex items-center gap-2 mb-2">
+                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Corpus-Driven Competence
+                        </h3>
+                        <p class="text-xs text-academic-500 leading-relaxed">
+                            Modules are structured using empirical resources like Averil Coxhead's Academic Word List and the Academic Collocation List.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-50/50 border border-indigo-100 rounded-xl p-5 mb-8">
+                    <h3 class="text-sm font-bold text-indigo-900 mb-2">How to Complete This Module:</h3>
+                    <ul class="text-xs text-indigo-950 space-y-2 list-disc pl-5">
+                        <li>Work through Units 1 to 7 using the left navigation system.</li>
+                        <li>Engage with the customized, interactive tasks for each vocabulary dimension.</li>
+                        <li>Verify your answers to instantly unlock your progress status.</li>
+                        <li>Produce a script inside the <strong class="text-indigo-800">Spoken EAP/ELF Podcast Workshop</strong> and test it using our automated analysis engine!</li>
+                    </ul>
+                </div>
+
+                <div class="mt-auto pt-6 flex justify-end">
+                    <button onclick="switchTab('unit1')" class="bg-academic-800 hover:bg-academic-700 text-white font-medium px-6 py-2.5 rounded-xl transition-all duration-200 flex items-center gap-2 shadow-md">
+                        Start with Unit 1
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab: Unit 1 -->
+            <div id="tab-content-unit1" class="tab-pane hidden flex flex-col h-full">
+                <div class="border-b border-academic-100 pb-4 mb-6 flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-semibold text-accent-600 tracking-wider uppercase">Unit 1: Register Translation</span>
+                        <h2 class="text-2xl font-serif text-academic-800 font-bold mt-1">Formal vs. Informal Lexis</h2>
+                    </div>
+                    <button onclick="toggleTheory('theory-unit1')" class="text-xs border border-academic-200 hover:bg-academic-50 text-academic-500 hover:text-academic-800 font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all">
+                        <span class="theory-btn-text">Show Theory</span> 📘
+                    </button>
+                </div>
+
+                <!-- Theory card -->
+                <div id="theory-unit1" class="hidden mb-6 p-4 bg-amber-50/60 border border-amber-200 rounded-xl text-xs text-academic-700 leading-relaxed space-y-2">
+                    <p class="font-bold text-amber-900 text-sm">Theoretical Framework:</p>
+                    <p>Academic register is characterized by its high density of information, objectivity, and precision. EAP instruction emphasizes replacing phrasal verbs, vague descriptors, and emotionally charged vocabulary with single-word Latinate lexical items (Ali Saeed, 2022).</p>
+                </div>
+
+                <p class="text-xs text-academic-500 mb-4 bg-slate-50 border border-slate-100 p-3 rounded-lg flex gap-2 items-center">
+                    <span>💡</span>
+                    <strong>Task:</strong> Select the most appropriate academic equivalent to complete the formal transformation of the sentence below.
+                </p>
+
+                <!-- Interactive Exercise Container -->
+                <div class="space-y-6">
+                    <!-- Q1 -->
+                    <div class="p-4 border border-academic-100 rounded-xl hover:shadow-sm transition-all bg-academic-50/20">
+                        <p class="text-xs text-academic-400 font-mono uppercase mb-2">Statement 1</p>
+                        <p class="text-sm text-academic-500 italic mb-3">Informal: "A <strong>lot of</strong> researchers have <strong>looked into</strong> how teachers..."</p>
+                        <div class="flex flex-wrap gap-3 items-center text-sm">
+                            <span>Formal: "A</span>
+                            <select id="u1-q1-a" class="border border-academic-300 rounded-lg p-1.5 bg-white text-academic-800 focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                                <option value="">-- select --</option>
+                                <option value="incorrect">lot of</option>
+                                <option value="correct">substantial number of</option>
+                                <option value="distractor">high bunch of</option>
+                            </select>
+                            <span>researchers have</span>
+                            <select id="u1-q1-b" class="border border-academic-300 rounded-lg p-1.5 bg-white text-academic-800 focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                                <option value="">-- select --</option>
+                                <option value="correct">investigated</option>
+                                <option value="incorrect">looked into</option>
+                                <option value="distractor">spied on</option>
+                            </select>
+                            <span>how educators..."</span>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="p-4 border border-academic-100 rounded-xl hover:shadow-sm transition-all bg-academic-50/20">
+                        <p class="text-xs text-academic-400 font-mono uppercase mb-2">Statement 2</p>
+                        <p class="text-sm text-academic-500 italic mb-3">Informal: "They <strong>found out</strong> that <strong>basically</strong> they feel they <strong>have to</strong> copy native speakers."</p>
+                        <div class="flex flex-wrap gap-3 items-center text-sm">
+                            <span>Formal: "They have</span>
+                            <select id="u1-q2-a" class="border border-academic-300 rounded-lg p-1.5 bg-white text-academic-800 focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                                <option value="">-- select --</option>
+                                <option value="incorrect">found out</option>
+                                <option value="correct">determined</option>
+                                <option value="distractor">uncovered</option>
+                            </select>
+                            <span>that,</span>
+                            <select id="u1-q2-b" class="border border-academic-300 rounded-lg p-1.5 bg-white text-academic-800 focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                                <option value="">-- select --</option>
+                                <option value="incorrect">basically</option>
+                                <option value="correct">essentially</option>
+                                <option value="distractor">strictly</option>
+                            </select>
+                            <span>they are</span>
+                            <select id="u1-q2-c" class="border border-academic-300 rounded-lg p-1.5 bg-white text-academic-800 focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                                <option value="">-- select --</option>
+                                <option value="incorrect">obliged to</option>
+                                <option value="correct">compelled to</option>
+                                <option value="distractor">forced on</option>
+                            </select>
+                            <span>emulate standard models."</span>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="p-4 border border-academic-100 rounded-xl hover:shadow-sm transition-all bg-academic-50/20">
+                        <p class="text-xs text-academic-400 font-mono uppercase mb-2">Statement 3</p>
+                        <p class="text-sm text-academic-500 italic mb-3">Informal: "We need to <strong>cut down</strong> on native bias to <strong>go ahead</strong> with ELF."</p>
+                        <div class="flex flex-wrap gap-3 items-center text-sm">
+                            <span>Formal: "We must</span>
+                            <select id="u1-q3-a" class="border border-academic-300 rounded-lg p-1.5 bg-white text-academic-800 focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                                <option value="">-- select --</option>
+                                <option value="incorrect">cut down</option>
+                                <option value="correct">reduce</option>
+                                <option value="distractor">diminish out</option>
+                            </select>
+                            <span>native-speaker bias to</span>
+                            <select id="u1-q3-b" class="border border-academic-300 rounded-lg p-1.5 bg-white text-academic-800 focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                                <option value="">-- select --</option>
+                                <option value="incorrect">go ahead with</option>
+                                <option value="correct">proceed with</option>
+                                <option value="distractor">start up</option>
+                            </select>
+                            <span>local curriculum implementation."</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer with controls -->
+                <div class="mt-auto pt-6 flex justify-between items-center border-t border-academic-100">
+                    <button onclick="switchTab('intro')" class="text-academic-500 hover:text-academic-800 font-medium text-sm">← Back</button>
+                    <div class="flex gap-2">
+                        <button onclick="checkUnit1()" class="bg-academic-800 hover:bg-academic-700 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200">Submit and Check</button>
+                        <button onclick="switchTab('unit2')" id="next-btn-unit1" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200 flex items-center gap-1.5">Next Unit →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Unit 2 -->
+            <div id="tab-content-unit2" class="tab-pane hidden flex flex-col h-full">
+                <div class="border-b border-academic-100 pb-4 mb-6 flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-semibold text-accent-600 tracking-wider uppercase">Unit 2: Abbreviation Syntax</span>
+                        <h2 class="text-2xl font-serif text-academic-800 font-bold mt-1">Academic Abbreviations & Acronyms</h2>
+                    </div>
+                    <button onclick="toggleTheory('theory-unit2')" class="text-xs border border-academic-200 hover:bg-academic-50 text-academic-500 hover:text-academic-800 font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all">
+                        <span class="theory-btn-text">Show Theory</span> 📘
+                    </button>
+                </div>
+
+                <!-- Theory card -->
+                <div id="theory-unit2" class="hidden mb-6 p-4 bg-amber-50/60 border border-amber-200 rounded-xl text-xs text-academic-700 leading-relaxed space-y-2">
+                    <p class="font-bold text-amber-900 text-sm">Theoretical Framework:</p>
+                    <p>Abbreviations falling under Latin formulas (i.e., e.g., cf., et al.) conserve space. They require meticulous formatting under APA style. For instance, Latin abbreviations must be lowercase, punctuated with internal periods, and accompanied by proper commas when used parenthetically.</p>
+                </div>
+
+                <p class="text-xs text-academic-500 mb-4 bg-slate-50 border border-slate-100 p-3 rounded-lg flex gap-2 items-center">
+                    <span>💡</span>
+                    <strong>Task:</strong> Read the flawed sentence, type the correct academic abbreviation inside the field, and review.
+                </p>
+
+                <!-- Interactive Exercise Container -->
+                <div class="space-y-6">
+                    <!-- Q1 -->
+                    <div class="p-4 border border-academic-100 rounded-xl bg-academic-50/20">
+                        <p class="text-xs font-bold text-academic-600 mb-2">Sentence 1 (Incorrect i.e. usage):</p>
+                        <p class="text-sm text-academic-500 mb-3 font-serif italic">"The survey targeted secondary school English teachers, <span class="bg-red-50 text-red-700 px-1 font-sans rounded">ie,</span> those working in public institutions."</p>
+                        <div class="flex flex-col md:flex-row items-start md:items-center gap-2">
+                            <span class="text-xs text-academic-400 uppercase tracking-wider">Your correction for "ie,":</span>
+                            <input type="text" id="u2-q1" placeholder="Type correct style (e.g., i.e.,)" class="border border-academic-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none w-full md:w-48 font-mono">
+                            <span id="u2-q1-feedback" class="text-xs font-bold hidden"></span>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="p-4 border border-academic-100 rounded-xl bg-academic-50/20">
+                        <p class="text-xs font-bold text-academic-600 mb-2">Sentence 2 (Incorrect et al. usage):</p>
+                        <p class="text-sm text-academic-500 mb-3 font-serif italic">"According to Jenkins <span class="bg-red-50 text-red-700 px-1 font-sans rounded">et. al.</span>, pronunciation should prioritize intelligibility."</p>
+                        <div class="flex flex-col md:flex-row items-start md:items-center gap-2">
+                            <span class="text-xs text-academic-400 uppercase tracking-wider">Your correction for "et. al.":</span>
+                            <input type="text" id="u2-q2" placeholder="Type correct style" class="border border-academic-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none w-full md:w-48 font-mono">
+                            <span id="u2-q2-feedback" class="text-xs font-bold hidden"></span>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="p-4 border border-academic-100 rounded-xl bg-academic-50/20">
+                        <p class="text-xs font-bold text-academic-600 mb-2">Sentence 3 (Incorrect vs. usage):</p>
+                        <p class="text-sm text-academic-500 mb-3 font-serif italic">"The study analyzed differences in vowel production (<span class="bg-red-50 text-red-700 px-1 font-sans rounded">V.S.</span> consonant production)."</p>
+                        <div class="flex flex-col md:flex-row items-start md:items-center gap-2">
+                            <span class="text-xs text-academic-400 uppercase tracking-wider">Your correction for "V.S.":</span>
+                            <input type="text" id="u2-q3" placeholder="Type correct style" class="border border-academic-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none w-full md:w-48 font-mono">
+                            <span id="u2-q3-feedback" class="text-xs font-bold hidden"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer with controls -->
+                <div class="mt-auto pt-6 flex justify-between items-center border-t border-academic-100">
+                    <button onclick="switchTab('unit1')" class="text-academic-500 hover:text-academic-800 font-medium text-sm">← Back</button>
+                    <div class="flex gap-2">
+                        <button onclick="checkUnit2()" class="bg-academic-800 hover:bg-academic-700 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200">Submit and Check</button>
+                        <button onclick="switchTab('unit3')" id="next-btn-unit2" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200 flex items-center gap-1.5">Next Unit →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Unit 3 -->
+            <div id="tab-content-unit3" class="tab-pane hidden flex flex-col h-full">
+                <div class="border-b border-academic-100 pb-4 mb-6 flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-semibold text-accent-600 tracking-wider uppercase">Unit 3: Structural Shift</span>
+                        <h2 class="text-2xl font-serif text-academic-800 font-bold mt-1">Academic Nouns & Nominalization</h2>
+                    </div>
+                    <button onclick="toggleTheory('theory-unit3')" class="text-xs border border-academic-200 hover:bg-academic-50 text-academic-500 hover:text-academic-800 font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all">
+                        <span class="theory-btn-text">Show Theory</span> 📘
+                    </button>
+                </div>
+
+                <!-- Theory card -->
+                <div id="theory-unit3" class="hidden mb-6 p-4 bg-amber-50/60 border border-amber-200 rounded-xl text-xs text-academic-700 leading-relaxed space-y-2">
+                    <p class="font-bold text-amber-900 text-sm">Theoretical Framework:</p>
+                    <p>Nominalization is the transformation of verbs and adjectives into nouns. This increases density and objectifies discourse by removing immediate human agents. Example: "We implemented" $\rightarrow$ "The implementation of."</p>
+                </div>
+
+                <p class="text-xs text-academic-500 mb-4 bg-slate-50 border border-slate-100 p-3 rounded-lg flex gap-2 items-center">
+                    <span>🧩</span>
+                    <strong>Task:</strong> Complete the nominalized transform by matching the correct nominal equivalents for each dynamic part.
+                </p>
+
+                <!-- Interactive Exercise Container -->
+                <div class="space-y-6">
+                    <!-- Q1 -->
+                    <div class="p-4 border border-academic-100 rounded-xl bg-academic-50/20">
+                        <p class="text-xs text-academic-400 font-mono uppercase mb-2">Transformation 1</p>
+                        <p class="text-sm text-academic-600 italic mb-3">Verbal: "When we <strong>implemented</strong> the curriculum, the students <strong>participated</strong> more..."</p>
+                        <div class="flex flex-wrap gap-2 items-center text-sm font-medium">
+                            <span>"The</span>
+                            <select id="u3-q1-a" class="border border-academic-300 rounded-lg p-1 bg-white focus:outline-none focus:ring-2 focus:ring-accent-500">
+                                <option value="">-- select nominal --</option>
+                                <option value="implementing">implementing</option>
+                                <option value="correct">implementation</option>
+                                <option value="implement">implement</option>
+                            </select>
+                            <span>of the curriculum resulted in increased student</span>
+                            <select id="u3-q1-b" class="border border-academic-300 rounded-lg p-1 bg-white focus:outline-none focus:ring-2 focus:ring-accent-500">
+                                <option value="">-- select nominal --</option>
+                                <option value="correct">participation</option>
+                                <option value="participant">participants</option>
+                                <option value="participate">participating</option>
+                            </select>
+                            <span>."</span>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="p-4 border border-academic-100 rounded-xl bg-academic-50/20">
+                        <p class="text-xs text-academic-400 font-mono uppercase mb-2">Transformation 2</p>
+                        <p class="text-sm text-academic-600 italic mb-3">Verbal: "Because the ministry <strong>refused</strong> to fund schools, teachers couldn't <strong>access</strong> materials."</p>
+                        <div class="flex flex-wrap gap-2 items-center text-sm font-medium">
+                            <span>"The ministry's</span>
+                            <select id="u3-q2-a" class="border border-academic-300 rounded-lg p-1 bg-white focus:outline-none focus:ring-2 focus:ring-accent-500">
+                                <option value="">-- select nominal --</option>
+                                <option value="refusing">refusing</option>
+                                <option value="refuse">refuse</option>
+                                <option value="correct">refusal</option>
+                            </select>
+                            <span>to fund public education restricted teachers'</span>
+                            <select id="u3-q2-b" class="border border-academic-300 rounded-lg p-1 bg-white focus:outline-none focus:ring-2 focus:ring-accent-500">
+                                <option value="">-- select nominal --</option>
+                                <option value="correct">access</option>
+                                <option value="accessing">accessing</option>
+                                <option value="accessible">accessibility</option>
+                            </select>
+                            <span>to modern materials."</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer with controls -->
+                <div class="mt-auto pt-6 flex justify-between items-center border-t border-academic-100">
+                    <button onclick="switchTab('unit2')" class="text-academic-500 hover:text-academic-800 font-medium text-sm">← Back</button>
+                    <div class="flex gap-2">
+                        <button onclick="checkUnit3()" class="bg-academic-800 hover:bg-academic-700 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200">Submit and Check</button>
+                        <button onclick="switchTab('unit4')" id="next-btn-unit3" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200 flex items-center gap-1.5">Next Unit →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Unit 4 -->
+            <div id="tab-content-unit4" class="tab-pane hidden flex flex-col h-full">
+                <div class="border-b border-academic-100 pb-4 mb-6 flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-semibold text-accent-600 tracking-wider uppercase">Unit 4: Lexical Precision</span>
+                        <h2 class="text-2xl font-serif text-academic-800 font-bold mt-1">Academic Adjectives</h2>
+                    </div>
+                    <button onclick="toggleTheory('theory-unit4')" class="text-xs border border-academic-200 hover:bg-academic-50 text-academic-500 hover:text-academic-800 font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all">
+                        <span class="theory-btn-text">Show Theory</span> 📘
+                    </button>
+                </div>
+
+                <!-- Theory card -->
+                <div id="theory-unit4" class="hidden mb-6 p-4 bg-amber-50/60 border border-amber-200 rounded-xl text-xs text-academic-700 leading-relaxed space-y-2">
+                    <p class="font-bold text-amber-900 text-sm">Theoretical Framework:</p>
+                    <p>Adjectives classify (*qualitative*, *systemic*) or evaluate (*substantial*, *unsubstantiated*). Academic registers avoid conversational intensity (e.g., *amazing*, *terrible*, *huge*) in favor of scholarly precision and measured tones.</p>
+                </div>
+
+                <p class="text-xs text-academic-500 mb-4 bg-slate-50 border border-slate-100 p-3 rounded-lg flex gap-2 items-center">
+                    <span>💡</span>
+                    <strong>Task:</strong> Match the informal adjectives to their corresponding precise, academic equivalents.
+                </p>
+
+                <!-- Interactive Exercise Container -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Cards -->
+                    <div class="border border-academic-100 rounded-xl p-4 flex flex-col justify-between">
+                        <span class="text-xs text-red-600 font-semibold mb-1">Colloquial Context:</span>
+                        <p class="text-sm text-academic-700 font-serif mb-4">"The student showed an <strong class="underline text-red-700">amazing</strong> improvement in speaking skills."</p>
+                        <select id="u4-q1" class="border border-academic-300 rounded-lg p-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent-500">
+                            <option value="">-- Choose formal counterpart --</option>
+                            <option value="correct">marked / substantial</option>
+                            <option value="wrong1">terrific</option>
+                            <option value="wrong2">unimaginable</option>
+                        </select>
+                    </div>
+
+                    <div class="border border-academic-100 rounded-xl p-4 flex flex-col justify-between">
+                        <span class="text-xs text-red-600 font-semibold mb-1">Colloquial Context:</span>
+                        <p class="text-sm text-academic-700 font-serif mb-4">"The argument presented by the researcher was <strong class="underline text-red-700">terrible</strong>."</p>
+                        <select id="u4-q2" class="border border-academic-300 rounded-lg p-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent-500">
+                            <option value="">-- Choose formal counterpart --</option>
+                            <option value="correct">untenable / flawed</option>
+                            <option value="wrong1">horrible</option>
+                            <option value="wrong2">rubbish</option>
+                        </select>
+                    </div>
+
+                    <div class="border border-academic-100 rounded-xl p-4 flex flex-col justify-between">
+                        <span class="text-xs text-red-600 font-semibold mb-1">Colloquial Context:</span>
+                        <p class="text-sm text-academic-700 font-serif mb-4">"There is a <strong class="underline text-red-700">huge</strong> gap in the literature."</p>
+                        <select id="u4-q3" class="border border-academic-300 rounded-lg p-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent-500">
+                            <option value="">-- Choose formal counterpart --</option>
+                            <option value="wrong1">gigantic</option>
+                            <option value="correct">significant / profound</option>
+                            <option value="wrong2">gargantuan</option>
+                        </select>
+                    </div>
+
+                    <div class="border border-academic-100 rounded-xl p-4 flex flex-col justify-between">
+                        <span class="text-xs text-red-600 font-semibold mb-1">Colloquial Context:</span>
+                        <p class="text-sm text-academic-700 font-serif mb-4">"It is <strong class="underline text-red-700">highly possible</strong> the size affected outcomes."</p>
+                        <select id="u4-q4" class="border border-academic-300 rounded-lg p-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent-500">
+                            <option value="">-- Choose formal counterpart --</option>
+                            <option value="wrong1">completely possible</option>
+                            <option value="correct">plausible / highly probable</option>
+                            <option value="wrong2">expectedly real</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Footer with controls -->
+                <div class="mt-auto pt-6 flex justify-between items-center border-t border-academic-100">
+                    <button onclick="switchTab('unit3')" class="text-academic-500 hover:text-academic-800 font-medium text-sm">← Back</button>
+                    <div class="flex gap-2">
+                        <button onclick="checkUnit4()" class="bg-academic-800 hover:bg-academic-700 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200">Submit and Check</button>
+                        <button onclick="switchTab('unit5')" id="next-btn-unit4" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200 flex items-center gap-1.5">Next Unit →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Unit 5 -->
+            <div id="tab-content-unit5" class="tab-pane hidden flex flex-col h-full">
+                <div class="border-b border-academic-100 pb-4 mb-6 flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-semibold text-accent-600 tracking-wider uppercase">Unit 5: Rhetorical Force</span>
+                        <h2 class="text-2xl font-serif text-academic-800 font-bold mt-1">Academic Verbs & Reporting Stance</h2>
+                    </div>
+                    <button onclick="toggleTheory('theory-unit5')" class="text-xs border border-academic-200 hover:bg-academic-50 text-academic-500 hover:text-academic-800 font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all">
+                        <span class="theory-btn-text">Show Theory</span> 📘
+                    </button>
+                </div>
+
+                <!-- Theory card -->
+                <div id="theory-unit5" class="hidden mb-6 p-4 bg-amber-50/60 border border-amber-200 rounded-xl text-xs text-academic-700 leading-relaxed space-y-2">
+                    <p class="font-bold text-amber-900 text-sm">Theoretical Framework:</p>
+                    <p>Reporting verbs signify the writer's attitude towards the claim they cite. Selecting *demonstrates* signals full alignment with a proven fact, while selecting *contends* labels the citation as an argumentative viewpoint.</p>
+                </div>
+
+                <p class="text-xs text-academic-500 mb-4 bg-slate-50 border border-slate-100 p-3 rounded-lg flex gap-2 items-center">
+                    <span>✍️</span>
+                    <strong>Task:</strong> Choose the precise reporting verb that matches the author's intended rhetorical stance.
+                </p>
+
+                <!-- Interactive Exercise Container -->
+                <div class="space-y-4">
+                    <!-- Q1 -->
+                    <div class="p-4 border border-academic-100 rounded-xl bg-academic-50/25">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase">Stance: Full Agreement (Fact-backed)</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2 items-center text-sm">
+                            <span>"Chomsky (1965)</span>
+                            <select id="u5-q1" class="border border-academic-300 rounded-md p-1 bg-white font-medium text-academic-800 focus:outline-none focus:ring-2 focus:ring-accent-500">
+                                <option value="">-- choose verb --</option>
+                                <option value="asserts">asserts</option>
+                                <option value="correct">demonstrates</option>
+                                <option value="claims">claims</option>
+                            </select>
+                            <span>that human beings possess an innate device."</span>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="p-4 border border-academic-100 rounded-xl bg-academic-50/25">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-slate-100 text-slate-800 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase">Stance: Neutral / Objective Exposition</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2 items-center text-sm">
+                            <span>"Krashen (1982)</span>
+                            <select id="u5-q2" class="border border-academic-300 rounded-md p-1 bg-white font-medium text-academic-800 focus:outline-none focus:ring-2 focus:ring-accent-500">
+                                <option value="">-- choose verb --</option>
+                                <option value="proves">proves</option>
+                                <option value="correct">posits</option>
+                                <option value="confirms">confirms</option>
+                            </select>
+                            <span>that acquisition occurs through input exposure."</span>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="p-4 border border-academic-100 rounded-xl bg-academic-50/25">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-md uppercase">Stance: Doubt / Non-factual Perspective</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2 items-center text-sm">
+                            <span>"The traditionalist school</span>
+                            <select id="u5-q3" class="border border-academic-300 rounded-md p-1 bg-white font-medium text-academic-800 focus:outline-none focus:ring-2 focus:ring-accent-500">
+                                <option value="">-- choose verb --</option>
+                                <option value="shows">shows</option>
+                                <option value="correct">contends</option>
+                                <option value="establishes">establishes</option>
+                            </select>
+                            <span>that native accentuation is the only goal."</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer with controls -->
+                <div class="mt-auto pt-6 flex justify-between items-center border-t border-academic-100">
+                    <button onclick="switchTab('unit4')" class="text-academic-500 hover:text-academic-800 font-medium text-sm">← Back</button>
+                    <div class="flex gap-2">
+                        <button onclick="checkUnit5()" class="bg-academic-800 hover:bg-academic-700 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200">Submit and Check</button>
+                        <button onclick="switchTab('unit6')" id="next-btn-unit5" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200 flex items-center gap-1.5">Next Unit →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Unit 6 -->
+            <div id="tab-content-unit6" class="tab-pane hidden flex flex-col h-full">
+                <div class="border-b border-academic-100 pb-4 mb-6 flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-semibold text-accent-600 tracking-wider uppercase">Unit 6: Statement Calibration</span>
+                        <h2 class="text-2xl font-serif text-academic-800 font-bold mt-1">Academic Adverbs & Hedging</h2>
+                    </div>
+                    <button onclick="toggleTheory('theory-unit6')" class="text-xs border border-academic-200 hover:bg-academic-50 text-academic-500 hover:text-academic-800 font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all">
+                        <span class="theory-btn-text">Show Theory</span> 📘
+                    </button>
+                </div>
+
+                <!-- Theory card -->
+                <div id="theory-unit6" class="hidden mb-6 p-4 bg-amber-50/60 border border-amber-200 rounded-xl text-xs text-academic-700 leading-relaxed space-y-2">
+                    <p class="font-bold text-amber-900 text-sm">Theoretical Framework:</p>
+                    <p>Hedging is the practice of limiting commitment to statements to preserve scholarly accuracy. Modifying absolute claims (e.g., changing *always* to *frequently*) avoids academic overgeneralization.</p>
+                </div>
+
+                <!-- Interactive Hedging Slider Workbench -->
+                <div class="bg-slate-50 border border-slate-100 rounded-xl p-5 mb-6">
+                    <h3 class="text-sm font-bold text-academic-800 mb-2 flex items-center gap-1.5">
+                        <span>🎚️</span>
+                        Interactive Hedging Workbench
+                    </h3>
+                    <p class="text-xs text-academic-500 mb-4">Move the slider below to see how a dogmatic, unhedged statement transforms dynamically into a professional, scientifically defensible academic claim using adverbs and modifiers.</p>
+                    
+                    <!-- Slider -->
+                    <div class="flex items-center gap-4 mb-4">
+                        <span class="text-xs font-semibold text-red-600">Dogmatic (100%)</span>
+                        <input type="range" id="hedge-slider" min="0" max="2" value="0" oninput="updateHedgeSimulation(this.value)" class="flex-1 accent-academic-700 cursor-pointer">
+                        <span class="text-xs font-semibold text-emerald-600">Nuanced (50%)</span>
+                    </div>
+
+                    <!-- Display Dynamic Sentence -->
+                    <div class="bg-white border border-academic-200 rounded-xl p-4 min-h-[70px] flex items-center justify-center text-center">
+                        <p id="slider-text-output" class="text-sm font-serif italic text-academic-850 transition-all duration-300">"Bilingual education always causes cognitive advantages in children."</p>
+                    </div>
+                    <div id="slider-analysis-output" class="text-[11px] text-academic-500 mt-2 text-right">Current register: Absolute & unscientific</div>
+                </div>
+
+                <!-- Modality Quiz -->
+                <div class="p-4 border border-academic-100 rounded-xl bg-academic-50/10">
+                    <p class="text-xs font-bold text-academic-600 mb-3">Task: Hedging Calibration Challenge</p>
+                    <p class="text-sm text-academic-700 italic mb-3 font-serif">"Standardized assessments fail to measure the linguistic capacity of non-native speakers."</p>
+                    <div class="flex flex-wrap gap-2 items-center text-sm font-medium">
+                        <span>"Standardized assessments</span>
+                        <select id="u6-q1" class="border border-academic-300 rounded-md p-1 bg-white focus:ring-2 focus:ring-accent-500">
+                            <option value="">-- select modifier --</option>
+                            <option value="correct">frequently fail to fully</option>
+                            <option value="incorrect">completely miss to</option>
+                        </select>
+                        <span>capture the complex linguistic capability of L2 speakers."</span>
+                    </div>
+                </div>
+
+                <!-- Footer with controls -->
+                <div class="mt-auto pt-6 flex justify-between items-center border-t border-academic-100">
+                    <button onclick="switchTab('unit5')" class="text-academic-500 hover:text-academic-800 font-medium text-sm">← Back</button>
+                    <div class="flex gap-2">
+                        <button onclick="checkUnit6()" class="bg-academic-800 hover:bg-academic-700 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200">Submit and Check</button>
+                        <button onclick="switchTab('unit7')" id="next-btn-unit6" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200 flex items-center gap-1.5">Next Unit →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Unit 7 -->
+            <div id="tab-content-unit7" class="tab-pane hidden flex flex-col h-full">
+                <div class="border-b border-academic-100 pb-4 mb-6 flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-semibold text-accent-600 tracking-wider uppercase">Unit 7: Lexical Partnerships</span>
+                        <h2 class="text-2xl font-serif text-academic-800 font-bold mt-1">Academic Collocations</h2>
+                    </div>
+                    <button onclick="toggleTheory('theory-unit7')" class="text-xs border border-academic-200 hover:bg-academic-50 text-academic-500 hover:text-academic-800 font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all">
+                        <span class="theory-btn-text">Show Theory</span> 📘
+                    </button>
+                </div>
+
+                <!-- Theory card -->
+                <div id="theory-unit7" class="hidden mb-6 p-4 bg-amber-50/60 border border-amber-200 rounded-xl text-xs text-academic-700 leading-relaxed space-y-2">
+                    <p class="font-bold text-amber-900 text-sm">Theoretical Framework:</p>
+                    <p>Collocations are conventionalized multi-word strings statistically frequent in academia. Choosing arbitrary translations from L1 Spanish (e.g., *making research*) signals register dissonance to editors; we must use validated matches (*conducting research*).</p>
+                </div>
+
+                <p class="text-xs text-academic-500 mb-4 bg-slate-50 border border-slate-100 p-3 rounded-lg flex gap-2 items-center">
+                    <span>🔗</span>
+                    <strong>Task:</strong> Repair the faulty collocations by choosing the accepted academic partners below.
+                </p>
+
+                <!-- Collocations interactive test -->
+                <div class="space-y-4">
+                    <div class="p-4 border border-academic-100 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                        <div>
+                            <p class="text-xs font-mono text-academic-400">FAULTY:</p>
+                            <p class="text-sm font-serif italic text-academic-700">"The researchers <span class="text-red-600 underline">made a survey</span>..."</p>
+                        </div>
+                        <select id="u7-q1" class="border border-academic-300 rounded-lg p-2 bg-white text-sm focus:ring-2 focus:ring-accent-500">
+                            <option value="">-- Correct partner --</option>
+                            <option value="correct">conducted / administered a survey</option>
+                            <option value="wrong1">produced a survey</option>
+                            <option value="wrong2">did a survey</option>
+                        </select>
+                    </div>
+
+                    <div class="p-4 border border-academic-100 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                        <div>
+                            <p class="text-xs font-mono text-academic-400">FAULTY:</p>
+                            <p class="text-sm font-serif italic text-academic-700">"Her research <span class="text-red-600 underline">did a great contribution</span>..."</p>
+                        </div>
+                        <select id="u7-q2" class="border border-academic-300 rounded-lg p-2 bg-white text-sm focus:ring-2 focus:ring-accent-500">
+                            <option value="">-- Correct partner --</option>
+                            <option value="correct">made a substantial contribution</option>
+                            <option value="wrong1">performed a high contribution</option>
+                            <option value="wrong2">conducted a contribution</option>
+                        </select>
+                    </div>
+
+                    <div class="p-4 border border-academic-100 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                        <div>
+                            <p class="text-xs font-mono text-academic-400">FAULTY:</p>
+                            <p class="text-sm font-serif italic text-academic-700">"We need to <span class="text-red-600 underline">draw attention on</span>..."</p>
+                        </div>
+                        <select id="u7-q3" class="border border-academic-300 rounded-lg p-2 bg-white text-sm focus:ring-2 focus:ring-accent-500">
+                            <option value="">-- Correct partner --</option>
+                            <option value="correct">draw attention to</option>
+                            <option value="wrong1">draw attention about</option>
+                            <option value="wrong2">pull attention on</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Footer with controls -->
+                <div class="mt-auto pt-6 flex justify-between items-center border-t border-academic-100">
+                    <button onclick="switchTab('unit6')" class="text-academic-500 hover:text-academic-800 font-medium text-sm">← Back</button>
+                    <div class="flex gap-2">
+                        <button onclick="checkUnit7()" class="bg-academic-800 hover:bg-academic-700 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200">Submit and Check</button>
+                        <button onclick="switchTab('podcast')" id="next-btn-unit7" class="hidden bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200 flex items-center gap-1.5">Go to Workshop →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Podcast -->
+            <div id="tab-content-podcast" class="tab-pane hidden flex flex-col h-full">
+                <div class="border-b border-academic-100 pb-4 mb-6">
+                    <span class="text-xs font-semibold text-accent-600 tracking-wider uppercase">Practical Module: Capstone Workshop</span>
+                    <h2 class="text-2xl font-serif text-academic-800 font-bold mt-1">Academic Audio Podcast Script Analyzer</h2>
+                </div>
+
+                <p class="text-xs text-academic-600 mb-4 leading-relaxed">
+                    Write, refine, or paste an academic audio podcast script. Below, our automated validator evaluates your text to check if you have embedded the necessary EAP register elements (nominalizations, Latin abbreviations, precise adjectives, modal hedges, and standard collocations).
+                </p>
+
+                <!-- Input area and Analyzer panel -->
+                <div class="grid grid-cols-1 xl:grid-cols-5 gap-6">
+                    <!-- Left: Editor panel -->
+                    <div class="xl:col-span-3 flex flex-col gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-semibold text-academic-400 uppercase tracking-widest">Script Editor</span>
+                            <button onclick="loadExemplarScript()" class="text-xs bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 font-medium px-2.5 py-1 rounded-md transition-all">
+                                Load Exemplar Script
+                            </button>
+                        </div>
+                        <textarea id="podcast-script-input" rows="12" placeholder="Paste or compose your 3-minute EAP/ELF script here..." class="w-full border border-academic-300 rounded-xl p-4 text-sm font-mono focus:ring-2 focus:ring-accent-500 focus:outline-none custom-scrollbar shadow-inner bg-academic-50/10"></textarea>
+                        
+                        <button onclick="analyzePodcastScript()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-md flex items-center justify-center gap-2">
+                            <span>🔍</span> Analyze Script for EAP Registers
+                        </button>
+                    </div>
+
+                    <!-- Right: Analysis Dashboard -->
+                    <div class="xl:col-span-2 bg-slate-50 border border-slate-100 rounded-xl p-4 shadow-inner flex flex-col gap-4">
+                        <h3 class="text-xs font-bold text-academic-600 uppercase tracking-widest border-b border-academic-200 pb-2">Academic Validation Checklist</h3>
+                        
+                        <!-- Metric checks -->
+                        <div class="space-y-3 flex-1 overflow-y-auto max-h-[300px] pr-1 custom-scrollbar">
+                            <!-- Criterion 1 -->
+                            <div class="flex items-start gap-3 p-2 bg-white rounded-lg border border-slate-100 shadow-sm">
+                                <span id="metric-nominal-icon" class="text-sm">❌</span>
+                                <div>
+                                    <h4 class="text-xs font-bold text-academic-800">Nominalizations (min 3)</h4>
+                                    <p class="text-[10px] text-academic-400">Scans for words ending in -tion, -ment, -ance, -ence.</p>
+                                    <p id="metric-nominal-list" class="text-[10px] text-indigo-600 font-mono mt-1"></p>
+                                </div>
+                            </div>
+                            <!-- Criterion 2 -->
+                            <div class="flex items-start gap-3 p-2 bg-white rounded-lg border border-slate-100 shadow-sm">
+                                <span id="metric-abbrev-icon" class="text-sm">❌</span>
+                                <div>
+                                    <h4 class="text-xs font-bold text-academic-800">Latin Abbreviations (min 2)</h4>
+                                    <p class="text-[10px] text-academic-400">Requires e.g., i.e., et al., or cf.</p>
+                                    <p id="metric-abbrev-list" class="text-[10px] text-indigo-600 font-mono mt-1"></p>
+                                </div>
+                            </div>
+                            <!-- Criterion 3 -->
+                            <div class="flex items-start gap-3 p-2 bg-white rounded-lg border border-slate-100 shadow-sm">
+                                <span id="metric-adjective-icon" class="text-sm">❌</span>
+                                <div>
+                                    <h4 class="text-xs font-bold text-academic-800">Precise Adjectives (min 3)</h4>
+                                    <p class="text-[10px] text-academic-400">Looks for substantial, significant, profound, striking, etc.</p>
+                                    <p id="metric-adjective-list" class="text-[10px] text-indigo-600 font-mono mt-1"></p>
+                                </div>
+                            </div>
+                            <!-- Criterion 4 -->
+                            <div class="flex items-start gap-3 p-2 bg-white rounded-lg border border-slate-100 shadow-sm">
+                                <span id="metric-adverb-icon" class="text-sm">❌</span>
+                                <div>
+                                    <h4 class="text-xs font-bold text-academic-800">Hedged Adverbs (min 2)</h4>
+                                    <p class="text-[10px] text-academic-400">Finds potentially, frequently, arguably, typically, etc.</p>
+                                    <p id="metric-adverb-list" class="text-[10px] text-indigo-600 font-mono mt-1"></p>
+                                </div>
+                            </div>
+                            <!-- Criterion 5 -->
+                            <div class="flex items-start gap-3 p-2 bg-white rounded-lg border border-slate-100 shadow-sm">
+                                <span id="metric-colloc-icon" class="text-sm">❌</span>
+                                <div>
+                                    <h4 class="text-xs font-bold text-academic-800">Academic Collocations (min 2)</h4>
+                                    <p class="text-[10px] text-academic-400">Detects key collocations like "statistically significant," etc.</p>
+                                    <p id="metric-colloc-list" class="text-[10px] text-indigo-600 font-mono mt-1"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Score card -->
+                        <div class="border-t border-slate-200 pt-3 flex justify-between items-center">
+                            <span class="text-xs text-academic-500 font-medium">Evaluation Score:</span>
+                            <span id="podcast-score-display" class="text-lg font-extrabold text-academic-700 font-mono">0 / 5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer with controls -->
+                <div class="mt-auto pt-6 flex justify-between items-center border-t border-academic-100">
+                    <button onclick="switchTab('unit7')" class="text-academic-500 hover:text-academic-800 font-medium text-sm">← Back</button>
+                    <button onclick="completePodcastWorkshop()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2 rounded-xl transition-all duration-200">Finalize Capstone</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Celebration Modal (Hidden by Default) -->
+    <div id="celebration-modal" class="fixed inset-0 bg-academic-950/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white border border-academic-200 rounded-3xl p-6 md:p-8 max-w-md w-full text-center shadow-2xl transform scale-95 transition-all">
+            <div class="w-16 h-16 bg-argentina-100 text-argentina-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🏆</div>
+            <h3 class="text-xl font-bold text-academic-800 font-serif">Module Mastered!</h3>
+            <p class="text-xs text-academic-500 mt-2 leading-relaxed">
+                Congratulations, colleague! You have successfully resolved all exercises and analyzed a podcast script satisfying the criteria of EAP / ELF academic register. You are now prepared to guide your future teachers with robust academic standards.
+            </p>
+            <div class="bg-slate-50 border border-slate-100 p-4 rounded-xl my-4 text-xs font-medium text-academic-700">
+                Linguistic Portfolio Certificate unlocked!
+            </div>
+            <button onclick="closeModal()" class="w-full bg-academic-800 hover:bg-academic-700 text-white font-semibold py-2.5 rounded-xl transition-all">
+                Great, thank you!
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-notification" class="fixed bottom-4 right-4 bg-academic-800 text-white text-xs px-4 py-3 rounded-xl shadow-lg border border-academic-700 hidden transition-all duration-300 z-50">
+        This is a toast!
+    </div>
+
+    <!-- Academic Footnotes -->
+    <footer class="bg-academic-900 text-academic-400 py-6 text-center border-t border-academic-800 mt-12">
+        <p class="text-[11px]">&copy; 2026 EAP/ELF Teacher Training Framework. Designed in Argentina.</p>
+        <p class="text-[9px] text-academic-500 mt-1">Grounding References: Ackermann & Chen (2013); Ali Saeed (2022); Coffey (2015); Fraser et al. (2025).</p>
+    </footer>
+
+    <!-- Core Scripting Logic -->
+    <script>
+        // Module Progression State
+        const state = {
+            currentTab: 'intro',
+            progress: {
+                unit1: false,
+                unit2: false,
+                unit3: false,
+                unit4: false,
+                unit5: false,
+                unit6: false,
+                unit7: false,
+                podcast: false
+            }
+        };
+
+        // Initialize App state
+        window.onload = function() {
+            loadProgress();
+            updateProgressUI();
+        }
+
+        // Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-content-${tabId}`).classList.remove('hidden');
+
+            // Style navigation buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-academic-100', 'text-academic-900', 'border-l-4', 'border-argentina-500', 'shadow-sm');
+                btn.classList.add('text-academic-600');
+            });
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-academic-100', 'text-academic-900', 'border-l-4', 'border-argentina-500', 'shadow-sm');
+                activeBtn.classList.remove('text-academic-600');
+            }
+            state.currentTab = tabId;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle Theory visibility
+        function toggleTheory(elementId) {
+            const block = document.getElementById(elementId);
+            const isHidden = block.classList.contains('hidden');
+            if (isHidden) {
+                block.classList.remove('hidden');
+            } else {
+                block.classList.add('hidden');
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, isSuccess = true) {
+            const toast = document.getElementById('toast-notification');
+            toast.innerText = message;
+            toast.className = `fixed bottom-4 right-4 text-xs px-4 py-3 rounded-xl shadow-lg border z-50 ${
+                isSuccess ? 'bg-academic-800 text-white border-academic-700' : 'bg-red-900 text-white border-red-700'
+            }`;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Local Storage Utilities
+        function saveProgress() {
+            localStorage.setItem('elf_progress_state', JSON.stringify(state.progress));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('elf_progress_state');
+            if (saved) {
+                try {
+                    state.progress = JSON.parse(saved);
+                } catch(e) {
+                    console.error("Could not parse saved progress.");
+                }
+            }
+        }
+
+        function resetAllProgress() {
+            state.progress = {
+                unit1: false,
+                unit2: false,
+                unit3: false,
+                unit4: false,
+                unit5: false,
+                unit6: false,
+                unit7: false,
+                podcast: false
+            };
+            saveProgress();
+            updateProgressUI();
+            showToast("Progress has been reset.");
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }
+
+        // Update overall completion statistics
+        function updateProgressUI() {
+            let completedCount = 0;
+            const units = ['unit1', 'unit2', 'unit3', 'unit4', 'unit5', 'unit6', 'unit7'];
+            
+            units.forEach(unit => {
+                const indicator = document.getElementById(`status-${unit}`);
+                if (state.progress[unit]) {
+                    if (indicator) indicator.innerText = '✅';
+                    completedCount++;
+                } else {
+                    if (indicator) indicator.innerText = '❌';
+                }
+            });
+
+            const podcastIndicator = document.getElementById('status-podcast');
+            if (podcastIndicator) {
+                podcastIndicator.innerText = state.progress.podcast ? '✅' : '❌';
+            }
+
+            const totalCount = units.length;
+            const percentage = Math.round((completedCount / totalCount) * 100);
+            
+            document.getElementById('overall-progress-text').innerText = `${percentage}% Completed`;
+            document.getElementById('overall-progress-bar').style.width = `${percentage}%`;
+            document.getElementById('units-mastered-count').innerText = completedCount;
+        }
+
+        // UNIT 1: Register Translation Checks
+        function checkUnit1() {
+            const q1a = document.getElementById('u1-q1-a').value;
+            const q1b = document.getElementById('u1-q1-b').value;
+            const q2a = document.getElementById('u1-q2-a').value;
+            const q2b = document.getElementById('u1-q2-b').value;
+            const q2c = document.getElementById('u1-q2-c').value;
+            const q3a = document.getElementById('u1-q3-a').value;
+            const q3b = document.getElementById('u1-q3-b').value;
+
+            if (!q1a || !q1b || !q2a || !q2b || !q2c || !q3a || !q3b) {
+                showToast("Please complete all dropdown choices before submitting.", false);
+                return;
+            }
+
+            const isCorrect = (q1a === 'correct' && q1b === 'correct' && 
+                               q2a === 'correct' && q2b === 'correct' && q2c === 'correct' &&
+                               q3a === 'correct' && q3b === 'correct');
+
+            if (isCorrect) {
+                state.progress.unit1 = true;
+                saveProgress();
+                updateProgressUI();
+                document.getElementById('next-btn-unit1').classList.remove('hidden');
+                showToast("Excellent! Your translations align perfectly with standard academic Latinate registers.");
+            } else {
+                showToast("Some choices do not match optimal EAP register standards. Review your selections.", false);
+            }
+        }
+
+        // UNIT 2: Abbreviation Syntax Checks
+        function checkUnit2() {
+            const q1Val = document.getElementById('u2-q1').value.trim();
+            const q2Val = document.getElementById('u2-q2').value.trim();
+            const q3Val = document.getElementById('u2-q3').value.trim();
+
+            const isQ1Correct = (q1Val === 'i.e.,');
+            const isQ2Correct = (q2Val === 'et al.' || q2Val === 'et al.,');
+            const isQ3Correct = (q3Val === 'vs.' || q3Val === 'vs');
+
+            // Set dynamic visual feedback
+            toggleFieldFeedback('u2-q1-feedback', isQ1Correct, "Should be punctuated as: i.e.,");
+            toggleFieldFeedback('u2-q2-feedback', isQ2Correct, "Should be punctuated as: et al.");
+            toggleFieldFeedback('u2-q3-feedback', isQ3Correct, "Should be punctuated as: vs.");
+
+            if (isQ1Correct && isQ2Correct && isQ3Correct) {
+                state.progress.unit2 = true;
+                saveProgress();
+                updateProgressUI();
+                document.getElementById('next-btn-unit2').classList.remove('hidden');
+                showToast("Fantastic! Your academic abbreviation punctuation is impeccable.");
+            } else {
+                showToast("Some abbreviation formatting remains incorrect.", false);
+            }
+        }
+
+        function toggleFieldFeedback(spanId, isCorrect, solutionText) {
+            const span = document.getElementById(spanId);
+            span.classList.remove('hidden');
+            if (isCorrect) {
+                span.innerText = "✓ Correct";
+                span.className = "text-xs font-bold text-emerald-600 block mt-1";
+            } else {
+                span.innerText = `✗ ${solutionText}`;
+                span.className = "text-xs font-bold text-red-600 block mt-1";
+            }
+        }
+
+        // UNIT 3: Nominalization Transformations
+        function checkUnit3() {
+            const q1a = document.getElementById('u3-q1-a').value;
+            const q1b = document.getElementById('u3-q1-b').value;
+            const q2a = document.getElementById('u3-q2-a').value;
+            const q2b = document.getElementById('u3-q2-b').value;
+
+            if (!q1a || !q1b || !q2a || !q2b) {
+                showToast("Please complete all nominal selections.", false);
+                return;
+            }
+
+            const isCorrect = (q1a === 'correct' && q1b === 'correct' && q2a === 'correct' && q2b === 'correct');
+
+            if (isCorrect) {
+                state.progress.unit3 = true;
+                saveProgress();
+                updateProgressUI();
+                document.getElementById('next-btn-unit3').classList.remove('hidden');
+                showToast("Outstanding! Nominalizations verified. Your transformations successfully objectified the arguments.");
+            } else {
+                showToast("One or more transformations failed. Remember to select structural nouns (suffixes like -tion, -al).", false);
+            }
+        }
+
+        // UNIT 4: Academic Adjectives
+        function checkUnit4() {
+            const q1 = document.getElementById('u4-q1').value;
+            const q2 = document.getElementById('u4-q2').value;
+            const q3 = document.getElementById('u4-q3').value;
+            const q4 = document.getElementById('u4-q4').value;
+
+            if (!q1 || !q2 || !q3 || !q4) {
+                showToast("Make sure all adjectives are specified.", false);
+                return;
+            }
+
+            const isCorrect = (q1 === 'correct' && q2 === 'correct' && q3 === 'correct' && q4 === 'correct');
+
+            if (isCorrect) {
+                state.progress.unit4 = true;
+                saveProgress();
+                updateProgressUI();
+                document.getElementById('next-btn-unit4').classList.remove('hidden');
+                showToast("Wonderful! Subjective intensity replaced with precise categorizations.");
+            } else {
+                showToast("Some choices are still too conversational. Aim for scientific objectivity.", false);
+            }
+        }
+
+        // UNIT 5: Reporting Verbs
+        function checkUnit5() {
+            const q1 = document.getElementById('u5-q1').value;
+            const q2 = document.getElementById('u5-q2').value;
+            const q3 = document.getElementById('u5-q3').value;
+
+            if (!q1 || !q2 || !q3) {
+                showToast("Complete all reporting verb parameters.", false);
+                return;
+            }
+
+            const isCorrect = (q1 === 'correct' && q2 === 'correct' && q3 === 'correct');
+
+            if (isCorrect) {
+                state.progress.unit5 = true;
+                saveProgress();
+                updateProgressUI();
+                document.getElementById('next-btn-unit5').classList.remove('hidden');
+                showToast("Excellent! Stance matches verified. You control the logical force of citations.");
+            } else {
+                showToast("Incorrect reporting verb. Reread the specified stance carefully.", false);
+            }
+        }
+
+        // UNIT 6: Academic Adverbs (Hedging Slider Simulation)
+        const sliderTexts = [
+            "Bilingual education always causes cognitive advantages in children.",
+            "Bilingual education typically yields cognitive advantages in children.",
+            "Bilingual education is widely considered to associate with cognitive advantages in children."
+        ];
+        const sliderAnalyses = [
+            "Current register: Absolute & unscientific (Dogmatic)",
+            "Current register: Nuanced and academically safe (Pragmatic Hedging)",
+            "Current register: Highly advanced academic hedging (Sophisticated Stance)"
+        ];
+
+        function updateHedgeSimulation(value) {
+            document.getElementById('slider-text-output').innerText = `"${sliderTexts[value]}"`;
+            const analysisOutput = document.getElementById('slider-analysis-output');
+            analysisOutput.innerText = sliderAnalyses[value];
+            
+            if (value == 0) {
+                analysisOutput.className = "text-[11px] text-red-600 mt-2 text-right font-semibold";
+            } else if (value == 1) {
+                analysisOutput.className = "text-[11px] text-emerald-600 mt-2 text-right font-semibold";
+            } else {
+                analysisOutput.className = "text-[11px] text-indigo-600 mt-2 text-right font-semibold";
+            }
+        }
+
+        function checkUnit6() {
+            const q1 = document.getElementById('u6-q1').value;
+            if (q1 === 'correct') {
+                state.progress.unit6 = true;
+                saveProgress();
+                updateProgressUI();
+                document.getElementById('next-btn-unit6').classList.remove('hidden');
+                showToast("Perfect! Safe, nuanced, and academically accurate.");
+            } else {
+                showToast("Incorrect selection. Ensure you pick a choice featuring hedging modifiers.", false);
+            }
+        }
+
+        // UNIT 7: Collocations
+        function checkUnit7() {
+            const q1 = document.getElementById('u7-q1').value;
+            const q2 = document.getElementById('u7-q2').value;
+            const q3 = document.getElementById('u7-q3').value;
+
+            if (!q1 || !q2 || !q3) {
+                showToast("Make sure all collocations are specified.", false);
+                return;
+            }
+
+            const isCorrect = (q1 === 'correct' && q2 === 'correct' && q3 === 'correct');
+
+            if (isCorrect) {
+                state.progress.unit7 = true;
+                saveProgress();
+                updateProgressUI();
+                document.getElementById('next-btn-unit7').classList.remove('hidden');
+                showToast("Collocations matched successfully! No more literal L1 interference.");
+            } else {
+                showToast("One or more selections are unnatural in academic English corpora.", false);
+            }
+        }
+
+        // SPOKEN PODCAST CAPSTONE WORKSHOP
+        const exemplarScript = `[INTRO MUSIC PLAYING - FADE OUT]
+
+SPEAKER: 
+Hello, colleagues, and welcome to another episode of "The ELF Educator Podcast." 
+
+Today, we are going to explore a topic that is central to English language teaching in South America: namely, the tension between native-speaker pronunciation models and the principles of English as a Lingua Franca. Historically, teacher training programs in Argentina have prioritized native-like pronunciation. However, contemporary research—such as studies by Jenkins and colleagues—demonstrates that our primary goal should be "intelligibility," that is to say, being easily understood in international communication.
+
+This shift in pedagogy requires us to embrace nominalization in our curriculums; we must move our focus from the "elimination" of local accents to the "maximization" of mutual comprehension. If we look at the empirical data, there is a profound lacuna in traditional materials. Many textbooks still present an idealized, highly artificial standard of English that does not reflect real-world lingua franca interactions.
+
+Therefore, when we design our classrooms, we must incorporate appropriate hedging in our assertions. It is highly probable that our students will communicate predominantly with other non-native speakers. Thus, insisting on rigid adherence to a native-speaker model is arguably counterproductive. Instead, we must conduct systematic research into our students' real needs. 
+
+By prioritizing "comfortable intelligibility" over "native-like perfection," we can empower our learners to speak English with confidence and authority, recognizing their unique linguistic identity as bilingual South American speakers.
+
+Thank you for listening, and we look forward to continuing this discussion in our next episode.
+
+[OUTRO MUSIC PLAYING - FADE OUT]`;
+
+        function loadExemplarScript() {
+            document.getElementById('podcast-script-input').value = exemplarScript;
+            showToast("Exemplar script loaded into editor.");
+        }
+
+        function analyzePodcastScript() {
+            const text = document.getElementById('podcast-script-input').value.toLowerCase();
+            if (!text.trim()) {
+                showToast("Please draft or paste your script first.", false);
+                return;
+            }
+
+            let matches = {
+                nominals: [],
+                abbrev: [],
+                adjectives: [],
+                adverbs: [],
+                collocs: []
+            };
+
+            // 1. Scan Nominals
+            const nominalTargets = ['comprehension', 'elimination', 'pronunciation', 'intelligibility', 'nominalization', 'assertion', 'implementation', 'participation', 'acquisition', 'refusal', 'connection', 'analysis', 'discovery'];
+            nominalTargets.forEach(word => {
+                if (text.includes(word)) matches.nominals.push(word);
+            });
+
+            // 2. Scan Latin Abbreviations or spoken equivalents
+            const abbrevTargets = ['i.e.', 'that is to say', 'e.g.', 'for example', 'et al.', 'and colleagues', 'cf.', 'circa', 'ca.'];
+            abbrevTargets.forEach(word => {
+                if (text.includes(word)) matches.abbrev.push(word);
+            });
+
+            // 3. Scan Precise Adjectives
+            const adjTargets = ['substantial', 'significant', 'marked', 'untenable', 'profound', 'striking', 'straightforward', 'idealized', 'artificial', 'counterproductive', 'adverse', 'unexpected'];
+            adjTargets.forEach(word => {
+                if (text.includes(word)) matches.adjectives.push(word);
+            });
+
+            // 4. Scan Hedged Adverbs
+            const advTargets = ['typically', 'frequently', 'arguably', 'potentially', 'partially', 'predominantly', 'essentially', 'fundamentally', 'substantially'];
+            advTargets.forEach(word => {
+                if (text.includes(word)) matches.adverbs.push(word);
+            });
+
+            // 5. Scan Collocations
+            const collocTargets = ['conduct systematic research', 'conducted research', 'profound lacuna', 'rigid adherence', 'statistically significant', 'make a contribution', 'substantial contribution', 'exert a profound influence', 'heavily influence', 'draw attention to'];
+            collocTargets.forEach(colloc => {
+                if (text.includes(colloc)) matches.collocs.push(colloc);
+            });
+
+            // Score Calculations
+            let score = 0;
+            
+            // Check Nominals (min 3)
+            const nominalPassed = matches.nominals.length >= 3;
+            document.getElementById('metric-nominal-icon').innerText = nominalPassed ? '✅' : '❌';
+            document.getElementById('metric-nominal-list').innerText = `Matches found: ${matches.nominals.join(', ') || 'none'}`;
+            if (nominalPassed) score++;
+
+            // Check Abbreviations (min 2)
+            const abbrevPassed = matches.abbrev.length >= 2;
+            document.getElementById('metric-abbrev-icon').innerText = abbrevPassed ? '✅' : '❌';
+            document.getElementById('metric-abbrev-list').innerText = `Matches found: ${matches.abbrev.join(', ') || 'none'}`;
+            if (abbrevPassed) score++;
+
+            // Check Adjectives (min 3)
+            const adjPassed = matches.adjectives.length >= 3;
+            document.getElementById('metric-adjective-icon').innerText = adjPassed ? '✅' : '❌';
+            document.getElementById('metric-adjective-list').innerText = `Matches found: ${matches.adjectives.join(', ') || 'none'}`;
+            if (adjPassed) score++;
+
+            // Check Adverbs (min 2)
+            const advPassed = matches.adverbs.length >= 2;
+            document.getElementById('metric-adverb-icon').innerText = advPassed ? '✅' : '❌';
+            document.getElementById('metric-adverb-list').innerText = `Matches found: ${matches.adverbs.join(', ') || 'none'}`;
+            if (advPassed) score++;
+
+            // Check Collocations (min 2)
+            const collocPassed = matches.collocs.length >= 2;
+            document.getElementById('metric-colloc-icon').innerText = collocPassed ? '✅' : '❌';
+            document.getElementById('metric-colloc-list').innerText = `Matches found: ${matches.collocs.join(', ') || 'none'}`;
+            if (collocPassed) score++;
+
+            // Display overall evaluation score
+            document.getElementById('podcast-score-display').innerText = `${score} / 5`;
+            
+            if (score === 5) {
+                showToast("Perfect! Your script satisfies all formal academic register metrics.");
+            } else {
+                showToast(`Script analyzed. Criteria matched: ${score}/5. Refine your text to unlock the final criteria.`, false);
+            }
+
+            return score === 5;
+        }
+
+        function completePodcastWorkshop() {
+            const isCompleted = analyzePodcastScript();
+            if (isCompleted) {
+                state.progress.podcast = true;
+                saveProgress();
+                updateProgressUI();
+                
+                // Show celebration modal
+                document.getElementById('celebration-modal').classList.remove('hidden');
+            } else {
+                showToast("Your script does not satisfy all metric thresholds yet. Complete all 5 categories to finalize.", false);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('celebration-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

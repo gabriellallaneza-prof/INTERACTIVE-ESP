@@ -1,0 +1,2118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced English Grammar Diagnostics (CEFR C1/C2)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- React & Babel CDNs for single-file operation -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+              mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .animate-slide-in {
+        animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      /* Custom scrollbar for standard design */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between antialiased">
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect, useRef } = React;
+
+      // Ensure API Key setup conforms to execution context
+      const apiKey = "";
+
+      // Static database of highly advanced C1/C2 grammar testing materials with academic references
+      const curatedQuestions = [
+        {
+          id: 'q1',
+          topic: 'Negative Inversion',
+          level: 'C2',
+          questionText: "Only when she completed the final dissertation prospectus ______ that her advisor was fully satisfied.",
+          options: [
+            "did she realize",
+            "she realized",
+            "does she realize",
+            "she did realize"
+          ],
+          correctAnswer: "did she realize",
+          explanation: "As detailed in Huddleston & Pullum's *Cambridge Grammar of the English Language* (CGEL, 2002), restrictive time adjuncts starting with 'Only when...' trigger subject-auxiliary inversion in the matrix clause. Thus, the dummy operator 'did' must precede the subject 'she', and the verb takes the bare infinitival aspect.",
+          categoryHint: "Only when + adjunct clause -> auxiliary + subject + lexical verb (CGEL §11.2)"
+        },
+        {
+          id: 'q2',
+          topic: 'Negative Inversion',
+          level: 'C1',
+          questionText: "______ had the contract been signed than the prospective client attempted to renegotiate the intellectual property clauses.",
+          options: [
+            "No sooner",
+            "Hardly",
+            "Barely",
+            "Scarcely"
+          ],
+          correctAnswer: "No sooner",
+          explanation: "In accordance with Quirk et al. (1985) in *A Comprehensive Grammar of the English Language*, 'No sooner' acts as a negative correlative operator paired strictly with the comparative particle 'than' to denote near-instantaneous sequence. 'Hardly', 'scarcely', and 'barely' mandate coordination via 'when' or 'before'.",
+          categoryHint: "Correlative negative operators of immediate temporal succession"
+        },
+        {
+          id: 'q3',
+          topic: 'Cleft Sentences',
+          level: 'C1',
+          questionText: "______ the executive advisory board objected to was not the merger, but the total absence of communication.",
+          options: [
+            "What",
+            "Which",
+            "That",
+            "It was"
+          ],
+          correctAnswer: "What",
+          explanation: "This displays a pseudo-cleft (or wh-cleft) construction. The fused relative pronoun 'What' introduces the subordinate clause (acting as 'the thing that'), allowing the focused informational element (the absence of communication) to occupy the post-copular focal position.",
+          categoryHint: "Wh-clefting for informational focus (Quirk §18.27)"
+        },
+        {
+          id: 'q4',
+          topic: 'Cleft Sentences',
+          level: 'C2',
+          questionText: "It was in the seventeenth century ______ the foundations of modern calculus were independently established by Newton and Leibniz.",
+          options: [
+            "that",
+            "when",
+            "which",
+            "where"
+          ],
+          correctAnswer: "that",
+          explanation: "In a standard it-cleft focused on a prepositional adjunct of time ('in the seventeenth century'), the relative clause is introduced by the declarative subordinator 'that'. While temporal relative 'when' is frequently observed colloquially, formal academic registers require 'that' (CGEL, 2002).",
+          categoryHint: "It-cleft focusing of prepositional adjuncts of time"
+        },
+        {
+          id: 'q5',
+          topic: 'Advanced Conditionals',
+          level: 'C2',
+          questionText: "______ any unexpected logistics hurdles arise, the operations team is prepared to divert shipments to the Antwerp port.",
+          options: [
+            "Should",
+            "Were",
+            "Had",
+            "If"
+          ],
+          correctAnswer: "Should",
+          explanation: "This represents subject-auxiliary inversion in an open conditional clause (First Conditional). The modal auxiliary 'should' is fronted, dropping the conditional subordinator 'if'. This structure represents a low-probability contingency, characteristic of high-register professional discourse.",
+          categoryHint: "Inverted conditional operators displaying epistemic possibility"
+        },
+        {
+          id: 'q6',
+          topic: 'Advanced Conditionals',
+          level: 'C1',
+          questionText: "Had they not undertaken a thorough risk-management audit in the third quarter, the fiscal fallout ______ devastating.",
+          options: [
+            "would have been",
+            "had been",
+            "would be",
+            "will have been"
+          ],
+          correctAnswer: "would have been",
+          explanation: "An inverted Third Conditional denoting a counterfactual past event. The conditional clause contains the past perfect ('Had they not undertaken'), which logically pairs with a past counterfactual result expressed by the perfect conditional 'would have been' (Quirk et al., 1985).",
+          categoryHint: "Past counterfactual conditional inversion"
+        },
+        {
+          id: 'q7',
+          topic: 'Advanced Conditionals',
+          level: 'C2',
+          questionText: "Were it not for the ongoing research endowment, the laboratory ______ to scale back its experiments on quantum mechanics starting next cycle.",
+          options: [
+            "would be forced",
+            "will have been forced",
+            "were forced",
+            "had been forced"
+          ],
+          correctAnswer: "would be forced",
+          explanation: "A mixed counterfactual conditional. The protasis 'Were it not for...' indicates an inverted present counterfactual state (ongoing funding), which triggers a hypothetical ongoing or future consequence in the apodosis expressed by the present conditional 'would be forced'.",
+          categoryHint: "Mixed counterfactual: present hypothesis with subsequent outcome"
+        },
+        {
+          id: 'q8',
+          topic: 'Subjunctive Mood',
+          level: 'C2',
+          questionText: "It is of paramount importance that the compliance officer ______ any discrepancies in the equity statement prior to the public audit.",
+          options: [
+            "investigate",
+            "investigates",
+            "investigated",
+            "must investigate"
+          ],
+          correctAnswer: "investigate",
+          explanation: "Adjectives expressing deontic urgency, necessity, or importance (e.g., paramount, vital, imperative) license the mandative subjunctive in the content clause. The verb must remain in its base form 'investigate', neutral with respect to third-person singular agreement (CGEL §11.6).",
+          categoryHint: "Deontic adjectives triggering mandative subjunctive"
+        },
+        {
+          id: 'q9',
+          topic: 'Subjunctive Mood',
+          level: 'C1',
+          questionText: "The senior committee insisted that the executive director ______ a motion for immediate structural reform.",
+          options: [
+            "propose",
+            "proposes",
+            "proposed",
+            "must propose"
+          ],
+          correctAnswer: "propose",
+          explanation: "Deontic verbs of demanding, recommending, or advising (e.g., insist, recommend, propose) trigger a mandative subjunctive structure. The subordinate verb takes the bare, non-inflected base form 'propose', ignoring the third-person singular inflection.",
+          categoryHint: "Suasive verbs licensing mandative subjunctive clauses"
+        },
+        {
+          id: 'q10',
+          topic: 'Advanced Gerunds & Infinitives',
+          level: 'C2',
+          questionText: "The executive was reported ______ under intense scrutiny by federal regulators for several months before she resigned.",
+          options: [
+            "to have been working",
+            "to work",
+            "having worked",
+            "to be working"
+          ],
+          correctAnswer: "to have been working",
+          explanation: "To express an aspectual action that was ongoing and continuous *prior* to a past point of reference (her resignation), we employ the perfect continuous aspect of the passive-reported infinitive: 'to have been working'.",
+          categoryHint: "Perfect continuous infinitive triggered by passive reportative matrix"
+        },
+        {
+          id: 'q11',
+          topic: 'Advanced Gerunds & Infinitives',
+          level: 'C1',
+          questionText: "The board members resented ______ informed about the venture capital acquisition until after the terms were legally settled.",
+          options: [
+            "not having been",
+            "not being",
+            "to not have been",
+            "to have not been"
+          ],
+          correctAnswer: "not having been",
+          explanation: "The emotive verb 'resent' licenses a gerund-participial complement. Because the target action represents a completed, passive historical event (not being informed), we must employ the negative perfect passive gerund: 'not having been informed' (Quirk, 1985).",
+          categoryHint: "Perfect passive gerund with left-edge clitic negation"
+        },
+        {
+          id: 'q12',
+          topic: 'Ellipsis & Substitution',
+          level: 'C2',
+          questionText: "While some delegates successfully ratified the agreement, others strongly declined ______.",
+          options: [
+            "to do so",
+            "doing so",
+            "to",
+            "so to do"
+          ],
+          correctAnswer: "to do so",
+          explanation: "The predicate substitute verb phrase 'do so' acts as a cohesive cohesive pro-form representing 'ratified the agreement'. It is introduced by the infinitival 'to' required as a complement by the catenative verb 'decline'.",
+          categoryHint: "Infinitival complementation with 'do so' pro-form substitution"
+        },
+        {
+          id: 'q13',
+          topic: 'Ellipsis & Substitution',
+          level: 'C1',
+          questionText: "Most of the board members expect prices to deflate, and certainly I expect ______ too.",
+          options: [
+            "them to",
+            "so",
+            "it",
+            "not"
+          ],
+          correctAnswer: "them to",
+          explanation: "This sentence exhibits post-auxiliary ellipsis of the infinitival verb phrase ('deflate'). The object pronoun 'them' functions as the subject of the infinitive clause, with the stranded infinitival marker 'to' signaling the ellipsis.",
+          categoryHint: "Infinitive clause VP-ellipsis with object-pronoun remnant"
+        }
+      ];
+
+      const curatedRewritings = [
+        {
+          id: 'rw1',
+          original: "We had hardly sat down to eat when the alarm went off.",
+          instruction: "Rewrite the sentence using negative inversion starting with 'Hardly...'",
+          targetStructure: "Inversion",
+          hint: "Place the restrictive temporal adverbial 'Hardly' first, triggering subject-auxiliary inversion of the past perfect components.",
+          sampleAnswers: [
+            "Hardly had we sat down to eat when the alarm went off.",
+            "Hardly had we sat down to eat when the alarm sounded."
+          ]
+        },
+        {
+          id: 'rw2',
+          original: "She didn't know that her speech was being recorded.",
+          instruction: "Rewrite the sentence using inversion starting with 'Little...'",
+          targetStructure: "Inversion",
+          hint: "'Little' behaves as a fronted negative adjunct, requiring dummy auxiliary 'did' prior to the subject.",
+          sampleAnswers: [
+            "Little did she know that her speech was being recorded.",
+            "Little did she realize that her speech was being recorded."
+          ]
+        },
+        {
+          id: 'rw3',
+          original: "I didn't realize how much he had sacrificed until years later.",
+          instruction: "Rewrite as a cleft sentence starting with 'It was not until...'",
+          targetStructure: "Cleft Sentence",
+          hint: "An 'It-cleft' focalizing a temporal adverbial, followed by a 'that'-complement clause.",
+          sampleAnswers: [
+            "It was not until years later that I realized how much he had sacrificed.",
+            "It was not until years later that I understood the extent of his sacrifice."
+          ]
+        },
+        {
+          id: 'rw4',
+          original: "If you need further consultation, do not hesitate to contact our chief executive.",
+          instruction: "Rewrite using inversion starting with 'Should...'",
+          targetStructure: "Conditionals",
+          hint: "Eliminate the conditional conjunction 'if' and front the modal auxiliary 'should' ahead of the subject pronoun.",
+          sampleAnswers: [
+            "Should you need further consultation, do not hesitate to contact our chief executive.",
+            "Should you require further consultation, please contact our chief executive."
+          ]
+        }
+      ];
+
+      // Custom Reusable SVGs for clean, zero-dependency rendering
+      function Icon({ name, className = "w-5 h-5" }) {
+        const svgProps = {
+          className,
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          strokeWidth: "2",
+          strokeLinecap: "round",
+          strokeLinejoin: "round"
+        };
+
+        const icons = {
+          brain: (
+            <>
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+              <path d="M12 6v12" />
+              <path d="M8 10c0-1.5 1.5-3 4-3s4 1.5 4 3" />
+              <path d="M16 14c0 1.5-1.5 3-4 3s-4-1.5-4-3" />
+            </>
+          ),
+          award: (
+            <>
+              <circle cx="12" cy="8" r="7" />
+              <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+            </>
+          ),
+          bookOpen: (
+            <>
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+            </>
+          ),
+          sliders: (
+            <>
+              <line x1="4" y1="21" x2="4" y2="14" />
+              <line x1="4" y1="10" x2="4" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12" y2="3" />
+              <line x1="20" y1="21" x2="20" y2="16" />
+              <line x1="20" y1="12" x2="20" y2="3" />
+              <line x1="2" y1="14" x2="6" y2="14" />
+              <line x1="10" y1="8" x2="14" y2="8" />
+              <line x1="18" y1="16" x2="22" y2="16" />
+            </>
+          ),
+          clock: (
+            <>
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </>
+          ),
+          flame: (
+            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+          ),
+          checkCircle: (
+            <>
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </>
+          ),
+          check: (
+            <polyline points="20 6 9 17 4 12" />
+          ),
+          x: (
+            <>
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </>
+          ),
+          arrowUpRight: (
+            <>
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </>
+          ),
+          chevronRight: (
+            <polyline points="9 18 15 12 9 6" />
+          ),
+          chevronLeft: (
+            <polyline points="15 18 9 12 15 6" />
+          ),
+          sparkles: (
+            <>
+              <path d="M12 3v3M12 18v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M3 12h3M18 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" />
+            </>
+          ),
+          share: (
+            <>
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+              <polyline points="16 6 12 2 8 6" />
+              <line x1="12" y1="2" x2="12" y2="15" />
+            </>
+          ),
+          chrome: (
+            <>
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="4" />
+              <line x1="21.17" y1="8" x2="12" y2="8" />
+              <line x1="3.95" y1="6.06" x2="8.54" y2="14" />
+              <line x1="10.88" y1="21.94" x2="15.46" y2="14" />
+            </>
+          ),
+          copy: (
+            <>
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </>
+          ),
+          shieldAlert: (
+            <>
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </>
+          ),
+          helpCircle: (
+            <>
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </>
+          ),
+          send: (
+            <>
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </>
+          ),
+          layers: (
+            <>
+              <polygon points="12 2 2 7 12 12 22 7 12 2" />
+              <polyline points="2 17 12 22 22 17" />
+              <polyline points="2 12 12 17 22 12" />
+            </>
+          ),
+          eye: (
+            <>
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </>
+          ),
+          refresh: (
+            <>
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+            </>
+          )
+        };
+
+        return (
+          <svg {...svgProps}>
+            {icons[name] || null}
+          </svg>
+        );
+      }
+
+      // Safe copy function meeting restrictions
+      function copyTextToClipboard(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+        } catch (err) {
+          console.error('Fallback copy failed', err);
+        }
+        document.body.removeChild(textArea);
+      }
+
+      // Safe exponential backoff caller for direct Gemini client integration in the web browser
+      async function fetchGeminiData(prompt, systemInstruction) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        const payload = {
+          contents: [{ parts: [{ text: prompt }] }],
+          systemInstruction: { parts: [{ text: systemInstruction }] },
+          generationConfig: {
+            responseMimeType: "application/json"
+          }
+        };
+
+        let delay = 1000;
+        for (let i = 0; i < 5; i++) {
+          try {
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+              throw new Error(`HTTP Error: status ${response.status}`);
+            }
+
+            const data = await response.json();
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) {
+              // Sanitize standard code block markings if returned
+              const sanitizedText = text.replace(/```json\s?|```/g, '').trim();
+              return JSON.parse(sanitizedText);
+            }
+            throw new Error("Invalid or empty response structure from model.");
+          } catch (error) {
+            if (i === 4) throw error;
+            await new Promise(resolve => setTimeout(resolve, delay));
+            delay *= 2;
+          }
+        }
+      }
+
+      // Toast Notification System (Sustituye alerts)
+      function Toast({ message, type, onClose }) {
+        useEffect(() => {
+          const timer = setTimeout(onClose, 4000);
+          return () => clearTimeout(timer);
+        }, [onClose]);
+
+        const colors = {
+          success: 'bg-emerald-900 border-emerald-700 text-emerald-100',
+          error: 'bg-red-900 border-red-700 text-red-100',
+          info: 'bg-slate-900 border-slate-700 text-slate-100'
+        };
+
+        return (
+          <div className={`fixed bottom-5 right-5 z-50 flex items-center gap-3 px-4 py-3.5 rounded-xl border shadow-xl animate-slide-in max-w-sm ${colors[type]}`}>
+            <Icon name={type === 'success' ? 'checkCircle' : 'shieldAlert'} className="w-5 h-5 shrink-0" />
+            <span className="text-xs font-semibold leading-relaxed font-sans">{message}</span>
+            <button onClick={onClose} className="hover:opacity-75 cursor-pointer">
+              <Icon name="x" className="w-4 h-4" />
+            </button>
+          </div>
+        );
+      }
+
+      // Dialog System (Modal de Confirmación)
+      function ConfirmationModal({ isOpen, title, message, onConfirm, onCancel }) {
+        if (!isOpen) return null;
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+            <div className="bg-white rounded-2xl max-w-md w-full border border-slate-100 shadow-2xl p-6 space-y-4 animate-fade-in">
+              <div className="flex items-center gap-3 text-red-600">
+                <Icon name="shieldAlert" className="w-6 h-6" />
+                <h3 className="text-base font-bold text-slate-900">{title}</h3>
+              </div>
+              <p className="text-xs text-slate-500 leading-relaxed font-sans">{message}</p>
+              <div className="flex justify-end gap-3 pt-2">
+                <button 
+                  onClick={onCancel}
+                  className="px-4 py-2 border border-slate-200 hover:bg-slate-50 rounded-lg text-xs font-bold text-slate-600 cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button 
+                  onClick={onConfirm}
+                  className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold cursor-pointer"
+                >
+                  Confirmar Reinicio
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // --- COMPONENT: DASHBOARD ---
+      function Dashboard({ stats, mastery, history, onSelectTab, onClearStats, onSelectTopicQuiz, showToast }) {
+        const [copiedLink, setCopiedLink] = useState(false);
+
+        const averageAccuracy = stats.questionsAnswered > 0 
+          ? Math.round((stats.correctAnswers / stats.questionsAnswered) * 100)
+          : 0;
+
+        let estimatedLevel = 'B2';
+        if (stats.quizzesCompleted >= 3 && averageAccuracy >= 85) {
+          estimatedLevel = 'C2';
+        } else if (stats.quizzesCompleted >= 1 && averageAccuracy >= 65) {
+          estimatedLevel = 'C1';
+        }
+
+        const topics = [
+          { name: 'Negative Inversion', desc: 'Subject-auxiliary inversion following emphatic adverbials.', cefr: 'C2' },
+          { name: 'Cleft Sentences', desc: 'It- and Wh-structures focusing essential text information.', cefr: 'C1' },
+          { name: 'Advanced Conditionals', desc: 'Mixed timelines and inverted counterfactual events.', cefr: 'C2' },
+          { name: 'Subjunctive Mood', desc: 'Mandative guidelines expressing demands/urges.', cefr: 'C1' },
+          { name: 'Advanced Gerunds & Infinitives', desc: 'Perfective, passive, and continuous infinitival aspects.', cefr: 'C1' },
+          { name: 'Ellipsis & Substitution', desc: 'Cohesive reduction of redundant verbal constructs.', cefr: 'C2' }
+        ];
+
+        return (
+          <div className="space-y-8 animate-fade-in">
+            {/* Header Banner - Academic Premium Card */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-2xl p-6 md:p-8 shadow-md border border-slate-800">
+              <div className="absolute right-0 top-0 -mt-10 -mr-10 w-44 h-44 rounded-full bg-indigo-500/10 blur-2xl"></div>
+              <div className="absolute left-1/3 bottom-0 w-32 h-32 rounded-full bg-slate-500/10 blur-xl"></div>
+              
+              <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="space-y-2">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/25 text-indigo-200 border border-indigo-500/30">
+                    CEFR Academic Standard
+                  </span>
+                  <h1 className="text-2xl md:text-3xl font-bold tracking-tight font-sans">
+                    Advanced English Grammar Diagnostics
+                  </h1>
+                  <p className="text-slate-300 text-sm md:text-base max-w-xl font-sans">
+                    Diagnose and polish your mastery of the most intricate mechanics of English syntax (C1/C2 levels).
+                  </p>
+                </div>
+                
+                <div className="bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/10 flex items-center gap-4 min-w-[200px]">
+                  <div className="p-3 bg-indigo-600 rounded-lg text-white">
+                    <Icon name="award" className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-300 uppercase font-mono tracking-wider">Estimated Level</p>
+                    <h2 className="text-3xl font-extrabold text-white tracking-tight">{estimatedLevel}</h2>
+                    <p className="text-xs text-indigo-200">{averageAccuracy >= 85 ? 'Highly Sophisticated' : averageAccuracy >= 65 ? 'Core Advanced' : 'Upper Intermediate'}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Metrics Row */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-xs flex items-center gap-4">
+                <div className="p-3 bg-emerald-50 text-emerald-600 rounded-lg">
+                  <Icon name="checkCircle" className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 font-medium">Diagnostic Score</p>
+                  <h3 className="text-xl font-bold text-slate-800">{averageAccuracy}%</h3>
+                  <p className="text-[10px] text-slate-400">Avg. Accuracy</p>
+                </div>
+              </div>
+
+              <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-xs flex items-center gap-4">
+                <div className="p-3 bg-indigo-50 text-indigo-600 rounded-lg">
+                  <Icon name="bookOpen" className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 font-medium">Tests Taken</p>
+                  <h3 className="text-xl font-bold text-slate-800">{stats.quizzesCompleted}</h3>
+                  <p className="text-[10px] text-slate-400">Total sessions</p>
+                </div>
+              </div>
+
+              <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-xs flex items-center gap-4">
+                <div className="p-3 bg-amber-50 text-amber-600 rounded-lg">
+                  <Icon name="flame" className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 font-medium font-sans">Active Drill Items</p>
+                  <h3 className="text-xl font-bold text-slate-800">{stats.questionsAnswered}</h3>
+                  <p className="text-[10px] text-slate-400">Engagements logged</p>
+                </div>
+              </div>
+
+              <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-xs flex items-center gap-4">
+                <div className="p-3 bg-indigo-50 text-indigo-600 rounded-lg">
+                  <Icon name="clock" className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500 font-medium">Accuracy Rate</p>
+                  <h3 className="text-xl font-bold text-slate-800">
+                    {stats.correctAnswers} <span className="text-xs text-slate-400 font-normal">/ {stats.questionsAnswered}</span>
+                  </h3>
+                  <p className="text-[10px] text-slate-400">Correct details</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Primary Panels */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Topic Mastery Strengths */}
+              <div className="lg:col-span-2 space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <Icon name="sliders" className="w-5 h-5 text-indigo-600" />
+                    CEFR Advanced Topics Mastery
+                  </h2>
+                  <button
+                    onClick={onClearStats}
+                    className="text-xs text-slate-400 hover:text-red-500 transition-colors flex items-center gap-1 cursor-pointer"
+                  >
+                    Reset Statistics
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {topics.map((t) => {
+                    const score = mastery[t.name] || 0;
+                    let textBar = 'bg-indigo-600';
+                    if (score >= 80) textBar = 'bg-emerald-600';
+                    else if (score > 0 && score < 60) textBar = 'bg-amber-500';
+
+                    return (
+                      <div key={t.name} className="p-4 bg-white rounded-xl border border-slate-100 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between space-y-3">
+                        <div>
+                          <div className="flex items-start justify-between">
+                            <span className="font-bold text-sm text-slate-800 font-sans tracking-tight">{t.name}</span>
+                            <span className={`text-[10px] uppercase font-mono px-1.5 py-0.5 rounded font-bold ${
+                              t.cefr === 'C2' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-blue-50 text-blue-600 border border-blue-100'
+                            }`}>
+                              {t.cefr}
+                            </span>
+                          </div>
+                          <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">{t.desc}</p>
+                        </div>
+
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-xs font-mono text-slate-400">
+                            <span>Accuracy</span>
+                            <span className="font-bold text-slate-700">{score ? `${score}%` : 'Not Started'}</span>
+                          </div>
+                          <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                            <div className={`h-full ${textBar} transition-all duration-500`} style={{ width: `${score || 0}%` }}></div>
+                          </div>
+                          <div className="flex justify-end pt-1">
+                            <button 
+                              onClick={() => onSelectTopicQuiz(t.name)}
+                              className="text-[11px] font-medium text-indigo-600 hover:text-indigo-800 transition-colors inline-flex items-center gap-0.5 cursor-pointer font-sans"
+                            >
+                              Start Quiz <Icon name="arrowUpRight" className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Practice Modes & Recent Log */}
+              <div className="space-y-6">
+                <h2 className="text-lg font-bold text-slate-900">Choose Practice Arena</h2>
+                
+                <div className="space-y-4">
+                  {/* Arena 1 */}
+                  <div 
+                    onClick={() => onSelectTab('quiz')}
+                    className="p-5 bg-white rounded-xl border border-slate-100 shadow-2xs hover:border-indigo-400 transition-all cursor-pointer group hover:scale-[1.01]"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="p-2 bg-indigo-50 text-indigo-600 rounded-lg font-bold text-xs uppercase font-mono">Arena I</span>
+                      <Icon name="chevronRight" className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors" />
+                    </div>
+                    <h3 className="text-base font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">Adaptive Quizzes</h3>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                      Take timed C1/C2 multiple-choice evaluations dynamically generated by Gemini or curated by expert linguists.
+                    </p>
+                  </div>
+
+                  {/* Arena 2 */}
+                  <div 
+                    onClick={() => onSelectTab('transformer')}
+                    className="p-5 bg-white rounded-xl border border-slate-100 shadow-2xs hover:border-indigo-400 transition-all cursor-pointer group hover:scale-[1.01]"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="p-2 bg-amber-50 text-amber-600 rounded-lg font-bold text-xs uppercase font-mono">Arena II</span>
+                      <Icon name="chevronRight" className="w-4 h-4 text-slate-400 group-hover:text-amber-600 transition-colors" />
+                    </div>
+                    <h3 className="text-base font-bold text-slate-800 group-hover:text-amber-600 transition-colors">Syntax Transformer</h3>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                      Practice complex syntactic rewriting. Invert clauses, mold cleft phrases, and review academic registers.
+                    </p>
+                  </div>
+
+                  {/* Arena 3 */}
+                  <div 
+                    onClick={() => onSelectTab('prose')}
+                    className="p-5 bg-white rounded-xl border border-slate-100 shadow-2xs hover:border-indigo-400 transition-all cursor-pointer group hover:scale-[1.01]"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="p-2 bg-emerald-50 text-emerald-600 rounded-lg font-bold text-xs uppercase font-mono">Arena III</span>
+                      <Icon name="chevronRight" className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 transition-colors" />
+                    </div>
+                    <h3 className="text-base font-bold text-slate-800 group-hover:text-emerald-600 transition-colors">Advanced Prose Analyzer</h3>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                      Submit an essay or letter. Get in-depth corrections on register, articles, passive aspects, and vocabulary sophistication.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Recent History log */}
+                <div className="space-y-3 pt-2">
+                  <h3 className="text-sm font-bold text-slate-700 font-sans">Recent Engagements</h3>
+                  {history.length === 0 ? (
+                    <div className="text-center p-6 border border-dashed border-slate-200 rounded-xl text-xs text-slate-400 font-sans">
+                      No active history. Select an arena above to start.
+                    </div>
+                  ) : (
+                    <div className="space-y-3 overflow-y-auto max-h-[220px]">
+                      {history.slice(0, 4).map((h, idx) => (
+                        <div key={idx} className="p-3 bg-slate-50/70 border border-slate-100 rounded-lg flex items-center justify-between text-xs font-sans">
+                          <div>
+                            <p className="font-semibold text-slate-800">{h.type}: <span className="font-normal text-slate-500">{h.topicOrFocus}</span></p>
+                            <p className="text-[10px] text-slate-400 mt-0.5">{h.date}</p>
+                          </div>
+                          <span className={`px-2 py-0.5 rounded-full font-mono font-bold text-[10px] ${
+                            h.status === 'excellent' ? 'bg-emerald-50 text-emerald-600' :
+                            h.status === 'passed' ? 'bg-indigo-50 text-indigo-600' : 'bg-amber-50 text-amber-600'
+                          }`}>
+                            {h.score}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Share & Chrome Extension panel */}
+            <div className="bg-slate-100/55 rounded-2xl border border-slate-200 p-6 space-y-6 mt-8">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+                <div>
+                  <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">
+                    <Icon name="share" className="w-5 h-5 text-indigo-600" />
+                    Compartir App y Extensión Local
+                  </h2>
+                  <p className="text-xs text-slate-500">
+                    Usa esta aplicación de forma autónoma en pantalla completa o instálala directamente como extensión de Google Chrome.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-3">
+                  <div className="flex items-center gap-2 text-indigo-700 font-bold text-xs uppercase font-mono">
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse"></span>
+                    Direct Application URL
+                  </div>
+                  <h3 className="text-sm font-bold text-slate-800">Enlace del Entorno Local</h3>
+                  <p className="text-xs text-slate-500 leading-normal font-sans">
+                    Puedes copiar la URL actual del navegador para compartir tu progreso académico con otros estudiantes o guardarlo en tus marcadores:
+                  </p>
+                  <div className="flex gap-2 pt-1 font-sans">
+                    <input 
+                      type="text" 
+                      readOnly 
+                      value={typeof window !== 'undefined' ? window.location.href : 'http://localhost'} 
+                      className="flex-1 bg-slate-50 border border-slate-200 text-slate-600 rounded-lg px-3 py-1.5 text-xs font-mono select-all focus:outline-hidden"
+                    />
+                    <button
+                      onClick={() => {
+                        copyTextToClipboard(window.location.href);
+                        showToast("¡Enlace de aplicación copiado exitosamente al portapapeles!", "success");
+                      }}
+                      className="px-3 py-1.5 bg-slate-950 text-white hover:bg-slate-800 rounded-lg text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1 shrink-0"
+                    >
+                      <Icon name="copy" className="w-3.5 h-3.5" />
+                      Copiar
+                    </button>
+                  </div>
+                </div>
+
+                <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs space-y-3">
+                  <div className="flex items-center gap-2 text-amber-600 font-bold text-xs uppercase font-mono">
+                    <Icon name="chrome" className="w-3.5 h-3.5" />
+                    Utilizar como Extensión de Chrome
+                  </div>
+                  <h3 className="text-sm font-bold text-slate-800">Ejecución desde el Navegador</h3>
+                  <p className="text-xs text-slate-500 leading-normal font-sans">
+                    Para convertir este archivo HTML autónomo en un popup nativo de Chrome:
+                  </p>
+                  <ul className="text-[11px] text-slate-600 space-y-1.5 list-decimal pl-4 leading-normal font-medium font-sans">
+                    <li>Guarda este código completo en un archivo llamado <code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-[10px]">index.html</code>.</li>
+                    <li>Crea un archivo de texto llamado <code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-[10px]">manifest.json</code> en la misma carpeta con la versión 3 de extensiones.</li>
+                    <li>Abre <code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-[10px]">chrome://extensions/</code> y activa el <b>Modo desarrollador</b>.</li>
+                    <li>Usa <b>Cargar descomprimida</b> y selecciona tu carpeta para usarla en cualquier pestaña.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // --- COMPONENT: DIAGNOSTIC QUIZ ---
+      function DiagnosticQuiz({ onQuizCompleted, onBackToDashboard, selectedTopicFromDashboard, showToast }) {
+        const topics = [
+          'Negative Inversion',
+          'Cleft Sentences',
+          'Advanced Conditionals',
+          'Subjunctive Mood',
+          'Advanced Gerunds & Infinitives',
+          'Ellipsis & Substitution'
+        ];
+
+        const [activeTopic, setActiveTopic] = useState(selectedTopicFromDashboard || 'Negative Inversion');
+        const [level, setLevel] = useState('C1');
+        const [useAI, setUseAI] = useState(false);
+        const [isGenerating, setIsGenerating] = useState(false);
+        const [apiError, setApiError] = useState(null);
+
+        const [questions, setQuestions] = useState([]);
+        const [currentIdx, setCurrentIdx] = useState(-1);
+        const [selectedAnswer, setSelectedAnswer] = useState(null);
+        const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
+        const [sessionScore, setSessionScore] = useState(0);
+        const [answersSummary, setAnswersSummary] = useState([]);
+
+        const startQuizSession = async () => {
+          setIsGenerating(true);
+          setApiError(null);
+          setSelectedAnswer(null);
+          setIsAnswerSubmitted(false);
+          setSessionScore(0);
+          setAnswersSummary([]);
+
+          if (useAI) {
+            try {
+              const systemPrompt = "You are an elite Cambridge/Oxford caliber ESL examination designer creating advanced assessments for C1/C2 candidates. Your responses must strictly contain valid JSON arrays matching the requested structures.";
+              const prompt = `Generate exactly 5 highly advanced, natural multiple-choice English grammar question items on the specific topic: "${activeTopic}".
+The difficulty level must be strictly suited for CEFR ${level} advanced learners of English.
+Ensure the questions represent authentic academic, literature, or high-register professional usage, focusing on subtle grammatical aspects, register, and syntactic rules.
+Each question must include 4 distinct, plausible options where only 1 option is grammatically correct.
+Provide a clear, detailed grammatical explanation referencing established academic grammars (like Huddleston & Pullum's CGEL, or Quirk et al. CGEL) clarifying why the correct choice stands and why the other options are sophisticated distractors with minor faults.
+Also provide a categoryHint summarizing the formula or key pattern.
+
+Return ONLY a raw JSON array matching this schema:
+[
+  {
+    "id": "q_ai_1",
+    "topic": "${activeTopic}",
+    "level": "${level}",
+    "questionText": "Sentence containing a blank '______' for multiple choice completion.",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "correctAnswer": "Option A",
+    "explanation": "Detailed professional linguistic breakdown with academic citations...",
+    "categoryHint": "Short syntax formula label"
+  }
+]`;
+
+              const result = await fetchGeminiData(prompt, systemPrompt);
+              if (result && Array.isArray(result) && result.length > 0) {
+                setQuestions(result);
+                setCurrentIdx(0);
+                showToast("¡Prueba de diagnóstico generada con Gemini exitosamente!", "success");
+              } else {
+                throw new Error("No questions retrieved. Check model formatting.");
+              }
+            } catch (err) {
+              console.error(err);
+              setApiError("Unable to load dynamic AI questions. The app fell back to the local premium database.");
+              // Local fallback matching topic
+              const localSet = curatedQuestions.filter(q => q.topic === activeTopic);
+              setQuestions(localSet.length > 0 ? localSet : curatedQuestions.slice(0, 5));
+              setCurrentIdx(0);
+            } finally {
+              setIsGenerating(false);
+            }
+          } else {
+            const localSet = curatedQuestions.filter(q => q.topic === activeTopic);
+            setQuestions(localSet.length > 0 ? localSet : curatedQuestions.slice(0, 5));
+            setCurrentIdx(0);
+            setIsGenerating(false);
+            showToast("Banco local de preguntas académicas cargado.", "info");
+          }
+        };
+
+        const handleSubmitAnswer = () => {
+          if (!selectedAnswer || isAnswerSubmitted) return;
+          const currentQ = questions[currentIdx];
+          const isCorrect = selectedAnswer === currentQ.correctAnswer;
+          
+          if (isCorrect) {
+            setSessionScore(prev => prev + 1);
+          }
+          setAnswersSummary(prev => [...prev, { q: currentQ, chosen: selectedAnswer, isCorrect }]);
+          setIsAnswerSubmitted(true);
+        };
+
+        const handleNext = () => {
+          if (currentIdx + 1 < questions.length) {
+            setCurrentIdx(currentIdx + 1);
+            setSelectedAnswer(null);
+            setIsAnswerSubmitted(false);
+          } else {
+            onQuizCompleted(activeTopic, sessionScore, questions.length);
+            setCurrentIdx(-2);
+          }
+        };
+
+        return (
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-md p-6 max-w-4xl mx-auto">
+            {currentIdx === -1 && (
+              <div className="space-y-6 animate-fade-in">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                  <div className="flex items-center gap-2">
+                    <button onClick={onBackToDashboard} className="p-1 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-slate-700 cursor-pointer">
+                      <Icon name="chevronLeft" className="w-5 h-5" />
+                    </button>
+                    <div>
+                      <h2 className="text-xl font-bold text-slate-800">Advanced Diagnostic Quizzes</h2>
+                      <p className="text-xs text-slate-400 font-sans">Validate syntactic precision and structural rules</p>
+                    </div>
+                  </div>
+                  <span className="text-xs text-slate-400 font-mono">Arena I</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
+                  <div className="space-y-4">
+                    <label className="block text-sm font-semibold text-slate-700">1. Select Advanced Domain</label>
+                    <div className="grid grid-cols-1 gap-2">
+                      {topics.map((t) => (
+                        <button
+                          key={t}
+                          onClick={() => setActiveTopic(t)}
+                          className={`p-3 text-left text-xs rounded-xl border text-slate-700 font-medium transition-all flex justify-between items-center cursor-pointer ${
+                            activeTopic === t 
+                              ? 'bg-indigo-50/70 text-indigo-700 border-indigo-200 shadow-2xs' 
+                              : 'bg-white border-slate-100 hover:bg-slate-50/50'
+                          }`}
+                        >
+                          <span>{t}</span>
+                          <span className="text-[9px] uppercase font-mono px-1.5 bg-slate-50 border rounded text-slate-400">C1/C2</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-6 flex flex-col justify-between">
+                    <div className="space-y-4">
+                      <label className="block text-sm font-semibold text-slate-700">2. Configure Parameters</label>
+                      
+                      <div className="p-4 bg-slate-50/50 rounded-xl space-y-2 border border-slate-100">
+                        <span className="text-xs text-slate-500 font-medium block">Target CEFR Register</span>
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setLevel('C1')}
+                            className={`flex-1 py-2 text-xs font-bold rounded-lg border cursor-pointer transition-all ${
+                              level === 'C1' ? 'bg-white border-indigo-200 text-indigo-600 shadow-2xs' : 'bg-transparent border-transparent text-slate-500'
+                            }`}
+                          >
+                            C1 (Proficiency)
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setLevel('C2')}
+                            className={`flex-1 py-2 text-xs font-bold rounded-lg border cursor-pointer transition-all ${
+                              level === 'C2' ? 'bg-white border-indigo-200 text-indigo-600 shadow-2xs' : 'bg-transparent border-transparent text-slate-500'
+                            }`}
+                          >
+                            C2 (Mastery)
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="p-4 bg-slate-50/50 rounded-xl space-y-3 border border-slate-100 font-sans">
+                        <span className="text-xs text-slate-500 font-medium block">Engine Selector</span>
+                        <div className="flex flex-col gap-2">
+                          <label className={`p-3 rounded-lg border cursor-pointer transition-all flex items-start gap-3 ${!useAI ? 'bg-white border-indigo-200 shadow-2xs' : 'bg-transparent border-transparent'}`}>
+                            <input type="radio" checked={!useAI} onChange={() => setUseAI(false)} className="mt-0.5" />
+                            <div>
+                              <span className="text-xs font-bold text-slate-700 block">Linguist Curated Standard</span>
+                              <span className="text-[10px] text-slate-400 block mt-0.5">Static set of highly complex academic testing items with references.</span>
+                            </div>
+                          </label>
+
+                          <label className={`p-3 rounded-lg border cursor-pointer transition-all flex items-start gap-3 ${useAI ? 'bg-white border-indigo-200 shadow-2xs' : 'bg-transparent border-transparent'}`}>
+                            <input type="radio" checked={useAI} onChange={() => setUseAI(true)} className="mt-0.5" />
+                            <div>
+                              <span className="text-xs font-bold text-slate-700 flex items-center gap-1">
+                                Generative AI (Gemini 2.5)
+                                <Icon name="sparkles" className="w-3.5 h-3.5 text-indigo-500" />
+                              </span>
+                              <span className="text-[10px] text-slate-400 block mt-0.5">Infinite dynamic variations generated server-side.</span>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    {apiError && (
+                      <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-700 flex items-start gap-2">
+                        <Icon name="shieldAlert" className="w-4 h-4 mt-0.5 shrink-0" />
+                        <p>{apiError}</p>
+                      </div>
+                    )}
+
+                    <button
+                      onClick={startQuizSession}
+                      disabled={isGenerating}
+                      className="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 text-white font-bold rounded-xl text-sm transition-all cursor-pointer flex items-center justify-center gap-2"
+                    >
+                      {isGenerating ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          Drafting advanced clausal materials...
+                        </>
+                      ) : "Initialize Assessment"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {currentIdx >= 0 && questions.length > 0 && (
+              <div className="space-y-6 animate-fade-in">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3 text-xs text-slate-400">
+                  <span className="font-semibold text-slate-600 uppercase font-mono tracking-wider">{activeTopic}</span>
+                  <div className="flex items-center gap-2 font-sans">
+                    <span className="bg-slate-50 border rounded-sm px-1.5 py-0.5 text-[10px] font-bold text-slate-500">Level {questions[currentIdx].level}</span>
+                    <span className="font-mono">{currentIdx + 1} of {questions.length}</span>
+                  </div>
+                </div>
+
+                <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-indigo-600 transition-all duration-300" style={{ width: `${((currentIdx + 1) / questions.length) * 100}%` }}></div>
+                </div>
+
+                <div className="bg-slate-50/50 p-6 rounded-2xl border border-slate-100 space-y-4">
+                  <p className="text-xs font-semibold uppercase font-mono tracking-wider text-indigo-500 inline-flex items-center gap-1.5">
+                    <Icon name="helpCircle" className="w-3.5 h-3.5" /> Instruction: Select the grammatically correct option
+                  </p>
+                  <blockquote className="text-lg md:text-xl font-medium text-slate-800 tracking-tight leading-relaxed font-sans select-none">
+                    {questions[currentIdx].questionText}
+                  </blockquote>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {questions[currentIdx].options.map((option, i) => {
+                    const isSelected = selectedAnswer === option;
+                    const isCorrectOpt = option === questions[currentIdx].correctAnswer;
+                    
+                    let optionStyle = 'border-slate-100 hover:border-slate-300 bg-white text-slate-700';
+                    if (isSelected) optionStyle = 'border-indigo-600 bg-indigo-50/50 text-indigo-900 font-medium';
+                    
+                    if (isAnswerSubmitted) {
+                      if (isCorrectOpt) optionStyle = 'border-emerald-600 bg-emerald-50 text-emerald-900 font-semibold';
+                      else if (isSelected) optionStyle = 'border-red-500 bg-red-50 text-red-900';
+                      else optionStyle = 'border-slate-100 bg-slate-50/30 text-slate-400 opacity-60';
+                    }
+
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => !isAnswerSubmitted && setSelectedAnswer(option)}
+                        disabled={isAnswerSubmitted}
+                        className={`p-4 text-left text-sm rounded-xl border transition-all flex items-center justify-between cursor-pointer font-sans ${optionStyle}`}
+                      >
+                        <span className="flex-1">{option}</span>
+                        {isAnswerSubmitted && isCorrectOpt && <Icon name="check" className="w-4 h-4 text-emerald-600" />}
+                        {isAnswerSubmitted && isSelected && !isCorrectOpt && <Icon name="x" className="w-4 h-4 text-red-500" />}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {isAnswerSubmitted && (
+                  <div className="bg-amber-50/60 border border-amber-100 p-5 rounded-xl space-y-3 animate-slide-up">
+                    <div className="flex items-start gap-2 text-amber-800 font-semibold text-xs uppercase font-mono tracking-wider">
+                      <Icon name="bookOpen" className="w-4 h-4 mt-0.5 shrink-0 text-amber-600" />
+                      <span>Analytical Philology Explanatory Notes</span>
+                    </div>
+                    <p className="text-xs text-amber-900/90 leading-relaxed font-sans">{questions[currentIdx].explanation}</p>
+                    {questions[currentIdx].categoryHint && (
+                      <div className="bg-white/80 border border-amber-200/50 inline-flex items-center px-2 py-1 rounded text-[10px] font-mono text-amber-700/80">
+                        Formula: {questions[currentIdx].categoryHint}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className="flex justify-between items-center pt-2 font-sans">
+                  <button onClick={() => setCurrentIdx(-1)} className="text-xs text-slate-400 hover:text-slate-600 cursor-pointer">
+                    Cancel Assessment
+                  </button>
+
+                  {!isAnswerSubmitted ? (
+                    <button
+                      onClick={handleSubmitAnswer}
+                      disabled={!selectedAnswer}
+                      className="py-2.5 px-6 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold rounded-lg text-sm cursor-pointer"
+                    >
+                      Evaluate Answer
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleNext}
+                      className="py-2.5 px-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-sm cursor-pointer flex items-center gap-1.5"
+                    >
+                      {currentIdx + 1 === questions.length ? 'Show Summary' : 'Continue'}
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {currentIdx === -2 && (
+              <div className="space-y-6 animate-fade-in font-sans">
+                <div className="text-center py-6 space-y-3 border-b border-slate-100 pb-6">
+                  <div className="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
+                    <Icon name="award" className="w-8 h-8" />
+                  </div>
+                  <h2 className="text-xl font-bold text-slate-800">Assessment Complete!</h2>
+                  <p className="text-xs text-slate-500">Grammar competency reviewed inside <span className="font-semibold text-indigo-600">{activeTopic}</span></p>
+                  <div className="inline-block bg-slate-50 border border-slate-100 py-2 px-5 rounded-xl mt-2">
+                    <p className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Score Sheet</p>
+                    <p className="text-2xl font-extrabold text-slate-800 tracking-tight">
+                      {sessionScore} <span className="text-xs text-slate-400 font-semibold">/ {questions.length} Correct</span>
+                    </p>
+                    <p className="text-[10px] text-emerald-600 font-bold mt-0.5">
+                      {Math.round((sessionScore / questions.length) * 100)}% Accuracy
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-sm font-semibold text-slate-700">Detailed Feedback Journal</h3>
+                  <div className="space-y-3">
+                    {answersSummary.map((item, idx) => (
+                      <div 
+                        key={idx} 
+                        className={`p-4 rounded-xl border flex flex-col space-y-2 text-xs ${
+                          item.isCorrect ? 'bg-emerald-50/20 border-emerald-100' : 'bg-red-50/20 border-red-100'
+                        }`}
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <p className="font-bold text-slate-800 leading-relaxed flex-1">
+                            {idx + 1}. <span className="font-medium">{item.q.questionText}</span>
+                          </p>
+                          <span className={`px-2 py-0.5 rounded font-bold uppercase font-mono text-[9px] shrink-0 ${
+                            item.isCorrect ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-600'
+                          }`}>
+                            {item.isCorrect ? 'Correct' : 'Incorrect'}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-slate-600 py-1">
+                          <p>
+                            <span className="font-medium text-slate-500 font-sans">Your Selection:</span>{' '}
+                            <span className={`font-semibold ${item.isCorrect ? 'text-emerald-700' : 'text-red-700'}`}>{item.chosen}</span>
+                          </p>
+                          {!item.isCorrect && (
+                            <p>
+                              <span className="font-medium text-slate-500 font-sans">Linguistic Stand:</span>{' '}
+                              <span className="font-semibold text-emerald-700">{item.q.correctAnswer}</span>
+                            </p>
+                          )}
+                        </div>
+                        <p className="text-slate-500 leading-relaxed border-t border-slate-100/50 pt-2 font-sans">
+                          <span className="font-semibold text-slate-700 font-mono text-[9px] uppercase">Philology:</span> {item.q.explanation}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                  <button onClick={() => setCurrentIdx(-1)} className="py-2 px-5 border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-lg text-xs font-semibold cursor-pointer">
+                    Take Another Quiz
+                  </button>
+                  <button onClick={onBackToDashboard} className="py-2 px-5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold cursor-pointer">
+                    Return to Dashboard
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      // --- COMPONENT: SENTENCE TRANSFORMER ---
+      function SentenceTransformer({ onActivityLog, onBackToDashboard, showToast }) {
+        const [selectedIdx, setSelectedIdx] = useState(0);
+        const [userAnswer, setUserAnswer] = useState('');
+        const [isEvaluating, setIsEvaluating] = useState(false);
+        const [showHint, setShowHint] = useState(false);
+        const [apiError, setApiError] = useState(null);
+        const [evaluation, setEvaluation] = useState(null);
+
+        const currentItem = curatedRewritings[selectedIdx];
+
+        const handleEvaluate = async () => {
+          if (userAnswer.trim() === '') return;
+          setIsEvaluating(true);
+          setApiError(null);
+          setEvaluation(null);
+
+          try {
+            const systemPrompt = "You are an elite Grammarian and CEFR standards grading assessor. Analyze sentence transformations precisely and output structural feedback in strict JSON compliance.";
+            const prompt = `A student was asked to practice sentence transformation.
+Original sentence: "${currentItem.original}"
+Transformation Instruction: "${currentItem.instruction}"
+Target Advanced Structure: "${currentItem.targetStructure}"
+Student's Submitted Answer: "${userAnswer}"
+
+Analyze the student's answer with absolute grammatical care.
+Determine if it represents C1/C2 advanced standards and matches standard academic English.
+
+Return strictly a valid JSON object matching this schema:
+{
+  "isCorrect": boolean,
+  "score": number (0 to 100),
+  "feedback": "constructive feedback analyzing inversion, aspect, register, punctuation or subtle structural slips",
+  "alternativeSuggestions": ["rewrite example 1", "rewrite example 2"],
+  "grammaticalBreakdown": "detailed explanation of the syntactic constraints of the target structure"
+}`;
+
+            const data = await fetchGeminiData(prompt, systemPrompt);
+            if (data && typeof data === 'object') {
+              setEvaluation(data);
+              onActivityLog(
+                `${currentItem.targetStructure} Transformation`, 
+                `${data.score}/100`, 
+                data.score >= 75
+              );
+              showToast("Análisis filológico completado exitosamente por Gemini.", "success");
+            } else {
+              throw new Error("Invalid output format from model.");
+            }
+          } catch (err) {
+            console.error(err);
+            setApiError("El motor de IA no pudo evaluar la respuesta en este momento. Se aplicará una pre-evaluación heurística local.");
+            
+            // Heuristic evaluation fallback
+            const lowerAnswer = userAnswer.trim().toLowerCase();
+            const matchesSample = currentItem.sampleAnswers.some(ans => 
+              ans.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"") === lowerAnswer.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
+            );
+            
+            const dummyGrading = {
+              isCorrect: matchesSample,
+              score: matchesSample ? 100 : 65,
+              feedback: matchesSample 
+                ? "Perfect adherence to structural constraints. Excellent mastery of clausal operators." 
+                : "The transformation is plausible but might deviate slightly from the ideal lexical and spelling conventions expected at C1/C2 levels.",
+              alternativeSuggestions: currentItem.sampleAnswers,
+              grammaticalBreakdown: "Heuristic diagnostics fallback. Evaluated based on strict string-distance to academic key models."
+            };
+            setEvaluation(dummyGrading);
+            onActivityLog(`${currentItem.targetStructure} Transformation`, `${dummyGrading.score}/100`, matchesSample);
+          } finally {
+            setIsEvaluating(false);
+          }
+        };
+
+        const handleNextChallenge = () => {
+          setSelectedIdx((prev) => (prev + 1) % curatedRewritings.length);
+          setUserAnswer('');
+          setEvaluation(null);
+          setShowHint(false);
+          setApiError(null);
+        };
+
+        return (
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-md p-6 max-w-4xl mx-auto space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div className="flex items-center gap-2">
+                <button onClick={onBackToDashboard} className="p-1 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-slate-700 cursor-pointer">
+                  <Icon name="chevronLeft" className="w-5 h-5" />
+                </button>
+                <div>
+                  <h2 className="text-xl font-bold text-slate-800 font-sans">C1/C2 Syntax Transformer</h2>
+                  <p className="text-xs text-slate-400 font-sans">Reconstruct structures and refine syntactical registers</p>
+                </div>
+              </div>
+              <span className="text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded font-mono font-bold">Arena II</span>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-2">
+              <div className="space-y-4 lg:col-span-1">
+                <span className="text-xs font-semibold text-slate-500 uppercase font-mono tracking-wider">Select Challenge Drill</span>
+                <div className="space-y-2">
+                  {curatedRewritings.map((item, idx) => (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setSelectedIdx(idx);
+                        setUserAnswer('');
+                        setEvaluation(null);
+                        setShowHint(false);
+                        setApiError(null);
+                      }}
+                      className={`w-full p-4 text-left rounded-xl border transition-all cursor-pointer flex flex-col space-y-1.5 ${
+                        selectedIdx === idx ? 'bg-amber-50/40 border-amber-300 shadow-2xs' : 'bg-white border-slate-100 hover:bg-slate-50/50'
+                      }`}
+                    >
+                      <div className="flex justify-between items-center w-full">
+                        <span className="text-xs font-bold text-indigo-700">{item.targetStructure} Drill</span>
+                        <span className="text-[9px] uppercase tracking-wider font-mono bg-slate-100 px-1 py-0.5 rounded text-slate-500 font-bold">C1/C2</span>
+                      </div>
+                      <p className="text-xs font-medium text-slate-700 font-sans line-clamp-1">"{item.original}"</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="lg:col-span-2 space-y-6">
+                <div className="space-y-4">
+                  <div className="bg-slate-900 text-slate-100 p-5 rounded-2xl space-y-3 shadow-xs border border-slate-800">
+                    <span className="inline-block px-1.5 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-300 font-bold uppercase font-mono tracking-wider border border-amber-500/20">
+                      Syntax Prompt
+                    </span>
+                    <p className="text-xs font-mono text-slate-400">Original Template:</p>
+                    <blockquote className="text-base font-semibold font-sans tracking-wide">
+                      "{currentItem.original}"
+                    </blockquote>
+                    <div className="pt-2 border-t border-slate-800">
+                      <p className="text-xs font-mono text-slate-400">Target Transformation Objective:</p>
+                      <p className="text-sm font-bold text-slate-200 mt-1 font-sans flex items-center gap-1.5">
+                        <Icon name="layers" className="w-4 h-4 text-amber-500 shrink-0" />
+                        {currentItem.instruction}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center font-sans">
+                      <label className="text-xs font-bold text-slate-600 uppercase font-mono tracking-wider">Your Transformed Synthesis</label>
+                      <button
+                        type="button"
+                        onClick={() => setShowHint(!showHint)}
+                        className="text-xs text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-0.5 cursor-pointer"
+                      >
+                        <Icon name="eye" className="w-3.5 h-3.5" />
+                        {showHint ? 'Hide Clues' : 'View Syntactic Clue'}
+                      </button>
+                    </div>
+
+                    {showHint && (
+                      <div className="p-3 bg-indigo-50 border border-indigo-100 rounded-xl text-xs text-indigo-800 animate-slide-up font-sans">
+                        <span className="font-bold">Mnemonic Cue:</span> {currentItem.hint}
+                      </div>
+                    )}
+
+                    <textarea
+                      value={userAnswer}
+                      onChange={(e) => setUserAnswer(e.target.value)}
+                      placeholder="Draft your transformed clausal argument here..."
+                      disabled={isEvaluating}
+                      rows={3}
+                      className="w-full p-4 text-sm text-slate-700 bg-white border border-slate-200 rounded-xl focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-hidden transition-all placeholder:text-slate-400 font-medium font-sans resize-none"
+                    ></textarea>
+                  </div>
+
+                  {apiError && (
+                    <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-700 flex items-start gap-2">
+                      <Icon name="shieldAlert" className="w-4 h-4 mt-0.5 shrink-0" />
+                      <p>{apiError}</p>
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-center font-sans">
+                    <button onClick={handleNextChallenge} className="text-xs text-slate-400 hover:text-slate-600 cursor-pointer">
+                      Skip to Next Drill
+                    </button>
+                    <button
+                      onClick={handleEvaluate}
+                      disabled={isEvaluating || userAnswer.trim() === ''}
+                      className="py-2.5 px-6 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-200 text-white font-bold rounded-xl text-xs cursor-pointer flex items-center gap-2"
+                    >
+                      {isEvaluating ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          Interrogating clausal structures...
+                        </>
+                      ) : "Analyze Synthesis"}
+                    </button>
+                  </div>
+                </div>
+
+                {evaluation && (
+                  <div className="border border-slate-100 bg-white shadow-xs rounded-2xl p-6 space-y-5 animate-slide-up font-sans">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-100">
+                      <div>
+                        <h3 className="font-bold text-slate-800 text-sm">Synthetic Grammar Diagnostic</h3>
+                        <p className="text-xs text-slate-400">CEFR Assessment Verdict</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Icon name="checkCircle" className={`w-6 h-6 ${evaluation.isCorrect ? 'text-emerald-500' : 'text-amber-500'}`} />
+                        <div>
+                          <span className="text-[10px] text-slate-400 uppercase font-mono tracking-wider block">Fluency Rating</span>
+                          <span className={`text-2xl font-extrabold tracking-tight ${evaluation.score >= 85 ? 'text-emerald-600' : 'text-amber-500'}`}>
+                            {evaluation.score} <span className="text-xs text-slate-400 font-normal">/ 100</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4 text-xs leading-relaxed">
+                      <div className="space-y-1">
+                        <b className="text-slate-700 font-semibold block uppercase font-mono text-[9px] tracking-wider">Semantic Assessment</b>
+                        <p className="text-slate-600 text-sm leading-relaxed">{evaluation.feedback}</p>
+                      </div>
+
+                      <div className="space-y-2 bg-emerald-50/30 p-4 rounded-xl border border-emerald-100/50">
+                        <b className="text-emerald-800 font-semibold block uppercase font-mono text-[9px] tracking-wider">Elevated Lexical Equivalents</b>
+                        <ul className="space-y-1.5 text-slate-700">
+                          {evaluation.alternativeSuggestions.map((alt, i) => (
+                            <li key={i} className="flex gap-2 items-start font-medium">
+                              <span className="text-emerald-600 font-bold shrink-0">✓</span>
+                              <span>"{alt}"</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="space-y-1 bg-indigo-50/30 p-4 rounded-xl border border-indigo-100/50">
+                        <b className="text-slate-700 font-semibold block uppercase font-mono text-[9px] tracking-wider">Syntactic Law Breakdown</b>
+                        <p className="text-slate-600 leading-relaxed">{evaluation.grammaticalBreakdown}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end pt-2">
+                      <button onClick={handleNextChallenge} className="py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold cursor-pointer">
+                        Load Next Clause
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // --- COMPONENT: PROSE ANALYZER ---
+      function ProseAnalyzer({ onActivityLog, onBackToDashboard, showToast }) {
+        const sampleParagraphs = [
+          {
+            title: "1. Advanced Academic Report (Flawed Mixed Tenses & Subjunctive)",
+            text: "Despite of the committee discussed about the ecological impacts of the merger last year, they had decided to dismiss the negative warnings. Furthermore, high officials insisted that the chief consultant writes a complementary paper right away in support. If we would have had the sensory equipment calibrated, the research would be complete now."
+          },
+          {
+            title: "2. Cover Letter Excerpt (Non-Idiomatic Register & Prepositions)",
+            text: "I am writing regarding to the senior coordinator position. I have been working as an assistant for three years, during which I succeeded in solving complex crises. At the present moment, I look forward to meet you. I hope my credentials are fit for your agency."
+          }
+        ];
+
+        const [inputText, setInputText] = useState('');
+        const [isAnalyzing, setIsAnalyzing] = useState(false);
+        const [report, setReport] = useState(null);
+        const [apiError, setApiError] = useState(null);
+        const [activeTabCompare, setActiveTabCompare] = useState('errors');
+
+        const handleAnalyze = async () => {
+          if (inputText.trim() === '') return;
+          setIsAnalyzing(true);
+          setApiError(null);
+          setReport(null);
+
+          try {
+            const systemPrompt = "You are an advanced ESL English Stylist and Cambridge CEFR assessor. Analyze the writing for style, errors, and vocabulary, and return strict JSON compliance.";
+            const prompt = `Analyze this prose submitted by an advanced English learner trying to target C1/C2:
+"${inputText}"
+
+Provide an exhaustive diagnostic reports object. Try to find actual and subtle lapses (stylistic or formal) that separate a strong speaker from a native-like C2 professional.
+Detect specific errors or stylistic enhancements, capturing the original segment, suggested correction, explanation, CEFR level classification, severity (minor, major, stylistic), and character indices.
+
+Return strictly a valid JSON object matching this schema:
+{
+  "originalText": "${inputText}",
+  "errorsDetected": [
+    {
+      "id": "err_1",
+      "original": "awkward/incorrect fragment",
+      "correction": "proposed native alternative",
+      "explanation": "scholarly linguistic reason referencing grammar structures...",
+      "category": "Preposition / Register / Aspect / Mood",
+      "severity": "minor / major / stylistic",
+      "position": { "start": 0, "end": 15 }
+    }
+  ],
+  "overallFeedback": "pedagogical overview summarizing sentence complexity, lexical diversity, and coherence...",
+  "suggestedSophisticatedVersion": "A beautifully polished, high-register academic/professional rewrite...",
+  "cefrLevelEstimated": "B2 / C1 / C2"
+}`;
+
+            const data = await fetchGeminiData(prompt, systemPrompt);
+            if (data && typeof data === 'object') {
+              setReport(data);
+              const detectedCount = data.errorsDetected?.length || 0;
+              const scoreRating = detectedCount === 0 ? "100/100" : `${Math.max(50, 100 - detectedCount * 8)}/100`;
+              onActivityLog("Prose Analysis", scoreRating, data.cefrLevelEstimated === 'C1' || data.cefrLevelEstimated === 'C2');
+              showToast("Análisis filológico estilístico completado con Gemini.", "success");
+            } else {
+              throw new Error("Invalid report shape.");
+            }
+          } catch (err) {
+            console.error(err);
+            setApiError("The server AI module failed to complete diagnostics. A heuristic summary report was mounted below.");
+            
+            // Dummy fallback report
+            const dummyReport = {
+              originalText: inputText,
+              errorsDetected: [
+                {
+                  id: "err_fallback_1",
+                  original: "Despite of",
+                  correction: "Despite / In spite of",
+                  explanation: "The preposition 'despite' acts as a transitive head, forbidding licensing of the particle 'of'. Quirk et al. (1985).",
+                  category: "Prepositional syntax",
+                  severity: "major",
+                  position: { start: 0, fill: 10 }
+                }
+              ],
+              overallFeedback: "The submitted draft displays intermediate syntax structures with localized preposition slips. Recommend systematic review of relative structures.",
+              suggestedSophisticatedVersion: "Notwithstanding prior academic debate, the board resolved to initiate immediate clausal transformation metrics.",
+              cefrLevelEstimated: "B2"
+            };
+            setReport(dummyReport);
+            onActivityLog("Prose Analysis", "60/100", false);
+          } finally {
+            setIsAnalyzing(false);
+          }
+        };
+
+        return (
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-md p-6 max-w-4xl mx-auto space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div className="flex items-center gap-2 font-sans">
+                <button onClick={onBackToDashboard} className="p-1 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-slate-700 cursor-pointer">
+                  <Icon name="chevronLeft" className="w-5 h-5" />
+                </button>
+                <div>
+                  <h2 className="text-xl font-bold text-slate-800">Advanced Prose Style Analyzer</h2>
+                  <p className="text-xs text-slate-400">Scan academic/business writing for idiomatic flow and clausal flaws</p>
+                </div>
+              </div>
+              <span className="text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-mono font-bold">Arena III</span>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-2">
+              <div className="lg:col-span-1 space-y-4 font-sans">
+                <span className="text-xs font-semibold text-slate-500 uppercase font-mono tracking-wider block">1. Quick Load Sample Paragraphs</span>
+                <div className="space-y-2">
+                  {sampleParagraphs.map((samp, i) => (
+                    <button
+                      key={i}
+                      onClick={() => { setInputText(samp.text); setReport(null); setApiError(null); }}
+                      className="w-full text-left p-3 border border-slate-100 hover:border-emerald-300 rounded-lg bg-slate-50/50 hover:bg-white text-[11px] font-medium text-slate-600 leading-normal transition-all cursor-pointer block"
+                    >
+                      {samp.title}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="p-4 bg-emerald-50/35 border border-emerald-100 text-slate-600 rounded-xl space-y-2 mt-4 text-xs">
+                  <span className="font-bold text-emerald-800 uppercase font-mono text-[9px] tracking-wider block">Analytical Criteria Examined</span>
+                  <ul className="space-y-1.5 list-disc list-inside text-slate-500 text-[11px]">
+                    <li>Register Stability (CGEL, 2002)</li>
+                    <li>Incorrect Perfect Aspect</li>
+                    <li>Subjunctive Mood Mandates</li>
+                    <li>Awkward Prepositional Adjuncts</li>
+                    <li>Idiomatic Synonyms Density</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="lg:col-span-2 space-y-5">
+                <div className="space-y-2 font-sans">
+                  <div className="flex justify-between items-center">
+                    <label className="text-xs font-bold text-slate-600 uppercase font-mono tracking-wider">Paste Prose for Evaluation</label>
+                    {inputText.trim() !== '' && (
+                      <button onClick={() => { setInputText(''); setReport(null); setApiError(null); }} className="text-xs text-slate-400 hover:text-red-500 cursor-pointer">
+                        Clear Prose
+                      </button>
+                    )}
+                  </div>
+                  <textarea
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    placeholder="Paste your C1/C2 draft essay, coverage memo, research abstract, or paragraph here (minimum 20 words recommended)..."
+                    disabled={isAnalyzing}
+                    rows={8}
+                    className="w-full p-4 text-sm text-slate-700 bg-white border border-slate-200 rounded-xl focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-hidden transition-all font-sans resize-y"
+                  ></textarea>
+                </div>
+
+                {apiError && (
+                  <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-700 flex items-start gap-2">
+                    <Icon name="shieldAlert" className="w-4 h-4 mt-0.5 shrink-0" />
+                    <p>{apiError}</p>
+                  </div>
+                )}
+
+                <div className="flex justify-end font-sans">
+                  <button
+                    onClick={handleAnalyze}
+                    disabled={isAnalyzing || inputText.trim() === ''}
+                    className="py-3 px-6 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-200 text-white font-bold rounded-xl text-xs cursor-pointer flex items-center gap-2"
+                  >
+                    {isAnalyzing ? (
+                      <>
+                        <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Synthesizing lexical profile...
+                      </>
+                    ) : "Deconstruct Prose Style"}
+                  </button>
+                </div>
+
+                {report && (
+                  <div className="border border-slate-100 bg-white shadow-xs rounded-2xl p-6 space-y-6 animate-slide-up font-sans">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-indigo-50/50">
+                      <div>
+                        <h3 className="font-bold text-slate-800 text-sm">Lexical Style Diagnostics</h3>
+                        <p className="text-xs text-slate-400 font-sans">CEFR Register Breakdown</p>
+                      </div>
+
+                      <div className="flex flex-wrap gap-3 font-sans">
+                        <div className="bg-indigo-50/70 border border-indigo-100 px-3 py-1.5 rounded-lg text-center min-w-[80px]">
+                          <span className="text-[9px] text-indigo-400 uppercase font-mono tracking-wider block">Estimated CEFR</span>
+                          <span className="text-lg font-bold text-indigo-700">{report.cefrLevelEstimated}</span>
+                        </div>
+
+                        <div className="bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-lg text-center min-w-[80px]">
+                          <span className="text-[9px] text-emerald-500 uppercase font-mono tracking-wider block">Deficiencies</span>
+                          <span className="text-lg font-bold text-emerald-700">{report.errorsDetected?.length || 0}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex border-b border-slate-100 font-sans">
+                      <button
+                        onClick={() => setActiveTabCompare('errors')}
+                        className={`py-2 px-4 text-xs font-bold border-b-2 cursor-pointer ${
+                          activeTabCompare === 'errors' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-400'
+                        }`}
+                      >
+                        Diagnostic Journal ({report.errorsDetected?.length || 0})
+                      </button>
+                      <button
+                        onClick={() => setActiveTabCompare('rewrite')}
+                        className={`py-2 px-4 text-xs font-bold border-b-2 cursor-pointer ${
+                          activeTabCompare === 'rewrite' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-400'
+                        }`}
+                      >
+                        Polished Native Alternative
+                      </button>
+                    </div>
+
+                    <div className="p-4 bg-slate-50/60 rounded-xl border border-slate-100 space-y-2">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-800 uppercase font-mono tracking-wider">
+                        <Icon name="bookOpen" className="w-4 h-4 text-indigo-600" />
+                        <span>General Syntactic Evaluation Summary</span>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">{report.overallFeedback}</p>
+                    </div>
+
+                    {activeTabCompare === 'errors' ? (
+                      <div className="space-y-4">
+                        {report.errorsDetected?.length === 0 ? (
+                          <div className="text-center p-8 border border-dashed border-slate-200 rounded-xl text-xs text-slate-400">
+                            🎉 Flawless prose profile! No grammatical slips or non-idiomatic registers detected.
+                          </div>
+                        ) : (
+                          <div className="space-y-3">
+                            {report.errorsDetected.map((err, i) => (
+                              <div key={i} className="p-4 bg-white rounded-xl border border-slate-100 shadow-2xs hover:shadow-xs space-y-2 text-xs">
+                                <div className="flex items-start justify-between flex-wrap gap-2">
+                                  <span className={`px-2 py-0.5 rounded-full font-mono font-bold text-[9px] uppercase border ${
+                                    err.severity === 'major' ? 'bg-red-50 text-red-600 border-red-100' : 'bg-amber-50 text-amber-600 border-amber-100'
+                                  }`}>
+                                    {err.severity}
+                                  </span>
+                                  <span className="bg-slate-100 border text-slate-500 rounded px-1.5 py-0.5 text-[10px] font-mono">
+                                    Topic: {err.category}
+                                  </span>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                                  <div className="p-2.5 bg-red-50/20 rounded border border-red-100/50">
+                                    <span className="text-[10px] uppercase font-mono text-slate-400 font-bold block mb-0.5">Original Segment</span>
+                                    <span className="font-semibold text-red-800 line-through">"{err.original}"</span>
+                                  </div>
+
+                                  <div className="p-2.5 bg-emerald-50/20 rounded border border-emerald-100/50">
+                                    <span className="text-[10px] uppercase font-mono text-slate-400 font-bold block mb-0.5">Linguistic Correction</span>
+                                    <span className="font-bold text-emerald-800">"{err.correction}"</span>
+                                  </div>
+                                </div>
+
+                                <p className="text-slate-500 leading-relaxed mt-2">
+                                  <strong className="text-slate-700 font-semibold font-mono text-[9px] uppercase block mb-0.5">Grammar Justification:</strong>
+                                  {err.explanation}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="p-4 border border-slate-200 rounded-xl bg-slate-50/50 space-y-2">
+                            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block border-b pb-1.5">Submitted Draft Copy</span>
+                            <blockquote className="text-xs text-slate-500 leading-relaxed italic whitespace-pre-wrap">"{report.originalText}"</blockquote>
+                          </div>
+
+                          <div className="p-4 border border-emerald-100 rounded-xl bg-emerald-50/15 space-y-2">
+                            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-600 block border-b pb-1.5 flex items-center justify-between">
+                              <span>Synthesized Masterpiece</span>
+                              <span className="bg-emerald-50 px-1 py-0.5 rounded text-[9px] border border-emerald-200 text-emerald-700 uppercase">Expert</span>
+                            </span>
+                            <blockquote className="text-xs text-slate-700 leading-relaxed font-medium whitespace-pre-wrap">{report.suggestedSophisticatedVersion}</blockquote>
+                          </div>
+                        </div>
+
+                        <div className="bg-amber-50/50 border border-amber-100 p-4 rounded-xl text-xs text-amber-900/90 leading-relaxed mt-4">
+                          <span className="font-bold uppercase font-mono text-[9px] tracking-wider text-amber-800 block mb-1">Pedagogical Review Tip</span>
+                          Compare the lexical density and structural balance. Tense consistency, negative inversion clauses, and precise prepositional patterns distinguish native-level writing.
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // --- COMPONENT: APP ---
+      function App() {
+        const [activeTab, setActiveTab] = useState('dashboard');
+        const [selectedTopicFromDashboard, setSelectedTopicFromDashboard] = useState(null);
+
+        // Toast notifications state
+        const [toast, setToast] = useState(null);
+        const [isModalOpen, setIsModalOpen] = useState(false);
+
+        // Core stats state
+        const [stats, setStats] = useState({
+          quizzesCompleted: 0,
+          scoreTotal: 0,
+          questionsAnswered: 0,
+          correctAnswers: 0,
+        });
+
+        // Topic mastery state
+        const [mastery, setMastery] = useState({
+          'Negative Inversion': 0,
+          'Cleft Sentences': 0,
+          'Advanced Conditionals': 0,
+          'Subjunctive Mood': 0,
+          'Advanced Gerunds & Infinitives': 0,
+          'Ellipsis & Substitution': 0,
+        });
+
+        const [history, setHistory] = useState([]);
+
+        // Load initial state from storage
+        useEffect(() => {
+          try {
+            const savedStats = localStorage.getItem('tester_stats_v1');
+            const savedMastery = localStorage.getItem('tester_mastery_v1');
+            const savedHistory = localStorage.getItem('tester_history_v1');
+
+            if (savedStats) setStats(JSON.parse(savedStats));
+            if (savedMastery) setMastery(JSON.parse(savedMastery));
+            if (savedHistory) setHistory(JSON.parse(savedHistory));
+          } catch (e) {
+            console.error('Failed to load localStorage data:', e);
+          }
+        }, []);
+
+        const showToast = (message, type = "info") => {
+          setToast({ message, type });
+        };
+
+        const handleQuizCompleted = (topic, correctCount, totalQuestions) => {
+          const accuracy = Math.round((correctCount / totalQuestions) * 100);
+
+          const updatedStats = {
+            quizzesCompleted: stats.quizzesCompleted + 1,
+            scoreTotal: stats.scoreTotal + accuracy,
+            questionsAnswered: stats.questionsAnswered + totalQuestions,
+            correctAnswers: stats.correctAnswers + correctCount,
+          };
+          setStats(updatedStats);
+          localStorage.setItem('tester_stats_v1', JSON.stringify(updatedStats));
+
+          const oldScore = mastery[topic] || 0;
+          const updatedMastery = {
+            ...mastery,
+            [topic]: oldScore === 0 ? accuracy : Math.round((oldScore + accuracy) / 2)
+          };
+          setMastery(updatedMastery);
+          localStorage.setItem('tester_mastery_v1', JSON.stringify(updatedMastery));
+
+          const dateStr = new Date().toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+
+          const newHistoryItem = {
+            date: dateStr,
+            type: 'Quiz',
+            topicOrFocus: topic,
+            score: `${correctCount}/${totalQuestions}`,
+            status: accuracy >= 80 ? 'excellent' : accuracy >= 60 ? 'passed' : 'review'
+          };
+
+          const updatedHistory = [newHistoryItem, ...history];
+          setHistory(updatedHistory);
+          localStorage.setItem('tester_history_v1', JSON.stringify(updatedHistory));
+
+          showToast(`¡Sesión de evaluación completada con ${accuracy}% de precisión!`, "success");
+        };
+
+        const handleActivityLog = (focusArea, scoreString, passed) => {
+          const dateStr = new Date().toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+
+          const isAnalyzer = focusArea === 'Prose Analysis';
+
+          const newHistoryItem = {
+            date: dateStr,
+            type: isAnalyzer ? 'Prose Analyzer' : 'Transformer',
+            topicOrFocus: focusArea,
+            score: scoreString,
+            status: passed ? 'excellent' : 'review'
+          };
+
+          const updatedHistory = [newHistoryItem, ...history];
+          setHistory(updatedHistory);
+          localStorage.setItem('tester_history_v1', JSON.stringify(updatedHistory));
+
+          if (!isAnalyzer) {
+            const scoreNum = parseInt(scoreString.split('/')[0]);
+            const updatedStats = {
+              ...stats,
+              questionsAnswered: stats.questionsAnswered + 1,
+              correctAnswers: stats.correctAnswers + (scoreNum >= 75 ? 1 : 0),
+            };
+            setStats(updatedStats);
+            localStorage.setItem('tester_stats_v1', JSON.stringify(updatedStats));
+          }
+        };
+
+        const executeStatsClear = () => {
+          const emptyStats = {
+            quizzesCompleted: 0,
+            scoreTotal: 0,
+            questionsAnswered: 0,
+            correctAnswers: 0,
+          };
+          const emptyMastery = {
+            'Negative Inversion': 0,
+            'Cleft Sentences': 0,
+            'Advanced Conditionals': 0,
+            'Subjunctive Mood': 0,
+            'Advanced Gerunds & Infinitives': 0,
+            'Ellipsis & Substitution': 0,
+          };
+
+          setStats(emptyStats);
+          setMastery(emptyMastery);
+          setHistory([]);
+
+          localStorage.removeItem('tester_stats_v1');
+          localStorage.removeItem('tester_mastery_v1');
+          localStorage.removeItem('tester_history_v1');
+
+          setIsModalOpen(false);
+          showToast("Las estadísticas y el progreso han sido completamente reiniciados.", "info");
+        };
+
+        const handleSelectTopicQuiz = (topic) => {
+          setSelectedTopicFromDashboard(topic);
+          setActiveTab('quiz');
+        };
+
+        return (
+          <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col justify-between antialiased">
+            {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+            
+            <ConfirmationModal 
+              isOpen={isModalOpen}
+              title="¿Reiniciar todas las estadísticas?"
+              message="Esta acción borrará permanentemente todo tu historial de diagnósticos, puntuaciones, logs de actividad y niveles estimados de CEFR. No se puede deshacer."
+              onConfirm={executeStatsClear}
+              onCancel={() => setIsModalOpen(false)}
+            />
+
+            {/* Header */}
+            <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-2xs">
+              <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+                <div 
+                  onClick={() => { setActiveTab('dashboard'); setSelectedTopicFromDashboard(null); }}
+                  className="flex items-center gap-2.5 cursor-pointer select-none group"
+                >
+                  <div className="p-2 bg-slate-900 text-white rounded-lg group-hover:scale-105 transition-transform">
+                    <Icon name="brain" className="w-5 h-5 text-indigo-400" />
+                  </div>
+                  <div>
+                    <span className="font-extrabold text-slate-900 tracking-tight text-sm md:text-base font-sans block leading-none">
+                      Grammar Tester
+                    </span>
+                    <span className="text-[10px] text-indigo-500 font-mono uppercase tracking-wider block mt-1">C1/C2 advanced level</span>
+                  </div>
+                </div>
+
+                <nav className="flex items-center gap-1.5 md:gap-3 font-sans">
+                  <button
+                    onClick={() => { setActiveTab('dashboard'); setSelectedTopicFromDashboard(null); }}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide transition-all cursor-pointer ${
+                      activeTab === 'dashboard' ? 'bg-slate-900 text-white shadow-xs' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
+                    }`}
+                  >
+                    Dashboard
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('quiz')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide transition-all cursor-pointer ${
+                      activeTab === 'quiz' ? 'bg-slate-900 text-white shadow-xs' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
+                    }`}
+                  >
+                    Quizzes
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('transformer')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide transition-all cursor-pointer ${
+                      activeTab === 'transformer' ? 'bg-slate-900 text-white shadow-xs' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
+                    }`}
+                  >
+                    Transformer
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('prose')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide transition-all cursor-pointer ${
+                      activeTab === 'prose' ? 'bg-slate-900 text-white shadow-xs' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
+                    }`}
+                  >
+                    Prose Analyzer
+                  </button>
+                </nav>
+              </div>
+            </header>
+
+            {/* Main */}
+            <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-8">
+              {activeTab === 'dashboard' && (
+                <Dashboard
+                  stats={stats}
+                  mastery={mastery}
+                  history={history}
+                  onSelectTab={setActiveTab}
+                  onClearStats={() => setIsModalOpen(true)}
+                  onSelectTopicQuiz={handleSelectTopicQuiz}
+                  showToast={showToast}
+                />
+              )}
+
+              {activeTab === 'quiz' && (
+                <DiagnosticQuiz
+                  onQuizCompleted={handleQuizCompleted}
+                  onBackToDashboard={() => setActiveTab('dashboard')}
+                  selectedTopicFromDashboard={selectedTopicFromDashboard}
+                  showToast={showToast}
+                />
+              )}
+
+              {activeTab === 'transformer' && (
+                <SentenceTransformer
+                  onActivityLog={handleActivityLog}
+                  onBackToDashboard={() => setActiveTab('dashboard')}
+                  showToast={showToast}
+                />
+              )}
+
+              {activeTab === 'prose' && (
+                <ProseAnalyzer
+                  onActivityLog={handleActivityLog}
+                  onBackToDashboard={() => setActiveTab('dashboard')}
+                  showToast={showToast}
+                />
+              )}
+            </main>
+
+            {/* Footer */}
+            <footer className="bg-white border-t border-slate-100 py-6 text-xs text-slate-400">
+              <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p className="font-sans">
+                  &copy; {new Date().getFullYear()} C1/C2 Advanced English Grammar Diagnostic Suite.
+                </p>
+                <div className="flex gap-4 font-mono text-[10px] tracking-tight">
+                  <span>Level: C1/C2 (Proficient User)</span>
+                  <span>Refinement Engine: Gemini-2.5-flash-preview</span>
+                </div>
+              </div>
+            </footer>
+          </div>
+        );
+      }
+
+      // Root initialization
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
+</html>

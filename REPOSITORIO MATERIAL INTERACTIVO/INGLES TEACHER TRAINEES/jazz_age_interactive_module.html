@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Jazz Age & Entertainment Revolution Interactive Module</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        deco: {
+                            gold: '#D4AF37',
+                            goldLight: '#F3E5AB',
+                            darkGold: '#AA7C11',
+                            charcoal: '#1A202C',
+                            slate: '#2D3748',
+                            cream: '#FFFDD0',
+                            paper: '#FDFBF7'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Georgia', 'ui-serif', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Art Deco Accents */
+        .art-deco-border {
+            border: 4px double #D4AF37;
+        }
+        .art-deco-corners {
+            position: relative;
+        }
+        .art-deco-corners::before, .art-deco-corners::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #D4AF37;
+        }
+        .art-deco-corners::before { top: 4px; left: 4px; border-right: none; border-bottom: none; }
+        .art-deco-corners::after { bottom: 4px; right: 4px; border-left: none; border-top: none; }
+        
+        /* Smooth transitions */
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header Banner -->
+    <header class="bg-deco-charcoal text-white border-b-4 border-deco-gold shadow-lg py-8 px-4 art-deco-corners">
+        <div class="max-w-5xl mx-auto text-center relative z-10">
+            <span class="text-xs uppercase tracking-[0.3em] text-deco-gold font-semibold">GCSE History Series</span>
+            <h1 class="font-serif text-3xl md:text-5xl mt-2 mb-3 text-deco-goldLight font-bold tracking-wide">
+                THE JAZZ AGE
+            </h1>
+            <p class="text-sm md:text-lg text-stone-300 max-w-2xl mx-auto font-light">
+                Explore the 1920s Entertainment Revolution through vocabulary, active listening, and conceptual comprehension.
+            </p>
+        </div>
+    </header>
+
+    <!-- Overall Progress Dashboard -->
+    <section class="max-w-5xl w-full mx-auto mt-6 px-4">
+        <div class="bg-white rounded-xl shadow-md p-4 flex flex-col md:flex-row items-center justify-between gap-4 border border-stone-200">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-deco-gold/10 rounded-lg text-deco-darkGold">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-stone-700">Your Module Progress</h3>
+                    <p class="text-xs text-stone-500">Complete all three activities to earn your certificate!</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-6 w-full md:w-auto">
+                <!-- Progress bar -->
+                <div class="flex-1 md:w-48 bg-stone-200 rounded-full h-3 overflow-hidden">
+                    <div id="overall-progress-bar" class="bg-gradient-to-r from-deco-darkGold to-deco-gold h-full transition-all" style="width: 0%;"></div>
+                </div>
+                <span id="overall-progress-text" class="font-bold text-deco-darkGold text-sm">0% Complete</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="max-w-5xl w-full mx-auto mt-6 px-4 flex border-b border-stone-300 gap-1 overflow-x-auto">
+        <button onclick="switchTab('vocab')" id="tab-vocab" class="tab-btn px-4 py-3 font-semibold text-sm rounded-t-lg border-b-2 border-transparent transition-all flex items-center gap-2 bg-white text-stone-600 hover:text-stone-900 shadow-sm">
+            <span>📚</span> Activity 1: Vocabulary
+        </button>
+        <button onclick="switchTab('listen')" id="tab-listen" class="tab-btn px-4 py-3 font-semibold text-sm rounded-t-lg border-b-2 border-transparent transition-all flex items-center gap-2 bg-stone-200/50 text-stone-600 hover:text-stone-900">
+            <span>🎧</span> Activity 2: Listen & Comprehend
+        </button>
+        <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn px-4 py-3 font-semibold text-sm rounded-t-lg border-b-2 border-transparent transition-all flex items-center gap-2 bg-stone-200/50 text-stone-600 hover:text-stone-900">
+            <span>⚖️</span> Activity 3: True or False
+        </button>
+    </nav>
+
+    <!-- Main Workspace Content -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-6">
+
+        <!-- ACTIVITY 1: VOCABULARY -->
+        <section id="content-vocab" class="tab-content block">
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-stone-200">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Activity 1</span>
+                        <h2 class="text-2xl font-serif font-bold mt-2 text-deco-charcoal">Vocabulary of the Jazz Age</h2>
+                        <p class="text-stone-600 text-sm mt-1">Match each essential 1920s term with its correct historical definition. Click a term, then click its corresponding definition.</p>
+                    </div>
+                    <div id="vocab-score" class="bg-deco-gold/10 border border-deco-gold/30 rounded-lg p-3 text-center min-w-[120px]">
+                        <span class="block text-xs uppercase tracking-wider text-stone-500">Pairs Matched</span>
+                        <span id="vocab-match-count" class="text-2xl font-bold text-deco-darkGold font-serif">0 / 6</span>
+                    </div>
+                </div>
+
+                <!-- Match Setup Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <!-- Terms column -->
+                    <div>
+                        <h3 class="font-bold text-stone-700 mb-3 text-sm tracking-wider uppercase border-b pb-2">Key Terms</h3>
+                        <div class="space-y-3" id="vocab-terms-container">
+                            <!-- Terms injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Definitions column -->
+                    <div>
+                        <h3 class="font-bold text-stone-700 mb-3 text-sm tracking-wider uppercase border-b pb-2">Definitions</h3>
+                        <div class="space-y-3" id="vocab-defs-container">
+                            <!-- Definitions injected by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset vocabulary -->
+                <div class="mt-8 flex justify-end">
+                    <button onclick="resetVocabulary()" class="px-5 py-2.5 border border-stone-300 text-stone-600 hover:bg-stone-50 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 12H19c0 4.418-3.582 8-8 8a8.001 8.001 0 01-7.6-6h-2.12a10.001 10.001 0 0019.4 0H19z"/></svg>
+                        Reset Matching
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ACTIVITY 2: LISTEN & COMPREHEND -->
+        <section id="content-listen" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Video Integration Area -->
+                <div class="lg:col-span-5 bg-white rounded-2xl shadow-xl p-5 border border-stone-200 flex flex-col justify-between">
+                    <div>
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Video Lesson</span>
+                        <h2 class="text-xl font-serif font-bold mt-2 mb-4 text-deco-charcoal">GCSE Revision Video</h2>
+                        <!-- Responsive Video Wrapper -->
+                        <div class="aspect-video w-full rounded-lg overflow-hidden shadow-inner border border-stone-300 bg-black">
+                            <iframe class="w-full h-full" src="https://www.youtube.com/embed/gcrp8VOd69M?si=9PhZHJkw7krkcO1J" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                        <p class="text-xs text-stone-500 mt-4 leading-relaxed">
+                            <strong>Note:</strong> Listen closely to the segments covering the <em>birth of jazz</em>, the <em>cinema boom</em>, and the <em>explosive growth of radio</em> to answer the active comprehension questions.
+                        </p>
+                    </div>
+                    
+                    <div class="mt-6 border-t pt-4 bg-stone-50 p-3 rounded-lg border">
+                        <span class="text-xs font-bold text-stone-600 block mb-1">Key Timestamps in Video:</span>
+                        <ul class="text-xs space-y-1 text-stone-500">
+                            <li>⏱️ <strong>00:53</strong> – The Birth of Jazz</li>
+                            <li>⏱️ <strong>02:08</strong> – Hollywood & Cinema Boom</li>
+                            <li>⏱️ <strong>03:33</strong> – Radio Connecting the Nation</li>
+                            <li>⏱️ <strong>04:36</strong> – Sports Heroes & Celebrities</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Comprehension Questions Area -->
+                <div class="lg:col-span-7 bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-stone-200">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Activity 2</span>
+                            <h2 class="text-2xl font-serif font-bold mt-2 text-deco-charcoal">Listening Comprehension</h2>
+                        </div>
+                        <div id="comprehension-score" class="bg-deco-gold/10 border border-deco-gold/30 rounded-lg py-1.5 px-3 text-center">
+                            <span class="text-xs uppercase text-stone-500 block">Score</span>
+                            <span id="comp-score-text" class="text-xl font-bold text-deco-darkGold font-serif">0 / 4</span>
+                        </div>
+                    </div>
+
+                    <!-- Question Container -->
+                    <div class="space-y-8" id="comp-questions-container">
+                        <!-- Questions injected dynamically by JS -->
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="mt-8 pt-6 border-t flex justify-between items-center">
+                        <button onclick="resetComprehension()" class="px-4 py-2 border border-stone-300 text-stone-600 hover:bg-stone-50 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all">
+                            Reset Video Quiz
+                        </button>
+                        <button onclick="switchTab('quiz')" class="px-5 py-2.5 bg-deco-charcoal text-white hover:bg-stone-800 rounded-lg text-sm font-semibold flex items-center gap-2 transition-all shadow-md">
+                            Continue to Activity 3 ➡️
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ACTIVITY 3: TRUE OR FALSE -->
+        <section id="content-quiz" class="tab-content hidden">
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-stone-200 max-w-3xl mx-auto">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b pb-4">
+                    <div>
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full uppercase">Activity 3</span>
+                        <h2 class="text-2xl font-serif font-bold mt-2 text-deco-charcoal">Fact-Checker: True or False</h2>
+                        <p class="text-stone-600 text-sm mt-1">Review these claims about the 1920s. Which statements are historically accurate based on the class lesson?</p>
+                    </div>
+                    <div class="bg-deco-gold/10 border border-deco-gold/30 rounded-lg p-3 text-center min-w-[120px]">
+                        <span class="block text-xs uppercase tracking-wider text-stone-500">Correct Claims</span>
+                        <span id="tf-score-text" class="text-2xl font-bold text-deco-darkGold font-serif">0 / 5</span>
+                    </div>
+                </div>
+
+                <!-- True / False Items -->
+                <div class="space-y-6" id="tf-items-container">
+                    <!-- Injected dynamically by JS -->
+                </div>
+
+                <!-- Reset T/F -->
+                <div class="mt-8 pt-6 border-t flex justify-between items-center">
+                    <button onclick="resetTF()" class="px-4 py-2 border border-stone-300 text-stone-600 hover:bg-stone-50 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all">
+                        Reset Fact-Check
+                    </button>
+                    <button onclick="checkFinalCompletion()" id="finish-btn" class="px-6 py-3 bg-gradient-to-r from-deco-darkGold to-deco-gold text-white hover:opacity-90 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shadow-lg hidden">
+                        🎓 Claim Graduation Certificate
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Celebration Modal (Hidden by Default) -->
+    <div id="success-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center border-4 border-deco-gold relative art-deco-corners">
+            <div class="text-6xl mb-4">🏆</div>
+            <h3 class="font-serif text-3xl font-bold text-deco-charcoal mb-2">Grand Accomplishment!</h3>
+            <span class="text-xs font-semibold tracking-widest text-deco-darkGold uppercase block mb-6">1920s Historian Certification</span>
+            
+            <p class="text-stone-600 text-sm mb-6 leading-relaxed">
+                Congratulations! You completed all activities inside the <strong>Jazz Age & Entertainment Revolution Interactive Module</strong>. You demonstrated a deep understanding of historical terminology, active listening skills, and cultural context analysis.
+            </p>
+            
+            <div class="bg-deco-gold/10 p-4 rounded-xl border border-deco-gold/30 mb-6 text-left">
+                <span class="text-xs uppercase font-bold text-stone-500 block mb-2 text-center">Score Sheet Summary</span>
+                <div class="flex justify-between text-sm py-1 border-b border-stone-200">
+                    <span>📚 Vocab Terms Matched:</span>
+                    <strong class="text-deco-charcoal">6 / 6</strong>
+                </div>
+                <div class="flex justify-between text-sm py-1 border-b border-stone-200">
+                    <span>🎧 Listening Accuracy:</span>
+                    <strong class="text-deco-charcoal" id="modal-comp-score">4 / 4</strong>
+                </div>
+                <div class="flex justify-between text-sm py-1">
+                    <span>⚖️ Fact-Checking Accuracy:</span>
+                    <strong class="text-deco-charcoal" id="modal-tf-score">5 / 5</strong>
+                </div>
+            </div>
+
+            <button onclick="closeModal()" class="w-full py-3 bg-deco-charcoal text-white rounded-xl hover:bg-stone-800 font-bold tracking-wide transition-all shadow-md">
+                Keep Exploring Module
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-deco-charcoal border-t-4 border-deco-gold py-6 text-center text-stone-400 text-xs mt-12">
+        <div class="max-w-5xl mx-auto px-4 space-y-2">
+            <p>GCSE History AQA Revision Hub &copy; 2026. Designed for modern classroom integration.</p>
+            <p class="text-stone-500">Video source material and lecture points credited to <em>I'm Stuck - GCSE and A-Level Revision</em>.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Logic JavaScript -->
+    <script>
+        // Module State
+        const state = {
+            currentTab: 'vocab',
+            vocab: {
+                selectedTerm: null,
+                selectedDef: null,
+                matches: {}, // maps termId to defId
+                finished: false
+            },
+            comprehension: {
+                userAnswers: {}, // questionIndex: optionIndex
+                score: 0
+            },
+            trueFalse: {
+                userAnswers: {}, // index: true/false
+                score: 0
+            }
+        };
+
+        // Static Data Constants
+        const VOCAB_DATA = [
+            { id: 'v1', term: 'Improvisation', def: 'The spontaneous practice of composing music on the fly instead of relying strictly on structured written scores.' },
+            { id: 'v2', term: 'The Great Migration', def: 'The massive demographic movement of African-Americans from the rural South to industrial cities of the North.' },
+            { id: 'v3', term: 'Talkie', def: 'A breakthrough motion picture featuring fully synchronized, recorded sound and vocal dialogue.' },
+            { id: 'v4', term: 'The Hays Code', def: 'A strict set of self-imposed moral and censorship guidelines adopted by Hollywood studios in 1930.' },
+            { id: 'v5', term: 'Disposable Income', def: 'Leisure funds remaining after taxes and critical expenses, which fueled the rise of mass consumerism.' },
+            { id: 'v6', term: 'Harlem Renaissance', def: 'A vibrant explosion of African-American culture, literary achievements, and artistic pride in 1920s New York.' }
+        ];
+
+        const COMP_QUESTIONS = [
+            {
+                id: 1,
+                question: "In what city did Early Jazz emerge in the year 1920 by blending traditional African rhythms with European brass sounds?",
+                options: [
+                    "New Orleans",
+                    "New York City",
+                    "Chicago",
+                    "Detroit"
+                ],
+                correct: 0,
+                rationale: "Early jazz emerged in New Orleans around 1920. It later migrated north to cities like Chicago and New York's Harlem neighborhood."
+            },
+            {
+                id: 2,
+                question: "By the end of the 1920s (1929), approximately what share of the American population went to the cinema weekly?",
+                options: [
+                    "Roughly 5 million people (a small novelty group)",
+                    "About 60 million people (nearly half the population)",
+                    "Over 120 million people (the entire nation)",
+                    "Around 10 million people (strictly metropolitan citizens)"
+                ],
+                correct: 1,
+                rationale: "Cinema exploded into a massive industry; by 1929, 60 million Americans (nearly half of the population at the time) attended movies weekly."
+            },
+            {
+                id: 3,
+                question: "What did radio broadcasting produce for the first time in American history during the 1920s?",
+                options: [
+                    "The world's first interactive global communications satellite",
+                    "A shared national culture with families listening to the same program simultaneously",
+                    "The immediate end of all local printed newspaper companies",
+                    "A direct telephone connection between rural and urban schools"
+                ],
+                correct: 1,
+                rationale: "Radio allowed people across the entire nation to hear the same program, comedy routines, or baseball games simultaneously, creating a shared national culture."
+            },
+            {
+                id: 4,
+                question: "How did New York Yankee Babe Ruth affect public perception of professional baseball after joining the team in 1920?",
+                options: [
+                    "He caused massive protests due to aggressive behavior",
+                    "He restored faith in the sport after major scandals and transformed it into the 'national pastime'",
+                    "He led to the temporary shut down of national broadcasting channels",
+                    "He argued that individual achievements in sports were un-American"
+                ],
+                correct: 1,
+                rationale: "Babe Ruth restored public trust and faith in professional baseball after a series of match-fixing scandals, quickly solidifying baseball's place in the American heart."
+            }
+        ];
+
+        const TF_QUESTIONS = [
+            {
+                id: 1,
+                statement: "By 1929, over 10 million American households owned a radio, a huge increase from only 60,000 in 1922.",
+                isTrue: true,
+                rationale: "True! The video emphasizes this explosive expansion: from 60,000 households in 1922 to over 10 million by 1929."
+            },
+            {
+                id: 2,
+                statement: "Religious groups and older generations were highly enthusiastic about jazz music because it brought traditional families closer together.",
+                isTrue: false,
+                rationale: "False. Many religious leaders and traditional figures strongly criticized jazz, linking it with alcohol, wild dances, and rebellion against conservative values."
+            },
+            {
+                id: 3,
+                statement: "The Jazz Singer, released in 1927, is credited as the first successful 'talkie' and within 3 years, silent movies were largely replaced.",
+                isTrue: true,
+                rationale: "True! Synchronized voice and sound quickly won audiences, and by 1930 nearly all Hollywood films were made with sound."
+            },
+            {
+                id: 4,
+                statement: "Sports writers and journalists strictly reported cold numbers and scores, avoiding the creation of larger-than-life narratives around athletes.",
+                isTrue: false,
+                rationale: "False. Sports writers deliberately spun rich narratives that turned athletes into national heroes, cementing the connection to the American Dream."
+            },
+            {
+                id: 5,
+                statement: "The entertainment revolution sparked massive generational tensions, as younger people took life ideas from entertainers rather than parents or teachers.",
+                isTrue: true,
+                rationale: "True! Young people rejected the moral guidance of authority figures in favor of trends set by sports stars, screen actors, and jazz clubs."
+            }
+        ];
+
+        // Init Setup
+        window.addEventListener('DOMContentLoaded', () => {
+            initVocab();
+            initComprehension();
+            initTF();
+            updateOverallProgress();
+        });
+
+        // Tab Switching
+        function switchTab(tabId) {
+            state.currentTab = tabId;
+            
+            // Toggle active classes on tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-deco-darkGold', 'border-deco-gold');
+                btn.classList.add('bg-stone-200/50', 'text-stone-600');
+            });
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            activeTab.classList.remove('bg-stone-200/50', 'text-stone-600');
+            activeTab.classList.add('bg-white', 'text-deco-darkGold', 'border-deco-gold', 'border-b-4');
+
+            // Hide/Show tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+        }
+
+        // --- ACTIVITY 1: VOCABULARY ENGINE ---
+        function initVocab() {
+            const termsContainer = document.getElementById('vocab-terms-container');
+            const defsContainer = document.getElementById('vocab-defs-container');
+            
+            termsContainer.innerHTML = '';
+            defsContainer.innerHTML = '';
+
+            // Shuffle terms and definitions independently
+            const shuffledTerms = [...VOCAB_DATA].sort(() => Math.random() - 0.5);
+            const shuffledDefs = [...VOCAB_DATA].sort(() => Math.random() - 0.5);
+
+            // Render Terms
+            shuffledTerms.forEach(item => {
+                const btn = document.createElement('button');
+                btn.id = `term-${item.id}`;
+                btn.className = "w-full text-left p-3 rounded-lg border border-stone-200 bg-stone-50 hover:bg-stone-100 hover:border-deco-gold/50 font-semibold text-stone-700 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-deco-gold/30";
+                btn.innerHTML = `${item.term}`;
+                btn.onclick = () => selectTerm(item.id);
+                termsContainer.appendChild(btn);
+            });
+
+            // Render Definitions
+            shuffledDefs.forEach(item => {
+                const btn = document.createElement('button');
+                btn.id = `def-${item.id}`;
+                btn.className = "w-full text-left p-3 rounded-lg border border-stone-200 bg-stone-50 hover:bg-stone-100 hover:border-deco-gold/50 text-stone-600 text-xs transition-all leading-relaxed focus:outline-none focus:ring-2 focus:ring-deco-gold/30";
+                btn.innerHTML = `${item.def}`;
+                btn.onclick = () => selectDef(item.id);
+                defsContainer.appendChild(btn);
+            });
+
+            state.vocab.matches = {};
+            state.vocab.selectedTerm = null;
+            state.vocab.selectedDef = null;
+            updateVocabScore();
+        }
+
+        function selectTerm(id) {
+            // If already matched, ignore
+            if (state.vocab.matches[id]) return;
+
+            // Remove highlight from previous term selection
+            if (state.vocab.selectedTerm) {
+                const prevBtn = document.getElementById(`term-${state.vocab.selectedTerm}`);
+                if (prevBtn) prevBtn.className = prevBtn.className.replace(' bg-deco-goldLight/30 border-deco-gold', ' bg-stone-50 border-stone-200');
+            }
+
+            state.vocab.selectedTerm = id;
+            const btn = document.getElementById(`term-${id}`);
+            btn.className = btn.className.replace(' bg-stone-50 border-stone-200', ' bg-deco-goldLight/30 border-deco-gold');
+
+            checkMatch();
+        }
+
+        function selectDef(id) {
+            // If already matched, ignore
+            if (Object.values(state.vocab.matches).includes(id)) return;
+
+            // Remove highlight from previous definition selection
+            if (state.vocab.selectedDef) {
+                const prevBtn = document.getElementById(`def-${state.vocab.selectedDef}`);
+                if (prevBtn) prevBtn.className = prevBtn.className.replace(' bg-deco-goldLight/30 border-deco-gold', ' bg-stone-50 border-stone-200');
+            }
+
+            state.vocab.selectedDef = id;
+            const btn = document.getElementById(`def-${id}`);
+            btn.className = btn.className.replace(' bg-stone-50 border-stone-200', ' bg-deco-goldLight/30 border-deco-gold');
+
+            checkMatch();
+        }
+
+        function checkMatch() {
+            if (state.vocab.selectedTerm && state.vocab.selectedDef) {
+                const termId = state.vocab.selectedTerm;
+                const defId = state.vocab.selectedDef;
+
+                if (termId === defId) {
+                    // It's a match!
+                    state.vocab.matches[termId] = defId;
+
+                    // Permanently style them as matched
+                    const termBtn = document.getElementById(`term-${termId}`);
+                    const defBtn = document.getElementById(`def-${defId}`);
+
+                    termBtn.className = "w-full text-left p-3 rounded-lg border-2 border-emerald-500 bg-emerald-50 text-emerald-800 font-semibold text-sm transition-all cursor-default pointer-events-none flex justify-between items-center";
+                    termBtn.innerHTML += ` <span class="text-emerald-600">✓</span>`;
+
+                    defBtn.className = "w-full text-left p-3 rounded-lg border-2 border-emerald-500 bg-emerald-50 text-emerald-700 text-xs transition-all leading-relaxed cursor-default pointer-events-none flex justify-between items-center";
+                    defBtn.innerHTML += ` <span class="text-emerald-600 ml-2 font-bold">✓</span>`;
+
+                    state.vocab.selectedTerm = null;
+                    state.vocab.selectedDef = null;
+
+                    updateVocabScore();
+                    updateOverallProgress();
+                } else {
+                    // It's a mistake, highlight incorrect pair red briefly
+                    const termBtn = document.getElementById(`term-${termId}`);
+                    const defBtn = document.getElementById(`def-${defId}`);
+
+                    termBtn.classList.add('bg-red-50', 'border-red-500', 'text-red-700');
+                    defBtn.classList.add('bg-red-50', 'border-red-500', 'text-red-700');
+
+                    setTimeout(() => {
+                        termBtn.className = "w-full text-left p-3 rounded-lg border border-stone-200 bg-stone-50 hover:bg-stone-100 hover:border-deco-gold/50 font-semibold text-stone-700 text-sm transition-all focus:outline-none focus:ring-2 focus:ring-deco-gold/30";
+                        defBtn.className = "w-full text-left p-3 rounded-lg border border-stone-200 bg-stone-50 hover:bg-stone-100 hover:border-deco-gold/50 text-stone-600 text-xs transition-all leading-relaxed focus:outline-none focus:ring-2 focus:ring-deco-gold/30";
+                    }, 800);
+
+                    state.vocab.selectedTerm = null;
+                    state.vocab.selectedDef = null;
+                }
+            }
+        }
+
+        function updateVocabScore() {
+            const matchCount = Object.keys(state.vocab.matches).length;
+            document.getElementById('vocab-match-count').innerText = `${matchCount} / 6`;
+            if (matchCount === 6) {
+                state.vocab.finished = true;
+            }
+        }
+
+        function resetVocabulary() {
+            initVocab();
+            updateOverallProgress();
+        }
+
+
+        // --- ACTIVITY 2: COMPREHENSION QUIZ ENGINE ---
+        function initComprehension() {
+            const container = document.getElementById('comp-questions-container');
+            container.innerHTML = '';
+            state.comprehension.userAnswers = {};
+            state.comprehension.score = 0;
+            updateCompScoreDisplay();
+
+            COMP_QUESTIONS.forEach((q, qIndex) => {
+                const qCard = document.createElement('div');
+                qCard.className = "bg-stone-50 border border-stone-200 p-5 rounded-xl";
+                qCard.id = `comp-card-${qIndex}`;
+
+                let optionsHTML = '';
+                q.options.forEach((opt, optIndex) => {
+                    optionsHTML += `
+                        <button onclick="selectCompOption(${qIndex}, ${optIndex})" id="comp-opt-${qIndex}-${optIndex}" class="w-full text-left p-3 rounded-lg border border-stone-200 bg-white hover:bg-stone-100 hover:border-stone-400 text-stone-700 text-xs md:text-sm transition-all">
+                            ${opt}
+                        </button>
+                    `;
+                });
+
+                qCard.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="flex items-center justify-center bg-deco-gold text-white text-xs font-bold rounded-full w-5 h-5 mt-1 shrink-0 font-serif">${q.id}</span>
+                        <h4 class="font-bold text-stone-800 text-sm md:text-base mb-4 leading-snug">${q.question}</h4>
+                    </div>
+                    <div class="grid grid-cols-1 gap-2 mt-2">
+                        ${optionsHTML}
+                    </div>
+                    <!-- Explanation panel (hidden initially) -->
+                    <div id="comp-explanation-${qIndex}" class="mt-4 p-3 bg-stone-100 rounded-lg text-xs leading-relaxed text-stone-600 border border-stone-200 hidden">
+                        <!-- Filled by evaluate/select -->
+                    </div>
+                `;
+                container.appendChild(qCard);
+            });
+        }
+
+        function selectCompOption(qIndex, optIndex) {
+            const q = COMP_QUESTIONS[qIndex];
+            
+            // If already answered, don't allow changing
+            if (state.comprehension.userAnswers[qIndex] !== undefined) return;
+
+            state.comprehension.userAnswers[qIndex] = optIndex;
+
+            const isCorrect = optIndex === q.correct;
+            const explanationDiv = document.getElementById(`comp-explanation-${qIndex}`);
+
+            // Apply styling
+            q.options.forEach((_, currOptIndex) => {
+                const optBtn = document.getElementById(`comp-opt-${qIndex}-${currOptIndex}`);
+                optBtn.disabled = true; // disable all options for this question
+                
+                if (currOptIndex === q.correct) {
+                    optBtn.className = "w-full text-left p-3 rounded-lg border border-emerald-500 bg-emerald-50 text-emerald-800 font-semibold text-xs md:text-sm transition-all cursor-default pointer-events-none";
+                } else if (currOptIndex === optIndex) {
+                    optBtn.className = "w-full text-left p-3 rounded-lg border border-red-500 bg-red-50 text-red-800 font-semibold text-xs md:text-sm transition-all cursor-default pointer-events-none";
+                } else {
+                    optBtn.className = "w-full text-left p-3 rounded-lg border border-stone-200 bg-stone-50/50 text-stone-400 text-xs md:text-sm transition-all cursor-default pointer-events-none";
+                }
+            });
+
+            // Set dynamic explanation layout
+            explanationDiv.innerHTML = `
+                <span class="font-bold block mb-1 ${isCorrect ? 'text-emerald-700' : 'text-red-700'}">
+                    ${isCorrect ? '✨ Correct' : '❌ Incorrect'}
+                </span>
+                ${q.rationale}
+            `;
+            explanationDiv.classList.remove('hidden');
+
+            if (isCorrect) {
+                state.comprehension.score += 1;
+            }
+
+            updateCompScoreDisplay();
+            updateOverallProgress();
+        }
+
+        function updateCompScoreDisplay() {
+            document.getElementById('comp-score-text').innerText = `${state.comprehension.score} / 4`;
+        }
+
+        function resetComprehension() {
+            initComprehension();
+            updateOverallProgress();
+        }
+
+
+        // --- ACTIVITY 3: TRUE OR FALSE ENGINE ---
+        function initTF() {
+            const container = document.getElementById('tf-items-container');
+            container.innerHTML = '';
+            state.trueFalse.userAnswers = {};
+            state.trueFalse.score = 0;
+            updateTFScoreDisplay();
+
+            TF_QUESTIONS.forEach((item, index) => {
+                const tfDiv = document.createElement('div');
+                tfDiv.className = "border border-stone-200 bg-stone-50 rounded-xl p-4 md:p-5 flex flex-col justify-between gap-4";
+                tfDiv.id = `tf-card-${index}`;
+
+                tfDiv.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="bg-stone-200 text-stone-700 text-xs font-bold rounded px-1.5 py-0.5 mt-1 shrink-0 font-mono">Claim #${index+1}</span>
+                        <p class="font-semibold text-stone-800 text-sm md:text-base leading-snug">${item.statement}</p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t pt-3 mt-2">
+                        <!-- T/F Choice Buttons -->
+                        <div class="flex gap-2 shrink-0">
+                            <button onclick="answerTF(${index}, true)" id="tf-btn-${index}-true" class="px-5 py-2 rounded-lg border border-stone-300 bg-white hover:bg-emerald-50 hover:text-emerald-700 text-xs font-bold uppercase tracking-wider transition-all">
+                                True
+                            </button>
+                            <button onclick="answerTF(${index}, false)" id="tf-btn-${index}-false" class="px-5 py-2 rounded-lg border border-stone-300 bg-white hover:bg-red-50 hover:text-red-700 text-xs font-bold uppercase tracking-wider transition-all">
+                                False
+                            </button>
+                        </div>
+
+                        <!-- Feedback Panel -->
+                        <div id="tf-feedback-${index}" class="text-xs text-stone-600 hidden">
+                            <!-- Injected dynamically on click -->
+                        </div>
+                    </div>
+                `;
+                container.appendChild(tfDiv);
+            });
+        }
+
+        function answerTF(index, userChoice) {
+            const item = TF_QUESTIONS[index];
+            
+            // Do not allow re-answering
+            if (state.trueFalse.userAnswers[index] !== undefined) return;
+
+            state.trueFalse.userAnswers[index] = userChoice;
+            const isCorrect = userChoice === item.isTrue;
+
+            const tBtn = document.getElementById(`tf-btn-${index}-true`);
+            const fBtn = document.getElementById(`tf-btn-${index}-false`);
+            const feedback = document.getElementById(`tf-feedback-${index}`);
+
+            // Highlight results
+            if (item.isTrue) {
+                tBtn.className = "px-5 py-2 rounded-lg border-2 border-emerald-500 bg-emerald-50 text-emerald-800 text-xs font-bold uppercase tracking-wider transition-all pointer-events-none";
+                fBtn.className = "px-5 py-2 rounded-lg border border-stone-200 bg-stone-50 text-stone-400 text-xs font-bold uppercase tracking-wider transition-all pointer-events-none";
+                if (!isCorrect) {
+                    fBtn.className = "px-5 py-2 rounded-lg border-2 border-red-500 bg-red-100 text-red-800 text-xs font-bold uppercase tracking-wider transition-all pointer-events-none";
+                }
+            } else {
+                fBtn.className = "px-5 py-2 rounded-lg border-2 border-emerald-500 bg-emerald-50 text-emerald-800 text-xs font-bold uppercase tracking-wider transition-all pointer-events-none";
+                tBtn.className = "px-5 py-2 rounded-lg border border-stone-200 bg-stone-50 text-stone-400 text-xs font-bold uppercase tracking-wider transition-all pointer-events-none";
+                if (!isCorrect) {
+                    tBtn.className = "px-5 py-2 rounded-lg border-2 border-red-500 bg-red-100 text-red-800 text-xs font-bold uppercase tracking-wider transition-all pointer-events-none";
+                }
+            }
+
+            feedback.innerHTML = `
+                <div class="flex gap-2 items-start bg-white p-2 rounded border">
+                    <span class="font-bold ${isCorrect ? 'text-emerald-700' : 'text-red-700'}">
+                        ${isCorrect ? 'Correct!' : 'Incorrect.'}
+                    </span>
+                    <p class="text-stone-500">${item.rationale}</p>
+                </div>
+            `;
+            feedback.classList.remove('hidden');
+
+            if (isCorrect) {
+                state.trueFalse.score += 1;
+            }
+
+            updateTFScoreDisplay();
+            updateOverallProgress();
+        }
+
+        function updateTFScoreDisplay() {
+            document.getElementById('tf-score-text').innerText = `${state.trueFalse.score} / 5`;
+        }
+
+        function resetTF() {
+            initTF();
+            updateOverallProgress();
+        }
+
+
+        // --- DASHBOARD AND PROGRESS LOGIC ---
+        function updateOverallProgress() {
+            // Count matched terms (6 total pairs)
+            const matchedCount = Object.keys(state.vocab.matches).length; // max 6
+            // Count comprehension questions answered
+            const compCount = Object.keys(state.comprehension.userAnswers).length; // max 4
+            // Count T/F answered
+            const tfCount = Object.keys(state.trueFalse.userAnswers).length; // max 5
+
+            const totalCompletedItems = matchedCount + compCount + tfCount;
+            const overallPercentage = Math.round((totalCompletedItems / 15) * 100);
+
+            // Update DOM Elements
+            document.getElementById('overall-progress-bar').style.width = `${overallPercentage}%`;
+            document.getElementById('overall-progress-text').innerText = `${overallPercentage}% Complete`;
+
+            // Display Graduation button if 100% complete
+            const finishBtn = document.getElementById('finish-btn');
+            if (overallPercentage === 100) {
+                finishBtn.classList.remove('hidden');
+                // Auto-scroll attention to it if they are on Activity 3
+                if (state.currentTab === 'quiz') {
+                    finishBtn.scrollIntoView({ behavior: 'smooth' });
+                }
+            } else {
+                finishBtn.classList.add('hidden');
+            }
+        }
+
+        function checkFinalCompletion() {
+            // Fill final numbers on score sheets inside celebration modal
+            document.getElementById('modal-comp-score').innerText = `${state.comprehension.score} / 4`;
+            document.getElementById('modal-tf-score').innerText = `${state.trueFalse.score} / 5`;
+
+            // Display certificate modal
+            document.getElementById('success-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

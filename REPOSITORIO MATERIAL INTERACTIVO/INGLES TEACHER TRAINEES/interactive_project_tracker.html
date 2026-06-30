@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Project Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SheetJS for Excel export -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <style>
+        /* Custom scrollbar for the gantt chart area */
+        .gantt-scroll::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .gantt-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+            border-radius: 4px;
+        }
+        .gantt-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .gantt-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        .gantt-cell {
+            min-width: 40px;
+            height: 100%;
+            border-right: 1px solid #e2e8f0;
+        }
+        .gantt-bar {
+            transition: all 0.2s ease;
+        }
+        .gantt-bar:hover {
+            opacity: 0.9;
+            transform: scaleY(1.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+        
+        <!-- Header -->
+        <div class="bg-blue-600 text-white p-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight">Interactive Project Tracker</h1>
+                <p class="text-blue-100 text-sm mt-1">Manage tasks, visualize timeline, and export to Excel</p>
+            </div>
+            <button onclick="exportToExcel()" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow transition flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+                Export Excel
+            </button>
+        </div>
+
+        <div class="p-6">
+            <!-- Project Details -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
+                    <input type="text" id="projectName" placeholder="e.g., Website Redesign" class="w-full px-4 py-2 rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 outline-none transition" onchange="saveState()">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Participants</label>
+                    <input type="text" id="participants" placeholder="e.g., Alice, Bob, Charlie" class="w-full px-4 py-2 rounded-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500 outline-none transition" onchange="saveState()">
+                </div>
+            </div>
+
+            <!-- Add Task Form -->
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Add New Task</h2>
+                <form id="taskForm" class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end" onsubmit="addTask(event)">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Task Name</label>
+                        <input type="text" id="taskName" required placeholder="Design Mockups" class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Assignee</label>
+                        <input type="text" id="taskAssignee" required placeholder="Alice" class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Start Date</label>
+                        <input type="date" id="taskStart" required class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">End Date</label>
+                        <input type="date" id="taskEnd" required class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Status</label>
+                        <select id="taskStatus" class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
+                            <option value="Not Started">Not Started</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-6 flex justify-end mt-2">
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-6 rounded shadow transition">
+                            Add Task
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tracker & Timeline View -->
+            <div>
+                <div class="flex justify-between items-center mb-3 border-b pb-2">
+                    <h2 class="text-lg font-semibold text-gray-800">Task List & Timeline</h2>
+                    <div class="flex gap-2">
+                        <button onclick="changeViewRange(-1)" class="p-1 rounded hover:bg-gray-100" title="Previous Month">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        </button>
+                        <span id="currentMonthLabel" class="text-sm font-medium text-gray-700 py-1">Loading...</span>
+                        <button onclick="changeViewRange(1)" class="p-1 rounded hover:bg-gray-100" title="Next Month">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                    <!-- Left Side: Task List Details -->
+                    <div class="w-1/3 min-w-[300px] border-r border-gray-200 flex flex-col bg-white z-10">
+                        <!-- Header -->
+                        <div class="flex border-b border-gray-200 bg-gray-50 text-xs font-semibold text-gray-600 uppercase tracking-wider py-3 px-4">
+                            <div class="w-1/2">Task Name</div>
+                            <div class="w-1/4">Assignee</div>
+                            <div class="w-1/4 text-center">Status</div>
+                            <div class="w-8"></div><!-- Delete col -->
+                        </div>
+                        <!-- List Container -->
+                        <div id="taskListBody" class="flex-1 overflow-y-auto" style="min-height: 200px;">
+                            <!-- Task rows will be injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Timeline (Gantt) -->
+                    <div class="flex-1 overflow-x-auto gantt-scroll relative" id="timelineContainer">
+                        <!-- Timeline Header (Days) -->
+                        <div id="timelineHeader" class="flex border-b border-gray-200 bg-gray-50 h-[45px]">
+                            <!-- Days will be injected here -->
+                        </div>
+                        
+                        <!-- Timeline Grid & Bars Container -->
+                        <div id="timelineBody" class="relative" style="min-height: 200px;">
+                            <!-- Grid and bars injected here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Empty State -->
+                <div id="emptyState" class="hidden text-center py-10 text-gray-500">
+                    <svg class="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                    <p>No tasks added yet. Add a task above to start tracking.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // State
+        let state = {
+            projectName: "",
+            participants: "",
+            tasks: [],
+            viewStartDate: new Date()
+        };
+
+        // Initialize view start date to beginning of current month
+        state.viewStartDate = new Date(state.viewStartDate.getFullYear(), state.viewStartDate.getMonth(), 1);
+
+        const ROW_HEIGHT = 48; // px
+
+        // Colors for status
+        const statusColors = {
+            'Not Started': { bg: 'bg-gray-200', text: 'text-gray-700', bar: 'bg-gray-400' },
+            'In Progress': { bg: 'bg-blue-100', text: 'text-blue-700', bar: 'bg-blue-500' },
+            'Completed': { bg: 'bg-green-100', text: 'text-green-700', bar: 'bg-green-500' }
+        };
+
+        // Set default dates in form to today and tomorrow
+        window.onload = function() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            document.getElementById('taskStart').valueAsDate = today;
+            document.getElementById('taskEnd').valueAsDate = tomorrow;
+
+            loadState();
+            renderApp();
+        };
+
+        function addTask(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('taskName').value.trim();
+            const assignee = document.getElementById('taskAssignee').value.trim();
+            const start = document.getElementById('taskStart').value;
+            const end = document.getElementById('taskEnd').value;
+            const status = document.getElementById('taskStatus').value;
+
+            if (new Date(start) > new Date(end)) {
+                showMessage("End Date cannot be before Start Date.", true);
+                return;
+            }
+
+            const newTask = {
+                id: Date.now().toString(),
+                name,
+                assignee,
+                start,
+                end,
+                status
+            };
+
+            state.tasks.push(newTask);
+            saveState();
+            renderApp();
+            
+            // Reset main inputs, keep dates
+            document.getElementById('taskName').value = '';
+            document.getElementById('taskName').focus();
+        }
+
+        function deleteTask(id) {
+            state.tasks = state.tasks.filter(t => t.id !== id);
+            saveState();
+            renderApp();
+        }
+
+        function updateTaskStatus(id, newStatus) {
+            const task = state.tasks.find(t => t.id === id);
+            if(task) {
+                task.status = newStatus;
+                saveState();
+                renderApp();
+            }
+        }
+
+        function changeViewRange(months) {
+            state.viewStartDate.setMonth(state.viewStartDate.getMonth() + months);
+            renderApp();
+        }
+
+        function getDaysInMonth(year, month) {
+            return new Date(year, month + 1, 0).getDate();
+        }
+
+        function generateTimelineDays() {
+            const year = state.viewStartDate.getFullYear();
+            const month = state.viewStartDate.getMonth();
+            const daysInMonth = getDaysInMonth(year, month);
+            
+            let headerHTML = '';
+            let gridHTML = '';
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const date = new Date(year, month, i);
+                const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+                const bgClass = isWeekend ? 'bg-gray-100' : '';
+                const today = new Date();
+                const isToday = date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
+                const todayClass = isToday ? 'text-blue-600 font-bold' : 'text-gray-500';
+
+                // Header cell
+                headerHTML += `
+                    <div class="gantt-cell flex-shrink-0 flex flex-col items-center justify-center text-[10px] ${bgClass}">
+                        <span class="${todayClass}">${i}</span>
+                        <span class="text-[8px] text-gray-400">${date.toLocaleDateString('en-US', { weekday: 'narrow' })}</span>
+                    </div>
+                `;
+
+                // Grid lines behind bars
+                gridHTML += `
+                    <div class="gantt-cell flex-shrink-0 absolute top-0 bottom-0 ${bgClass}" style="left: ${(i-1)*40}px; border-right: 1px solid #f1f5f9;"></div>
+                `;
+            }
+            return { headerHTML, gridHTML, daysInMonth };
+        }
+
+        function renderApp() {
+            // Update labels
+            document.getElementById('projectName').value = state.projectName;
+            document.getElementById('participants').value = state.participants;
+
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('currentMonthLabel').innerText = `${monthNames[state.viewStartDate.getMonth()]} ${state.viewStartDate.getFullYear()}`;
+
+            const listBody = document.getElementById('taskListBody');
+            const timelineHeader = document.getElementById('timelineHeader');
+            const timelineBody = document.getElementById('timelineBody');
+            const emptyState = document.getElementById('emptyState');
+
+            if (state.tasks.length === 0) {
+                listBody.innerHTML = '';
+                timelineHeader.innerHTML = '';
+                timelineBody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                document.getElementById('timelineContainer').style.display = 'none';
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+                document.getElementById('timelineContainer').style.display = 'block';
+            }
+
+            // Generate Timeline Grid
+            const { headerHTML, gridHTML, daysInMonth } = generateTimelineDays();
+            timelineHeader.innerHTML = headerHTML;
+            
+            // Set widths based on days
+            const totalWidth = daysInMonth * 40;
+            timelineHeader.style.width = `${totalWidth}px`;
+            timelineBody.style.width = `${totalWidth}px`;
+            timelineBody.style.height = `${state.tasks.length * ROW_HEIGHT}px`;
+            
+            // Background grid
+            timelineBody.innerHTML = gridHTML;
+
+            let listHTML = '';
+            
+            const viewYear = state.viewStartDate.getFullYear();
+            const viewMonth = state.viewStartDate.getMonth();
+            const viewStartMs = new Date(viewYear, viewMonth, 1).getTime();
+            const viewEndMs = new Date(viewYear, viewMonth, daysInMonth, 23, 59, 59).getTime();
+
+            state.tasks.forEach((task, index) => {
+                // Render List Row
+                const colors = statusColors[task.status] || statusColors['Not Started'];
+                listHTML += `
+                    <div class="flex border-b border-gray-100 hover:bg-gray-50 items-center py-2 px-4" style="height: ${ROW_HEIGHT}px">
+                        <div class="w-1/2 text-sm font-medium text-gray-800 truncate pr-2" title="${task.name}">${task.name}</div>
+                        <div class="w-1/4 text-xs text-gray-500 truncate pr-2" title="${task.assignee}">${task.assignee}</div>
+                        <div class="w-1/4 flex justify-center">
+                            <select onchange="updateTaskStatus('${task.id}', this.value)" class="text-xs px-2 py-1 rounded-full ${colors.bg} ${colors.text} border-none outline-none cursor-pointer appearance-none text-center">
+                                <option value="Not Started" ${task.status === 'Not Started' ? 'selected' : ''}>Not Started</option>
+                                <option value="In Progress" ${task.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                                <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                            </select>
+                        </div>
+                        <div class="w-8 flex justify-end">
+                            <button onclick="deleteTask('${task.id}')" class="text-gray-400 hover:text-red-500 p-1" title="Delete Task">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Calculate Bar position and width
+                const tStart = new Date(task.start);
+                const tEnd = new Date(task.end);
+                
+                // Adjust dates to end of day to include the whole day
+                tEnd.setHours(23, 59, 59, 999);
+
+                // Check if task overlaps with current view
+                if (tEnd.getTime() >= viewStartMs && tStart.getTime() <= viewEndMs) {
+                    
+                    // Clamp start and end to view boundaries for drawing
+                    let drawStart = new Date(Math.max(tStart.getTime(), viewStartMs));
+                    let drawEnd = new Date(Math.min(tEnd.getTime(), viewEndMs));
+
+                    // Calculate offset in days from start of month
+                    const startDayOffset = drawStart.getDate() - 1;
+                    const durationDays = Math.ceil((drawEnd.getTime() - drawStart.getTime()) / (1000 * 60 * 60 * 24));
+                    
+                    const leftPos = startDayOffset * 40;
+                    const barWidth = durationDays * 40;
+                    const topPos = (index * ROW_HEIGHT) + 8; // Center in row (48px height, 32px bar -> 8px top)
+
+                    // Indicators if task continues outside view
+                    const hasLeftArrow = tStart.getTime() < viewStartMs;
+                    const hasRightArrow = tEnd.getTime() > viewEndMs;
+
+                    timelineBody.innerHTML += `
+                        <div class="absolute gantt-bar rounded-md ${colors.bar} flex items-center shadow-sm z-10" 
+                             style="left: ${leftPos}px; width: ${barWidth}px; top: ${topPos}px; height: 32px;"
+                             title="${task.name}\nStart: ${task.start}\nEnd: ${task.end}">
+                             ${hasLeftArrow ? '<span class="text-white text-xs ml-1 opacity-70">◀</span>' : ''}
+                             <div class="px-2 text-xs text-white truncate font-medium flex-1 ${hasLeftArrow ? 'pl-0' : ''}">${task.name}</div>
+                             ${hasRightArrow ? '<span class="text-white text-xs mr-1 opacity-70">▶</span>' : ''}
+                        </div>
+                    `;
+                }
+            });
+
+            listBody.innerHTML = listHTML;
+        }
+
+        function exportToExcel() {
+            if (state.tasks.length === 0) {
+                showMessage("No tasks to export.", false);
+                return;
+            }
+
+            try {
+                // Prepare data for Excel
+                const data = [];
+                
+                // Add Project Info Header
+                data.push(['Project Tracker Data']);
+                data.push(['Project Name:', state.projectName || 'Unnamed Project']);
+                data.push(['Participants:', state.participants || 'None listed']);
+                data.push([]); // Empty row
+                
+                // Add Task Headers
+                data.push(['Task Name', 'Assignee', 'Start Date', 'End Date', 'Status', 'Duration (Days)']);
+
+                // Add Task Data
+                state.tasks.forEach(t => {
+                    const s = new Date(t.start);
+                    const e = new Date(t.end);
+                    const diffTime = Math.abs(e - s);
+                    const duration = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both start and end day
+                    
+                    data.push([
+                        t.name,
+                        t.assignee,
+                        t.start,
+                        t.end,
+                        t.status,
+                        duration
+                    ]);
+                });
+
+                // Create Worksheet
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                
+                // Set column widths
+                ws['!cols'] = [
+                    { wch: 30 }, // Task Name
+                    { wch: 20 }, // Assignee
+                    { wch: 15 }, // Start Date
+                    { wch: 15 }, // End Date
+                    { wch: 15 }, // Status
+                    { wch: 15 }  // Duration
+                ];
+
+                // Create Workbook
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Project Tasks");
+
+                // Generate filename
+                const safeName = (state.projectName || "Project_Tracker").replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                const fileName = `${safeName}_tasks.xlsx`;
+
+                // Download
+                XLSX.writeFile(wb, fileName);
+                showMessage("Excel file downloaded successfully!", false);
+
+            } catch (error) {
+                console.error("Export error:", error);
+                showMessage("Failed to export to Excel. Please try again.", true);
+            }
+        }
+
+        // Local Storage persistence
+        function saveState() {
+            // Update inputs state before saving
+            state.projectName = document.getElementById('projectName').value;
+            state.participants = document.getElementById('participants').value;
+            
+            // Don't save viewStartDate, let it reset to current month on reload
+            const stateToSave = {
+                projectName: state.projectName,
+                participants: state.participants,
+                tasks: state.tasks
+            };
+            localStorage.setItem('projectTrackerState', JSON.stringify(stateToSave));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('projectTrackerState');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    state.projectName = parsed.projectName || "";
+                    state.participants = parsed.participants || "";
+                    state.tasks = parsed.tasks || [];
+                } catch(e) {
+                    console.error("Failed to load state", e);
+                }
+            }
+        }
+
+        // Custom alert/message function instead of alert()
+        function showMessage(msg, isError) {
+            // Create toast container if it doesn't exist
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.className = 'fixed bottom-4 right-4 z-50 flex flex-col gap-2';
+                document.body.appendChild(container);
+            }
+
+            const toast = document.createElement('div');
+            toast.className = `px-4 py-3 rounded shadow-lg text-sm text-white transform transition-all duration-300 translate-y-full opacity-0 ${isError ? 'bg-red-500' : 'bg-green-500'}`;
+            toast.innerText = msg;
+
+            container.appendChild(toast);
+
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-y-full', 'opacity-0');
+            }, 10);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-y-full', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+    </script>
+</body>
+</html>

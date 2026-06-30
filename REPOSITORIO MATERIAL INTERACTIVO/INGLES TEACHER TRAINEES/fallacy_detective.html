@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Fallacy Detective & Refutation Lab</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+    <!-- Header / Navigation -->
+    <header class="bg-slate-900 text-white shadow-lg border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-indigo-600 rounded-lg text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 .364l-.707 .707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold tracking-tight">FALLACY DETECTIVE</h1>
+                    <p class="text-xs text-indigo-400 font-medium">Academic Writing & Refutation Lab</p>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu Toggle Button -->
+            <button id="mobileMenuBtn" class="md:hidden p-2 text-slate-400 hover:text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+
+            <!-- Navigation Links -->
+            <nav id="navMenu" class="hidden md:flex space-x-1 lg:space-x-2 text-sm font-medium">
+                <button onclick="switchTab('library')" id="tab-library" class="px-3 py-2 rounded-md transition duration-200 text-indigo-400 bg-slate-800 font-semibold">Fallacy Library</button>
+                <button onclick="switchTab('quiz')" id="tab-quiz" class="px-3 py-2 rounded-md transition duration-200 text-slate-300 hover:bg-slate-800 hover:text-white">Identification Quest</button>
+                <button onclick="switchTab('rewriter')" id="tab-rewriter" class="px-3 py-2 rounded-md transition duration-200 text-slate-300 hover:bg-slate-800 hover:text-white">Hedging Sandbox</button>
+                <button onclick="switchTab('builder')" id="tab-builder" class="px-3 py-2 rounded-md transition duration-200 text-slate-300 hover:bg-slate-800 hover:text-white">Refutation Workshop</button>
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="px-3 py-2 rounded-md transition duration-200 text-slate-300 hover:bg-slate-800 hover:text-white">My Analytics</button>
+            </nav>
+        </div>
+
+        <!-- Mobile Drawer Navigation -->
+        <div id="mobileDrawer" class="hidden md:hidden bg-slate-900 border-t border-slate-800 px-4 py-3 space-y-2">
+            <button onclick="switchTab('library'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-md text-white font-medium hover:bg-slate-800">Fallacy Library</button>
+            <button onclick="switchTab('quiz'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-md text-white font-medium hover:bg-slate-800">Identification Quest</button>
+            <button onclick="switchTab('rewriter'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-md text-white font-medium hover:bg-slate-800">Hedging Sandbox</button>
+            <button onclick="switchTab('builder'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-md text-white font-medium hover:bg-slate-800">Refutation Workshop</button>
+            <button onclick="switchTab('dashboard'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-md text-white font-medium hover:bg-slate-800">My Analytics</button>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ================= FALLACY LIBRARY TAB ================= -->
+        <section id="pane-library" class="tab-pane space-y-6">
+            <div class="bg-gradient-to-r from-slate-900 to-indigo-950 rounded-2xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute right-0 top-0 opacity-10 translate-x-1/4 -translate-y-1/4">
+                    <svg class="w-96 h-96" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                </div>
+                <div class="relative z-10 max-w-3xl">
+                    <span class="bg-indigo-500/20 text-indigo-300 text-xs uppercase tracking-widest font-extrabold px-3 py-1 rounded-full border border-indigo-500/30">Theoretical Framework</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-3 tracking-tight">Logical Fallacies in Academic Discourse</h2>
+                    <p class="text-slate-300 mt-2 text-sm sm:text-base leading-relaxed">
+                        In English as a Lingua Franca (ELF) contexts, robust argumentative and analytical competence is vital. Mastering fallacy detection empowers future teachers and scholars to critically evaluate claims, dismantle bias, and craft valid, cautiously balanced counterarguments.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Fallacy Selector Grid & Card Details -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left: Interactive List -->
+                <div class="lg:col-span-4 space-y-3">
+                    <h3 class="text-xs uppercase tracking-wider text-slate-500 font-bold px-1">Select a Fallacy to Investigate</h3>
+                    <div id="fallacyButtonsList" class="space-y-2">
+                        <!-- Dynamic generated buttons will go here -->
+                    </div>
+                </div>
+
+                <!-- Right: Detailed Presentation Screen -->
+                <div class="lg:col-span-8">
+                    <div id="fallacyDetailsCard" class="bg-white rounded-2xl shadow-md border border-slate-200/80 p-6 sm:p-8 space-y-6 transition-all duration-300">
+                        <!-- Dynamic details injected here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= IDENTIFICATION QUEST TAB ================= -->
+        <section id="pane-quiz" class="tab-pane hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Fallacy Identification Quest</h2>
+                    <p class="text-sm text-slate-500">Deconstruct flawed reasoning inside mock academic excerpts.</p>
+                </div>
+                <!-- Progress indicator -->
+                <div class="flex items-center space-x-3 bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-200">
+                    <div class="text-right">
+                        <p class="text-xs text-slate-400 font-medium">Quest Progress</p>
+                        <p id="quizProgressText" class="text-sm font-bold text-slate-800">1 of 9 Challenges</p>
+                    </div>
+                    <div class="w-24 bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                        <div id="quizProgressBar" class="bg-indigo-600 h-full transition-all duration-500" style="width: 11%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Main Panel -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Question & Text Panel -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Academic Quote Card -->
+                    <div class="bg-slate-900 text-slate-100 rounded-2xl shadow-xl p-6 sm:p-8 border border-slate-800 relative">
+                        <div class="absolute top-4 right-4 bg-slate-800 text-slate-400 text-xs font-mono px-2.5 py-1 rounded-md border border-slate-700">
+                            Simulated Extract
+                        </div>
+                        <h4 class="text-xs uppercase tracking-widest text-indigo-400 font-bold mb-3">Academic Passage to Analyze:</h4>
+                        <!-- Main Quote text -->
+                        <blockquote id="quizQuoteText" class="text-base sm:text-lg italic font-medium leading-relaxed text-slate-200 border-l-4 border-indigo-500 pl-4 py-1">
+                            "Unemployment causes an immediate rise in local crime rates."
+                        </blockquote>
+                        <div id="quizQuoteSource" class="mt-4 text-xs font-semibold text-slate-400 text-right">
+                            — Source: Speculative Economics Journal (2025)
+                        </div>
+                    </div>
+
+                    <!-- Interactive MCQ Interface -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+                        <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Diagnostic Challenge</h3>
+                        <p id="quizQuestionPrompt" class="text-base font-bold text-slate-800">Which logical fallacy does this passage exhibit?</p>
+                        
+                        <div id="quizOptionsContainer" class="space-y-3 pt-2">
+                            <!-- Injected choices -->
+                        </div>
+
+                        <!-- Feedback Box -->
+                        <div id="quizFeedbackBox" class="hidden rounded-xl p-5 border transition-all duration-300">
+                            <!-- Injected Feedback Content -->
+                        </div>
+
+                        <!-- Actions Row -->
+                        <div class="flex justify-between items-center pt-2">
+                            <button id="quizHintBtn" onclick="toggleQuizHint()" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center space-x-1 px-3 py-2 rounded-lg hover:bg-indigo-50 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span>Reveal Rhetorical Hint</span>
+                            </button>
+                            <button id="quizNextBtn" onclick="submitOrNextQuestion()" class="px-5 py-2.5 bg-indigo-600 text-white font-bold rounded-xl shadow-md hover:bg-indigo-700 hover:shadow-lg active:scale-95 transition flex items-center space-x-2">
+                                <span id="quizNextBtnText">Verify Assessment</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Side Info: Reference Card -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 shadow-sm">
+                        <h4 class="text-indigo-900 font-bold text-sm mb-2 flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                            <span>Writing Teacher Guideline</span>
+                        </h4>
+                        <p class="text-xs text-indigo-800 leading-relaxed">
+                            When critiquing argumentative structures, pay close attention to structural indicators. Absolute statements must be balanced with <strong>Hedging Words</strong>. Redundant claims require rigorous identification of structural circularity.
+                        </p>
+                    </div>
+
+                    <!-- Realtime Interactive Scorecard -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+                        <h4 class="text-slate-800 font-bold text-sm">Real-time Diagnostics</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-3.5 bg-slate-50 border border-slate-100 rounded-xl text-center">
+                                <p class="text-xs text-slate-400 font-medium">Quest Accuracy</p>
+                                <p id="realtimeAccuracy" class="text-2xl font-black text-indigo-600 mt-1">100%</p>
+                            </div>
+                            <div class="p-3.5 bg-slate-50 border border-slate-100 rounded-xl text-center">
+                                <p class="text-xs text-slate-400 font-medium">Academic Rating</p>
+                                <p id="realtimeRating" class="text-sm font-black text-emerald-600 mt-2.5">Novice Detective</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= HEDGING SANDBOX TAB ================= -->
+        <section id="pane-rewriter" class="tab-pane hidden space-y-6">
+            <div class="bg-gradient-to-r from-teal-800 to-indigo-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl relative">
+                <div class="max-w-3xl">
+                    <span class="bg-teal-500/20 text-teal-300 text-xs uppercase tracking-widest font-extrabold px-3 py-1 rounded-full border border-teal-500/30">Module 3: Pragmatics Workshop</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-3 tracking-tight">The Hedging & Cautious Language Sandbox</h2>
+                    <p class="text-teal-100 mt-2 text-sm sm:text-base leading-relaxed">
+                        To counter absolute fallacies, academic prose leverages tentative formulations. In this interactive editor, analyze absolute claims and transform them into cautious, acceptable academic prose.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Sandbox Working Deck -->
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Rewriting Target</h3>
+                            <button onclick="loadNewSandboxPrompt()" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center space-x-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 4.75L18 8"></path></svg>
+                                <span>Try another statement</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Bad Absolute Sentence Block -->
+                        <div class="p-4 bg-rose-50 border-l-4 border-rose-500 rounded-r-xl">
+                            <p class="text-xs font-bold text-rose-800 uppercase tracking-widest">Unacceptable Absolute Statement (Fallacious):</p>
+                            <p id="sandboxPromptText" class="text-slate-800 italic mt-1 font-semibold text-sm sm:text-base">
+                                "Traditional face-to-face lectures are completely obsolete."
+                            </p>
+                        </div>
+
+                        <!-- User Interactive Textarea -->
+                        <div class="space-y-2">
+                            <label for="sandboxInput" class="block text-sm font-bold text-slate-700">Refine & Write with Cautious Language:</label>
+                            <textarea id="sandboxInput" rows="4" oninput="analyzeSandboxInput()" class="w-full rounded-xl border border-slate-300 shadow-sm p-4 text-slate-800 font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 code-font text-sm" placeholder="Provide your academic rewrite here... Hint: Use the lexical suggestions on the right to trigger matching checks."></textarea>
+                        </div>
+
+                        <!-- Real-time Analysis Metrics -->
+                        <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 space-y-3">
+                            <h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Dynamic Linguistic Evaluation</h4>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                <!-- Modal Check -->
+                                <div id="check-modal" class="flex items-center space-x-2 text-slate-400 bg-white p-2 rounded-lg border border-slate-200 text-xs font-medium">
+                                    <span class="indicator-icon text-sm">❌</span>
+                                    <span>Modal Verb</span>
+                                </div>
+                                <!-- Frequency Check -->
+                                <div id="check-freq" class="flex items-center space-x-2 text-slate-400 bg-white p-2 rounded-lg border border-slate-200 text-xs font-medium">
+                                    <span class="indicator-icon text-sm">❌</span>
+                                    <span>Indefinite Adverb</span>
+                                </div>
+                                <!-- Verb Cautious -->
+                                <div id="check-verb" class="flex items-center space-x-2 text-slate-400 bg-white p-2 rounded-lg border border-slate-200 text-xs font-medium">
+                                    <span class="indicator-icon text-sm">❌</span>
+                                    <span>Tentative Verb</span>
+                                </div>
+                                <!-- Length Check -->
+                                <div id="check-length" class="flex items-center space-x-2 text-slate-400 bg-white p-2 rounded-lg border border-slate-200 text-xs font-medium">
+                                    <span class="indicator-icon text-sm">❌</span>
+                                    <span>Proper Length</span>
+                                </div>
+                            </div>
+
+                            <!-- Live Feedback Notice -->
+                            <div id="sandboxFeedbackNotice" class="text-xs text-slate-500 leading-relaxed bg-indigo-50 p-3 rounded-lg border border-indigo-100/50 mt-2">
+                                Type your cautious formulation using academic hedging keywords (e.g. <i>may, might, tends to, typically, suggests, implies</i>) to validate structural compliance.
+                            </div>
+                        </div>
+
+                        <!-- Action Submit -->
+                        <div class="flex justify-end pt-2">
+                            <button id="submitSandboxBtn" onclick="evaluateSandboxSubmission()" class="px-5 py-2.5 bg-teal-600 text-white font-bold rounded-xl shadow-md hover:bg-teal-700 hover:shadow-lg active:scale-95 transition flex items-center space-x-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span>Commit Rewrite to Scorecard</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reference & Lexicon Deck -->
+                <div class="lg:col-span-4 space-y-4">
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+                        <h4 class="text-slate-800 font-bold text-sm border-b border-slate-100 pb-2">Academic Hedging Toolkit</h4>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <h5 class="text-xs font-bold text-indigo-600 uppercase">Modal Auxiliaries (Tentative)</h5>
+                                <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">may</span>
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">might</span>
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">could</span>
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">can</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h5 class="text-xs font-bold text-indigo-600 uppercase">Indefinite Frequency/Degree</h5>
+                                <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">typically</span>
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">frequently</span>
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">periodically</span>
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">often</span>
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">generally</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h5 class="text-xs font-bold text-indigo-600 uppercase">Tentative Verbs / Anchors</h5>
+                                <div class="flex flex-wrap gap-1.5 mt-1.5">
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">tend to</span>
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">suggests</span>
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">implies</span>
+                                    <span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono">appears to</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sandbox Target Key -->
+                    <div class="bg-indigo-900 text-slate-100 rounded-2xl p-5 shadow-sm space-y-2">
+                        <h4 class="font-extrabold text-sm text-indigo-300">Pedagogical Rationale</h4>
+                        <p class="text-xs leading-relaxed text-slate-300">
+                            Academic argumentation is rarely absolute. Overgeneralizations invite rapid falsification. By hedging your propositions, you render your arguments structurally sound and immune to easy critiques.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= REFUTATION WORKSHOP TAB ================= -->
+        <section id="pane-builder" class="tab-pane hidden space-y-6">
+            <div class="bg-gradient-to-r from-violet-800 to-indigo-950 rounded-2xl p-6 sm:p-8 text-white shadow-xl relative">
+                <div class="max-w-3xl">
+                    <span class="bg-violet-500/20 text-violet-300 text-xs uppercase tracking-widest font-extrabold px-3 py-1 rounded-full border border-violet-500/30">Refutation Workshop</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-3 tracking-tight">Structured Counterargument Workshop</h2>
+                    <p class="text-violet-100 mt-2 text-sm sm:text-base leading-relaxed">
+                        Practice synthesizing conflicting claims into unified, structurally sound, and formally objective academic paragraphs. Complete the drag-and-drop structural blocks.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Workshop Workspace Panel -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Main Builder Area -->
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+                        <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Dynamic Synthesis Assignment</h3>
+                        
+                        <!-- Briefing Materials -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                                <span class="bg-red-100 text-red-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded">Source A (Claim with Fallacy)</span>
+                                <p class="text-xs font-semibold text-slate-600">Lombardi (2024):</p>
+                                <p class="text-xs italic text-slate-500">"Online educational environments satisfy all student needs effortlessly, rendering face-to-face modules obsolete."</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded">Source B (Empirical Baseline)</span>
+                                <p class="text-xs font-semibold text-slate-600">Silva (2025):</p>
+                                <p class="text-xs italic text-slate-500">"An assessment of 200 adult trainees outlines a massive statistical preference for hybrid models over purely remote setups."</p>
+                            </div>
+                        </div>
+
+                        <!-- Main Block Construction Deck -->
+                        <div class="space-y-4 pt-4 border-t border-slate-100">
+                            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Assemble the Paragraph Structure:</h4>
+                            
+                            <!-- Block 1 Selection -->
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold text-slate-500 uppercase">Part 1: The Fallacious Position Representation</label>
+                                <select id="buildPart1" onchange="updateWorkshopOutput()" class="w-full text-xs font-medium rounded-xl border border-slate-300 p-3 bg-white focus:ring-2 focus:ring-violet-500">
+                                    <option value="">-- Choose opening statement with critical reporting verb --</option>
+                                    <option value="Lombardi (2024) asserts that online modules resolve educational gaps effortlessly, implying that traditional configurations are obsolete.">Lombardi (2024) asserts that online modules resolve educational gaps effortlessly, implying that traditional configurations are obsolete.</option>
+                                    <option value="Lombardi (2024) says that computers are great, so traditional schools are stupid.">Lombardi (2024) says that computers are great, so traditional schools are stupid. (Too informal)</option>
+                                    <option value="We believe online education is totally perfect, which is Lombardi's (2024) point.">We believe online education is totally perfect, which is Lombardi's (2024) point. (Subjective / Active)</option>
+                                </select>
+                            </div>
+
+                            <!-- Block 2 Selection -->
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold text-slate-500 uppercase">Part 2: Conjunction of Opposition & Refutation Anchor</label>
+                                <select id="buildPart2" onchange="updateWorkshopOutput()" class="w-full text-xs font-medium rounded-xl border border-slate-300 p-3 bg-white focus:ring-2 focus:ring-violet-500">
+                                    <option value="">-- Choose transitional opposition structure --</option>
+                                    <option value="However, this absolute claim is disputed by subsequent research, which contests the validity of such generalizations.">However, this absolute claim is disputed by subsequent research, which contests the validity of such generalizations.</option>
+                                    <option value="But this is a big lie, and we are going to disprove it right now.">But this is a big lie, and we are going to disprove it right now. (Aggressive / Unacademic)</option>
+                                    <option value="In addition to this, the claims are somewhat fine, but maybe they aren't correct.">In addition to this, the claims are somewhat fine, but maybe they aren't correct. (Weak transition)</option>
+                                </select>
+                            </div>
+
+                            <!-- Block 3 Selection -->
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold text-slate-500 uppercase">Part 3: The Empirical Counterargument with Cautious Language</label>
+                                <select id="buildPart3" onchange="updateWorkshopOutput()" class="w-full text-xs font-medium rounded-xl border border-slate-300 p-3 bg-white focus:ring-2 focus:ring-violet-500">
+                                    <option value="">-- Choose empirical presentation with cautious language --</option>
+                                    <option value="Indeed, Silva's (2025) study of 200 adult trainees reveals that hybrid configurations are frequently preferred.">Indeed, Silva's (2025) study of 200 adult trainees reveals that hybrid configurations are frequently preferred.</option>
+                                    <option value="Silva (2025) clearly proves that hybrid is the only way and online teaching always fails.">Silva (2025) clearly proves that hybrid is the only way and online teaching always fails. (Violates Hedging / Overgeneralized)</option>
+                                    <option value="Some study by Silva (2025) might show people like hybrid classes, but who knows really.">Some study by Silva (2025) might show people like hybrid classes, but who knows really. (Informal/Skeptical)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Real-time Merged Output Preview -->
+                        <div class="bg-slate-900 text-slate-100 rounded-xl p-5 border border-slate-800 space-y-2">
+                            <h4 class="text-xs uppercase font-extrabold text-violet-400 tracking-wider">Dynamic Synthesis Paragraph Preview:</h4>
+                            <p id="workshopTextPreview" class="text-sm italic leading-relaxed text-slate-300">
+                                Select block elements above to construct a cohesive academic refutation.
+                            </p>
+                        </div>
+
+                        <!-- Action Submit -->
+                        <div class="flex justify-end">
+                            <button id="commitWorkshopBtn" onclick="evaluateWorkshopSubmission()" class="px-5 py-2.5 bg-violet-600 text-white font-bold rounded-xl shadow-md hover:bg-violet-700 hover:shadow-lg active:scale-95 transition flex items-center space-x-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span>Commit Paragraph Assembly</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guidance & Criterion Deck -->
+                <div class="lg:col-span-4 space-y-4">
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
+                        <h4 class="text-slate-800 font-bold text-sm">Workshop Rubrics</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            To secure a successful synthesis score, select blocks that exhibit:
+                        </p>
+                        <ul class="space-y-2.5 text-xs text-slate-600 font-medium">
+                            <li class="flex items-start space-x-2">
+                                <span class="text-indigo-600 font-bold">✔</span>
+                                <span><strong>Rhetorical Coherence:</strong> Orderly transition from thesis to counter-evidence.</span>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <span class="text-indigo-600 font-bold">✔</span>
+                                <span><strong>Objective Register:</strong> Impersonal syntax avoiding active pronoun structures like <i>"I"</i> or <i>"we"</i>.</span>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <span class="text-indigo-600 font-bold">✔</span>
+                                <span><strong>Hedging Validation:</strong> The synthesis avoids absolute statements of fact in favor of tentative configurations.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PERFORMANCE DASHBOARD TAB ================= -->
+        <section id="pane-dashboard" class="tab-pane hidden space-y-6">
+            <div class="bg-gradient-to-r from-indigo-900 to-indigo-950 text-white rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+                <div class="relative z-10 max-w-xl">
+                    <span class="bg-indigo-500/20 text-indigo-300 text-xs uppercase tracking-widest font-extrabold px-3 py-1 rounded-full border border-indigo-500/30">Linguistic Competency Profile</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-3 tracking-tight">Analytics & Professional Certificate</h2>
+                    <p class="text-slate-300 mt-2 text-sm sm:text-base leading-relaxed">
+                        Review your overall logical fallacy detection accuracy, sandbox revision status, and refutation synthesis grades. Complete all modules to access your professional development completion certificate!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <!-- Accuracy Card -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm text-center space-y-2">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Quest Accuracy</p>
+                    <p id="statsAccuracyVal" class="text-4xl font-black text-indigo-600">0%</p>
+                    <p id="statsAccuracySub" class="text-xs text-slate-500">Quest Mode not started</p>
+                </div>
+
+                <!-- Sandbox Revisions -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm text-center space-y-2">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Hedging Submissions</p>
+                    <p id="statsSandboxVal" class="text-4xl font-black text-teal-600">0 / 3</p>
+                    <p id="statsSandboxSub" class="text-xs text-slate-500">Phrases correctly hedged</p>
+                </div>
+
+                <!-- Workshop Status -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm text-center space-y-2">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Workshop Assembly</p>
+                    <p id="statsWorkshopVal" class="text-4xl font-black text-violet-600">Locked</p>
+                    <p id="statsWorkshopSub" class="text-xs text-slate-500">Synthesize blocks to unlock</p>
+                </div>
+            </div>
+
+            <!-- Fallacy Mastery breakdown -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                <h3 class="text-base font-bold text-slate-800">Mastery Checklist: Identification Competence</h3>
+                <p class="text-xs text-slate-500">Identify fallacies inside the Identification Quest to check off these items.</p>
+                
+                <div id="masteryList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-2">
+                    <!-- Checkbox items dynamically populated -->
+                </div>
+            </div>
+
+            <!-- Certificate Panel -->
+            <div id="certificateContainer" class="hidden bg-white border-2 border-dashed border-indigo-300 rounded-2xl p-6 sm:p-10 shadow-lg text-center space-y-6 max-w-3xl mx-auto">
+                <div class="flex justify-center">
+                    <span class="text-5xl">🎓</span>
+                </div>
+                <div class="space-y-2">
+                    <h3 class="text-indigo-900 font-extrabold tracking-tight text-xl sm:text-2xl uppercase">Certificate of Professional Competency</h3>
+                    <p class="text-xs text-indigo-500 font-mono tracking-widest">FALLACY DETECTIVE & RHETORICAL ARGUMENTATION</p>
+                    <div class="w-16 h-1 bg-indigo-500 mx-auto my-4"></div>
+                    <p class="text-sm max-w-lg mx-auto text-slate-600 leading-relaxed">
+                        This document verifies that the user has completed all academic components of the <strong>Fallacy Detection & Synthesized Refutation</strong> app module under the guidelines of EAP/ELF Teacher Training.
+                    </p>
+                </div>
+                
+                <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400 font-medium gap-4">
+                    <div>Module: Academic Fallacy Detective App</div>
+                    <div>Validation Date: 2026-06-09</div>
+                    <div class="italic text-indigo-600 font-semibold">Verification Key: FALD-2026-SEC9</div>
+                </div>
+
+                <div>
+                    <button onclick="window.print()" class="px-5 py-2.5 bg-slate-900 text-white font-bold rounded-xl text-xs hover:bg-slate-800 transition">Print Academic Certificate</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- App Footer -->
+    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-6 text-xs text-center">
+        <p>© 2026 - Academic Fallacy Detective App. Argentina Higher Teacher Education Framework.</p>
+        <p class="mt-1">Informed by: Bailey, S. (2015). <i>Academic Writing: A Handbook for International Students</i>.</p>
+    </footer>
+
+    <!-- Custom Dialog/Modal Box -->
+    <div id="appModal" class="fixed inset-0 bg-slate-950/60 flex items-center justify-center p-4 z-50 hidden transition-opacity duration-300 opacity-0">
+        <div id="appModalContent" class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform scale-90 transition-transform duration-300 space-y-4">
+            <div class="flex items-center space-x-3 text-indigo-600">
+                <span id="modalIcon" class="text-3xl">💡</span>
+                <h3 id="modalTitle" class="text-lg font-extrabold text-slate-900 tracking-tight">Notification</h3>
+            </div>
+            <p id="modalBody" class="text-sm text-slate-600 leading-relaxed">
+                Message Content goes here.
+            </p>
+            <div class="flex justify-end pt-2">
+                <button onclick="closeAppModal()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg transition">Dismiss</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        // ================= APPLICATION STATE =================
+        const fallacies = [
+            {
+                id: "overgeneralization",
+                name: "Overgeneralization",
+                definition: "An absolute statement made without sufficient empirical or representative evidence, typically neglecting variations in data.",
+                structuralFlaw: "Incorrect use of absolute terms (e.g., 'all', 'always', 'never') instead of cautious linguistic phrasing (hedging).",
+                lexicalCorrection: "Hedging modifiers: may, tend to, might, generally, typically, rather than absolute assertions.",
+                badExample: "Non-native teachers of English always fail to teach pronunciation accurately because they lack a native accent.",
+                goodExample: "Evidence implies that some non-native instructors may face challenges regarding pronunciation instruction, although many tend to achieve high professional competence."
+            },
+            {
+                id: "false_cause",
+                name: "False Cause (Post Hoc)",
+                definition: "The flawed assumption that because one event followed another, the initial event caused the subsequent occurrence directly.",
+                structuralFlaw: "Illogical causal linking syntax based on immediate temporal sequences rather than verified correlations.",
+                lexicalCorrection: "Precise causal verbs and tentative connections: 'may be linked to', 'is potentially associated with', rather than 'causes' or 'results in'.",
+                badExample: "The government implemented a technology tax in November. Immediately afterward, two software firms went bankrupt. Thus, the tax caused corporate insolvency.",
+                goodExample: "The introduction of the technology tax preceded the closure of two software companies; however, further research is required to ascertain if these occurrences are causally linked."
+            },
+            {
+                id: "ad_hominem",
+                name: "Ad Hominem",
+                definition: "An ideological or personal attack directed at the opponent's identity rather than refuting the substance of their logical arguments.",
+                structuralFlaw: "Shift from objective subject matter and scientific data to subjective, emotional, and personal bias.",
+                lexicalCorrection: "Use of neutral, objective reporting verbs and focus on evidence: 'Lombardi's data reveals...', rather than personal character analysis.",
+                badExample: "We cannot accept Dr. Smith's educational models because he is an old-fashioned academic who is out of touch with real students.",
+                goodExample: "While Dr. Smith advocates for traditional pedagogical models, recent research suggests these approaches may lack efficacy in hybrid writing environments."
+            },
+            {
+                id: "straw_man",
+                name: "The Straw Man",
+                definition: "The deliberate distortion, exaggeration, or misrepresentation of an opponent's original thesis to make it easier to refute.",
+                structuralFlaw: "Incorrect reconstruction of premises, shifting the scope of the counterargument to a caricature of the actual position.",
+                lexicalCorrection: "Use of precise critical reporting verbs to outline true stances: 'misrepresent', 'oversimplify', 'distort', to clarify assertions.",
+                badExample: "Proponents of ELF pedagogy argue that grammar should be completely ignored. Consequently, their models will lead to linguistic chaos.",
+                goodExample: "While ELF researchers propose prioritizing communicative efficacy over native-speaker norms, they do not advocate for the abandonment of grammatical instruction."
+            },
+            {
+                id: "slippery_slope",
+                name: "Slippery Slope",
+                definition: "An alarmist argument concluding, without empirical validation, that an initial minor action will inevitably lead to a chain of catastrophic consequences.",
+                structuralFlaw: "Abuse of predictive conditional clauses to project a direct, extreme chain of cause-and-effects without backing evidence.",
+                lexicalCorrection: "Replacing deterministic conditional links with cautious, speculative predictions: 'could potentially lead to', 'may cause some initial adjustments'.",
+                badExample: "If generative AI is allowed into writing classes, students will stop thinking entirely. Soon, academic institutions will completely collapse.",
+                goodExample: "The integration of generative AI within writing contexts may initially disrupt traditional assessment strategies, requiring updated evaluative rubrics."
+            },
+            {
+                id: "false_authority",
+                name: "Appeal to False Authority",
+                definition: "Basing the validity of a claim on the assertions of a prominent source who lacks qualifications in the specific academic domain.",
+                structuralFlaw: "Attributing expert credibility to subjective opinions of public figures, actors, or professionals from unrelated sectors.",
+                lexicalCorrection: "Utilizing evaluative relative clauses to clarify academic background: 'who has researched...', 'an expert in the domain of...'.",
+                badExample: "A famous software engineer asserted that traditional syntax models are entirely useless for pedagogical application.",
+                goodExample: "The expert, whose background is centered strictly on software systems, offers perspectives that do not align with empirical developments in cognitive linguistics."
+            },
+            {
+                id: "false_dilemma",
+                name: "False Dilemma",
+                definition: "Oversimplification of a complex academic issue into only two mutually exclusive choices, ignoring intermediate alternatives.",
+                structuralFlaw: "Using restrictive correlative conjunctions (either... or) to constrain a diverse problem to a simple binary split.",
+                lexicalCorrection: "Using structures of compromise and integration: 'alternative frameworks include', 'varying degrees of options', 'spectrum of approaches'.",
+                badExample: "Schools must either ban online evaluation tools completely or accept that academic integrity is completely dead.",
+                goodExample: "Rather than either prohibiting digital assessment or abandoning standards, institutions may explore hybrid proctoring methodologies."
+            },
+            {
+                id: "appeal_popularity",
+                name: "Appeal to Popularity",
+                definition: "Validating a claim solely because a significant majority of individuals believe or practice it, bypassing objective evidence.",
+                structuralFlaw: "Substituting empirical data with general quantifiers or social popularity metrics (e.g., 'most scholars', 'everyone believes').",
+                lexicalCorrection: "Differentiating between popular consensus and validated findings: 'Although widely recognized...', 'Despite a popular perception...'.",
+                badExample: "Most teachers prefer standard native accents, which proves native-speakerism is the best curricular model.",
+                goodExample: "Although a significant portion of surveyed instructors display subjective preferences for native-like models, this preference is not synonymous with pedagogical efficacy."
+            },
+            {
+                id: "circular_argument",
+                name: "Circular Argument",
+                definition: "A logical flaw where the thesis relies on its own conclusion as its original premise, recycling assumptions instead of proving them.",
+                structuralFlaw: "Syntactic redundancy that uses synonymic restructuring to repeat the premise as if it were a new claim.",
+                lexicalCorrection: "Providing verifiable criteria and distinguishing the premise from secondary outcomes through objective markers.",
+                badExample: "Traditional grammar drills are highly effective because conventional translation tasks always yield superior learning results.",
+                goodExample: "The assertion that traditional grammar translation is effective requires empirical support, such as comparative assessments of classroom performance."
+            }
+        ];
+
+        const quizQuestions = [
+            {
+                id: 1,
+                fallacy: "false_cause",
+                passage: "Academic data shows that the university introduced a new registration portal in March. Immediately afterward, student drop-out rates rose by 15%. Consequently, the new system is the sole cause of student attrition.",
+                question: "Which logical fallacy is committed here, and what is its primary structural flaw?",
+                hint: "Look at the timing. Does an event happening before another prove direct causation in academic prose?",
+                options: [
+                    {
+                        text: "False Cause (Post Hoc); because it presumes a temporal sequence denotes direct causality.",
+                        isCorrect: true,
+                        feedback: "Excellent! The argument assumes temporal sequence indicates causation without testing external variables (such as mid-term exams or financial changes)."
+                    },
+                    {
+                        text: "Straw Man; because the author is exaggerating the software engineer's stance.",
+                        isCorrect: false,
+                        feedback: "Incorrect. There is no representation of an opponent's argument here; rather, there is a flawed temporal causation link."
+                    },
+                    {
+                        text: "Overgeneralization; due to an insufficient sample of schools surveyed.",
+                        isCorrect: false,
+                        feedback: "Incorrect. While it lacks broad evidence, the core structural mistake is the chronological assertion that 'x happened before y, so x caused y'."
+                    }
+                ]
+            },
+            {
+                id: 2,
+                fallacy: "overgeneralization",
+                passage: "A survey of three international students reveals they find reading English textbooks extremely difficult. This demonstrates that all international students are academically unprepared for English-medium instruction.",
+                question: "What structural flaw does this text exhibit, and how can it be linguistically corrected?",
+                hint: "Analyze the sample size. Is 'three students' sufficient to validate a claim about 'all' students?",
+                options: [
+                    {
+                        text: "Ad Hominem; solved by removing subjective personal attacks.",
+                        isCorrect: false,
+                        feedback: "Incorrect. The text does not attack anyone's character; it draws a broad conclusion from tiny data."
+                    },
+                    {
+                        text: "Overgeneralization; solved by using cautious language (hedging) and representing the limited sample accurately.",
+                        isCorrect: true,
+                        feedback: "Correct! To fix this overgeneralization, the author must use terms like 'some', 'may find', or 'indicates a tentative challenge among the specific cohort'."
+                    },
+                    {
+                        text: "Circular Argument; solved by removing redundant synonyms in the conclusion.",
+                        isCorrect: false,
+                        feedback: "Incorrect. The premise does not merely repeat the conclusion; it inappropriately scales a small observation."
+                    }
+                ]
+            },
+            {
+                id: 3,
+                fallacy: "straw_man",
+                passage: "Critics of standard testing systems assert that scores are completely meaningless and we should give every student an A. This irresponsible view will lead to a complete lack of motivation and destroy the educational system.",
+                question: "Which fallacy is demonstrated by this unfair misrepresentation of student assessments?",
+                hint: "Critics usually argue that standardized tests are narrow measures, not that standard grades should be ignored completely.",
+                options: [
+                    {
+                        text: "Appeal to False Authority; because critics are not valid educational experts.",
+                        isCorrect: false,
+                        feedback: "Incorrect. The focus is on the distortion of the critics' actual claims."
+                    },
+                    {
+                        text: "The Straw Man; because it misrepresents the critics' real thesis (that standardized tests are narrow measures) as an extreme, easily refutable claim.",
+                        isCorrect: true,
+                        feedback: "Exactly! Misrepresenting an argument to make it look ridiculous and easily defeatable is the classic structural flaw of the Straw Man."
+                    },
+                    {
+                        text: "Slippery Slope; because the system will completely collapse.",
+                        isCorrect: false,
+                        feedback: "Incorrect. Although it ends with an alarmist projection, the foundational flaw is the deliberate distortion of the critics' viewpoint."
+                    }
+                ]
+            },
+            {
+                id: 4,
+                fallacy: "ad_hominem",
+                passage: "Dr. Alvarez's research paper regarding digital classrooms is flawed because she holds an administrative role in a private academy and is therefore biased toward profit.",
+                question: "Why does this passage qualify as an Ad Hominem fallacy in academic argumentation?",
+                hint: "Does Dr. Alvarez's workplace status negate the quantitative validity of her research data?",
+                options: [
+                    {
+                        text: "Because it relies on popularity metrics instead of hard data.",
+                        isCorrect: false,
+                        feedback: "Incorrect. No popularity metrics are mentioned in this text."
+                    },
+                    {
+                        text: "Because it attacks Dr. Alvarez's professional affiliation and personal incentives instead of refuting the specific findings of her research.",
+                        isCorrect: true,
+                        feedback: "Spot on! Academic review must focus on the methodology and data of a paper, not the professional biography or affiliations of the researcher."
+                    },
+                    {
+                        text: "Because it uses circular reasoning, assuming she is biased simply because she is biased.",
+                        isCorrect: false,
+                        feedback: "Incorrect. It points to a specific demographic attack rather than circular phrasing."
+                    }
+                ]
+            },
+            {
+                id: 5,
+                fallacy: "slippery_slope",
+                passage: "If the ministry allows schools to choose their own local curricula, state-regulated exams will fail. This will cause university standards to drop, and eventually, the country will lose its entire economic standing.",
+                question: "What logical and structural error defines this text?",
+                hint: "Notice the extreme chain of events. Is there any empirical link showing curriculum choices leading to absolute economic ruin?",
+                options: [
+                    {
+                        text: "Slippery Slope Fallacy; because it constructs an unsupported, catastrophic chain of events from a single policy change.",
+                        isCorrect: true,
+                        feedback: "Excellent! Slippery slope arguments rely on unproven causal links that escalate rapidly to an extreme, catastrophic outcome."
+                    },
+                    {
+                        text: "False Authority; because the ministry is not an expert in curriculum design.",
+                        isCorrect: false,
+                        feedback: "Incorrect. The ministry's expertise isn't the core issue; it's the illogical progression of negative events."
+                    },
+                    {
+                        text: "False Dilemma; because it offers only two choices for policy makers.",
+                        isCorrect: false,
+                        feedback: "Incorrect. Although it frames a dark path, it focuses on the step-by-step chain of doom rather than a strict binary choice."
+                    }
+                ]
+            },
+            {
+                id: 6,
+                fallacy: "false_authority",
+                passage: "The highly acclaimed Argentinian novelist declared in an interview that communicative language teaching is a total failure and students must return to rote grammar memorization immediately.",
+                question: "Why should this literary endorsement be viewed critically as an Appeal to False Authority?",
+                hint: "Is writing successful novels the same as being an expert in Applied Linguistics and L2 acquisition research?",
+                options: [
+                    {
+                        text: "Because a novelist is a public artist and does not hold an academic degree or empirical evidence in language acquisition pedagogy.",
+                        isCorrect: true,
+                        feedback: "Yes! While highly skilled in creative writing, a novelist lacks professional expertise and research credentials in applied linguistics and communicative teaching frameworks."
+                    },
+                    {
+                        text: "Because novels are written in Spanish and do not apply to English contexts.",
+                        isCorrect: false,
+                        feedback: "Incorrect. The language of their creative output is irrelevant compared to their lack of pedagogical/linguistic training."
+                    },
+                    {
+                        text: "Because their opinion is not popular enough to be considered valid.",
+                        isCorrect: false,
+                        feedback: "Incorrect. Popularity does not determine authority."
+                    }
+                ]
+            },
+            {
+                id: 7,
+                fallacy: "false_dilemma",
+                passage: "In order to resolve classroom disruption, teachers must either enforce strict punitive isolation rules or accept that their lessons will be completely chaotic.",
+                question: "Which structural element identifies this text as a False Dilemma?",
+                hint: "Look for correlative structures. Does it present other viable classroom management techniques?",
+                options: [
+                    {
+                        text: "The use of 'either... or' coordinates to eliminate intermediate solutions (such as positive reinforcement or collaborative tasks).",
+                        isCorrect: true,
+                        feedback: "Excellent! The author uses 'either... or' to force the reader into choosing between two extremes, neglecting a broad spectrum of classroom management strategies."
+                    },
+                    {
+                        text: "The personal attack on the teacher's capability.",
+                        isCorrect: false,
+                        feedback: "Incorrect. The statement does not attack the teacher's character directly."
+                    },
+                    {
+                        text: "The circular repetition of the word 'disruption'.",
+                        isCorrect: false,
+                        feedback: "Incorrect. The statement contains no circular definition."
+                    }
+                ]
+            },
+            {
+                id: 8,
+                fallacy: "appeal_popularity",
+                passage: "The majority of teachers in our province utilize grammar translation activities. Consequently, this methodology remains the absolute best framework for modern language teaching.",
+                question: "How does the author attempt to validate grammar translation in this excerpt?",
+                hint: "Does a popular vote or common practice automatically prove the scientific or cognitive validity of a teaching method?",
+                options: [
+                    {
+                        text: "By showing quantitative data demonstrating student test improvements.",
+                        isCorrect: false,
+                        feedback: "Incorrect. No student assessment data or quantitative metrics are supplied in the text."
+                    },
+                    {
+                        text: "By committing an Appeal to Popularity, assuming that because most teachers perform a task, it must be the objectively superior method.",
+                        isCorrect: true,
+                        feedback: "Correct! Academic frameworks must rely on empirical cognitive research and learning outcomes, not merely on the popularity of a traditional practice."
+                    },
+                    {
+                        text: "By attacking the character of alternative pedagogical experts.",
+                        isCorrect: false,
+                        feedback: "Incorrect. No personal attacks are present in this text."
+                    }
+                ]
+            },
+            {
+                id: 9,
+                fallacy: "circular_argument",
+                passage: "Active communicative tasks are incredibly useful language learning activities because interactive communication tasks always generate excellent communicative results.",
+                question: "Which of the following describes the logical fallacy of circularity in this text?",
+                hint: "Notice how the conclusion repeats the same vocabulary and ideas as the opening premise.",
+                options: [
+                    {
+                        text: "It attacks researchers who dislike communicative tasks.",
+                        isCorrect: false,
+                        feedback: "Incorrect. No researchers are attacked in this claim."
+                    },
+                    {
+                        text: "It commits a Circular Argument (Petitio Principii), because the premise 'communicative tasks are useful' is restated as the conclusion in slightly different words.",
+                        isCorrect: true,
+                        feedback: "Superb! Circular arguments are redundant and provide zero actual proof, instead relying on synonyms to repeat the starting claim."
+                    },
+                    {
+                        text: "It suggests a false cause of student communication problems.",
+                        isCorrect: false,
+                        feedback: "Incorrect. Causal sequences are not the primary issue here; structural redundancy is."
+                    }
+                ]
+            }
+        ];
+
+        const sandboxPrompts = [
+            {
+                id: 1,
+                absoluteText: "Traditional face-to-face lectures are completely obsolete.",
+                targetTerms: ["may", "might", "tend", "suggests", "typically"],
+                instructions: "Use at least one modal auxiliary (may, might, could) and a tentative verb (suggests, implies, tends) to make this acceptable.",
+                perfectRewrite: "Evidence suggests that traditional face-to-face lectures may be less effective, although hybrid setups tend to balance student preferences."
+            },
+            {
+                id: 2,
+                absoluteText: "Non-native teachers of English always fail to teach pronunciation.",
+                targetTerms: ["tend", "often", "can", "may", "imply", "some"],
+                instructions: "Use a hedging word ('some', 'may') and a tentative phrase ('tend to') to rewrite this without absolute bias.",
+                perfectRewrite: "Some research implies that some non-native instructors may face challenges with pronunciation, although they tend to master overall pedagogical strategies."
+            },
+            {
+                id: 3,
+                absoluteText: "Generative AI tools destroy academic integrity completely.",
+                targetTerms: ["might", "pose", "frequently", "can", "potentially"],
+                instructions: "Use terms like 'can potentially', 'pose challenges', or 'frequently' to turn this into a balanced prediction.",
+                perfectRewrite: "Generative AI tools can potentially pose challenges to academic integrity, although they frequently offer innovative learning assistance."
+            }
+        ];
+
+        // User Score State
+        let currentFallacyIndex = 0;
+        let currentQuizIndex = 0;
+        let selectedQuizOption = null;
+        let quizScore = 0;
+        let quizAnswersHistory = []; // Tracks true/false per question
+        let currentSandboxIndex = 0;
+        let sandboxSubmissionsCount = 0;
+        let isWorkshopCommitted = false;
+
+        // ================= APP INITIALIZATION =================
+        window.onload = function() {
+            renderFallacyList();
+            renderFallacyDetails(0);
+            renderQuizQuestion();
+            loadSandboxPrompt(0);
+            updateDashboard();
+        };
+
+        // ================= VIEW NAVIGATION =================
+        function switchTab(tabId) {
+            // Hide all panes
+            const panes = document.querySelectorAll('.tab-pane');
+            panes.forEach(pane => pane.classList.add('hidden'));
+
+            // Show active pane
+            const activePane = document.getElementById(`pane-${tabId}`);
+            if (activePane) {
+                activePane.classList.remove('hidden');
+            }
+
+            // Update navigation styles
+            const navButtons = document.querySelectorAll('header nav button');
+            navButtons.forEach(btn => {
+                if (btn.id === `tab-${tabId}`) {
+                    btn.className = "px-3 py-2 rounded-md transition duration-200 text-indigo-400 bg-slate-800 font-semibold";
+                } else {
+                    btn.className = "px-3 py-2 rounded-md transition duration-200 text-slate-300 hover:bg-slate-800 hover:text-white";
+                }
+            });
+
+            // Update dashboards dynamically if selected
+            if (tabId === 'dashboard') {
+                updateDashboard();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const drawer = document.getElementById('mobileDrawer');
+            drawer.classList.toggle('hidden');
+        }
+
+        document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+
+        // ================= FALLACY LIBRARY ENGINE =================
+        function renderFallacyList() {
+            const container = document.getElementById('fallacyButtonsList');
+            container.innerHTML = '';
+            
+            fallacies.forEach((f, idx) => {
+                const btn = document.createElement('button');
+                btn.onclick = () => renderFallacyDetails(idx);
+                btn.id = `library-btn-${idx}`;
+                btn.className = `w-full text-left px-4 py-3 rounded-xl border text-sm font-semibold transition duration-200 flex items-center justify-between ${
+                    idx === currentFallacyIndex 
+                    ? 'bg-indigo-50 border-indigo-200 text-indigo-900 shadow-sm' 
+                    : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                }`;
+                btn.innerHTML = `
+                    <span>${f.name}</span>
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function renderFallacyDetails(index) {
+            // Update active list selection style
+            const prevActive = document.getElementById(`library-btn-${currentFallacyIndex}`);
+            if (prevActive) {
+                prevActive.className = "w-full text-left px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold bg-white text-slate-700 hover:bg-slate-50 transition duration-200 flex items-center justify-between";
+            }
+            currentFallacyIndex = index;
+            const newActive = document.getElementById(`library-btn-${index}`);
+            if (newActive) {
+                newActive.className = "w-full text-left px-4 py-3 rounded-xl border border-indigo-200 text-sm font-semibold bg-indigo-50 text-indigo-900 shadow-sm transition duration-200 flex items-center justify-between";
+            }
+
+            const f = fallacies[index];
+            const container = document.getElementById('fallacyDetailsCard');
+            
+            container.innerHTML = `
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="bg-indigo-100 text-indigo-800 text-[10px] uppercase font-extrabold px-2.5 py-1 rounded">Rhetorical Anatomy</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 mt-2 tracking-tight">${f.name}</h2>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1">Academic Definition</h4>
+                        <p class="text-sm text-slate-700 leading-relaxed">${f.definition}</p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1">Core Structural Flaw</h4>
+                        <p class="text-sm text-slate-700 leading-relaxed">${f.structuralFlaw}</p>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1">Target Academic Grammar Correction</h4>
+                        <p class="text-sm text-indigo-800 font-medium leading-relaxed bg-indigo-50/50 p-3 rounded-lg border border-indigo-100/50">${f.lexicalCorrection}</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+                    <div class="p-4 bg-rose-50 border border-rose-100 rounded-xl space-y-2">
+                        <span class="bg-rose-100 text-rose-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded">Fallacious Excerpt (Bad)</span>
+                        <p class="text-xs italic text-rose-900 font-medium">"${f.badExample}"</p>
+                    </div>
+                    <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-xl space-y-2">
+                        <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded">Academic Correction (Good)</span>
+                        <p class="text-xs italic text-emerald-900 font-medium">"${f.goodExample}"</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ================= IDENTIFICATION QUEST ENGINE =================
+        function renderQuizQuestion() {
+            const q = quizQuestions[currentQuizIndex];
+            
+            // Progress Bar / Text
+            document.getElementById('quizProgressText').textContent = `${currentQuizIndex + 1} of ${quizQuestions.length} Challenges`;
+            document.getElementById('quizProgressBar').style.width = `${((currentQuizIndex + 1) / quizQuestions.length) * 100}%`;
+
+            // Reset UI state
+            document.getElementById('quizQuoteText').textContent = q.passage;
+            document.getElementById('quizQuestionPrompt').textContent = q.question;
+            document.getElementById('quizFeedbackBox').classList.add('hidden');
+            
+            // Options
+            const optionsBox = document.getElementById('quizOptionsContainer');
+            optionsBox.innerHTML = '';
+            selectedQuizOption = null;
+
+            q.options.forEach((opt, idx) => {
+                const optButton = document.createElement('button');
+                optButton.onclick = () => selectQuizOption(idx, optButton);
+                optButton.className = "w-full text-left p-4 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 hover:border-indigo-300 transition duration-150 flex items-start space-x-3";
+                optButton.innerHTML = `
+                    <span class="w-5 h-5 flex items-center justify-center bg-slate-100 rounded-full text-[10px] font-bold text-slate-500 mt-0.5 shrink-0 flex-none">${String.fromCharCode(65 + idx)}</span>
+                    <span class="leading-normal">${opt.text}</span>
+                `;
+                optionsBox.appendChild(optButton);
+            });
+
+            // Set Button State
+            const nextBtn = document.getElementById('quizNextBtn');
+            const nextBtnText = document.getElementById('quizNextBtnText');
+            nextBtnText.textContent = "Verify Assessment";
+            nextBtn.classList.remove('bg-slate-800', 'hover:bg-slate-900');
+            nextBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+        }
+
+        function selectQuizOption(index, buttonElement) {
+            selectedQuizOption = index;
+            // Clear all selections
+            const buttons = document.getElementById('quizOptionsContainer').children;
+            for (let btn of buttons) {
+                btn.className = "w-full text-left p-4 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 hover:border-indigo-300 transition duration-150 flex items-start space-x-3";
+                btn.querySelector('span').className = "w-5 h-5 flex items-center justify-center bg-slate-100 rounded-full text-[10px] font-bold text-slate-500 mt-0.5 shrink-0 flex-none";
+            }
+            // Highlight selected
+            buttonElement.className = "w-full text-left p-4 rounded-xl border-2 border-indigo-500 text-xs sm:text-sm font-bold text-indigo-900 bg-indigo-50/50 transition duration-150 flex items-start space-x-3 shadow-sm";
+            buttonElement.querySelector('span').className = "w-5 h-5 flex items-center justify-center bg-indigo-500 rounded-full text-[10px] font-bold text-white mt-0.5 shrink-0 flex-none";
+        }
+
+        function toggleQuizHint() {
+            const q = quizQuestions[currentQuizIndex];
+            showAppModal("Rhetorical Clue & Hint", q.hint, "💡");
+        }
+
+        function submitOrNextQuestion() {
+            const nextBtnText = document.getElementById('quizNextBtnText').textContent;
+            
+            if (nextBtnText === "Verify Assessment") {
+                if (selectedQuizOption === null) {
+                    showAppModal("Attention", "Please select an analytical option before verification.", "⚠️");
+                    return;
+                }
+                
+                const q = quizQuestions[currentQuizIndex];
+                const selected = q.options[selectedQuizOption];
+                const feedbackBox = document.getElementById('quizFeedbackBox');
+                
+                // Track answers history once
+                if (quizAnswersHistory.length <= currentQuizIndex) {
+                    quizAnswersHistory.push(selected.isCorrect);
+                    if (selected.isCorrect) quizScore++;
+                }
+
+                // Show Feedback UI
+                feedbackBox.className = `rounded-xl p-5 border transition-all duration-300 mt-4 block ${
+                    selected.isCorrect 
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-950' 
+                    : 'bg-rose-50 border-rose-200 text-rose-950'
+                }`;
+                feedbackBox.innerHTML = `
+                    <div class="flex items-center space-x-2 font-bold mb-1 text-sm">
+                        <span>${selected.isCorrect ? '✔ Correct Diagnosis!' : '❌ Incorrect Diagnosis'}</span>
+                    </div>
+                    <p class="text-xs sm:text-sm leading-relaxed">${selected.feedback}</p>
+                `;
+
+                // Update real-time scoreboard calculations
+                const totalAnswered = quizAnswersHistory.length;
+                const accuracy = Math.round((quizScore / totalAnswered) * 100);
+                document.getElementById('realtimeAccuracy').textContent = `${accuracy}%`;
+                
+                // Update Badge Label
+                let badge = "Novice Detective";
+                if (accuracy >= 80 && totalAnswered >= 5) badge = "Senior Rhetorician";
+                else if (accuracy >= 60 && totalAnswered >= 3) badge = "Associate Analyst";
+                document.getElementById('realtimeRating').textContent = badge;
+
+                // Adjust Next Button text
+                const nextBtn = document.getElementById('quizNextBtn');
+                const nextText = document.getElementById('quizNextBtnText');
+                if (currentQuizIndex < quizQuestions.length - 1) {
+                    nextText.textContent = "Advance Quest";
+                } else {
+                    nextText.textContent = "Finish Quest & Profile";
+                }
+                nextBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                nextBtn.classList.add('bg-slate-800', 'hover:bg-slate-900');
+
+            } else {
+                // Advance Question
+                if (currentQuizIndex < quizQuestions.length - 1) {
+                    currentQuizIndex++;
+                    renderQuizQuestion();
+                } else {
+                    showAppModal("Quest Complete!", "You have finished the Identification Quest. Let's examine your competencies on your performance dashboard!", "🎓");
+                    switchTab('dashboard');
+                }
+            }
+        }
+
+        // ================= HEDGING SANDBOX ENGINE =================
+        function loadSandboxPrompt(index) {
+            currentSandboxIndex = index;
+            const prompt = sandboxPrompts[index];
+            document.getElementById('sandboxPromptText').textContent = `"${prompt.absoluteText}"`;
+            document.getElementById('sandboxInput').value = '';
+            
+            // Reset checking indicators
+            resetSandboxIndicators();
+        }
+
+        function loadNewSandboxPrompt() {
+            let nextIndex = (currentSandboxIndex + 1) % sandboxPrompts.length;
+            loadSandboxPrompt(nextIndex);
+        }
+
+        function resetSandboxIndicators() {
+            const indicators = ['check-modal', 'check-freq', 'check-verb', 'check-length'];
+            indicators.forEach(id => {
+                const el = document.getElementById(id);
+                el.className = "flex items-center space-x-2 text-slate-400 bg-white p-2 rounded-lg border border-slate-200 text-xs font-medium";
+                el.querySelector('.indicator-icon').textContent = "❌";
+            });
+            document.getElementById('sandboxFeedbackNotice').innerHTML = `Type your cautious formulation using academic hedging keywords (e.g. <i>may, might, tends to, typically, suggests, implies</i>) to validate structural compliance.`;
+        }
+
+        function analyzeSandboxInput() {
+            const input = document.getElementById('sandboxInput').value.toLowerCase();
+            const p = sandboxPrompts[currentSandboxIndex];
+            
+            // 1. Check Modal
+            const modals = ['may', 'might', 'could', 'can'];
+            const hasModal = modals.some(m => input.includes(m));
+            updateIndicator('check-modal', hasModal);
+
+            // 2. Check Freq / Degree
+            const freqs = ['typically', 'frequently', 'periodically', 'often', 'generally', 'some', 'many'];
+            const hasFreq = freqs.some(f => input.includes(f));
+            updateIndicator('check-freq', hasFreq);
+
+            // 3. Check Cautious Verb
+            const verbs = ['tend', 'suggests', 'implies', 'appear', 'indicates', 'proposes'];
+            const hasVerb = verbs.some(v => input.includes(v));
+            updateIndicator('check-verb', hasVerb);
+
+            // 4. Check Length (Academic standards recommend > 25 characters)
+            const hasLength = input.trim().length >= 25;
+            updateIndicator('check-length', hasLength);
+
+            // Dynamic Hint Message
+            const notice = document.getElementById('sandboxFeedbackNotice');
+            if (hasModal && hasFreq && hasVerb && hasLength) {
+                notice.className = "text-xs font-bold text-emerald-800 bg-emerald-50 p-3 rounded-lg border border-emerald-100 mt-2";
+                notice.textContent = "Core academic hedging structures met! Click commit to lock in your score.";
+            } else {
+                notice.className = "text-xs text-slate-500 leading-relaxed bg-indigo-50 p-3 rounded-lg border border-indigo-100/50 mt-2";
+                notice.innerHTML = `Constructing... Make sure to include a <strong>modal</strong>, <strong>frequency keyword</strong>, and a <strong>tentative verb</strong> to polish register accuracy.`;
+            }
+        }
+
+        function updateIndicator(id, passed) {
+            const el = document.getElementById(id);
+            if (passed) {
+                el.className = "flex items-center space-x-2 text-emerald-700 bg-emerald-50 p-2 rounded-lg border border-emerald-200 text-xs font-semibold";
+                el.querySelector('.indicator-icon').textContent = "✔";
+            } else {
+                el.className = "flex items-center space-x-2 text-slate-400 bg-white p-2 rounded-lg border border-slate-200 text-xs font-medium";
+                el.querySelector('.indicator-icon').textContent = "❌";
+            }
+        }
+
+        function evaluateSandboxSubmission() {
+            const input = document.getElementById('sandboxInput').value.trim();
+            if (input.length < 15) {
+                showAppModal("Assessment Failed", "Your submitted response is too brief. Please provide a fully formulated, cautiously hedged academic sentence.", "⚠️");
+                return;
+            }
+
+            // Verify if basic indicators are passed
+            const passModal = document.getElementById('check-modal').classList.contains('text-emerald-700');
+            const passFreq = document.getElementById('check-freq').classList.contains('text-emerald-700');
+            const passVerb = document.getElementById('check-verb').classList.contains('text-emerald-700');
+
+            if (!passModal || !passFreq || !passVerb) {
+                showAppModal("Linguistic Criteria Unmet", "Your academic rewrite lacks key hedging elements (such as modals, indefinites, or tentative verbs). Use the lexicon block on the right to assist you.", "❌");
+                return;
+            }
+
+            sandboxSubmissionsCount++;
+            showAppModal("Commit Successful", `Your academic rewrite has been locked into your scorecard profile! (${sandboxSubmissionsCount} of 3 completed)`, "✔");
+            
+            // Advance or update
+            if (sandboxSubmissionsCount < 3) {
+                loadNewSandboxPrompt();
+            } else {
+                showAppModal("Sandbox Fully Completed!", "Fantastic! You have completed all 3 sandbox challenges. Check out your updated metrics on your dashboard.", "🎉");
+                switchTab('dashboard');
+            }
+        }
+
+        // ================= REFUTATION WORKSHOP ENGINE =================
+        function updateWorkshopOutput() {
+            const p1 = document.getElementById('buildPart1').value;
+            const p2 = document.getElementById('buildPart2').value;
+            const p3 = document.getElementById('buildPart3').value;
+
+            const preview = document.getElementById('workshopTextPreview');
+
+            if (!p1 && !p2 && !p3) {
+                preview.innerHTML = "Select block elements above to construct a cohesive academic refutation.";
+                preview.className = "text-sm italic leading-relaxed text-slate-300";
+                return;
+            }
+
+            let fullText = [p1, p2, p3].filter(Boolean).join(" ");
+            preview.textContent = fullText;
+            preview.className = "text-sm leading-relaxed text-slate-200 font-medium";
+        }
+
+        function evaluateWorkshopSubmission() {
+            const p1 = document.getElementById('buildPart1').value;
+            const p2 = document.getElementById('buildPart2').value;
+            const p3 = document.getElementById('buildPart3').value;
+
+            if (!p1 || !p2 || !p3) {
+                showAppModal("Incomplete Structure", "All three parts of the academic refutation must be formulated and selected before committing.", "⚠️");
+                return;
+            }
+
+            // Validate choices
+            const choice1Correct = p1.includes("Lombardi (2024) asserts that online modules");
+            const choice2Correct = p2.includes("However, this absolute claim is disputed");
+            const choice3Correct = p3.includes("Silva's (2025) study of 200 adult trainees reveals");
+
+            if (choice1Correct && choice2Correct && choice3Correct) {
+                isWorkshopCommitted = true;
+                showAppModal("Synthesis Mastered!", "Superb job! You successfully combined the two conflicting views using critical reporting verbs, an opposing connector, and cautious academic phrasing.", "🌟");
+                switchTab('dashboard');
+            } else {
+                showAppModal("SFL Alignment Issue", "One or more of your selections utilizes informal vocabulary (e.g., 'stupid', 'lies') or subjective pronoun structures which violate Academic English register. Review your blocks and try again.", "❌");
+            }
+        }
+
+        // ================= ANALYTICS DASHBOARD ENGINE =================
+        function updateDashboard() {
+            // 1. Identification Quiz Analytics
+            const statsAccuracyVal = document.getElementById('statsAccuracyVal');
+            const statsAccuracySub = document.getElementById('statsAccuracySub');
+            
+            if (quizAnswersHistory.length > 0) {
+                const acc = Math.round((quizScore / quizAnswersHistory.length) * 100);
+                statsAccuracyVal.textContent = `${acc}%`;
+                statsAccuracySub.textContent = `Based on ${quizAnswersHistory.length} checked quest challenges`;
+            } else {
+                statsAccuracyVal.textContent = "0%";
+                statsAccuracySub.textContent = "Quest Mode not started yet";
+            }
+
+            // 2. Sandbox Submissions progress
+            const statsSandboxVal = document.getElementById('statsSandboxVal');
+            statsSandboxVal.textContent = `${sandboxSubmissionsCount} / 3`;
+
+            // 3. Workshop Status
+            const statsWorkshopVal = document.getElementById('statsWorkshopVal');
+            const statsWorkshopSub = document.getElementById('statsWorkshopSub');
+            if (isWorkshopCommitted) {
+                statsWorkshopVal.textContent = "Verified";
+                statsWorkshopVal.className = "text-4xl font-black text-violet-600";
+                statsWorkshopSub.textContent = "Refutation paragraph correctly synthesized";
+            } else {
+                statsWorkshopVal.textContent = "Incomplete";
+                statsWorkshopVal.className = "text-4xl font-black text-slate-400";
+                statsWorkshopSub.textContent = "Synthesize blocks in workshop tab to unlock";
+            }
+
+            // 4. Competency Mastery Checklist
+            const masteryContainer = document.getElementById('masteryList');
+            masteryContainer.innerHTML = '';
+            
+            fallacies.forEach((f) => {
+                // check if the user encountered this fallacy in history and got it correct
+                let isMastered = false;
+                const questionAssoc = quizQuestions.find(q => q.fallacy === f.id);
+                if (questionAssoc) {
+                    const qIndex = quizQuestions.indexOf(questionAssoc);
+                    if (quizAnswersHistory[qIndex] === true) {
+                        isMastered = true;
+                    }
+                }
+
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl border flex items-center space-x-3 text-xs font-semibold ${
+                    isMastered 
+                    ? 'bg-emerald-50 border-emerald-100 text-emerald-950' 
+                    : 'bg-white border-slate-200 text-slate-400'
+                }`;
+                card.innerHTML = `
+                    <span class="text-base">${isMastered ? '✅' : '🔒'}</span>
+                    <div>
+                        <p class="font-bold">${f.name}</p>
+                        <p class="text-[10px] font-medium text-slate-400 mt-0.5">${isMastered ? 'Diagnostic Passed' : 'Verification Pending'}</p>
+                    </div>
+                `;
+                masteryContainer.appendChild(card);
+            });
+
+            // 5. Unlocking Certificate
+            const cert = document.getElementById('certificateContainer');
+            const allQuizSolved = quizAnswersHistory.length === quizQuestions.length;
+            const allSandboxSolved = sandboxSubmissionsCount >= 3;
+            const allWorkshopSolved = isWorkshopCommitted;
+
+            if (allQuizSolved && allSandboxSolved && allWorkshopSolved) {
+                cert.classList.remove('hidden');
+            } else {
+                cert.classList.add('hidden');
+            }
+        }
+
+        // ================= GENERAL DIALOG UTILITIES =================
+        function showAppModal(title, body, icon = "💡") {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').textContent = body;
+            document.getElementById('modalIcon').textContent = icon;
+            
+            const modal = document.getElementById('appModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                document.getElementById('appModalContent').classList.remove('scale-90');
+            }, 10);
+        }
+
+        function closeAppModal() {
+            const modal = document.getElementById('appModal');
+            modal.classList.add('opacity-0');
+            document.getElementById('appModalContent').classList.add('scale-90');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+    </script>
+</body>
+</html>

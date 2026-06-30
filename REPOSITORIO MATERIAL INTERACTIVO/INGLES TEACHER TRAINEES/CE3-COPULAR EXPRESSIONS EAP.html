@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Copular Verbs: Teacher-Training Module</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        argentine: {
+                            light: '#a3c2e0',
+                            DEFAULT: '#74acdf',
+                            dark: '#1d558c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-brand-900 via-brand-800 to-argentine-dark text-white border-b-4 border-argentine px-4 py-8 shadow-md">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                    <span class="bg-argentine text-brand-900 font-bold px-3 py-0.5 rounded text-xs tracking-wider uppercase">Teacher Education Program</span>
+                    <span class="bg-white/15 backdrop-blur-xs text-slate-200 border border-white/10 px-2 py-0.5 rounded text-[10px]">Copular Verbs Unit</span>
+                </div>
+                <h1 class="text-3xl font-extrabold tracking-tight">Academic Copular Verbs &amp; Syntax</h1>
+                <p class="text-slate-300 text-sm mt-1.5 max-w-2xl">
+                    An interactive self-study module designed for Argentine adult trainees preparing to teach English as a Lingua Franca (ELF).
+                </p>
+            </div>
+            
+            <!-- Global Scoring Widget -->
+            <div class="bg-slate-900/60 backdrop-blur-md rounded-xl p-4 border border-white/10 w-full md:w-auto shrink-0 flex items-center justify-between md:justify-start gap-4">
+                <div class="text-left">
+                    <div class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Total Module Progress</div>
+                    <div class="flex items-center gap-2 mt-1">
+                        <div class="w-24 bg-slate-800 rounded-full h-2">
+                            <div id="module-progress" class="bg-argentine h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <span id="module-progress-pct" class="text-xs font-bold text-white">0%</span>
+                    </div>
+                </div>
+                <div class="h-8 w-px bg-white/10 hidden md:block"></div>
+                <div class="text-right">
+                    <div class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Performance Score</div>
+                    <div class="text-sm font-extrabold text-white mt-0.5"><span id="total-score">0</span> / 23</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Section -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Sidebar Navigation -->
+        <nav class="lg:col-span-3 flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible gap-2 bg-white p-2.5 rounded-xl shadow-xs border border-slate-200 self-start w-full">
+            <button onclick="changeTab('glossary')" id="tab-btn-glossary" class="tab-button w-full text-left px-4 py-3 rounded-lg font-medium text-xs flex items-center gap-3 whitespace-nowrap transition bg-brand-50 text-brand-700 font-semibold">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                Linguistic Glossary
+            </button>
+            <button onclick="changeTab('act1')" id="tab-btn-act1" class="tab-button w-full text-left px-4 py-3 rounded-lg font-medium text-xs flex items-center gap-3 whitespace-nowrap transition text-slate-600 hover:bg-slate-50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                Act 1: Resultar vs. Prove
+            </button>
+            <button onclick="changeTab('act2')" id="tab-btn-act2" class="tab-button w-full text-left px-4 py-3 rounded-lg font-medium text-xs flex items-center gap-3 whitespace-nowrap transition text-slate-600 hover:bg-slate-50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                Act 2: Part-Whole Sorting
+            </button>
+            <button onclick="changeTab('act3')" id="tab-btn-act3" class="tab-button w-full text-left px-4 py-3 rounded-lg font-medium text-xs flex items-center gap-3 whitespace-nowrap transition text-slate-600 hover:bg-slate-50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Act 3: Aspect &amp; Modal Tuning
+            </button>
+            <button onclick="changeTab('act4')" id="tab-btn-act4" class="tab-button w-full text-left px-4 py-3 rounded-lg font-medium text-xs flex items-center gap-3 whitespace-nowrap transition text-slate-600 hover:bg-slate-50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                Act 4: Role Prepositions
+            </button>
+            <button onclick="changeTab('act5')" id="tab-btn-act5" class="tab-button w-full text-left px-4 py-3 rounded-lg font-medium text-xs flex items-center gap-3 whitespace-nowrap transition text-slate-600 hover:bg-slate-50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 113.536 0V21h-3.536v-2.2z"></path></svg>
+                Act 5: Metalinguistic Tasks
+            </button>
+            <button onclick="changeTab('report')" id="tab-btn-report" class="tab-button w-full text-left px-4 py-3 rounded-lg font-medium text-xs flex items-center gap-3 whitespace-nowrap transition text-slate-600 hover:bg-slate-50">
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                Summary &amp; Export
+            </button>
+        </nav>
+
+        <!-- Dynamic Content Section -->
+        <section class="lg:col-span-9 bg-white p-6 rounded-xl shadow-xs border border-slate-200">
+            
+            <!-- COGNITIVE GLOSSARY TAB -->
+            <div id="tab-glossary" class="tab-panel block">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-slate-100 pb-4 mb-6 gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">Academic Copular Glossary</h2>
+                        <p class="text-slate-500 text-xs">A comprehensive reference index for structural classifications of English copular phrases.</p>
+                    </div>
+                    <div class="w-full md:w-64">
+                        <input type="text" id="glossary-search" oninput="searchGlossary()" placeholder="Search linguistic concepts or terms..." class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600">
+                    </div>
+                </div>
+
+                <div id="glossary-list" class="space-y-4 max-h-[55vh] overflow-y-auto pr-2">
+                    <!-- Dynamic Loading of Glossary items -->
+                </div>
+            </div>
+
+            <!-- ACTIVITY 1 TAB -->
+            <div id="tab-act1" class="tab-panel hidden space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-[10px] font-bold text-brand-700 uppercase tracking-widest">Activity 1</span>
+                    <h2 class="text-xl font-bold text-slate-900">The "Resultar" vs. "Prove" Dilemma</h2>
+                    <p class="text-slate-500 text-xs mt-1">
+                        Identify and reconstruct the syntactic structure. English prohibits using <code class="bg-slate-100 px-1 rounded text-rose-700">result</code> as a copula. Reconstruct the interlanguage errors below.
+                    </p>
+                </div>
+
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg text-xs text-amber-900 leading-relaxed space-y-1">
+                    <strong>Argentine L1 Contrastive Tip:</strong> Replace phrases containing *resulted* with either <span class="font-bold">proved [to be]</span> or <span class="font-bold">turned out to be</span>, ensuring proper tense and element alignment.
+                </div>
+
+                <div id="act1-tasks" class="space-y-6">
+                    <!-- Injected dynamically -->
+                </div>
+            </div>
+
+            <!-- ACTIVITY 2 TAB -->
+            <div id="tab-act2" class="tab-panel hidden space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-[10px] font-bold text-brand-700 uppercase tracking-widest">Activity 2</span>
+                    <h2 class="text-xl font-bold text-slate-900">Part-Whole &amp; Equative Relations</h2>
+                    <p class="text-slate-500 text-xs mt-1">
+                        Analyze the relationship between syntactic slots. Choose between <span class="font-mono bg-slate-100 text-xs px-1">comprise</span> (whole-to-parts), <span class="font-mono bg-slate-100 text-xs px-1">constitute</span> (parts-to-whole), or <span class="font-mono bg-slate-100 text-xs px-1">represent</span> (symbol/indicator).
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-center mb-4">
+                    <div class="p-3 bg-brand-50 rounded-lg border border-brand-100">
+                        <div class="text-[10px] font-bold text-brand-800 uppercase tracking-wider">Constitute</div>
+                        <div class="text-[11px] text-brand-600 mt-1 font-mono">Parts → Constitute → Whole</div>
+                    </div>
+                    <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-100">
+                        <div class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider">Comprise</div>
+                        <div class="text-[11px] text-emerald-600 mt-1 font-mono">Whole → Comprises → Parts</div>
+                    </div>
+                    <div class="p-3 bg-indigo-50 rounded-lg border border-indigo-100">
+                        <div class="text-[10px] font-bold text-indigo-800 uppercase tracking-wider">Represent</div>
+                        <div class="text-[11px] text-indigo-600 mt-1 font-mono">Case/Fact → Represents → Indicator</div>
+                    </div>
+                </div>
+
+                <div id="act2-tasks" class="space-y-6">
+                    <!-- Injected dynamically -->
+                </div>
+            </div>
+
+            <!-- ACTIVITY 3 TAB -->
+            <div id="tab-act3" class="tab-panel hidden space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-[10px] font-bold text-brand-700 uppercase tracking-widest">Activity 3</span>
+                    <h2 class="text-xl font-bold text-slate-900">Aspectual and Modal Stance Tuning</h2>
+                    <p class="text-slate-500 text-xs mt-1">
+                        Evaluate the text dynamically. Complete the paragraph using appropriate combinations of aspectual and modal copular phrases.
+                    </p>
+                </div>
+
+                <div class="p-5 border border-slate-200 bg-slate-50/50 rounded-xl space-y-4">
+                    <h3 class="font-bold text-slate-800 text-xs">Cloze Paragraph (Select the most coherent combinations)</h3>
+                    <div class="text-xs text-slate-700 leading-relaxed" id="act3-cloze-container">
+                        "During the first three cycles of classroom observations, student performance across both experimental groups 
+                        <select id="act3-sel-1" onchange="checkAct3()" class="mx-1 border border-slate-300 rounded bg-white py-1 px-1.5 font-bold text-brand-800 focus:outline-none">
+                            <option value="">-- select --</option>
+                            <option value="remained constant">remained constant</option>
+                            <option value="grew constant">grew constant</option>
+                            <option value="appeared constant">appeared constant</option>
+                        </select>, showing almost zero statistical variation. Consequently, the teacher's initial theory that group dynamics dictate performance 
+                        <select id="act3-sel-2" onchange="checkAct3()" class="mx-1 border border-slate-300 rounded bg-white py-1 px-1.5 font-bold text-brand-800 focus:outline-none">
+                            <option value="">-- select --</option>
+                            <option value="grows plausible">grows plausible</option>
+                            <option value="seems highly plausible">seems highly plausible</option>
+                            <option value="remains plausible">remains plausible</option>
+                        </select> when analyzed in isolation. However, as syntactic structures 
+                        <select id="act3-sel-3" onchange="checkAct3()" class="mx-1 border border-slate-300 rounded bg-white py-1 px-1.5 font-bold text-brand-800 focus:outline-none">
+                            <option value="">-- select --</option>
+                            <option value="grew increasingly complex">grew increasingly complex</option>
+                            <option value="remained increasingly complex">remained increasingly complex</option>
+                            <option value="seemed increasingly complex">seemed increasingly complex</option>
+                        </select> in the advanced syllabus, trainees began to struggle. In light of this, the final exam results do not 
+                        <select id="act3-sel-4" onchange="checkAct3()" class="mx-1 border border-slate-300 rounded bg-white py-1 px-1.5 font-bold text-brand-800 focus:outline-none">
+                            <option value="">-- select --</option>
+                            <option value="grow consistent">grow consistent</option>
+                            <option value="remain consistent">remain consistent</option>
+                            <option value="appear consistent">appear consistent</option>
+                        </select> with the initial hypothesis, prompting a complete review of the pedagogical design."
+                    </div>
+
+                    <div id="act3-feedback" class="hidden p-4 rounded-lg text-xs leading-relaxed"></div>
+                </div>
+            </div>
+
+            <!-- ACTIVITY 4 TAB -->
+            <div id="tab-act4" class="tab-panel hidden space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-[10px] font-bold text-brand-700 uppercase tracking-widest">Activity 4</span>
+                    <h2 class="text-xl font-bold text-slate-900">Role-Marking Copulas (As vs. Like)</h2>
+                    <p class="text-slate-500 text-xs mt-1">
+                        Select the correct preposition. Use <span class="font-bold">as</span> to represent functional roles or real categories (copular), and <span class="font-bold">like</span> for purely illustrative comparison.
+                    </p>
+                </div>
+
+                <div id="act4-tasks" class="space-y-6">
+                    <!-- Injected dynamically -->
+                </div>
+            </div>
+
+            <!-- ACTIVITY 5 TAB -->
+            <div id="tab-act5" class="tab-panel hidden space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-[10px] font-bold text-brand-700 uppercase tracking-widest">Activity 5</span>
+                    <h2 class="text-xl font-bold text-slate-900">Metalinguistic Case Studies (Teacher Task)</h2>
+                    <p class="text-slate-500 text-xs mt-1">
+                        Evaluate the student sample. Draft your professional, metalinguistic feedback as a teacher educator. Once written, rate your performance against the model answer to submit your points.
+                    </p>
+                </div>
+
+                <div class="space-y-6" id="act5-container">
+                    <!-- Injected dynamically -->
+                </div>
+            </div>
+
+            <!-- PERFORMANCE SUMMARY & EXPORT TAB -->
+            <div id="tab-report" class="tab-panel hidden space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <h2 class="text-xl font-bold text-slate-900">Module Performance Summary</h2>
+                    <p class="text-slate-500 text-xs mt-1">Review your results, compile your custom metalinguistic feedback, and export your completed study records.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Detailed Performance Cards -->
+                    <div class="border border-slate-200 rounded-xl p-5 space-y-4 bg-slate-50/50">
+                        <h3 class="font-bold text-xs text-slate-800">Section Score Analysis</h3>
+                        <div class="space-y-3" id="score-summary-list">
+                            <!-- JS populated -->
+                        </div>
+                    </div>
+
+                    <!-- Export/Companion Actions -->
+                    <div class="border border-brand-200 bg-brand-50 rounded-xl p-5 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] bg-brand-200 text-brand-800 font-bold px-2 py-0.5 rounded tracking-wider uppercase">Linguistic Portfolio</span>
+                            <h3 class="font-bold text-sm text-brand-900 mt-2">Export Performance &amp; Answers</h3>
+                            <p class="text-xs text-brand-700 leading-relaxed mt-2">
+                                Download a comprehensive Study &amp; Lesson Companion document. It contains the 30-item core lexicon, the copular theory database, your personalized corrections, and the complete key.
+                            </p>
+                        </div>
+                        <button onclick="exportWorkbookReport()" class="w-full mt-6 bg-brand-700 hover:bg-brand-800 text-white font-bold text-xs py-3 rounded-lg shadow-sm flex items-center justify-center gap-2 transition duration-200">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            Download Study Report &amp; Keys (.md)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Complete Answer Key Reveal -->
+                <div class="border-t border-slate-200 pt-6 mt-4">
+                    <h3 class="font-extrabold text-slate-900 text-sm mb-4">Annotated Answer Key &amp; Teacher Guides</h3>
+                    <div class="space-y-4" id="annotated-master-key">
+                        <!-- JS populated -->
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Custom Dialog Modal -->
+    <div id="alert-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white rounded-xl shadow-xl border border-slate-200 max-w-md w-full p-6 text-center transform scale-95 transition-all">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-brand-100 text-brand-600 mb-4" id="modal-icon-holder">
+                <!-- SVG -->
+            </div>
+            <h3 class="text-base font-bold text-slate-900" id="modal-heading">Linguistic Notification</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed" id="modal-message">Notification context placeholder.</p>
+            <div class="mt-6">
+                <button onclick="closeAlertModal()" class="w-full py-2 bg-brand-700 hover:bg-brand-800 text-white text-xs font-bold rounded-lg transition duration-150">
+                    Acknowledge
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-10 mt-12 border-t border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 text-center space-y-2">
+            <p class="font-semibold text-slate-300">UTN / ISFD English Language Teacher Education Project</p>
+            <p>Designed to address structural transfer and support diagnostic, SLA-focused writing modules in Argentina.</p>
+        </div>
+    </footer>
+
+    <!-- App State and Logic Script -->
+    <script>
+        // Core Databases
+        const glossaryDb = [
+            { id: 1, term: "Copular Verb", classification: "Linking Verb", definition: "A verb of low lexical transitivity whose primary function is to link a subject with its subject complement.", frame: "Subject + Copula + Subject Complement [AdjP, NP, PP]", warning: "Argentine writers frequently misuse transitiveness (e.g. *maintain constant*), omitting the fact that true copulas are intransitive.", example: "The class remained quiet." },
+            { id: 2, term: "Current Copula", classification: "State-Preserving", definition: "Indicates that the state designated by the complement is stable, ongoing, and currently active.", frame: "Subject + remain / keep / stay + Complement", warning: "Often replaced by non-copular phrases under the influence of Spanish 'permanecer'.", example: "The data remained unchanged." },
+            { id: 3, term: "Resulting Copula", classification: "Process/Outcome", definition: "Specifies that the state is the culmination of a transformation, process, or analytical evaluation.", frame: "Subject + prove / turn out / become + Complement", warning: "Highly susceptible to the 'resultar' error (*The program resulted very successful*). Result in English is not a copula.", example: "The methodology proved successful." },
+            { id: 4, term: "Equative Copula", classification: "Identifying Relation", definition: "Functions similarly to an equals sign (=), identifying the subject as equivalent to the noun phrase complement.", frame: "Subject [Concept] + represent / constitute + Complement [NP]", warning: "Using 'comprise of' when an equative verb is required.", example: "This represents a major shift." },
+            { id: 5, term: "Mereological Copula", classification: "Part-Whole Relation", definition: "Sets up a relation between constituents and the total structure (whole-to-parts).", frame: "Subject [Whole] + comprise + Complement [Parts] (Active, no preposition)", warning: "Avoid 'is comprised of' and the redundant 'comprises of'.", example: "The program comprises six modules." },
+            { id: 6, term: "Role-Marking Copula", classification: "Functional Relation", definition: "Categorizes the subject according to its dynamic classroom function or systemic role.", frame: "Subject + serve as / act as / emerge as + Noun Phrase", warning: "Writing '*acts like' instead of 'acts as'. 'Like' indicates comparison, not real role.", example: "The platform serves as a virtual library." },
+            { id: 7, term: "Aspectual Shift", classification: "Temporal Progression", definition: "Denotes state progression, marking duration or gradual evolutionary change.", frame: "Subject + grow / turn / run + Complement [Adj]", warning: "Trainees underuse 'grow' in academic texts, limiting themselves to 'become'.", example: "The syntax grew increasingly complex." },
+            { id: 8, term: "Hedging (Modal)", classification: "Epistemic Cautiousness", definition: "Reduces the force of a claim, presenting it as tentative and open to scrutiny.", frame: "Subject + seem / appear / sound + Complement", warning: "Overusing first-person forms (*it seems to me*) instead of impersonal hedging.", example: "The findings appear consistent." },
+            { id: 9, term: "Colligation", classification: "Grammatical Collocation", definition: "The grammatical grouping of words, specifically selecting structural prepositions.", frame: "Verb + specific preposition (e.g., deviate + from)", warning: "Using 'deviate of' as an L1 translation of 'desviarse de'.", example: "Performance deviated from standard norms." },
+            { id: 10, term: "Transitive Copular Misuse", classification: "Valency Error", definition: "Using a transitive action verb as a linking verb without its required direct object.", frame: "Subject + transitive verb [e.g., maintain] + Adj Complement (Ungrammatical)", warning: "Incorrectly writing '*the levels maintained constant' where 'remained' is needed.", example: "The level was maintained (passive) OR The level remained constant (copular)." }
+        ];
+
+        const act1Db = [
+            { id: 1, prompt: "The initial trial of the flipped classroom model resulted unsuccessful due to technology limitations.", patterns: ["proved unsuccessful", "turned out to be unsuccessful"], explanation: "Resulted is not a copula. Use either 'proved unsuccessful' or 'turned out to be unsuccessful'." },
+            { id: 2, prompt: "Her phonetic analysis of regional dialects resulted very accurate when compared to the database.", patterns: ["proved highly accurate", "proved very accurate", "turned out to be very accurate", "turned out to be highly accurate"], explanation: "Replace the 'resulted' structure with 'proved' or 'turned out to be' plus the adjective complement." },
+            { id: 3, prompt: "The implementation of standard spelling tests in the secondary course resulted a waste of time.", patterns: ["turned out to be a waste of time", "proved to be a waste of time"], explanation: "When linking a subject to a nominal categorizing phrase (a waste of time), 'turned out to be' is highly idiomatic." },
+            { id: 4, prompt: "Although the researchers feared a low response rate, the final sample size resulted highly representative.", patterns: ["proved highly representative", "turned out to be highly representative"], explanation: "Correct the L1 transfer of 'resultó altamente representativa' to 'proved highly representative'." },
+            { id: 5, prompt: "The introduction of L1 translations in the instruction phase resulted to be more useful than expected.", patterns: ["proved more useful than expected", "turned out to be more useful than expected"], explanation: "The pattern 'resulted to be' is a literal grammatical mapping of 'resultó ser'. Reconstruct using 'proved' or 'turned out to be'." }
+        ];
+
+        const act2Db = [
+            { id: 1, sentence: "These five distinct phonetic sub-tests ____ the final diagnostic battery used to assess the trainee's oral proficiency.", options: ["comprise", "constitute", "represent"], correct: "constitute", explanation: "Parts-to-Whole relation (The sub-tests are parts, the diagnostic battery is the whole) requires 'constitute'." },
+            { id: 2, sentence: "The qualitative portfolio and the written summary ____ the main components of the evaluation scheme.", options: ["comprise", "constitute", "represent"], correct: "constitute", explanation: "The parts (portfolio and summary) make up the whole (evaluation scheme). Therefore, 'constitute' is appropriate." },
+            { id: 3, sentence: "The rapid increase in regional English dialects ____ a significant paradigm shift in how we perceive mutual intelligibility.", options: ["comprises", "constitutes", "represents"], correct: "represents", explanation: "The factual increase stands as a symbol/indicator of a broader paradigm shift. Therefore, 'represents' is the matching equative verb." },
+            { id: 4, sentence: "For many novice researchers, navigating the transition to formal writing ____ a major structural challenge.", options: ["comprises", "constitutes", "represents"], correct: "constitutes", explanation: "Navigating the transition (part/action) is categorized as equivalent to a major challenge (whole category)." },
+            { id: 5, sentence: "This comprehensive syllabus ____ six distinct theoretical modules.", options: ["comprises", "constitutes", "represents"], correct: "comprises", explanation: "Whole-to-Parts relation (The syllabus is the whole, the six modules are the parts) requires 'comprises' without a preposition." }
+        ];
+
+        const act3Answers = {
+            sel1: "remained constant",
+            sel2: "seems highly plausible",
+            sel3: "grew increasingly complex",
+            sel4: "appear consistent"
+        };
+
+        const act4Db = [
+            { id: 1, prompt: "In the context of secondary education in Buenos Aires, public schools often serve ___ the primary social buffer for vulnerable communities.", options: ["as", "like"], correct: "as", explanation: "The schools actually perform the function of the buffer. Use 'serve as'." },
+            { id: 2, prompt: "The teacher's corrective feedback acts ___ a guide, but it should not function ___ an absolute grammatical dictator.", slotsCount: 2, options: ["as", "like"], correct: ["as", "as"], explanation: "Both slots require 'as' since they denote real functional identities and classroom roles." },
+            { id: 3, prompt: "Sociolinguistics has emerged ___ a vital branch of teacher preparation programs over the last decade.", options: ["as", "like"], correct: "as", explanation: "Indicates dynamic resulting functional role. Use 'emerged as'." },
+            { id: 4, prompt: "Written evaluation methods, ___ traditional dictation exercises, often seem obsolete to modern communicative educators.", options: ["as", "like"], correct: "like", explanation: "Here, 'dictation exercises' is a comparative illustration, not a real copular role of the main subject. Use 'like'." },
+            { id: 5, prompt: "In this specific methodology, peer-review sessions rank ___ the most effective collaborative tool.", options: ["as", "like"], correct: "as", explanation: "The verb 'rank' collocates with 'as' to form a classifying copula indicating hierarchy." }
+        ];
+
+        const act5Db = [
+            {
+                id: 1,
+                title: "Case Study A (Intransitiveness and Valency)",
+                prompt: "The experimental methodology resulted very successful, but the variables maintained unchanged.",
+                correctModel: "The experimental methodology proved/turned out to be very successful, but the variables remained unchanged.",
+                explanation: "The student has used 'resulted' as a copula (linking verb) to join the subject with 'successful', which is an ungrammatical transfer of 'resultar'. English requires 'proved' or 'turned out to be'. Additionally, the student used 'maintained' as a copula. 'Maintain' is transitive and requires a direct object; they must use the state-preserving copula 'remained' instead."
+            },
+            {
+                id: 2,
+                title: "Case Study B (Prepositional Redundancy in Part-Whole Relations)",
+                prompt: "This new curriculum comprises of six distinct structural modules.",
+                correctModel: "This new curriculum comprises six distinct structural modules.",
+                explanation: "The verb 'comprise' is a transitive copula that means 'to consist of' or 'to be composed of'. Adding the preposition 'of' is redundant and ungrammatical in standard academic English. The student should write 'comprises six modules' (active) or 'is composed of six modules' (passive)."
+            },
+            {
+                id: 3,
+                title: "Case Study C (L1 Prep-Selection Transfer)",
+                prompt: "The phonetic data deviates of standard pronunciation guides.",
+                correctModel: "The phonetic data deviates from standard pronunciation guides.",
+                explanation: "This is a prepositional colligation error caused by Spanish L1 transfer. In Spanish, we say 'desviarse de'. Since 'de' typically translates to 'of', the student wrote 'deviates of'. In English, the copular prepositional verb 'deviate' strictly couples with 'from'."
+            }
+        ];
+
+        // Global User Progress Variables
+        let act1Answers = ["", "", "", "", ""];
+        let act1Checked = [false, false, false, false, false];
+
+        let act2Answers = ["", "", "", "", ""];
+        let act2Checked = [false, false, false, false, false];
+
+        let act3Checked = false;
+
+        let act4Answers = [
+            "", 
+            ["", ""], 
+            "", 
+            "", 
+            ""
+        ];
+        let act4Checked = [false, false, false, false, false];
+
+        let act5Drafts = ["", "", ""];
+        let act5Ratings = [null, null, null]; // 'exemplary', 'proficient', 'developing'
+
+        // Navigation Controller
+        function changeTab(tabId) {
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.add('hidden');
+                panel.classList.remove('block');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('bg-brand-50', 'text-brand-700', 'font-semibold');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-50');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('block');
+            document.getElementById(`tab-btn-${tabId}`).classList.add('bg-brand-50', 'text-brand-700', 'font-semibold');
+            document.getElementById(`tab-btn-${tabId}`).classList.remove('text-slate-600', 'hover:bg-slate-50');
+
+            if(tabId === 'report') {
+                populatePerformanceReport();
+            }
+        }
+
+        // Search Glossary
+        function searchGlossary() {
+            const query = document.getElementById('glossary-search').value.toLowerCase();
+            const cards = document.querySelectorAll('.glossary-card');
+            cards.forEach(card => {
+                const term = card.getAttribute('data-term').toLowerCase();
+                const def = card.getAttribute('data-def').toLowerCase();
+                if(term.includes(query) || def.includes(query)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Render Glossary
+        function renderGlossary() {
+            const container = document.getElementById('glossary-list');
+            container.innerHTML = '';
+            glossaryDb.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "glossary-card p-4 border border-slate-200 rounded-xl bg-white hover:border-brand-300 transition duration-150 shadow-xs";
+                card.setAttribute('data-term', item.term);
+                card.setAttribute('data-def', item.definition);
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-bold text-slate-950 text-xs">${item.term}</h4>
+                        <span class="text-[9px] bg-slate-100 text-slate-600 font-semibold border border-slate-200 px-2 py-0.5 rounded-full">${item.classification}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-600 leading-relaxed">${item.definition}</p>
+                    <div class="mt-3 pt-2 border-t border-slate-100 space-y-1 text-[10px] text-slate-500">
+                        <div><strong class="text-slate-700">Syntactic Frame:</strong> <code class="bg-slate-50 text-brand-700 px-1 py-0.5 rounded mono">${item.frame}</code></div>
+                        <div class="text-amber-700"><strong class="text-amber-800">Argentine L1 Alert:</strong> ${item.warning}</div>
+                        <div class="italic text-slate-600"><strong class="text-slate-700 not-italic">Example:</strong> "${item.example}"</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Render Activity 1
+        function renderActivity1() {
+            const container = document.getElementById('act1-tasks');
+            container.innerHTML = '';
+
+            act1Db.forEach((q, idx) => {
+                const checked = act1Checked[idx];
+                const userVal = act1Answers[idx];
+                let feedbackHTML = "";
+
+                if (checked) {
+                    const cleanUser = userVal.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s+/g, ' ');
+                    const isCorrect = q.patterns.some(pat => {
+                        const cleanPat = pat.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s+/g, ' ');
+                        return cleanUser.includes(cleanPat);
+                    });
+
+                    feedbackHTML = `
+                        <div class="p-3.5 rounded-lg border text-[11px] leading-relaxed ${isCorrect ? 'bg-emerald-50 text-emerald-900 border-emerald-200' : 'bg-rose-50 text-rose-900 border-rose-200'}">
+                            <strong>${isCorrect ? '✓ Reconstructed Correctly' : '✗ Structural Mismatch'}</strong>
+                            <p class="mt-1"><strong>Acceptable Syntactic Frames:</strong></p>
+                            <ul class="list-disc pl-4 mt-0.5 space-y-0.5 font-mono text-[10px]">
+                                ${q.patterns.map(pat => `<li>${pat}</li>`).join('')}
+                            </ul>
+                            <p class="mt-2 text-slate-600"><strong>Teacher Insight:</strong> ${q.explanation}</p>
+                        </div>
+                    `;
+                }
+
+                const taskDiv = document.createElement('div');
+                taskDiv.className = "p-5 border border-slate-200 rounded-xl bg-slate-50/40 space-y-3";
+                taskDiv.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="bg-brand-100 text-brand-900 font-bold rounded-full w-5 h-5 flex items-center justify-center text-[10px] shrink-0 mt-0.5">${idx+1}</span>
+                        <div class="w-full">
+                            <span class="text-[9px] uppercase font-bold text-rose-600 tracking-wider">Student L1 Transfer Error:</span>
+                            <p class="text-xs text-slate-700 italic font-medium font-mono bg-rose-50/50 p-2 border border-rose-100 rounded mt-1">"${q.prompt}"</p>
+                        </div>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="block text-[10px] font-semibold text-slate-600">Your Reconstructed Sentence:</label>
+                        <input type="text" id="act1-input-${idx}" oninput="updateAct1Answer(${idx}, this.value)" value="${userVal}" placeholder="Type the corrected sentence..." class="w-full text-xs p-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600 font-mono">
+                    </div>
+                    <div class="flex justify-between items-center pt-1">
+                        <span class="text-[10px] text-slate-400">Target structures: Proved / Turned out to be</span>
+                        <button onclick="checkAct1Task(${idx})" class="bg-slate-900 hover:bg-slate-800 text-white text-[11px] px-3.5 py-1.5 rounded-lg font-semibold transition duration-150">Check Reconstruction</button>
+                    </div>
+                    ${feedbackHTML}
+                `;
+                container.appendChild(taskDiv);
+            });
+        }
+
+        function updateAct1Answer(idx, val) {
+            act1Answers[idx] = val;
+        }
+
+        function checkAct1Task(idx) {
+            if(!act1Answers[idx].trim()) {
+                openAlertModal("Input Missing", "Please draft a reconstructed sentence first.", "rose");
+                return;
+            }
+            act1Checked[idx] = true;
+            renderActivity1();
+            updateCalculations();
+        }
+
+        // Render Activity 2
+        function renderActivity2() {
+            const container = document.getElementById('act2-tasks');
+            container.innerHTML = '';
+
+            act2Db.forEach((q, idx) => {
+                const checked = act2Checked[idx];
+                const selectedVal = act2Answers[idx];
+                let feedbackHTML = "";
+
+                if (checked) {
+                    const isCorrect = selectedVal === q.correct;
+                    feedbackHTML = `
+                        <div class="p-3.5 rounded-lg border text-[11px] leading-relaxed ${isCorrect ? 'bg-emerald-50 text-emerald-900 border-emerald-200' : 'bg-rose-50 text-rose-900 border-rose-200'}">
+                            <strong>${isCorrect ? '✓ Correct Choice' : '✗ Incorrect Selection'}</strong>
+                            <p class="mt-1">${q.explanation}</p>
+                        </div>
+                    `;
+                }
+
+                let selectOptions = `<option value="">-- select --</option>`;
+                q.options.forEach(opt => {
+                    const sel = selectedVal === opt ? "selected" : "";
+                    selectOptions += `<option value="${opt}" ${sel}>${opt}</option>`;
+                });
+
+                const taskDiv = document.createElement('div');
+                taskDiv.className = "p-5 border border-slate-200 rounded-xl bg-slate-50/40 space-y-3";
+                taskDiv.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="bg-indigo-100 text-indigo-900 font-bold rounded-full w-5 h-5 flex items-center justify-center text-[10px] shrink-0 mt-0.5">${idx+1}</span>
+                        <div class="text-xs text-slate-800 leading-loose w-full">
+                            ${q.sentence.replace("____", `
+                                <select onchange="updateAct2Selection(${idx}, this.value)" class="mx-1 border border-slate-300 rounded bg-white py-1 px-2 font-bold text-brand-800 focus:outline-none focus:ring-1 focus:ring-brand-500">
+                                    ${selectOptions}
+                                </select>
+                            `)}
+                        </div>
+                    </div>
+                    <div class="flex justify-end pt-1">
+                        <button onclick="checkAct2Task(${idx})" class="bg-slate-900 hover:bg-slate-800 text-white text-[11px] px-3.5 py-1.5 rounded-lg font-semibold transition duration-150">Verify Relation</button>
+                    </div>
+                    ${feedbackHTML}
+                `;
+                container.appendChild(taskDiv);
+            });
+        }
+
+        function updateAct2Selection(idx, val) {
+            act2Answers[idx] = val;
+        }
+
+        function checkAct2Task(idx) {
+            if (!act2Answers[idx]) {
+                openAlertModal("Selection Missing", "Please select a copular verb from the dropdown.", "rose");
+                return;
+            }
+            act2Checked[idx] = true;
+            renderActivity2();
+            updateCalculations();
+        }
+
+        // Check Activity 3
+        function checkAct3() {
+            const s1 = document.getElementById('act3-sel-1').value;
+            const s2 = document.getElementById('act3-sel-2').value;
+            const s3 = document.getElementById('act3-sel-3').value;
+            const s4 = document.getElementById('act3-sel-4').value;
+
+            // Checked only when all 4 are selected
+            if (s1 && s2 && s3 && s4) {
+                act3Checked = true;
+                const score = (s1 === act3Answers.sel1 ? 1 : 0) +
+                              (s2 === act3Answers.sel2 ? 1 : 0) +
+                              (s3 === act3Answers.sel3 ? 1 : 0) +
+                              (s4 === act3Answers.sel4 ? 1 : 0);
+
+                const feedback = document.getElementById('act3-feedback');
+                feedback.classList.remove('hidden');
+                
+                if (score === 4) {
+                    feedback.className = "p-4 rounded-lg text-xs leading-relaxed bg-emerald-50 text-emerald-900 border border-emerald-200 mt-4";
+                    feedback.innerHTML = "<strong>✓ Perfect Paragraph Harmony (4/4):</strong> All choices are syntactically accurate. Student performance remained constant, the initial theory seems highly plausible, structures grew increasingly complex, and final exam results appear consistent with previous models.";
+                } else {
+                    feedback.className = "p-4 rounded-lg text-xs leading-relaxed bg-amber-50 text-amber-900 border border-amber-200 mt-4";
+                    feedback.innerHTML = `<strong>Paragraph Harmony Score: ${score}/4.</strong> Review the incorrect selections. Use 'remained constant' for duration, 'seems highly plausible' for evaluation, 'grew complex' for progressive development, and 'appear consistent' for data-based comparisons.`;
+                }
+                updateCalculations();
+            } else {
+                act3Checked = false;
+                document.getElementById('act3-feedback').classList.add('hidden');
+            }
+        }
+
+        // Render Activity 4
+        function renderActivity4() {
+            const container = document.getElementById('act4-tasks');
+            container.innerHTML = '';
+
+            act4Db.forEach((q, idx) => {
+                const checked = act4Checked[idx];
+                const userVal = act4Answers[idx];
+                let feedbackHTML = "";
+
+                if (checked) {
+                    let isCorrect = false;
+                    if (q.slotsCount === 2) {
+                        isCorrect = userVal[0] === q.correct[0] && userVal[1] === q.correct[1];
+                    } else {
+                        isCorrect = userVal === q.correct;
+                    }
+
+                    feedbackHTML = `
+                        <div class="p-3.5 rounded-lg border text-[11px] leading-relaxed ${isCorrect ? 'bg-emerald-50 text-emerald-900 border-emerald-200' : 'bg-rose-50 text-rose-900 border-rose-200'}">
+                            <strong>${isCorrect ? '✓ Correct Choice' : '✗ Incorrect Preposition'}</strong>
+                            <p class="mt-1">${q.explanation}</p>
+                        </div>
+                    `;
+                }
+
+                let inputsHTML = "";
+                if (q.slotsCount === 2) {
+                    let opt1 = `<option value="">-- select 1 --</option>` + q.options.map(o => `<option value="${o}" ${userVal[0] === o ? 'selected' : ''}>${o}</option>`).join('');
+                    let opt2 = `<option value="">-- select 2 --</option>` + q.options.map(o => `<option value="${o}" ${userVal[1] === o ? 'selected' : ''}>${o}</option>`).join('');
+
+                    inputsHTML = q.prompt
+                        .replace("___", `<select onchange="updateAct4Selection(${idx}, 0, this.value)" class="mx-1 border border-slate-300 rounded bg-white py-1 px-2 font-bold text-brand-800 focus:outline-none focus:ring-1 focus:ring-brand-500">${opt1}</select>`)
+                        .replace("___", `<select onchange="updateAct4Selection(${idx}, 1, this.value)" class="mx-1 border border-slate-300 rounded bg-white py-1 px-2 font-bold text-brand-800 focus:outline-none focus:ring-1 focus:ring-brand-500">${opt2}</select>`);
+                } else {
+                    let opts = `<option value="">-- select --</option>` + q.options.map(o => `<option value="${o}" ${userVal === o ? 'selected' : ''}>${o}</option>`).join('');
+                    inputsHTML = q.prompt.replace("___", `<select onchange="updateAct4Selection(${idx}, null, this.value)" class="mx-1 border border-slate-300 rounded bg-white py-1 px-2 font-bold text-brand-800 focus:outline-none focus:ring-1 focus:ring-brand-500">${opts}</select>`);
+                }
+
+                const taskDiv = document.createElement('div');
+                taskDiv.className = "p-5 border border-slate-200 rounded-xl bg-slate-50/40 space-y-3";
+                taskDiv.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="bg-sky-100 text-sky-900 font-bold rounded-full w-5 h-5 flex items-center justify-center text-[10px] shrink-0 mt-0.5">${idx+1}</span>
+                        <div class="text-xs text-slate-800 leading-loose w-full">
+                            ${inputsHTML}
+                        </div>
+                    </div>
+                    <div class="flex justify-end pt-1">
+                        <button onclick="checkAct4Task(${idx})" class="bg-slate-900 hover:bg-slate-800 text-white text-[11px] px-3.5 py-1.5 rounded-lg font-semibold transition duration-150">Verify Preposition</button>
+                    </div>
+                    ${feedbackHTML}
+                `;
+                container.appendChild(taskDiv);
+            });
+        }
+
+        function updateAct4Selection(qIdx, slotIdx, val) {
+            if (slotIdx !== null) {
+                act4Answers[qIdx][slotIdx] = val;
+            } else {
+                act4Answers[qIdx] = val;
+            }
+        }
+
+        function checkAct4Task(idx) {
+            const current = act4Answers[idx];
+            if (Array.isArray(current)) {
+                if (!current[0] || !current[1]) {
+                    openAlertModal("Input Required", "Please select a response for both dropdown fields.", "rose");
+                    return;
+                }
+            } else {
+                if (!current) {
+                    openAlertModal("Input Required", "Please select a response first.", "rose");
+                    return;
+                }
+            }
+            act4Checked[idx] = true;
+            renderActivity4();
+            updateCalculations();
+        }
+
+        // Render Activity 5 (Metalinguistic Case Studies)
+        function renderActivity5() {
+            const container = document.getElementById('act5-container');
+            container.innerHTML = '';
+
+            act5Db.forEach((caseStudy, idx) => {
+                const userDraft = act5Drafts[idx];
+                const scoreRating = act5Ratings[idx];
+
+                let feedbackSection = "";
+                if (userDraft.trim().length > 10) {
+                    feedbackSection = `
+                        <div class="border-t border-slate-200 pt-4 space-y-3">
+                            <div class="p-4 bg-emerald-50 border border-emerald-150 rounded-xl space-y-2">
+                                <h4 class="font-bold text-xs text-emerald-900 uppercase tracking-wide">Linguistic Evaluation Matrix &amp; Key</h4>
+                                <div class="text-[11px] text-emerald-800 space-y-1.5">
+                                    <p><strong>Proposed Teacher Feedback Draft:</strong></p>
+                                    <div class="bg-white/75 p-3 rounded border border-emerald-200 font-mono text-[10px] whitespace-pre-wrap">"${caseStudy.correctModel}"</div>
+                                    <p class="mt-2"><strong>Linguistic &amp; Diagnostic Breakdown:</strong></p>
+                                    <p>${caseStudy.explanation}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-2">
+                                <label class="block text-[10px] font-bold text-slate-600">Rate your metalinguistic feedback quality:</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button onclick="rateAct5(${idx}, 'exemplary')" class="py-2 px-3 text-center border text-[11px] font-bold rounded-lg transition duration-150 ${scoreRating === 'exemplary' ? 'bg-brand-600 text-white border-brand-600' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}">
+                                        Exemplary (1 pt)
+                                    </button>
+                                    <button onclick="rateAct5(${idx}, 'proficient')" class="py-2 px-3 text-center border text-[11px] font-bold rounded-lg transition duration-150 ${scoreRating === 'proficient' ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}">
+                                        Proficient (1 pt)
+                                    </button>
+                                    <button onclick="rateAct5(${idx}, 'developing')" class="py-2 px-3 text-center border text-[11px] font-bold rounded-lg transition duration-150 ${scoreRating === 'developing' ? 'bg-amber-600 text-white border-amber-600' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'}">
+                                        Developing (0 pt)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const card = document.createElement('div');
+                card.className = "p-5 border border-slate-200 rounded-xl bg-slate-50/30 space-y-4 shadow-xs";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                        <h3 class="font-extrabold text-xs text-slate-900">${caseStudy.title}</h3>
+                        <span class="text-[9px] font-bold text-slate-400 font-mono">Case ${idx+1}/3</span>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="text-[9px] font-bold text-rose-600 uppercase tracking-wider">Erroneous Student Sample:</span>
+                        <div class="bg-rose-50 border border-rose-100 p-2.5 rounded text-xs font-mono italic text-slate-800">
+                            "${caseStudy.prompt}"
+                        </div>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="block text-[10px] font-bold text-slate-600">Draft your Metalinguistic correction &amp; explanation:</label>
+                        <textarea id="act5-textarea-${idx}" oninput="updateAct5Draft(${idx}, this.value)" placeholder="Explain the error to the student using formal syntactic terms (transitiveness, copular structures, L1 transfer)..." rows="4" class="w-full text-xs p-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600 font-sans leading-relaxed">${userDraft}</textarea>
+                    </div>
+                    <div class="flex justify-end">
+                        <button onclick="evaluateAct5Draft(${idx})" class="bg-slate-950 hover:bg-slate-800 text-white text-[11px] px-4 py-2 rounded-lg font-bold transition duration-150 shadow-xs">Evaluate Draft</button>
+                    </div>
+                    ${feedbackSection}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function updateAct5Draft(idx, val) {
+            act5Drafts[idx] = val;
+        }
+
+        function evaluateAct5Draft(idx) {
+            const val = act5Drafts[idx];
+            if(val.trim().length < 10) {
+                openAlertModal("Incomplete Entry", "Please write a comprehensive metalinguistic response (at least 10 characters) explaining the structures involved.", "rose");
+                return;
+            }
+            renderActivity5();
+        }
+
+        function rateAct5(idx, rating) {
+            act5Ratings[idx] = rating;
+            renderActivity5();
+            updateCalculations();
+        }
+
+        // Global Calculations and Trackers
+        function updateCalculations() {
+            // Act 1 score (max 5)
+            let a1Score = 0;
+            act1Db.forEach((q, idx) => {
+                if (act1Checked[idx]) {
+                    const cleanUser = act1Answers[idx].trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s+/g, ' ');
+                    const isCorrect = q.patterns.some(pat => {
+                        const cleanPat = pat.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s+/g, ' ');
+                        return cleanUser.includes(cleanPat);
+                    });
+                    if (isCorrect) a1Score++;
+                }
+            });
+
+            // Act 2 score (max 5)
+            let a2Score = 0;
+            act2Db.forEach((q, idx) => {
+                if (act2Checked[idx] && act2Answers[idx] === q.correct) {
+                    a2Score++;
+                }
+            });
+
+            // Act 3 score (max 4)
+            let a3Score = 0;
+            if (act3Checked) {
+                const s1 = document.getElementById('act3-sel-1').value;
+                const s2 = document.getElementById('act3-sel-2').value;
+                const s3 = document.getElementById('act3-sel-3').value;
+                const s4 = document.getElementById('act3-sel-4').value;
+
+                if (s1 === act3Answers.sel1) a3Score++;
+                if (s2 === act3Answers.sel2) a3Score++;
+                if (s3 === act3Answers.sel3) a3Score++;
+                if (s4 === act3Answers.sel4) a3Score++;
+            }
+
+            // Act 4 score (max 6 because item 2 has 2 slots)
+            let a4Score = 0;
+            act4Db.forEach((q, idx) => {
+                if (act4Checked[idx]) {
+                    if (q.slotsCount === 2) {
+                        if (act4Answers[idx][0] === q.correct[0]) a4Score++;
+                        if (act4Answers[idx][1] === q.correct[1]) a4Score++;
+                    } else {
+                        if (act4Answers[idx] === q.correct) a4Score++;
+                    }
+                }
+            });
+
+            // Act 5 score (max 3)
+            let a5Score = 0;
+            act5Ratings.forEach(rating => {
+                if (rating === 'exemplary' || rating === 'proficient') {
+                    a5Score++;
+                }
+            });
+
+            const totalScoreVal = a1Score + a2Score + a3Score + a4Score + a5Score;
+            document.getElementById('total-score').innerText = totalScoreVal;
+
+            // Compute Progress Pct (20 items in total)
+            let totalTasks = 19; // Act 1 (5), Act 2 (5), Act 3 (1), Act 4 (5), Act 5 (3)
+            let completed = 0;
+            completed += act1Checked.filter(x => x === true).length;
+            completed += act2Checked.filter(x => x === true).length;
+            if (act3Checked) completed++;
+            completed += act4Checked.filter(x => x === true).length;
+            completed += act5Ratings.filter(x => x !== null).length;
+
+            const pct = Math.round((completed / totalTasks) * 100);
+            document.getElementById('module-progress').style.width = `${pct}%`;
+            document.getElementById('module-progress-pct').innerText = `${pct}%`;
+        }
+
+        // Performance Tab populations
+        function populatePerformanceReport() {
+            let a1Score = 0;
+            act1Db.forEach((q, idx) => {
+                if (act1Checked[idx]) {
+                    const cleanUser = act1Answers[idx].trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s+/g, ' ');
+                    const isCorrect = q.patterns.some(pat => {
+                        const cleanPat = pat.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s+/g, ' ');
+                        return cleanUser.includes(cleanPat);
+                    });
+                    if (isCorrect) a1Score++;
+                }
+            });
+
+            let a2Score = 0;
+            act2Db.forEach((q, idx) => {
+                if (act2Checked[idx] && act2Answers[idx] === q.correct) {
+                    a2Score++;
+                }
+            });
+
+            let a3Score = 0;
+            let s1 = "", s2 = "", s3 = "", s4 = "";
+            if (act3Checked) {
+                s1 = document.getElementById('act3-sel-1').value;
+                s2 = document.getElementById('act3-sel-2').value;
+                s3 = document.getElementById('act3-sel-3').value;
+                s4 = document.getElementById('act3-sel-4').value;
+
+                if (s1 === act3Answers.sel1) a3Score++;
+                if (s2 === act3Answers.sel2) a3Score++;
+                if (s3 === act3Answers.sel3) a3Score++;
+                if (s4 === act3Answers.sel4) a3Score++;
+            }
+
+            let a4Score = 0;
+            let a4Max = 6;
+            act4Db.forEach((q, idx) => {
+                if (act4Checked[idx]) {
+                    if (q.slotsCount === 2) {
+                        if (act4Answers[idx][0] === q.correct[0]) a4Score++;
+                        if (act4Answers[idx][1] === q.correct[1]) a4Score++;
+                    } else {
+                        if (act4Answers[idx] === q.correct) a4Score++;
+                    }
+                }
+            });
+
+            let a5Score = 0;
+            act5Ratings.forEach(rating => {
+                if (rating === 'exemplary' || rating === 'proficient') {
+                    a5Score++;
+                }
+            });
+
+            const scoreContainer = document.getElementById('score-summary-list');
+            scoreContainer.innerHTML = `
+                <div class="flex justify-between items-center text-xs text-slate-600">
+                    <span>1. Resultar vs. Prove Syntax</span>
+                    <span class="font-bold text-slate-900">${a1Score} / 5</span>
+                </div>
+                <div class="flex justify-between items-center text-xs text-slate-600">
+                    <span>2. Part-Whole Structural Sorting</span>
+                    <span class="font-bold text-slate-900">${a2Score} / 5</span>
+                </div>
+                <div class="flex justify-between items-center text-xs text-slate-600">
+                    <span>3. Aspectual &amp; Modal Paragraph Harmony</span>
+                    <span class="font-bold text-slate-900">${a3Score} / 4</span>
+                </div>
+                <div class="flex justify-between items-center text-xs text-slate-600">
+                    <span>4. Prepositional Colligations (As vs. Like)</span>
+                    <span class="font-bold text-slate-900">${a4Score} / 6</span>
+                </div>
+                <div class="flex justify-between items-center text-xs text-slate-600">
+                    <span>5. Metalinguistic Explanations (Self-Evaluations)</span>
+                    <span class="font-bold text-slate-900">${a5Score} / 3</span>
+                </div>
+                <div class="h-px bg-slate-200 my-2"></div>
+                <div class="flex justify-between items-center text-xs font-extrabold text-slate-900">
+                    <span>Aggregate Mastery Score</span>
+                    <span>${a1Score + a2Score + a3Score + a4Score + a5Score} / 23</span>
+                </div>
+            `;
+
+            // Render Annotated Master Keys inside Tab
+            const keysContainer = document.getElementById('annotated-master-key');
+            keysContainer.innerHTML = '';
+
+            // Section 1 Master Key
+            let section1HTML = `
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs space-y-3 shadow-xs">
+                    <h4 class="font-extrabold text-slate-900 uppercase text-[10px] tracking-wide text-brand-800">Activity 1 Answer Key: Resultar vs. Prove</h4>
+                    <ol class="list-decimal pl-4 space-y-2.5 text-slate-700">
+            `;
+            act1Db.forEach(item => {
+                section1HTML += `
+                    <li>
+                        <span class="text-rose-700 block font-mono">Incorrect: "${item.prompt}"</span>
+                        <span class="text-emerald-700 font-bold block font-mono">Suggested: "${item.patterns[0]}"</span>
+                        <span class="text-[10px] text-slate-500 block">${item.explanation}</span>
+                    </li>
+                `;
+            });
+            section1HTML += `</ol></div>`;
+
+            // Section 2 Master Key
+            let section2HTML = `
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs space-y-3 mt-4 shadow-xs">
+                    <h4 class="font-extrabold text-slate-900 uppercase text-[10px] tracking-wide text-brand-800">Activity 2 Answer Key: Part-Whole &amp; Equative Sorting</h4>
+                    <ol class="list-decimal pl-4 space-y-2.5 text-slate-700">
+            `;
+            act2Db.forEach(item => {
+                section2HTML += `
+                    <li>
+                        <p class="font-medium">"${item.sentence.replace('____', `[${item.correct}]`)}"</p>
+                        <span class="text-[10px] text-slate-500 block">${item.explanation}</span>
+                    </li>
+                `;
+            });
+            section2HTML += `</ol></div>`;
+
+            // Section 3 Master Key
+            let section3HTML = `
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs space-y-3 mt-4 shadow-xs">
+                    <h4 class="font-extrabold text-slate-900 uppercase text-[10px] tracking-wide text-brand-800">Activity 3 Answer Key: Aspectual &amp; Modal Paragraph Harmony</h4>
+                    <p class="italic text-slate-700 leading-relaxed">
+                        "During the first three cycles of classroom observations, student performance across both experimental groups 
+                        <strong class="text-brand-800">remained constant</strong>, showing almost zero statistical variation. Consequently, the teacher's initial theory that group dynamics dictate performance 
+                        <strong class="text-brand-800">seems highly plausible</strong> when analyzed in isolation. However, as syntactic structures 
+                        <strong class="text-brand-800">grew increasingly complex</strong> in the advanced syllabus, trainees began to struggle. In light of this, the final exam results do not 
+                        <strong class="text-brand-800">appear consistent</strong> with the initial hypothesis, prompting a complete review of the pedagogical design."
+                    </p>
+                </div>
+            `;
+
+            // Section 4 Master Key
+            let section4HTML = `
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs space-y-3 mt-4 shadow-xs">
+                    <h4 class="font-extrabold text-slate-900 uppercase text-[10px] tracking-wide text-brand-800">Activity 4 Answer Key: Prepositional Colligations (As vs. Like)</h4>
+                    <ol class="list-decimal pl-4 space-y-2.5 text-slate-700">
+            `;
+            act4Db.forEach(item => {
+                let textCompleted = "";
+                if(item.slotsCount === 2) {
+                    textCompleted = item.prompt
+                        .replace('___', `[${item.correct[0]}]`)
+                        .replace('___', `[${item.correct[1]}]`);
+                } else {
+                    textCompleted = item.prompt.replace('___', `[${item.correct}]`);
+                }
+
+                section4HTML += `
+                    <li>
+                        <p class="font-medium">${textCompleted}</p>
+                        <span class="text-[10px] text-slate-500 block">${item.explanation}</span>
+                    </li>
+                `;
+            });
+            section4HTML += `</ol></div>`;
+
+            // Section 5 Master Key
+            let section5HTML = `
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs space-y-3 mt-4 shadow-xs">
+                    <h4 class="font-extrabold text-slate-900 uppercase text-[10px] tracking-wide text-brand-800">Activity 5 Master Key: Metalinguistic Case Studies</h4>
+                    <div class="space-y-4">
+            `;
+            act5Db.forEach((item, idx) => {
+                section5HTML += `
+                    <div class="border-b border-slate-200 pb-3 last:border-0">
+                        <strong class="text-slate-900 block text-[11px]">${item.title}</strong>
+                        <p class="text-rose-700 font-mono text-[10px] mt-0.5">Incorrect: "${item.prompt}"</p>
+                        <p class="text-emerald-700 font-mono text-[10px] mt-0.5">Correction: "${item.correctModel}"</p>
+                        <p class="text-[10px] text-slate-600 mt-1.5">${item.explanation}</p>
+                    </div>
+                `;
+            });
+            section5HTML += `</div></div>`;
+
+            keysContainer.innerHTML = section1HTML + section2HTML + section3HTML + section4HTML + section5HTML;
+        }
+
+        // Export Performance Markdown File
+        function exportWorkbookReport() {
+            let a1Score = 0;
+            act1Db.forEach((q, idx) => {
+                if (act1Checked[idx]) {
+                    const cleanUser = act1Answers[idx].trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s+/g, ' ');
+                    const isCorrect = q.patterns.some(pat => {
+                        const cleanPat = pat.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").replace(/\s+/g, ' ');
+                        return cleanUser.includes(cleanPat);
+                    });
+                    if (isCorrect) a1Score++;
+                }
+            });
+
+            let a2Score = 0;
+            act2Db.forEach((q, idx) => {
+                if (act2Checked[idx] && act2Answers[idx] === q.correct) {
+                    a2Score++;
+                }
+            });
+
+            let a3Score = 0;
+            let s1 = "", s2 = "", s3 = "", s4 = "";
+            if (act3Checked) {
+                s1 = document.getElementById('act3-sel-1').value;
+                s2 = document.getElementById('act3-sel-2').value;
+                s3 = document.getElementById('act3-sel-3').value;
+                s4 = document.getElementById('act3-sel-4').value;
+
+                if (s1 === act3Answers.sel1) a3Score++;
+                if (s2 === act3Answers.sel2) a3Score++;
+                if (s3 === act3Answers.sel3) a3Score++;
+                if (s4 === act3Answers.sel4) a3Score++;
+            }
+
+            let a4Score = 0;
+            act4Db.forEach((q, idx) => {
+                if (act4Checked[idx]) {
+                    if (q.slotsCount === 2) {
+                        if (act4Answers[idx][0] === q.correct[0]) a4Score++;
+                        if (act4Answers[idx][1] === q.correct[1]) a4Score++;
+                    } else {
+                        if (act4Answers[idx] === q.correct) a4Score++;
+                    }
+                }
+            });
+
+            let a5Score = 0;
+            act5Ratings.forEach(rating => {
+                if (rating === 'exemplary' || rating === 'proficient') {
+                    a5Score++;
+                }
+            });
+
+            let markdownData = `# Dynamic Study Report &amp; Answer Key
+Module: Academic Copular Verbs &amp; Syntactic Analysis
+Target Audience: EFL Teacher Education in Argentina
+
+========================================================================
+## YOUR OVERALL PERFORMANCE SCORING SUMMARY
+* Activity 1: Resultar vs. Prove Syntax: ${a1Score} / 5
+* Activity 2: Part-Whole Structural Sorting: ${a2Score} / 5
+* Activity 3: Aspectual &amp; Modal Paragraph Harmony: ${a3Score} / 4
+* Activity 4: Prepositional Colligations (As vs. Like): ${a4Score} / 6
+* Activity 5: Metalinguistic Explanations: ${a5Score} / 3
+------------------------------------------------------------------------
+AGGREGATE MASTERY SCORE: ${a1Score + a2Score + a3Score + a4Score + a5Score} / 23 (Passing criteria: 17/23)
+========================================================================
+
+## THEORETICAL GRAMMAR GLOSSARY REFERENCE DECK
+`;
+
+            glossaryDb.forEach(item => {
+                markdownData += `
+### ${item.term} (${item.classification})
+* **Linguistic Definition:** ${item.definition}
+* **Expected Syntactic Frame:** ${item.frame}
+* **Argentine L1 Spanish Danger:** ${item.warning}
+* **Linguistic Example:** "${item.example}"
+`;
+            });
+
+            markdownData += `
+========================================================================
+## DETAILED PERFORMANCE ARCHIVE &amp; CORRECT ANSWER RECORDS
+
+### Activity 1: The "Resultar" vs. "Prove" Dilemma
+`;
+            act1Db.forEach((q, idx) => {
+                markdownData += `
+Task ${idx+1}: Correcting: "${q.prompt}"
+- Your Submitted Correction: "${act1Answers[idx] || "N/A"}"
+- Correct Syntactic Frames: "${q.patterns.join(' OR ')}"
+- Linguistic Rationale: ${q.explanation}
+`;
+            });
+
+            markdownData += `
+### Activity 2: Part-Whole &amp; Equative Relations
+`;
+            act2Db.forEach((q, idx) => {
+                let userChosen = act2Answers[idx] || "N/A";
+                markdownData += `
+Task ${idx+1}: "${q.sentence.replace('____', `[${userChosen}]`)}"
+- Selected Copula: ${userChosen}
+- Expected Copula: ${q.correct}
+- Syntactic Rationale: ${q.explanation}
+`;
+            });
+
+            markdownData += `
+### Activity 3: Aspectual and Modal Stance Paragraph Harmony
+`;
+            if (act3Checked) {
+                markdownData += `
+* Slot 1: Group performance [remained constant] (Observed user selection: "${s1}")
+* Slot 2: Initial theory [seems highly plausible] (Observed user selection: "${s2}")
+* Slot 3: Syntactic structures [grew increasingly complex] (Observed user selection: "${s3}")
+* Slot 4: Final exam results do not [appear consistent] (Observed user selection: "${s4}")
+`;
+            } else {
+                markdownData += `\n*Activity 3 was skipped or remains incomplete in this session.*\n`;
+            }
+
+            markdownData += `
+### Activity 4: Prepositional Colligations (As vs. Like)
+`;
+            act4Db.forEach((q, idx) => {
+                let userChose = act4Answers[idx];
+                let chosenStr = Array.isArray(userChose) ? `[Slot 1: ${userChose[0] || 'none'} | Slot 2: ${userChose[1] || 'none'}]` : `[${userChose || 'none'}]`;
+                let expectedStr = Array.isArray(q.correct) ? `[Slot 1: ${q.correct[0]} | Slot 2: ${q.correct[1]}]` : `[${q.correct}]`;
+
+                markdownData += `
+Task ${idx+1}: "${q.prompt}"
+- Selected Preposition(s): ${chosenStr}
+- Correct Preposition(s): ${expectedStr}
+- Syntactic Principle: ${q.explanation}
+`;
+            });
+
+            markdownData += `
+### Activity 5: Metalinguistic Case Studies &amp; Teacher Explanations
+`;
+            act5Db.forEach((q, idx) => {
+                markdownData += `
+------------------------------------------------------------------------
+#### ${q.title}
+* Erroneous Student Sample: "${q.prompt}"
+* Your Metalinguistic Explanation Draft:
+  "${act5Drafts[idx] || "N/A"}"
+* Professional Model Explanation:
+  "${q.explanation}"
+* Your Self-Reported Performance Rating: "${act5Ratings[idx] || "Unrated"}"
+`;
+            });
+
+            markdownData += `
+========================================================================
+### Pedagogical References &amp; Academic Reading Lists
+* Leech, G., &amp; Svartvik, J. (2002). A Communicative Grammar of English (3rd ed.). Longman.
+* Greenbaum, S., &amp; Quirk, R. (1990). A Student's Grammar of the English Language. Longman.
+* Penston, T. (2005). A Concise Grammar for English Language Teachers. TP Publications.
+* Foley, M., &amp; Hall, D. (2012). MyGrammarLab Advanced C1/C2. Pearson.
+* Llaneza, G. A. (2025). Prácticas discursivas de la comunicación escrita III: Summary Essay Unit. UTN/ISFD.
+`;
+
+            // Trigger safe browser file generation
+            const blob = new Blob([markdownData], { type: 'text/markdown;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "Academic_Copular_Mastery_Workbook_Report.md");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            openAlertModal("Portfolio Compiled", "Your performance metrics, drafted evaluations, score matrix, and complete annotated answer explanations have been compiled and exported to your local device.", "emerald");
+        }
+
+        // Custom Modal Control
+        function openAlertModal(heading, message, type = "emerald") {
+            const modal = document.getElementById('alert-modal');
+            const mHead = document.getElementById('modal-heading');
+            const mMsg = document.getElementById('modal-message');
+            const mIcon = document.getElementById('modal-icon-holder');
+
+            mHead.innerText = heading;
+            mMsg.innerText = message;
+
+            if (type === "rose") {
+                mIcon.className = "mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-rose-100 text-rose-600 mb-4";
+                mIcon.innerHTML = `<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+            } else {
+                mIcon.className = "mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 text-emerald-600 mb-4";
+                mIcon.innerHTML = `<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeAlertModal() {
+            document.getElementById('alert-modal').classList.add('hidden');
+        }
+
+        // Setup on Load
+        window.onload = function() {
+            renderGlossary();
+            renderActivity1();
+            renderActivity2();
+            renderActivity4();
+            renderActivity5();
+            updateCalculations();
+        };
+    </script>
+</body>
+</html>

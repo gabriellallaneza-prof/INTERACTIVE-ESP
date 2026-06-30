@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP Exam Generator</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'media', // Automáticamente usa el tema del sistema
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', "Liberation Mono", "Courier New", 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos personalizados para el contenido Markdown generado */
+        .markdown-body h1 { @apply text-3xl font-extrabold mt-8 mb-4 text-indigo-700 dark:text-indigo-400; }
+        .markdown-body h2 { @apply text-2xl font-bold mt-8 mb-4 text-slate-900 dark:text-white pb-2 border-b border-slate-200 dark:border-slate-700; }
+        .markdown-body h3 { @apply text-xl font-bold mt-6 mb-2 text-slate-800 dark:text-slate-200; }
+        .markdown-body p { @apply mb-4 leading-relaxed; }
+        .markdown-body strong { @apply font-bold text-slate-900 dark:text-white; }
+        .markdown-body em { @apply italic; }
+        .markdown-body ul { @apply list-disc pl-6 mb-4 space-y-1; }
+        .markdown-body ol { @apply list-decimal pl-6 mb-4 space-y-1; }
+        .markdown-body blockquote { @apply border-l-4 border-indigo-500 pl-4 py-1 italic bg-slate-50 dark:bg-slate-800/50 my-4 text-slate-700 dark:text-slate-300 rounded-r; }
+        .markdown-body pre { @apply bg-slate-900 text-slate-50 p-4 rounded-xl my-4 overflow-x-auto text-sm font-mono shadow-inner; }
+        .markdown-body code { @apply bg-slate-100 dark:bg-slate-800 text-pink-600 dark:text-pink-400 px-1.5 py-0.5 rounded text-sm font-mono; }
+        .markdown-body pre code { @apply bg-transparent text-inherit p-0 text-sm; }
+        
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { @apply bg-slate-300 dark:bg-slate-600 rounded-full; }
+        ::-webkit-scrollbar-thumb:hover { @apply bg-slate-400 dark:bg-slate-500; }
+
+        /* Animaciones */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        
+        @keyframes slideUp { from { bottom: -50px; opacity: 0; } to { bottom: 20px; opacity: 1; } }
+        .toast-enter { animation: slideUp 0.3s ease-out forwards; }
+        
+        /* Estilos de Radio Buttons ocultos */
+        .config-radio:checked + div { @apply bg-indigo-50 border-indigo-200 dark:bg-indigo-900/20 dark:border-indigo-700; }
+        .config-radio:checked + div .radio-indicator { @apply border-indigo-600; border-width: 5px; }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 h-screen flex flex-col overflow-hidden selection:bg-indigo-200 dark:selection:bg-indigo-900">
+
+    <header class="bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 flex-shrink-0 z-10 shadow-sm relative">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-inner flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 2.5 0 0 1 0-5H20"/></svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white">Generador de Exámenes ESP</h1>
+                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Inglés 2 / Sistemas - TUDAIC</p>
+                </div>
+            </div>
+            
+            <!-- Controles móviles -->
+            <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg lg:hidden">
+                <button id="btn-tab-config" class="tab-btn active px-4 py-2 text-sm font-medium rounded-md bg-white dark:bg-slate-700 shadow text-slate-900 dark:text-white transition-all">Config</button>
+                <button id="btn-tab-preview" class="tab-btn px-4 py-2 text-sm font-medium rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all">Vista</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-6 lg:gap-8 overflow-hidden h-full">
+        
+        <!-- PANEL IZQUIERDO: Configuración -->
+        <div id="panel-config" class="flex-1 flex flex-col gap-6 overflow-y-auto pr-2 pb-24 lg:pb-0 h-full w-full lg:w-1/2 custom-scrollbar transition-all duration-300">
+            
+            <!-- Texto Académico -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col flex-shrink-0 overflow-hidden">
+                <div class="p-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80">
+                    <h2 class="font-bold text-slate-800 dark:text-slate-200 flex items-center text-sm uppercase tracking-wide">
+                        <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        Texto Académico Fuente
+                    </h2>
+                </div>
+                <textarea id="input-text" class="w-full h-48 lg:h-64 p-5 bg-transparent border-none focus:ring-0 resize-y text-slate-700 dark:text-slate-300 placeholder-slate-400 dark:placeholder-slate-500 outline-none" placeholder="Pegue el artículo académico aquí (Estándar: 4 páginas para parciales, 5-6 páginas para finales)..."></textarea>
+            </div>
+
+            <!-- Opciones de Diseño -->
+            <div class="flex-1 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 lg:p-6">
+                <div class="flex items-center mb-6">
+                    <svg class="text-slate-400 dark:text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    <h2 class="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wide text-sm">Blueprint del Instrumento</h2>
+                </div>
+                
+                <div id="phases-container" class="space-y-8">
+                    <!-- Fases inyectadas por JS -->
+                </div>
+            </div>
+
+            <!-- Botón Generar (Mobile sticky, Desktop normal) -->
+            <div class="fixed lg:static bottom-0 left-0 w-full lg:w-auto p-4 lg:p-0 bg-slate-50 lg:bg-transparent dark:bg-slate-900 lg:dark:bg-transparent border-t lg:border-none border-slate-200 dark:border-slate-800 mt-2 z-20">
+                <button id="btn-generate" class="w-full py-4 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg hover:shadow-indigo-500/30 transition-all flex justify-center items-center disabled:bg-slate-400 disabled:dark:bg-slate-700 disabled:cursor-not-allowed disabled:shadow-none">
+                    <span id="btn-text">Generar Examen Estandarizado</span>
+                    <svg id="btn-loader" class="hidden animate-spin ml-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- PANEL DERECHO: Previsualización -->
+        <div id="panel-preview" class="hidden lg:flex flex-col flex-1 h-full w-full lg:w-1/2 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden transition-all duration-300 relative">
+            <div class="p-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 flex justify-between items-center z-10">
+                <h2 class="font-bold text-slate-800 dark:text-slate-200 flex items-center text-sm uppercase tracking-wide">
+                    <svg class="w-5 h-5 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Artefacto Generado
+                </h2>
+                <button id="btn-copy" class="hidden items-center text-xs font-semibold bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 px-3 py-2 rounded-lg transition-colors shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    Copiar Examen
+                </button>
+            </div>
+            
+            <div id="output-container" class="flex-1 p-6 lg:p-8 overflow-y-auto custom-scrollbar relative bg-white dark:bg-slate-800">
+                <!-- Estado Vacío -->
+                <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 text-center px-8 animate-fade-in">
+                    <svg class="w-16 h-16 mb-4 text-slate-200 dark:text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                    <p class="text-lg font-semibold text-slate-600 dark:text-slate-300">Espacio de Trabajo Vacío</p>
+                    <p class="text-sm mt-2 max-w-md leading-relaxed">Pegue un texto académico en el panel izquierdo, configure las opciones para las fases pedagógicas y presione "Generar" para compilar un examen estandarizado.</p>
+                </div>
+
+                <!-- Estado Cargando -->
+                <div id="loading-state" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm z-10">
+                    <div class="grid grid-cols-2 gap-2 animate-pulse mb-6">
+                        <div class="w-10 h-10 bg-indigo-200 dark:bg-indigo-900/50 rounded-lg"></div>
+                        <div class="w-10 h-10 bg-indigo-300 dark:bg-indigo-800/50 rounded-lg"></div>
+                        <div class="w-10 h-10 bg-indigo-300 dark:bg-indigo-800/50 rounded-lg"></div>
+                        <div class="w-10 h-10 bg-indigo-400 dark:bg-indigo-700/50 rounded-lg"></div>
+                    </div>
+                    <p class="text-sm font-medium tracking-wide text-indigo-600 dark:text-indigo-400 animate-pulse">Compilando instrumento mediante LLM...</p>
+                </div>
+
+                <!-- Contenido Generado -->
+                <div id="markdown-output" class="markdown-body hidden"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Notificación Toast -->
+    <div id="toast" class="fixed bottom-[-50px] left-1/2 transform -translate-x-1/2 bg-slate-800 dark:bg-slate-700 text-white px-6 py-3 rounded-full shadow-2xl text-sm font-medium flex items-center transition-all duration-300 opacity-0 pointer-events-none z-50">
+        <svg class="w-4 h-4 mr-2 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        ¡Contenido copiado al portapapeles!
+    </div>
+
+    <!-- Script de Lógica -->
+    <script>
+        // Datos de las Fases
+        const phasesData = [
+            {
+                num: 1,
+                title: "Comprensión General",
+                optA: "Estructura: Identificación de divisiones, subtítulos y marcadores macro-estructurales.",
+                optB: "Mapeo Bibliográfico: Contexto de publicación, propósito comunicativo, audiencia."
+            },
+            {
+                num: 2,
+                title: "Características del Género y Comp. Detallada",
+                optA: "Matriz Epistémica: Grilla extrayendo Problema, Conceptos Centrales, Metodología, etc.",
+                optB: "Grilla Lógica Tri-Valente: 5 ítems TRUE / FALSO / DOES NOT SAY con justificación obligatoria."
+            },
+            {
+                num: 3,
+                title: "Vocabulario y Frases en Contexto",
+                optA: "MCQ de Cohesión (4 opciones): Marcadores de referencia, voz pasiva, conectores.",
+                optB: "Desambiguación Morfosintáctica: Distinguir valores de formas -ing/-ed y polisemia."
+            },
+            {
+                num: 4,
+                title: "Redacción Formal y Comp. Muy Específica",
+                optA: "Selección de Resumen Optimizada (24 pts): MCQ con distractores estructurados (Correcto vs IA vs Traducción Literal vs Alucinación).",
+                optB: "Cambio de Código Controlado: Extraer 2 oraciones complejas con giros idiomáticos para traducción formal."
+            },
+            {
+                num: 5,
+                title: "Interpretación de Gráficos",
+                optA: "Párrafo de Síntesis Controlado: Analizar diagrama/tabla en exactamente 2-3 oraciones en castellano formal.",
+                optB: "Mapeo Visual-Texto: Vincular proposiciones descriptivas a nodos de un modelo conceptual."
+            }
+        ];
+
+        // Estado Global
+        let currentConfigs = { phase1: 'A', phase2: 'A', phase3: 'A', phase4: 'A', phase5: 'A' };
+        let generatedContent = "";
+
+        // Prompt del Sistema Constante
+        const SYSTEM_PROMPT = `
+## ROLE & CONTEXT
+You are an expert AI instructional designer specialized in English for Specific Purposes (ESP), Systemic Functional Linguistics, and Genre-Based Pedagogy within higher education. Your task is to generate highly standardized reading comprehension exams based on an academic source text selected by the professor. 
+
+The design of these instruments must maximize grading efficiency for a high volume of students (~400 per semester) managed by limited teaching resources (4 graders, 72-hour grading window), while strictly limiting student cognitive load to text resolution rather than deciphering complex activity mechanics.
+
+## CONSTRAINTS & DESIGN PRINCIPLES
+*   **Cognitive Load:** Keep activity instructions concise, uniform, and identical to standard classroom practical work (Trabajos Prácticos).
+*   **Language Policy:** Questions and tasks are written in English/Spanish as specified by the phase; all student outputs must be in formal, academic Spanish (Castellano), strictly avoiding 'Spanglish' or literal calques.
+*   **Genitive Case Constraint:** In all generated English prompts, items, or explanations, the genitive case ('s) must be reserved exclusively for living things. For abstract or inanimate entities, use "of" constructions.
+*   **Comparability & Scalability:** Items must allow the creation of up to 4 parallel variants (Temas) per instrument with equivalent psychometric difficulty.
+
+## EXAM GENERATION PIPELINE
+Execute the following five phases sequentially based on the selected configuration flags.
+
+### PHASE 1: COMPRENSIÓN GENERAL
+*   **Objective:** Evaluate macro-textual comprehension and identification of the academic genre's structural layout.
+*   **Selected Option [A / B]:**
+    *   *Option A (Structural Layout):* Generate tasks focusing on identifying text divisions, subtitles, and major macro-structural markers.
+    *   *Option B (Bibliographic Mapping):* Create matching or short identification queries concerning the context of publication, communicative purpose, target audience, and author intentions.
+
+### PHASE 2: CARACTERÍSTICAS Y ORGANIZACIÓN DEL GÉNERO ACADÉMICO Y COMPRENSIÓN DETALLADA
+*   **Objective:** Map the epistemic components of scientific discourse.
+*   **Selected Option [A / B]:**
+    *   *Option A (The Epistemic Matrix):* Create a structured completion grid requiring the extraction of specific textual instances for: Motivation, Problem, Central Concepts, Definitions, Methodology, Limitations, Conclusions, and Implications.
+    *   *Option B (Tri-Value Logic Grid):* Generate 5 items using **TRUE / FALSO / DOES NOT SAY** syntax. Every item must explicitly require a precise textual justification in Spanish to prevent guessing.
+
+### PHASE 3: COMPRENSIÓN DE VOCABULARIO Y FRASES EN CONTEXTO
+*   **Objective:** Analyze micro-linguistic cohesive chains, grammatical patterns, and lexicogrammar.
+*   **Selected Option [A / B]:**
+    *   *Option A (4-Option Cohesion MCQs):* Generate multiple-choice items identifying the precise contextual reference, function, or value of specific elements. Target structures must include: textual reference markers, verbal aspects, active vs. passive voice, nominalizations, conditional clauses, modal verbs, participle constructions, connectors, cleft sentences, or structural inversion.
+    *   *Option B (Morphosyntactic Disambiguation):* Create 4-option MCQs targeting complex structural values, such as distinguishing the grammatical and semantic value of *-ing* and *-ed* forms (e.g., adjectival participle vs. gerund vs. continuous aspect) or polysemous technical terms in context.
+
+### PHASE 4: REDACCIÓN FORMAL EN CASTELLANO Y COMPRENSIÓN MUY ESPECÍFICA
+*   **Objective:** Assess high-level processing and synthesis without inflating grading times.
+*   **Selected Option [A / B]:**
+    *   *Option A (LMS-Optimized Summary Selection - 24 Points):* Generate a single high-stakes multiple-choice question where the student must select the most accurate summary of the text. You must construct exactly 4 options following this taxonomy:
+        *   *Option a (Correct Summary):* A pedagogically sound, fully accurate synthesis in formal Spanish.
+        *   *Option b (Raw AI Summary):* An unedited summary that reads with superficial fluency but contains subtle inaccuracies, missing nuances, or minor contradictions.
+        *   *Option c (Literal Abstract Translation):* A dense, literal translation of the text's abstract without proper synthesis.
+        *   *Option d (Hallucinated Proximity):* A summary containing actual keywords and related domain terminology, but introducing concepts or arguments completely absent from the source text.
+    *   *Option B (Controlled Code-Switching):* Extract 2 distinct complex sentences containing metaphorical language, idiomatic turns, or culturally foreign connotations combined with complex syntax (e.g., subordination, inversion). Require a short translation/explanation in formal Spanish.
+
+### PHASE 5: INTERPRETACIÓN DE GRÁFICOS
+*   **Objective:** Evaluate non-linear literacy (multimodality) and cross-lingual synthesis.
+*   **Selected Option [A / B]:**
+    *   *Option A (Controlled Synthesis Paragraph):* Prompt the student to analyze a diagram, flowchart, or table conceptually tied to the text. Instructions must strictly require a brief, cohesive paragraph in formal Spanish limited to exactly 2 to 3 sentences, penalizing the use of informal loanwords.
+    *   *Option B (Visual-to-Text Mapping):* Create items that require linking specific descriptive textual propositions to structural nodes within an accompanying conceptual model or architectural diagram.
+
+## OUTPUT REQUIREMENTS
+For each configured phase, provide:
+1.  **Student Copy:** Clear, scannable instructions, text excerpts where necessary, and clean response spaces or choice options. Format beautifully using Markdown.
+2.  **Answer Key (Clave de Corrección):** Explicit correct responses, objective grading rubrics for open items, and specific textual boundaries justifying the keys to ensure absolute consensus among different evaluators. Format beautifully using Markdown.
+`;
+
+        // Elementos del DOM
+        const phasesContainer = document.getElementById('phases-container');
+        const inputText = document.getElementById('input-text');
+        const btnGenerate = document.getElementById('btn-generate');
+        const btnText = document.getElementById('btn-text');
+        const btnLoader = document.getElementById('btn-loader');
+        const panelConfig = document.getElementById('panel-config');
+        const panelPreview = document.getElementById('panel-preview');
+        const btnTabConfig = document.getElementById('btn-tab-config');
+        const btnTabPreview = document.getElementById('btn-tab-preview');
+        
+        const outputContainer = document.getElementById('output-container');
+        const emptyState = document.getElementById('empty-state');
+        const loadingState = document.getElementById('loading-state');
+        const markdownOutput = document.getElementById('markdown-output');
+        const btnCopy = document.getElementById('btn-copy');
+        const toast = document.getElementById('toast');
+
+        // Renderizar opciones de fases
+        phasesData.forEach(phase => {
+            const phaseHTML = `
+                <div class="mb-2">
+                    <h3 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">Fase ${phase.num}: ${phase.title}</h3>
+                    <div class="space-y-3">
+                        <label class="relative block cursor-pointer group">
+                            <input type="radio" name="phase${phase.num}" value="A" class="config-radio sr-only" checked onchange="updateConfig('phase${phase.num}', 'A')">
+                            <div class="flex items-start p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                <div class="radio-indicator w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600 mr-3 flex-shrink-0 mt-0.5 transition-all"></div>
+                                <div>
+                                    <span class="block font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Opción A</span>
+                                    <span class="block text-sm text-slate-500 dark:text-slate-400 leading-snug">${phase.optA}</span>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="relative block cursor-pointer group">
+                            <input type="radio" name="phase${phase.num}" value="B" class="config-radio sr-only" onchange="updateConfig('phase${phase.num}', 'B')">
+                            <div class="flex items-start p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                <div class="radio-indicator w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600 mr-3 flex-shrink-0 mt-0.5 transition-all"></div>
+                                <div>
+                                    <span class="block font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Opción B</span>
+                                    <span class="block text-sm text-slate-500 dark:text-slate-400 leading-snug">${phase.optB}</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            `;
+            phasesContainer.insertAdjacentHTML('beforeend', phaseHTML);
+        });
+
+        // Actualizar Configuración
+        window.updateConfig = (phase, value) => {
+            currentConfigs[phase] = value;
+        };
+
+        // Parser simple de Markdown
+        const parseMarkdown = (md) => {
+            if (!md) return '';
+            
+            let html = md
+                // Headers
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                // Bold & Italic
+                .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+                // Links
+                .replace(/\[(.*?)\]\((.*?)\)/gim, '<a href="$2" class="text-indigo-600 dark:text-indigo-400 hover:underline">$1</a>')
+                // Blockquotes
+                .replace(/^\> (.*$)/gim, '<blockquote>$1</blockquote>')
+                // Code blocks
+                .replace(/```([\s\S]*?)```/gim, '<pre><code>$1</code></pre>')
+                // Inline code
+                .replace(/`([^`]+)`/gim, '<code>$1</code>')
+                // Lists (Basic handling)
+                .replace(/^\- (.*$)/gim, '<li>$1</li>')
+                .replace(/^\* (.*$)/gim, '<li>$1</li>')
+                .replace(/^\d+\. (.*$)/gim, '<li>$1</li>')
+                // Paragraphs and Line breaks
+                .replace(/\n\n/gim, '</p><p>')
+                .replace(/\n/gim, '<br />');
+                
+            // Wrap in P if not a block element
+            if (!html.startsWith('<h') && !html.startsWith('<p') && !html.startsWith('<li')) {
+                html = `<p>${html}</p>`;
+            }
+            
+            // Cleanup lists (Wrap contiguous li in ul)
+            html = html.replace(/(<li>.*<\/li>(?:<br \/>)*)+/gim, match => {
+                const clean = match.replace(/<br \/>/g, '');
+                return `<ul>${clean}</ul>`;
+            });
+            
+            return html;
+        };
+
+        // Controles de Tabs para Móviles
+        const switchTab = (tab) => {
+            if (window.innerWidth >= 1024) return; // Ignore on desktop
+
+            if (tab === 'config') {
+                panelConfig.classList.remove('hidden');
+                panelConfig.classList.add('flex');
+                panelPreview.classList.add('hidden');
+                panelPreview.classList.remove('flex');
+                
+                btnTabConfig.classList.replace('text-slate-500', 'text-slate-900');
+                btnTabConfig.classList.replace('dark:text-slate-400', 'dark:text-white');
+                btnTabConfig.classList.add('bg-white', 'dark:bg-slate-700', 'shadow');
+                
+                btnTabPreview.classList.replace('text-slate-900', 'text-slate-500');
+                btnTabPreview.classList.replace('dark:text-white', 'dark:text-slate-400');
+                btnTabPreview.classList.remove('bg-white', 'dark:bg-slate-700', 'shadow');
+            } else {
+                panelPreview.classList.remove('hidden');
+                panelPreview.classList.add('flex');
+                panelConfig.classList.add('hidden');
+                panelConfig.classList.remove('flex');
+                
+                btnTabPreview.classList.replace('text-slate-500', 'text-slate-900');
+                btnTabPreview.classList.replace('dark:text-slate-400', 'dark:text-white');
+                btnTabPreview.classList.add('bg-white', 'dark:bg-slate-700', 'shadow');
+                
+                btnTabConfig.classList.replace('text-slate-900', 'text-slate-500');
+                btnTabConfig.classList.replace('dark:text-white', 'dark:text-slate-400');
+                btnTabConfig.classList.remove('bg-white', 'dark:bg-slate-700', 'shadow');
+            }
+        };
+
+        btnTabConfig.addEventListener('click', () => switchTab('config'));
+        btnTabPreview.addEventListener('click', () => switchTab('preview'));
+
+        // Manejador de Copiado (Clipboard)
+        btnCopy.addEventListener('click', () => {
+            if (!generatedContent) return;
+            
+            // Usa una técnica compatible si navigator.clipboard falla en iframes
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = generatedContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            
+            try {
+                document.execCommand('copy');
+                // Mostrar Toast
+                toast.classList.add('toast-enter', 'opacity-100');
+                setTimeout(() => {
+                    toast.classList.remove('toast-enter', 'opacity-100');
+                    toast.classList.add('opacity-0');
+                }, 3000);
+            } catch (err) {
+                console.error('Error al copiar: ', err);
+            }
+            
+            document.body.removeChild(tempTextArea);
+        });
+
+        // Validar que haya texto antes de generar
+        inputText.addEventListener('input', () => {
+            if (inputText.value.trim().length > 0) {
+                btnGenerate.removeAttribute('disabled');
+            } else {
+                btnGenerate.setAttribute('disabled', 'true');
+            }
+        });
+
+        // Función principal de Generación
+        btnGenerate.addEventListener('click', async () => {
+            const text = inputText.value.trim();
+            if (!text) return;
+
+            // Cambiar a pestaña de vista en móviles
+            if (window.innerWidth < 1024) switchTab('preview');
+
+            // Actualizar UI a estado de carga
+            btnGenerate.setAttribute('disabled', 'true');
+            btnText.textContent = "Compilando...";
+            btnLoader.classList.remove('hidden');
+            
+            emptyState.classList.add('hidden');
+            markdownOutput.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+            btnCopy.classList.add('hidden');
+            btnCopy.classList.remove('flex');
+
+            const apiKey = ""; // El entorno Canvas maneja la API KEY automáticamente
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const userPrompt = `
+Genera un examen de comprensión lectora estandarizado basado en el siguiente texto académico y configuraciones.
+
+**ACADEMIC TEXT:**
+${text}
+
+**SELECTED CONFIGURATIONS:**
+- Phase 1: Option ${currentConfigs.phase1}
+- Phase 2: Option ${currentConfigs.phase2}
+- Phase 3: Option ${currentConfigs.phase3}
+- Phase 4: Option ${currentConfigs.phase4}
+- Phase 5: Option ${currentConfigs.phase5}
+
+Please provide the complete exam followed by the Answer Key. Use Markdown formatting.
+`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] }
+            };
+
+            try {
+                let retryCount = 0;
+                let response;
+                
+                // Lógica de reintentos (Exponential Backoff)
+                while (retryCount < 3) {
+                    response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 429) {
+                        retryCount++;
+                        await new Promise(r => setTimeout(r, Math.pow(2, retryCount) * 1000));
+                        continue;
+                    }
+                    break;
+                }
+
+                if (!response || !response.ok) {
+                    throw new Error(`Fallo en la petición a la API: ${response?.status}`);
+                }
+
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    generatedContent = candidate.content.parts[0].text;
+                    markdownOutput.innerHTML = parseMarkdown(generatedContent);
+                    
+                    // Mostrar resultados
+                    loadingState.classList.add('hidden');
+                    markdownOutput.classList.remove('hidden');
+                    markdownOutput.classList.add('animate-fade-in');
+                    
+                    btnCopy.classList.remove('hidden');
+                    btnCopy.classList.add('flex');
+                    
+                    // Scroll to top of output
+                    outputContainer.scrollTop = 0;
+                } else {
+                    throw new Error("No se pudo generar el contenido.");
+                }
+
+            } catch (error) {
+                console.error(error);
+                generatedContent = `**Error generando el examen:**\n${error.message}\n\nPor favor, intenta nuevamente.`;
+                markdownOutput.innerHTML = parseMarkdown(generatedContent);
+                loadingState.classList.add('hidden');
+                markdownOutput.classList.remove('hidden');
+            } finally {
+                // Restaurar UI del botón
+                btnGenerate.removeAttribute('disabled');
+                btnText.textContent = "Generar Examen Estandarizado";
+                btnLoader.classList.add('hidden');
+            }
+        });
+        
+        // Estado inicial
+        btnGenerate.setAttribute('disabled', 'true');
+    </script>
+</body>
+</html>

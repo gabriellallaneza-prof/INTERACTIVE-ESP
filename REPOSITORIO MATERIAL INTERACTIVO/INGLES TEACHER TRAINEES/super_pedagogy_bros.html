@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Super Pedagogy Bros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #5C94FC; /* Classic Mario Sky Blue */
+            font-family: 'Press Start 2P', cursive;
+            touch-action: none; /* Prevent pull-to-refresh on mobile */
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            image-rendering: pixelated; /* Ensures pixel art looks crisp, not blurry */
+            display: block;
+        }
+
+        /* Retro UI overlays */
+        .retro-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 10;
+        }
+
+        .retro-box {
+            background-color: #e49c54;
+            border: 8px solid #000;
+            box-shadow: inset -8px -8px 0px rgba(0,0,0,0.3), inset 8px 8px 0px rgba(255,255,255,0.4);
+            padding: 2rem;
+            text-align: center;
+            max-width: 90%;
+            width: 600px;
+        }
+
+        .retro-btn {
+            background-color: #d82800;
+            color: white;
+            border: 4px solid #000;
+            padding: 1rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8rem;
+            transition: transform 0.1s;
+        }
+
+        .retro-btn:hover {
+            background-color: #fc9838;
+        }
+
+        .retro-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Quiz specific styles */
+        .quiz-option {
+            background-color: #fc9838;
+            color: black;
+            border: 4px solid #000;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.7rem;
+            line-height: 1.4;
+            width: 100%;
+        }
+
+        .quiz-option:hover {
+            background-color: #fff;
+        }
+
+        #hud {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            text-shadow: 2px 2px 0 #000;
+            font-size: 1rem;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        #mobile-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 5;
+            display: none; /* Hidden by default, shown via JS if touch device */
+        }
+
+        .touch-btn {
+            background-color: rgba(255,255,255,0.3);
+            border: 4px solid rgba(255,255,255,0.6);
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2rem;
+            user-select: none;
+        }
+
+        .touch-btn:active {
+            background-color: rgba(255,255,255,0.6);
+        }
+
+        #audio-controls {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            z-index: 20;
+            pointer-events: auto;
+        }
+
+        .audio-btn {
+            background-color: #0058f8;
+            color: white;
+            border: 4px solid #000;
+            padding: 0.5rem;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.5);
+            transition: transform 0.1s;
+        }
+
+        .audio-btn:hover {
+            background-color: #fc9838;
+        }
+        
+        .audio-btn:active {
+            transform: scale(0.95);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .retro-box { padding: 1rem; width: 95%; }
+            .retro-btn, .quiz-option { font-size: 0.6rem; padding: 0.75rem; }
+            #hud { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <!-- Audio Element referencing your specific file -->
+    <audio id="bg-audio" loop>
+        <source src="Activity_First_The_Digital_Age_Showdown_Between_Learner_Prefere.m4a" type="audio/mp4">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Audio Controls -->
+    <div id="audio-controls">
+        <button id="toggle-audio-btn" class="audio-btn">🔈 PLAY PODCAST</button>
+    </div>
+
+    <!-- HUD -->
+    <div id="hud">
+        <div>SCORE: <span id="score-display">0</span></div>
+        <div>LIVES: <span id="lives-display">❤️❤️❤️</span></div>
+    </div>
+
+    <!-- The Game Canvas -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Mobile Jump Button -->
+    <div id="mobile-controls">
+        <div class="touch-btn" id="btn-jump">A</div>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="retro-overlay">
+        <div class="retro-box">
+            <h1 class="text-xl md:text-3xl text-red-600 mb-4" style="text-shadow: 2px 2px 0 #000;">SUPER PEDAGOGY BROS</h1>
+            <p class="text-xs md:text-sm mb-6 leading-relaxed">
+                Welcome, Teacher Trainee!<br><br>
+                Run, jump, and hit the <b>? Blocks</b> to test your knowledge of learning design.<br><br>
+                Use <b>SPACEBAR</b> or <b>TAP 'A'</b> to jump.
+            </p>
+            <button id="start-btn" class="retro-btn">START GAME</button>
+        </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quiz-screen" class="retro-overlay hidden">
+        <div class="retro-box" style="background-color: #fce0a8;">
+            <div id="quiz-hint" class="text-[0.6rem] text-blue-800 mb-2 font-bold uppercase"></div>
+            <h2 id="quiz-question" class="text-sm md:text-base mb-4 text-black leading-relaxed">Question goes here?</h2>
+            <div id="quiz-options" class="flex flex-col w-full">
+                <!-- Options injected by JS -->
+            </div>
+            <div id="quiz-feedback" class="text-xs mt-4 hidden font-bold"></div>
+            <button id="quiz-continue-btn" class="retro-btn hidden w-full">CONTINUE</button>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="retro-overlay hidden">
+        <div class="retro-box text-center">
+            <h1 id="end-title" class="text-2xl md:text-3xl mb-4 text-red-600">GAME OVER</h1>
+            <p class="text-sm mb-4">Final Score: <span id="final-score">0</span></p>
+            <p id="end-message" class="text-xs mb-6 leading-relaxed">You need to review your learning theories!</p>
+            <button id="restart-btn" class="retro-btn">TRY AGAIN</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- PEDAGOGY QUIZ DATA ---
+    const quizData = [
+        {
+            question: "What is the primary distinction between a 'task' and an 'activity'?",
+            hint: "Consider the difference between a formal requirement and the actual performance.",
+            options: [
+                "Activities are defined by teachers, whereas tasks are designed by educational researchers.",
+                "Activities are assessed for grades, while tasks are purely for practice.",
+                "Tasks are curriculum requirements, while activities are what learners actually do.",
+                "Tasks focus on digital tool usage, while activities focus on physical resources."
+            ],
+            correct: 2,
+            rationale: "Tasks are external requirements; activities are the learner's actual responses."
+        },
+        {
+            question: "Which learning approach emphasizes the rehearsal of skills in highly structured sequences rather than authentic contexts?",
+            hint: "This approach is often rule-based and focuses on accurate reproduction.",
+            options: [
+                "Situative learning",
+                "Social constructivism",
+                "Associative learning",
+                "Constructive learning"
+            ],
+            correct: 2,
+            rationale: "Associative learning focuses on building component skills through structured practice."
+        },
+        {
+            question: "In the context of learning activity design, what does 'locus of control' refer to?",
+            hint: "Think about whether the tutor or the student is 'in the driver's seat'.",
+            options: [
+                "Who makes decisions regarding the activity, timing, and assessment.",
+                "The physical location where the learning occurs.",
+                "The technological infrastructure used to monitor students.",
+                "The psychological ability of a learner to focus."
+            ],
+            correct: 0,
+            rationale: "Locus of control defines the balance of power between tutor direction and learner autonomy."
+        },
+        {
+            question: "Jonassen (2000) categorizes activities into four types. Which type is most closely associated with situative learning?",
+            hint: "Situative learning often involves apprenticeships and developing professional identities.",
+            options: [
+                "Strategy-based activities",
+                "Role-based activities",
+                "Incident-based activities",
+                "Rule-based activities"
+            ],
+            correct: 1,
+            rationale: "Role-based activities are inherently situative as they focus on the learner's developing identity."
+        },
+        {
+            question: "Why is a learning activity considered 'contingent' in nature?",
+            hint: "Think about why a postgraduate student and a college student might approach the same journal article differently.",
+            options: [
+                "Because the same task can result in different activities based on the learner's capabilities.",
+                "Because it depends entirely on the specific digital tools available at the time.",
+                "Because it is only effective if the learner is in a physical classroom environment.",
+                "Because it relies on the tutor being present to provide immediate feedback."
+            ],
+            correct: 0,
+            rationale: "The pedagogical meaning of an activity changes depending on whether the learner is a novice or an expert."
+        },
+        {
+            question: "What is a common criticism of strictly outcomes-based learning design?",
+            hint: "Reflect on how learners might prioritize their efforts when a curriculum is very rigid.",
+            options: [
+                "It makes it impossible to provide structured feedback to the learners.",
+                "It prevents teachers from using educational taxonomies like Bloom's.",
+                "It can lead to a strategic approach where learners only value what is assessed.",
+                "It requires too much investment in advanced digital technologies."
+            ],
+            correct: 2,
+            rationale: "Strict adherence to curriculum goals can cause learners to ignore subtler skills and values not assessed."
+        },
+        {
+            question: "According to reviews of Virtual Learning Environments (VLEs), what do they frequently prioritize over pedagogy?",
+            hint: "Think about what the 'management' in LMS often implies.",
+            options: [
+                "Social interaction and collaborative tools.",
+                "Learner-led assessment and portfolios.",
+                "Content delivery and administrative aspects.",
+                "Highly authentic work simulations."
+            ],
+            correct: 2,
+            rationale: "VLEs historically focus on managing materials/administration rather than active pedagogical design."
+        },
+        {
+            question: "In learning design, how are 'resources' distinguished from 'tools'?",
+            hint: "Consider the difference between a textbook and a calculator.",
+            options: [
+                "Resources are for associative learning, while tools are for constructive.",
+                "Resources are physical, tools are digital.",
+                "Resources are content-based artefacts, while tools are for specific task functions.",
+                "Resources are used by tutors, tools by learners."
+            ],
+            correct: 2,
+            rationale: "Resources convey information, whereas tools facilitate actions like analysis or creation."
+        },
+        {
+            question: "What is one specific advantage of text-based computer-mediated communication (CMC) for collaborative learning?",
+            hint: "Think about the permanence of written communication versus spoken words.",
+            options: [
+                "It allows for spontaneous, faster decision-making than face-to-face talk.",
+                "The explicit nature of dialogue makes it available for later reflection and review.",
+                "It removes all power structures and social hierarchies automatically.",
+                "It requires less motivation from learners due to the social nature of the software."
+            ],
+            correct: 1,
+            rationale: "The permanent record of text allows learners to revisit discussions and build shared understanding."
+        },
+        {
+            question: "How does constructive learning typically approach the concept of 'authenticity'?",
+            hint: "This approach 'creates' an environment that looks like the real world to facilitate research.",
+            options: [
+                "It uses mimicry of authentic tasks, even if the context is artificially created.",
+                "It relies exclusively on naturally occurring workplace problems.",
+                "It prioritizes the rehearsal of rules over any real-world application.",
+                "It avoids authenticity to focus on pure abstract reasoning."
+            ],
+            correct: 0,
+            rationale: "Constructive design mimics professional tasks to develop skills, unlike situative learning's real-world reliance."
+        },
+        {
+            question: "In a learner-centred design, why might a designer consider a learner's ICT competence?",
+            hint: "Think about how technology might act as a barrier or an amplifier of existing inequalities.",
+            options: [
+                "Because it is a standalone skill that determines the grade for all subjects.",
+                "Because it allows the designer to ignore the learner's previous subject knowledge.",
+                "Because technology use can exacerbate existing differences based on gender or culture.",
+                "Because digital natives already possess all necessary formal ICT literacy."
+            ],
+            correct: 2,
+            rationale: "Emotional responses to technology and varying skill levels can widen gaps between learners."
+        },
+        {
+            question: "Vygotsky (1986) argues that concepts and skills are internalized only after what occurs?",
+            hint: "Focus on the role of other people in the initial stages of acquiring knowledge.",
+            options: [
+                "Repeated associative rehearsal in a structured sequence.",
+                "A formal assessment of the learner's initial competence.",
+                "Individual reflection on a simulated authentic task.",
+                "Successful collaborative mastery with others."
+            ],
+            correct: 3,
+            rationale: "Learning is a socially mediated activity where dialogue and collaboration precede individual internalization."
+        },
+        {
+            question: "Which term describes the properties of designed artefacts that indicate their potential use for learning?",
+            hint: "Originated from ecological psychology (what an object 'offers').",
+            options: [
+                "Narrative types",
+                "Design specifications",
+                "Mediational means",
+                "Affordances"
+            ],
+            correct: 3,
+            rationale: "Affordances refers to the actionable properties of an object in its environment."
+        },
+        {
+            question: "According to the text, what is the primary limiting factor in providing flexible, learner-centred environments?",
+            hint: "Think about what is needed to make diverse learner choices meaningful and educational.",
+            options: [
+                "The lack of high-speed internet access in rural areas.",
+                "The availability of skilled practitioners for feedback and support.",
+                "The cost of individual licenses for adaptive software.",
+                "The inability of learners to use their own mobile phones for study."
+            ],
+            correct: 1,
+            rationale: "Flexibility requires that learners be supported in their choices, demanding significant teaching resources."
+        },
+        {
+            question: "When the goal is 'retention and reproduction', how do learners engage with a concept?",
+            hint: "The focus here is on accuracy and matching a provided model.",
+            options: [
+                "They reflect on its meaning and integrate it.",
+                "They practice it until they can reproduce it exactly as taught.",
+                "They negotiate the meaning with their peers.",
+                "They apply it in various authentic contexts."
+            ],
+            correct: 1,
+            rationale: "Reproduction focuses on accurate mimicry of the skill or concept provided."
+        },
+        {
+            question: "What is one way digital technologies support 'open-ended' learning outcomes?",
+            hint: "Consider how a student might showcase their personal learning journey.",
+            options: [
+                "They allow learners to compile diverse evidence in e-portfolios.",
+                "They ensure all learners reach the exact same conclusion.",
+                "They eliminate the need for tutor feedback via auto-grading.",
+                "They force learners to follow a strictly linear progression."
+            ],
+            correct: 0,
+            rationale: "E-portfolios facilitate the collection of varied evidence for broad, non-linear goals."
+        },
+        {
+            question: "Why might a learning designer choose to provide 'parallel media' (e.g., text and a diagram)?",
+            hint: "Think about how different people process information through sight versus reading.",
+            options: [
+                "To increase the file size and complexity of the learning environment.",
+                "To ensure that the learner only focuses on the text-based information.",
+                "To accommodate different learner capacities and enhance content recall.",
+                "Because associative learning theories forbid the use of visual aids."
+            ],
+            correct: 2,
+            rationale: "Providing multiple representations has been shown to support better assimilation and memory."
+        },
+        {
+            question: "What role does a mentor typically play in situative learning design?",
+            hint: "This role is common in work-based learning and apprenticeships.",
+            options: [
+                "Strictly monitoring the learner to ensure no interaction with peers occurs.",
+                "Providing structured, rule-based instructions for skill rehearsal.",
+                "Negotiating learning outcomes and facilitating abstract discussions.",
+                "Providing contextual insight to aid the learner's developing role."
+            ],
+            correct: 3,
+            rationale: "In situative learning, the expert guides the learner through the nuances of the professional role."
+        },
+        {
+            question: "In the suggested syntax for learning outcomes, what follows the 'verb' describing the activity?",
+            hint: "It provides the 'where', 'how', or 'to what extent' for the action being performed.",
+            options: [
+                "A list of required digital tools.",
+                "The names of the peer learners involved.",
+                "A specific grade or numerical score.",
+                "A qualification describing the context, scope, or method."
+            ],
+            correct: 3,
+            rationale: "The formula is 'Learners will be able to [verb] [qualification]' to ensure specificity."
+        },
+        {
+            question: "What risk is associated with using 'private' technologies (like mobile phones) in formal learning?",
+            hint: "Consider the tension between a student's personal digital life and the school's official systems.",
+            options: [
+                "They prevent the learner from constructing a personal identity.",
+                "Learners may fear violating rules implied by institutional technologies.",
+                "They are only useful for associative learning and cannot support collaboration.",
+                "They are technically incapable of supporting any educational software."
+            ],
+            correct: 1,
+            rationale: "Students might hide their use of personal tools if they believe they are 'against the rules'."
+        }
+    ];
+
+    // --- GAME ENGINE SETUP ---
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // UI Elements
+    const startScreen = document.getElementById('start-screen');
+    const quizScreen = document.getElementById('quiz-screen');
+    const gameOverScreen = document.getElementById('game-over-screen');
+    const scoreDisplay = document.getElementById('score-display');
+    const livesDisplay = document.getElementById('lives-display');
+    const mobileControls = document.getElementById('mobile-controls');
+    
+    // Game State
+    let gameState = 'START'; // START, PLAYING, QUIZ, GAMEOVER
+    let animationId;
+    let lastTime = 0;
+    
+    // Check for touch device to show mobile controls
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        mobileControls.style.display = 'block';
+    }
+
+    // Resize handling
+    let scale = 1;
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        // Calculate a scale factor based on standard height (e.g., 600px)
+        scale = canvas.height / 600;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // --- GAME ENTITIES ---
+    const gravity = 0.6;
+    let gameSpeed = 5;
+    let score = 0;
+    let lives = 3;
+    let distanceTraveled = 0;
+    
+    // Player Object
+    const player = {
+        x: 100,
+        y: 100,
+        width: 40,
+        height: 60,
+        dy: 0,
+        jumpForce: -12,
+        grounded: false,
+        color: '#d82800',
+        draw() {
+            ctx.save();
+            ctx.translate(this.x * scale, this.y * scale);
+            
+            // Draw a retro pixelated character (Teacher Trainee)
+            const w = this.width * scale;
+            const h = this.height * scale;
+            
+            // Body (Overalls)
+            ctx.fillStyle = '#0058f8';
+            ctx.fillRect(0, h * 0.4, w, h * 0.6);
+            
+            // Shirt
+            ctx.fillStyle = this.color;
+            ctx.fillRect(w * 0.1, h * 0.2, w * 0.8, h * 0.4);
+            
+            // Head
+            ctx.fillStyle = '#fce0a8'; // Skin tone
+            ctx.fillRect(w * 0.2, 0, w * 0.6, h * 0.3);
+            
+            // Hat (Graduation Cap / Mario Hat)
+            ctx.fillStyle = this.color;
+            ctx.fillRect(w * 0.1, -h * 0.1, w * 0.8, h * 0.15);
+            ctx.fillRect(w * 0.7, -h * 0.05, w * 0.4, h * 0.05); // Brim
+            
+            // Eye
+            ctx.fillStyle = '#000';
+            ctx.fillRect(w * 0.6, h * 0.1, w * 0.1, h * 0.1);
+
+            ctx.restore();
+        },
+        update() {
+            this.dy += gravity;
+            this.y += this.dy;
+            
+            // Floor collision
+            const floor = (canvas.height / scale) - 100;
+            if (this.y + this.height > floor) {
+                this.y = floor - this.height;
+                this.dy = 0;
+                this.grounded = true;
+            } else {
+                this.grounded = false;
+            }
+        },
+        jump() {
+            if (this.grounded) {
+                this.dy = this.jumpForce;
+                this.grounded = false;
+            }
+        }
+    };
+
+    // Environment Objects
+    let blocks = [];
+    let obstacles = [];
+    let clouds = [];
+    let particles = [];
+    let floorY = 0;
+
+    class Cloud {
+        constructor() {
+            this.x = (canvas.width / scale) + Math.random() * 500;
+            this.y = Math.random() * 200 + 50;
+            this.width = Math.random() * 100 + 50;
+            this.speed = Math.random() * 0.5 + 0.1;
+        }
+        update() {
+            this.x -= this.speed;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            const x = this.x * scale;
+            const y = this.y * scale;
+            const w = this.width * scale;
+            const h = 30 * scale;
+            ctx.fillRect(x, y, w, h);
+            ctx.fillRect(x + w * 0.2, y - h * 0.5, w * 0.6, h);
+        }
+    }
+
+    class QuestionBlock {
+        constructor(x) {
+            this.x = x;
+            this.y = floorY - 150 - Math.random() * 50; // Floating height
+            this.size = 40;
+            this.active = true;
+            this.flash = 0;
+        }
+        update() {
+            this.x -= gameSpeed;
+            this.flash++;
+        }
+        draw() {
+            const x = this.x * scale;
+            const y = this.y * scale;
+            const s = this.size * scale;
+            
+            if (this.active) {
+                // Flashing gold/orange effect
+                ctx.fillStyle = Math.floor(this.flash / 10) % 2 === 0 ? '#fc9838' : '#fce0a8';
+            } else {
+                ctx.fillStyle = '#888'; // Disabled state
+            }
+            
+            ctx.fillRect(x, y, s, s);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2 * scale;
+            ctx.strokeRect(x, y, s, s);
+            
+            if (this.active) {
+                ctx.fillStyle = '#000';
+                ctx.font = `${20 * scale}px 'Press Start 2P'`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('?', x + s/2, y + s/2);
+            }
+        }
+    }
+
+    class Obstacle {
+        constructor(x) {
+            this.x = x;
+            this.size = 30;
+            this.y = floorY - this.size;
+        }
+        update() {
+            this.x -= gameSpeed;
+        }
+        draw() {
+            const x = this.x * scale;
+            const y = this.y * scale;
+            const s = this.size * scale;
+            
+            // Draw a retro spike/enemy (Goomba substitute)
+            ctx.fillStyle = '#a84000';
+            ctx.beginPath();
+            ctx.moveTo(x + s/2, y);
+            ctx.lineTo(x + s, y + s);
+            ctx.lineTo(x, y + s);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+        }
+    }
+
+    // --- INPUT HANDLING ---
+    const keys = {
+        space: false
+    };
+
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' || e.code === 'ArrowUp') {
+            keys.space = true;
+            if (gameState === 'PLAYING') player.jump();
+        }
+    });
+
+    window.addEventListener('keyup', (e) => {
+        if (e.code === 'Space' || e.code === 'ArrowUp') {
+            keys.space = false;
+        }
+    });
+
+    // Touch Handling for Jump Button
+    const jumpBtn = document.getElementById('btn-jump');
+    jumpBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (gameState === 'PLAYING') player.jump();
+    });
+
+    // --- LEVEL GENERATION ---
+    function spawnEnvironment() {
+        // Spawn Clouds
+        if (Math.random() < 0.02) clouds.push(new Cloud());
+        
+        // Ensure floorY is calculated based on current scale
+        floorY = (canvas.height / scale) - 100;
+
+        // Spawn Blocks/Obstacles based on distance
+        distanceTraveled += gameSpeed;
+        if (distanceTraveled > 400) {
+            distanceTraveled = 0;
+            // 70% chance to spawn a block, 30% chance for obstacle
+            if (Math.random() > 0.3) {
+                blocks.push(new QuestionBlock((canvas.width / scale) + 50));
+            } else {
+                obstacles.push(new Obstacle((canvas.width / scale) + 50));
+            }
+        }
+    }
+
+    // --- COLLISION DETECTION ---
+    function rectIntersect(x1, y1, w1, h1, x2, y2, w2, h2) {
+        return x2 < x1 + w1 && x2 + w2 > x1 && y2 < y1 + h1 && y2 + h2 > y1;
+    }
+
+    function checkCollisions() {
+        // Blocks (Hit from below or side)
+        for (let i = 0; i < blocks.length; i++) {
+            let b = blocks[i];
+            if (b.active && rectIntersect(player.x, player.y, player.width, player.height, b.x, b.y, b.size, b.size)) {
+                // Trigger Quiz!
+                b.active = false; // Disable block
+                triggerQuiz();
+                return; // Stop checking further collisions this frame
+            }
+        }
+
+        // Obstacles
+        for (let i = 0; i < obstacles.length; i++) {
+            let o = obstacles[i];
+            // Shrink hitbox slightly for fairness
+            if (rectIntersect(player.x + 5, player.y + 5, player.width - 10, player.height - 10, o.x + 5, o.y + 5, o.size - 10, o.size - 10)) {
+                loseLife();
+                obstacles.splice(i, 1); // Remove to avoid multiple hits
+                return;
+            }
+        }
+    }
+
+    // --- QUIZ LOGIC ---
+    let currentQuestion = null;
+
+    function triggerQuiz() {
+        try {
+            gameState = 'QUIZ';
+            
+            // Pick a random question
+            currentQuestion = quizData[Math.floor(Math.random() * quizData.length)];
+            
+            // Populate UI
+            document.getElementById('quiz-hint').innerText = `HINT: ${currentQuestion.hint}`;
+            document.getElementById('quiz-question').innerText = currentQuestion.question;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
+            currentQuestion.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.innerText = opt;
+                btn.onclick = () => handleAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+            
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('quiz-continue-btn').classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+        } catch (e) {
+            console.error("Error triggering quiz:", e);
+            resumeGame(); // Fallback if quiz fails
+        }
+    }
+
+    function handleAnswer(selectedIndex, btnElement) {
+        // Disable all buttons
+        const buttons = document.querySelectorAll('.quiz-option');
+        buttons.forEach(b => b.disabled = true);
+        
+        const feedbackEl = document.getElementById('quiz-feedback');
+        feedbackEl.classList.remove('hidden');
+        
+        if (selectedIndex === currentQuestion.correct) {
+            // Correct
+            btnElement.style.backgroundColor = '#5c94fc';
+            btnElement.style.color = '#fff';
+            feedbackEl.innerText = "CORRECT! +100 Points. " + currentQuestion.rationale;
+            feedbackEl.className = "text-xs mt-4 font-bold text-green-700";
+            score += 100;
+            updateHUD();
+        } else {
+            // Incorrect
+            btnElement.style.backgroundColor = '#d82800';
+            btnElement.style.color = '#fff';
+            
+            // Highlight correct one
+            buttons[currentQuestion.correct].style.backgroundColor = '#5c94fc';
+            buttons[currentQuestion.correct].style.color = '#fff';
+            
+            feedbackEl.innerText = "INCORRECT! -1 Life. " + currentQuestion.rationale;
+            feedbackEl.className = "text-xs mt-4 font-bold text-red-700";
+            lives -= 1;
+            updateHUD();
+        }
+        
+        const continueBtn = document.getElementById('quiz-continue-btn');
+        continueBtn.classList.remove('hidden');
+        
+        // Use standard onclick to avoid listener pileup
+        continueBtn.onclick = () => {
+            quizScreen.classList.add('hidden');
+            if (lives <= 0) {
+                gameOver();
+            } else {
+                resumeGame();
+            }
+        };
+    }
+
+    function resumeGame() {
+        gameState = 'PLAYING';
+        // Give player a slight boost upwards to clear the block they just hit
+        player.dy = -5; 
+        lastTime = performance.now();
+        requestAnimationFrame(gameLoop);
+    }
+
+    // --- GAME STATE MANAGEMENT ---
+    function updateHUD() {
+        scoreDisplay.innerText = score;
+        let hearts = '';
+        for(let i=0; i<3; i++) {
+            hearts += (i < lives) ? '❤️' : '🖤';
+        }
+        livesDisplay.innerText = hearts;
+    }
+
+    function loseLife() {
+        lives -= 1;
+        updateHUD();
+        
+        // Visual flash (simple implementation)
+        player.color = '#fff';
+        setTimeout(() => player.color = '#d82800', 200);
+        
+        if (lives <= 0) {
+            gameOver();
+        }
+    }
+
+    function gameOver() {
+        gameState = 'GAMEOVER';
+        document.getElementById('final-score').innerText = score;
+        
+        const msg = document.getElementById('end-message');
+        if (score >= 500) {
+            document.getElementById('end-title').innerText = "COURSE PASSED!";
+            document.getElementById('end-title').className = "text-2xl md:text-3xl mb-4 text-green-600";
+            msg.innerText = "Excellent work! You are ready to design learner-centered activities.";
+        } else {
+            document.getElementById('end-title').innerText = "GAME OVER";
+            document.getElementById('end-title').className = "text-2xl md:text-3xl mb-4 text-red-600";
+            msg.innerText = "You need to review your learning theories. Remember the difference between a Task and an Activity!";
+        }
+        
+        gameOverScreen.classList.remove('hidden');
+    }
+
+    function resetGame() {
+        score = 0;
+        lives = 3;
+        gameSpeed = 5;
+        distanceTraveled = 0;
+        blocks = [];
+        obstacles = [];
+        clouds = [];
+        player.y = 100;
+        player.dy = 0;
+        updateHUD();
+        gameOverScreen.classList.add('hidden');
+        startScreen.classList.add('hidden');
+        gameState = 'PLAYING';
+        lastTime = performance.now();
+        requestAnimationFrame(gameLoop);
+    }
+
+    // --- MAIN GAME LOOP ---
+    function drawEnvironment() {
+        // Clear screen
+        ctx.fillStyle = '#5C94FC';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw Clouds
+        clouds.forEach(c => c.draw());
+        
+        // Draw Scenery (Background bushes/hills could go here)
+        
+        // Draw Floor
+        const fY = floorY * scale;
+        ctx.fillStyle = '#c84c0c'; // Mario ground base
+        ctx.fillRect(0, fY, canvas.width, canvas.height - fY);
+        
+        // Ground top highlight
+        ctx.fillStyle = '#fce0a8';
+        ctx.fillRect(0, fY, canvas.width, 10 * scale);
+        
+        // Ground pattern (simple scrolling lines)
+        ctx.fillStyle = '#000';
+        const offset = (Date.now() / 10 % 20) * scale;
+        for(let i = -offset; i < canvas.width; i += 40 * scale) {
+            ctx.fillRect(i, fY + 10 * scale, 2 * scale, (canvas.height - fY));
+        }
+
+        // Draw Entities
+        blocks.forEach(b => b.draw());
+        obstacles.forEach(o => o.draw());
+    }
+
+    function gameLoop(timestamp) {
+        if (gameState !== 'PLAYING') return;
+
+        try {
+            const deltaTime = timestamp - lastTime;
+            lastTime = timestamp;
+
+            // Optional: slowly increase game speed over time
+            // gameSpeed += 0.001; 
+
+            // Update Phase
+            player.update();
+            
+            spawnEnvironment();
+            
+            blocks.forEach(b => b.update());
+            obstacles.forEach(o => o.update());
+            clouds.forEach(c => c.update());
+            
+            // Cleanup off-screen entities
+            blocks = blocks.filter(b => b.x * scale + b.size * scale > -100);
+            obstacles = obstacles.filter(o => o.x * scale + o.size * scale > -100);
+            clouds = clouds.filter(c => c.x * scale + c.width * scale > -200);
+
+            checkCollisions();
+
+            // Draw Phase
+            if (gameState === 'PLAYING') { // Check again in case collision triggered quiz
+                drawEnvironment();
+                player.draw();
+                animationId = requestAnimationFrame(gameLoop);
+            }
+        } catch (e) {
+            console.error("Game Loop Error: ", e);
+        }
+    }
+
+    // --- INIT ---
+    document.getElementById('start-btn').addEventListener('click', resetGame);
+    document.getElementById('restart-btn').addEventListener('click', resetGame);
+    
+    // Initial draw for background
+    resize();
+    drawEnvironment();
+
+    // --- AUDIO CONTROLS LOGIC ---
+    const bgAudio = document.getElementById('bg-audio');
+    const audioBtn = document.getElementById('toggle-audio-btn');
+    let isAudioPlaying = false;
+    let playPromise;
+
+    function showAudioError() {
+        const existingErr = document.getElementById('audio-err-msg');
+        if (existingErr) return; // Prevent duplicate messages
+        
+        const errorDiv = document.createElement('div');
+        errorDiv.id = 'audio-err-msg';
+        errorDiv.className = 'retro-box';
+        errorDiv.style.position = 'absolute';
+        errorDiv.style.top = '60px';
+        errorDiv.style.right = '20px';
+        errorDiv.style.padding = '10px';
+        errorDiv.style.fontSize = '0.5rem';
+        errorDiv.style.width = '250px';
+        errorDiv.style.zIndex = '100';
+        errorDiv.innerText = "Audio file missing or blocked. Ensure 'Activity_First_The_Digital_Age_Showdown_Between_Learner_Prefere.m4a' is present.";
+        
+        document.getElementById('game-container').appendChild(errorDiv);
+        setTimeout(() => errorDiv.remove(), 6000);
+    }
+
+    audioBtn.addEventListener('click', () => {
+        if (isAudioPlaying) {
+            if (playPromise !== undefined) {
+                // Wait for the play promise to resolve before pausing to prevent AbortError
+                playPromise.then(_ => {
+                    bgAudio.pause();
+                    audioBtn.innerText = '🔈 PLAY PODCAST';
+                    isAudioPlaying = false;
+                }).catch(error => {
+                    console.error("Playback was interrupted.", error);
+                });
+            }
+        } else {
+            // Initiate play and track the promise
+            playPromise = bgAudio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    audioBtn.innerText = '🔊 PAUSE PODCAST';
+                    isAudioPlaying = true;
+                }).catch(e => {
+                    console.error("Audio playback failed:", e);
+                    audioBtn.innerText = '🔈 PLAY PODCAST';
+                    isAudioPlaying = false;
+                    
+                    // Only show the message if it's an actual failure (e.g., file not found), 
+                    // not a rapid-click interruption (AbortError)
+                    if (e.name !== 'AbortError') {
+                        showAudioError();
+                    }
+                });
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

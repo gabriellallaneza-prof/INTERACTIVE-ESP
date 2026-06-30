@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Literature Quest: Chrono-Archivist Adventure</title>
+    <!-- Tailwind CSS for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for academic & fantasy iconography -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts for authentic academic/vintage styling -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Lora:ital,wght@0,400;0,600;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        lora: ['Lora', 'serif'],
+                        typewriter: ['"Special Elite"', 'monospace']
+                    },
+                    colors: {
+                        parchment: {
+                            light: '#fdfbf7',
+                            DEFAULT: '#f5efe0',
+                            dark: '#e2d3b5',
+                            shadow: '#d2be96'
+                        },
+                        academia: {
+                            mahogany: '#2d1a12',
+                            ink: '#1a2421',
+                            gold: '#c5a059',
+                            emerald: '#2a4d38',
+                            crimson: '#6b2121',
+                            cobalt: '#1a365d'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Decorative scrollbars resembling vintage parchment */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2d1a12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c5a059;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #e2d3b5;
+        }
+
+        /* Subtle glowing and realistic card styles */
+        .parchment-glow {
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.2);
+        }
+        .page-fold {
+            background: linear-gradient(135deg, transparent 10px, #f5efe0 10px);
+        }
+        
+        /* Interactive animations */
+        @keyframes candle-flicker {
+            0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 4px rgba(239, 140, 15, 0.4)); }
+            50% { opacity: 1; filter: drop-shadow(0 0 10px rgba(239, 140, 15, 0.7)); }
+        }
+        .candle-flame {
+            animation: candle-flicker 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-[#18110b] text-parchment font-lora min-h-screen overflow-x-hidden flex flex-col justify-between relative selection:bg-academia-gold selection:text-academia-mahogany">
+
+    <!-- Ambient Web Audio Synthesizer Toggle -->
+    <div class="fixed top-4 right-4 z-50 flex items-center gap-2">
+        <button id="musicToggle" onclick="game.toggleAmbience()" class="bg-academia-mahogany/80 border border-academia-gold/50 text-academia-gold hover:bg-academia-gold hover:text-academia-mahogany px-3 py-2 rounded-full text-xs font-cinzel transition-all duration-300 flex items-center gap-2 shadow-lg">
+            <i id="musicIcon" class="fa-solid fa-volume-xmark"></i>
+            <span class="hidden sm:inline">LITERARY AMBIENCE</span>
+        </button>
+        <button id="notebookToggle" onclick="game.toggleNotebook()" class="bg-academia-cobalt/80 border border-academia-gold/50 text-academia-gold hover:bg-academia-gold hover:text-white px-3 py-2 rounded-full text-xs font-cinzel transition-all duration-300 flex items-center gap-2 shadow-lg">
+            <i class="fa-solid fa-book-open"></i>
+            <span class="hidden sm:inline">STUDY HANDBOOK</span>
+        </button>
+    </div>
+
+    <!-- Header Area -->
+    <header class="border-b border-academia-gold/30 bg-academia-mahogany/90 py-4 px-6 relative z-10">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-feather-pointed text-academia-gold text-2xl"></i>
+                <div>
+                    <h1 class="font-cinzel font-bold text-lg md:text-xl text-academia-gold tracking-widest">LITERATURE QUEST</h1>
+                    <p class="text-xs text-parchment-dark font-typewriter">ISFD y T N° 10 • Literatura y Juventud</p>
+                </div>
+            </div>
+            <!-- Score & Progress Panel -->
+            <div class="flex items-center gap-6">
+                <div class="text-center sm:text-right">
+                    <span class="text-xs uppercase font-cinzel text-academia-gold block">Current Rank</span>
+                    <span id="playerRank" class="text-sm font-semibold text-white tracking-wider">Novice Archivist</span>
+                </div>
+                <div class="h-10 w-[1px] bg-academia-gold/30"></div>
+                <div class="text-center">
+                    <span class="text-xs uppercase font-cinzel text-academia-gold block">Archival Score</span>
+                    <span id="playerScore" class="text-xl font-bold font-typewriter text-white">0000</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Game Viewport -->
+    <main class="flex-grow flex items-center justify-center py-8 px-4 md:px-8 relative z-10 max-w-7xl mx-auto w-full">
+        
+        <!-- INTRO SCREEN / START -->
+        <div id="screen-intro" class="w-full max-w-4xl bg-academia-mahogany/80 border border-academia-gold/40 rounded-xl p-6 md:p-10 shadow-2xl relative overflow-hidden backdrop-blur-sm parchment-glow">
+            <div class="absolute -top-10 -right-10 text-academia-gold/5 text-9xl pointer-events-none font-cinzel">LIT</div>
+            
+            <div class="text-center space-y-6">
+                <h2 class="font-cinzel text-3xl md:text-5xl text-academia-gold font-bold tracking-wider">The Fractured Library</h2>
+                <div class="w-24 h-[2px] bg-academia-gold mx-auto"></div>
+                
+                <p class="text-parchment text-lg max-w-2xl mx-auto italic leading-relaxed">
+                    "Welcome, young scholar. The Great Library of Literary Science is fractured. The Genres, Perspectives, and Plot alignments have collapsed into chaos. Only an Archivist with acute critical theory skills can restore balance."
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 text-left">
+                    <div class="bg-black/40 border border-academia-gold/20 rounded-lg p-5">
+                        <h4 class="font-cinzel text-academia-gold font-bold mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-compass"></i> Why Literature in EFL?
+                        </h4>
+                        <p class="text-sm text-parchment/90 leading-relaxed">
+                            Literature builds language & vocabulary, fosters creative imagination, sparks critical thinking, teaches diverse history & cultures, and serves as an escape to worlds of endless possibility.
+                        </p>
+                    </div>
+                    <div class="bg-black/40 border border-academia-gold/20 rounded-lg p-5">
+                        <h4 class="font-cinzel text-academia-gold font-bold mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-scroll"></i> Your Quest Modules
+                        </h4>
+                        <ul class="text-xs space-y-1.5 text-parchment-dark font-typewriter">
+                            <li><span class="text-academia-gold">1. Portal of Genres:</span> Sort Prose, Poetry & subgenres.</li>
+                            <li><span class="text-academia-gold">2. Lens of POV:</span> Map point of view & master irony.</li>
+                            <li><span class="text-academia-gold">3. Forge of Character:</span> Analyze identity & speech.</li>
+                            <li><span class="text-academia-gold">4. The Plot Mountain:</span> Assemble narrative structure.</li>
+                            <li><span class="text-academia-gold">5. Vault of Themes:</span> Solve the core life questions.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pt-6">
+                    <button onclick="game.startQuest()" class="bg-academia-gold text-academia-mahogany font-cinzel font-bold text-lg px-8 py-3.5 rounded-md hover:bg-white hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:scale-105 active:scale-95 transition-all duration-300 tracking-widest border-2 border-academia-gold">
+                        ENTER THE ARCHIVES
+                    </button>
+                    <p class="text-xs text-parchment-dark mt-3 font-typewriter">Designed for EFL Literature Students • ISFD y T N°10 • Reference: Elements of Literature 2024.pptx</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE MENU / MAP -->
+        <div id="screen-map" class="hidden w-full max-w-5xl bg-academia-mahogany/80 border border-academia-gold/40 rounded-xl p-6 md:p-8 shadow-2xl relative backdrop-blur-sm">
+            <div class="text-center mb-8">
+                <h3 class="font-cinzel text-2xl md:text-3xl text-academia-gold tracking-wider">Archival Quest Map</h3>
+                <p class="text-sm text-parchment-dark italic">Click on an active vault node to begin classification trials.</p>
+                <!-- Badge tracker -->
+                <div id="badgeContainer" class="flex justify-center gap-3 mt-4">
+                    <!-- Badges render dynamically -->
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <!-- Module 1 Node -->
+                <div id="node-1" class="border border-academia-gold bg-black/40 rounded-lg p-4 flex flex-col justify-between hover:border-white transition-all cursor-pointer relative group" onclick="game.startModule(1)">
+                    <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-academia-gold text-academia-mahogany flex items-center justify-center font-bold text-xs font-typewriter shadow-md">1</div>
+                    <div>
+                        <span class="text-academia-gold text-xs font-cinzel block uppercase tracking-wider">Module I</span>
+                        <h4 class="font-cinzel text-sm text-white font-bold group-hover:text-academia-gold transition-colors">Portal of Genres</h4>
+                        <p class="text-xs text-parchment-dark mt-2 leading-relaxed">Restore Prose, Poetry, Fiction, and Non-fiction subdivisions.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-academia-gold/20 flex justify-between items-center text-xs">
+                        <span class="font-typewriter text-academia-gold" id="node-status-1">Unopened</span>
+                        <i class="fa-solid fa-lock-open text-academia-gold" id="node-lock-1"></i>
+                    </div>
+                </div>
+
+                <!-- Module 2 Node -->
+                <div id="node-2" class="border border-academia-gold/30 bg-black/40 rounded-lg p-4 flex flex-col justify-between opacity-50 cursor-not-allowed relative group" onclick="game.startModule(2)">
+                    <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-academia-gold/30 text-academia-mahogany flex items-center justify-center font-bold text-xs font-typewriter shadow-md">2</div>
+                    <div>
+                        <span class="text-academia-gold text-xs font-cinzel block uppercase tracking-wider">Module II</span>
+                        <h4 class="font-cinzel text-sm text-white font-bold group-hover:text-academia-gold transition-colors">Lens of POV</h4>
+                        <p class="text-xs text-parchment-dark mt-2 leading-relaxed font-lora">Deconstruct narrator perspectives & solve structural irony levels.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-academia-gold/20 flex justify-between items-center text-xs">
+                        <span class="font-typewriter text-parchment-dark" id="node-status-2">Locked</span>
+                        <i class="fa-solid fa-lock text-parchment-dark" id="node-lock-2"></i>
+                    </div>
+                </div>
+
+                <!-- Module 3 Node -->
+                <div id="node-3" class="border border-academia-gold/30 bg-black/40 rounded-lg p-4 flex flex-col justify-between opacity-50 cursor-not-allowed relative group" onclick="game.startModule(3)">
+                    <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-academia-gold/30 text-academia-mahogany flex items-center justify-center font-bold text-xs font-typewriter shadow-md">3</div>
+                    <div>
+                        <span class="text-academia-gold text-xs font-cinzel block uppercase tracking-wider">Module III</span>
+                        <h4 class="font-cinzel text-sm text-white font-bold group-hover:text-academia-gold transition-colors">The Character Forge</h4>
+                        <p class="text-xs text-parchment-dark mt-2 leading-relaxed">Dissect telling vs showing, direct speech, and social contexts.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-academia-gold/20 flex justify-between items-center text-xs">
+                        <span class="font-typewriter text-parchment-dark" id="node-status-3">Locked</span>
+                        <i class="fa-solid fa-lock text-parchment-dark" id="node-lock-3"></i>
+                    </div>
+                </div>
+
+                <!-- Module 4 Node -->
+                <div id="node-4" class="border border-academia-gold/30 bg-black/40 rounded-lg p-4 flex flex-col justify-between opacity-50 cursor-not-allowed relative group" onclick="game.startModule(4)">
+                    <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-academia-gold/30 text-academia-mahogany flex items-center justify-center font-bold text-xs font-typewriter shadow-md">4</div>
+                    <div>
+                        <span class="text-academia-gold text-xs font-cinzel block uppercase tracking-wider">Module IV</span>
+                        <h4 class="font-cinzel text-sm text-white font-bold group-hover:text-academia-gold transition-colors">The Plot Builder</h4>
+                        <p class="text-xs text-parchment-dark mt-2 leading-relaxed font-lora">Map Exposition to Resolution. Align episodic & parallel plotways.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-academia-gold/20 flex justify-between items-center text-xs">
+                        <span class="font-typewriter text-parchment-dark" id="node-status-4">Locked</span>
+                        <i class="fa-solid fa-lock text-parchment-dark" id="node-lock-4"></i>
+                    </div>
+                </div>
+
+                <!-- Module 5 Node -->
+                <div id="node-5" class="border border-academia-gold/30 bg-black/40 rounded-lg p-4 flex flex-col justify-between opacity-50 cursor-not-allowed relative group" onclick="game.startModule(5)">
+                    <div class="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-academia-gold/30 text-academia-mahogany flex items-center justify-center font-bold text-xs font-typewriter shadow-md">5</div>
+                    <div>
+                        <span class="text-academia-gold text-xs font-cinzel block uppercase tracking-wider">Module V</span>
+                        <h4 class="font-cinzel text-sm text-white font-bold group-hover:text-academia-gold transition-colors">Vault of Themes</h4>
+                        <p class="text-xs text-parchment-dark mt-2 leading-relaxed">Discover core motives, symbols, and literary messages.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-academia-gold/20 flex justify-between items-center text-xs">
+                        <span class="font-typewriter text-parchment-dark" id="node-status-5">Locked</span>
+                        <i class="fa-solid fa-lock text-parchment-dark" id="node-lock-5"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-4 border-t border-academia-gold/20 text-center">
+                <button onclick="game.openStudyNotebookAt(0)" class="text-academia-gold hover:text-white transition-colors flex items-center gap-2 justify-center mx-auto text-sm uppercase tracking-wider font-cinzel">
+                    <i class="fa-solid fa-graduation-cap"></i> Read Academy Directives (Notes)
+                </button>
+            </div>
+        </div>
+
+        <!-- MODULE 1 GAMEPLAY: GENRES SORTING -->
+        <div id="screen-mod1" class="hidden w-full max-w-3xl bg-academia-mahogany/95 border border-academia-gold/40 rounded-xl p-6 shadow-2xl relative">
+            <div class="flex justify-between items-center border-b border-academia-gold/30 pb-3 mb-4">
+                <h3 class="font-cinzel text-xl text-academia-gold">The Sorting Portal</h3>
+                <span id="mod1-counter" class="font-typewriter text-sm text-parchment-dark">Card: 1 / 8</span>
+            </div>
+            
+            <p class="text-sm text-parchment mb-4 italic leading-relaxed text-center">
+                Drag or tap the matching button to place each literary genre into its accurate architectural category!
+            </p>
+
+            <div class="flex flex-col items-center gap-6">
+                <!-- Sorting Card container -->
+                <div id="sorting-card" class="bg-[#f5efe0] text-black w-72 h-52 rounded-xl border-4 border-academia-gold p-6 flex flex-col justify-between shadow-2xl transition-all duration-300 select-none">
+                    <div class="flex justify-between items-start">
+                        <i class="fa-solid fa-scroll text-academia-mahogany/40 text-xl"></i>
+                        <span id="card-type-tag" class="text-[10px] font-typewriter uppercase bg-academia-gold/20 px-2 py-0.5 rounded text-academia-mahogany">Genre Specimen</span>
+                    </div>
+                    <div class="text-center my-auto px-2">
+                        <h4 id="card-title" class="font-cinzel font-bold text-lg text-academia-mahogany tracking-wide">Novel</h4>
+                        <p id="card-desc" class="text-xs text-gray-700 mt-2 italic font-lora">"A work of long prose fiction centered on developed characters and plot."</p>
+                    </div>
+                    <div class="text-center text-[10px] font-typewriter text-academia-mahogany/50">
+                        ISFD & T • Specimen No. <span id="card-specimen-id">101</span>
+                    </div>
+                </div>
+
+                <!-- Classification Buttons Grid (PROSE, POETRY, FICTION, NON-FICTION) -->
+                <div class="grid grid-cols-2 gap-3 w-full max-w-md pt-4">
+                    <button onclick="game.classifyMod1('Prose')" class="bg-academia-emerald border border-white/20 text-white hover:bg-white hover:text-academia-emerald py-3 px-4 rounded-lg font-cinzel text-xs tracking-wider font-semibold shadow-md active:scale-95 transition-all">
+                        PROSE
+                    </button>
+                    <button onclick="game.classifyMod1('Poetry')" class="bg-academia-crimson border border-white/20 text-white hover:bg-white hover:text-academia-crimson py-3 px-4 rounded-lg font-cinzel text-xs tracking-wider font-semibold shadow-md active:scale-95 transition-all">
+                        POETRY
+                    </button>
+                    <button onclick="game.classifyMod1('Fiction')" class="bg-[#4a5568] border border-white/20 text-white hover:bg-white hover:text-slate-700 py-3 px-4 rounded-lg font-cinzel text-xs tracking-wider font-semibold shadow-md active:scale-95 transition-all">
+                        FICTION
+                    </button>
+                    <button onclick="game.classifyMod1('Non-Fiction')" class="bg-academia-cobalt border border-white/20 text-white hover:bg-white hover:text-academia-cobalt py-3 px-4 rounded-lg font-cinzel text-xs tracking-wider font-semibold shadow-md active:scale-95 transition-all">
+                        NON-FICTION
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feedback system -->
+            <div id="mod1-feedback" class="mt-6 text-center text-sm font-semibold h-6 text-academia-gold transition-all duration-300"></div>
+        </div>
+
+        <!-- MODULE 2 GAMEPLAY: PERSPECTIVE & IRONY CHRONICLES -->
+        <div id="screen-mod2" class="hidden w-full max-w-3xl bg-academia-mahogany/95 border border-academia-gold/40 rounded-xl p-6 shadow-2xl relative">
+            <div class="flex justify-between items-center border-b border-academia-gold/30 pb-3 mb-4">
+                <h3 class="font-cinzel text-xl text-academia-gold">The Perspective Chronicle</h3>
+                <span id="mod2-counter" class="font-typewriter text-sm text-parchment-dark">Case: 1 / 5</span>
+            </div>
+
+            <p class="text-sm text-parchment-dark mb-4 text-center font-typewriter">
+                Examine the following diagnostic narrative extract. Identify its point of view, degrees of knowledge, or structural irony.
+            </p>
+
+            <div class="bg-black/40 border border-academia-gold/20 rounded-lg p-5 mb-6">
+                <!-- Text Extract Container -->
+                <p id="mod2-passage" class="text-base text-parchment font-lora italic leading-relaxed">
+                    <!-- Loaded dynamically -->
+                </p>
+            </div>
+
+            <div class="space-y-3" id="mod2-options">
+                <!-- Option buttons loaded dynamically -->
+            </div>
+
+            <div id="mod2-feedback" class="mt-6 text-center text-sm font-semibold h-6 text-academia-gold"></div>
+        </div>
+
+        <!-- MODULE 3 GAMEPLAY: THE CHARACTER FORGE -->
+        <div id="screen-mod3" class="hidden w-full max-w-4xl bg-academia-mahogany/95 border border-academia-gold/40 rounded-xl p-6 shadow-2xl relative">
+            <div class="flex justify-between items-center border-b border-academia-gold/30 pb-3 mb-4">
+                <h3 class="font-cinzel text-xl text-academia-gold">The Characterization Forge</h3>
+                <span id="mod3-counter" class="font-typewriter text-sm text-parchment-dark">Diagnostic: 1 / 5</span>
+            </div>
+
+            <p class="text-sm text-parchment-dark mb-4 text-center font-typewriter">
+                Deconstruct character presentation modes. Identify direct speech, social status cues, dress analysis, or "telling vs showing".
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Left side: Scenario Presentation -->
+                <div class="bg-[#f5efe0] text-black rounded-lg p-5 border-2 border-academia-gold flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs uppercase font-cinzel text-academia-gold font-bold block mb-2">Scenario Fragment</span>
+                        <p id="mod3-scenario" class="text-sm font-lora italic leading-relaxed text-academia-mahogany">
+                            <!-- Scenario details dynamically loaded -->
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-academia-gold/30 mt-4 flex items-center justify-between text-xs font-typewriter">
+                        <span>Character: <strong id="mod3-char-name">Midas</strong></span>
+                        <span>ISFD y T Study Node</span>
+                    </div>
+                </div>
+
+                <!-- Right side: Multiple Choice Actions -->
+                <div class="flex flex-col justify-center space-y-3" id="mod3-options">
+                    <!-- Loaded dynamically -->
+                </div>
+            </div>
+
+            <div id="mod3-feedback" class="mt-6 text-center text-sm font-semibold h-6 text-academia-gold"></div>
+        </div>
+
+        <!-- MODULE 4 GAMEPLAY: THE PLOT TIMELINE & Mountain -->
+        <div id="screen-mod4" class="hidden w-full max-w-4xl bg-academia-mahogany/95 border border-academia-gold/40 rounded-xl p-6 shadow-2xl relative">
+            <div class="flex justify-between items-center border-b border-academia-gold/30 pb-3 mb-4">
+                <h3 class="font-cinzel text-xl text-academia-gold">Plot Alignment Trial</h3>
+                <span class="font-typewriter text-sm text-academia-gold">Structural Core</span>
+            </div>
+
+            <p class="text-sm text-parchment-dark text-center mb-6">
+                Map out the traditional Freytag dramatic arc elements, then align specialized plot shapes (Linear, Episodic, Parallel, Flashback).
+            </p>
+
+            <div class="space-y-6">
+                <!-- Mini puzzle 1: Order elements -->
+                <div class="bg-black/40 border border-academia-gold/20 rounded-lg p-4">
+                    <h4 class="font-cinzel text-academia-gold text-sm font-bold mb-3 uppercase tracking-wider">Part A: Reassemble the Plot Mountain Arc</h4>
+                    <p class="text-xs text-parchment-dark mb-3">Place these story moments in their correct physical sequence from Start to End!</p>
+                    
+                    <div class="grid grid-cols-5 gap-2" id="plot-items-container">
+                        <!-- Render dynamically with click sequence -->
+                    </div>
+                    <div class="mt-4 flex justify-between items-center text-xs">
+                        <span class="text-parchment-dark">Your Sequence: <strong id="plot-sequence-text" class="text-white font-typewriter">[Select items below]</strong></span>
+                        <button onclick="game.checkPlotMountain()" class="bg-academia-gold text-academia-mahogany font-cinzel px-4 py-1.5 rounded hover:bg-white text-xs font-bold transition-all">Submit Alignment</button>
+                    </div>
+                </div>
+
+                <!-- Mini puzzle 2: Identify Plot Shape -->
+                <div class="bg-black/40 border border-academia-gold/20 rounded-lg p-4">
+                    <h4 class="font-cinzel text-academia-gold text-sm font-bold mb-3 uppercase tracking-wider">Part B: Distinguish the Plot Shape</h4>
+                    <p id="plot-shape-desc" class="text-sm italic text-parchment leading-relaxed mb-4">
+                        <!-- Loaded dynamically -->
+                    </p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2" id="plot-shapes-options">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="mod4-feedback" class="mt-4 text-center text-sm font-semibold h-6 text-academia-gold"></div>
+        </div>
+
+        <!-- MODULE 5 GAMEPLAY: VAULT OF THEMES -->
+        <div id="screen-mod5" class="hidden w-full max-w-4xl bg-academia-mahogany/95 border border-academia-gold/40 rounded-xl p-6 shadow-2xl relative">
+            <div class="flex justify-between items-center border-b border-academia-gold/30 pb-3 mb-4">
+                <h3 class="font-cinzel text-xl text-academia-gold">The Ultimate Theme Deconstruction</h3>
+                <span class="font-typewriter text-sm text-academia-gold">Trial of the master archivist</span>
+            </div>
+
+            <div class="text-center mb-6">
+                <p class="text-sm text-parchment-dark">
+                    To unlock Master Archivist status and retrieve the final shard, analyze the comprehensive theme patterns in this classic short fiction scenario.
+                </p>
+            </div>
+
+            <div class="bg-[#f5efe0] text-[#2d1a12] p-5 rounded-lg border-2 border-academia-gold mb-6 relative">
+                <i class="fa-solid fa-quote-left absolute top-4 left-4 text-academia-gold/20 text-5xl"></i>
+                <h4 class="font-cinzel font-bold text-center border-b border-academia-gold/30 pb-2 mb-3 text-academia-mahogany">Scenario Fragment: "The Scholar of Tandil"</h4>
+                <p class="text-sm font-lora leading-relaxed italic">
+                    "An aging professor travels to the windswept hills of ISFD N°10. On his desk lies a broken sonnet from 1924. He writes endless diaries (non-fiction), analyzing how the town's youth find freedom through words. In his last entry, his handwriting changes, matching exactly the handwriting on the ancient sonnet he has been studying."
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-black/40 border border-academia-gold/20 p-4 rounded-lg">
+                    <span class="text-[10px] font-cinzel text-academia-gold block mb-1">Question A</span>
+                    <p class="text-xs mb-3 font-semibold">Which central thematic motif describes this passage?</p>
+                    <select id="mod5-qa" class="w-full bg-academia-mahogany border border-academia-gold/40 text-white rounded p-2 text-xs font-lora">
+                        <option value="">Select theme...</option>
+                        <option value="individual_vs_society">Individual vs Society</option>
+                        <option value="ethical_science">Ethical concerns of science</option>
+                        <option value="appearance_reality">Appearance vs Reality / Mirroring of Time</option>
+                        <option value="american_dream">The American Dream</option>
+                    </select>
+                </div>
+
+                <div class="bg-black/40 border border-academia-gold/20 p-4 rounded-lg">
+                    <span class="text-[10px] font-cinzel text-academia-gold block mb-1">Question B</span>
+                    <p class="text-xs mb-3 font-semibold">How can we find theme clues based on the presentation rules?</p>
+                    <select id="mod5-qb" class="w-full bg-academia-mahogany border border-academia-gold/40 text-white rounded p-2 text-xs font-lora">
+                        <option value="">Select identification tip...</option>
+                        <option value="only_by_word_count">Only by examining word count details</option>
+                        <option value="titles_and_space">Through book titles, writing space, and motifs</option>
+                        <option value="publish_year_only">Simply by checking historical publishing dates</option>
+                    </select>
+                </div>
+
+                <div class="bg-black/40 border border-academia-gold/20 p-4 rounded-lg">
+                    <span class="text-[10px] font-cinzel text-academia-gold block mb-1">Question C</span>
+                    <p class="text-xs mb-3 font-semibold">Identify the exact narrative style highlighted in the diary entries:</p>
+                    <select id="mod5-qc" class="w-full bg-academia-mahogany border border-academia-gold/40 text-white rounded p-2 text-xs font-lora">
+                        <option value="">Select style category...</option>
+                        <option value="epic_verse">Epic verse with ballad chorus</option>
+                        <option value="ordinary_prose">Prose representing natural flow of speech</option>
+                        <option value="dramatic_soliloquy">Dramatic soliloquy in metric scale</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <button onclick="game.checkVaultThemes()" class="bg-academia-gold text-academia-mahogany font-cinzel px-8 py-3 rounded font-bold hover:bg-white tracking-widest active:scale-95 transition-all">DECRYPT THE SYSTEM</button>
+            </div>
+
+            <div id="mod5-feedback" class="mt-4 text-center text-sm font-semibold h-6 text-academia-gold"></div>
+        </div>
+
+        <!-- CONGRATULATIONS / COMPLETE SCREEN -->
+        <div id="screen-victory" class="hidden w-full max-w-2xl bg-academia-mahogany/90 border-2 border-academia-gold rounded-xl p-6 md:p-8 shadow-2xl relative text-center">
+            <i class="fa-solid fa-crown text-academia-gold text-5xl mb-4"></i>
+            <h2 class="font-cinzel text-2xl md:text-3xl text-academia-gold font-bold tracking-wider mb-2">ARCHIVES FULLY RESTORED</h2>
+            <div class="w-24 h-[1px] bg-academia-gold mx-auto mb-4"></div>
+            
+            <p class="text-sm text-parchment leading-relaxed mb-4">
+                "Fantastic job, Chrono-Archivist! By categorizing genres, parsing point of view narration, analyzing characters, and mastering plot structures, you have rescued the literary study syllabus of 2024!"
+            </p>
+
+            <!-- Student Verification Info -->
+            <div class="bg-black/40 border border-academia-gold/30 rounded-lg p-4 max-w-md mx-auto mb-4 text-left space-y-3">
+                <h4 class="font-cinzel text-academia-gold text-xs font-bold tracking-wider uppercase border-b border-academia-gold/20 pb-1.5 flex items-center gap-2">
+                    <i class="fa-solid fa-user-graduate"></i> Student Verification Card
+                </h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[10px] uppercase font-typewriter text-parchment-dark mb-1">Full Name *</label>
+                        <input id="studentName" type="text" placeholder="e.g. John Doe" class="w-full bg-academia-mahogany border border-academia-gold/40 text-white rounded p-2 text-xs font-lora focus:outline-none focus:border-academia-gold transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase font-typewriter text-parchment-dark mb-1">Class / Group</label>
+                        <input id="studentGroup" type="text" placeholder="e.g. Year 4 - Group A" class="w-full bg-academia-mahogany border border-academia-gold/40 text-white rounded p-2 text-xs font-lora focus:outline-none focus:border-academia-gold transition-all">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Panel: Student Download & Teacher Reporting -->
+            <div class="bg-black/20 border border-academia-gold/10 rounded-lg p-4 max-w-md mx-auto mb-4 space-y-3">
+                <span class="text-[10px] uppercase font-typewriter text-academia-gold tracking-widest block">Submit Your Work</span>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <!-- Student Download Button -->
+                    <button onclick="game.downloadReport()" class="bg-academia-cobalt text-white border border-white/20 font-cinzel text-xs py-2.5 px-3 rounded-lg shadow-md hover:bg-white hover:text-academia-cobalt active:scale-95 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-file-arrow-down"></i> Download Answers (.TXT)
+                    </button>
+                    <!-- Email Teacher Button -->
+                    <button onclick="game.emailReport()" class="bg-academia-emerald text-white border border-white/20 font-cinzel text-xs py-2.5 px-3 rounded-lg shadow-md hover:bg-white hover:text-academia-emerald active:scale-95 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-envelope-open-text"></i> Email to Teacher
+                    </button>
+                </div>
+                
+                <!-- Clipboard Copy Option -->
+                <button onclick="game.copyReport()" class="w-full bg-academia-mahogany/80 text-academia-gold border border-academia-gold/40 font-cinzel text-[11px] py-2 px-3 rounded-lg shadow-md hover:bg-academia-gold hover:text-academia-mahogany active:scale-95 transition-all flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-copy"></i> Copy Full Performance Report to Clipboard
+                </button>
+            </div>
+
+            <!-- Action Feedback Message Block -->
+            <div id="victory-action-feedback" class="text-xs font-typewriter text-academia-gold h-4 mb-4 font-bold transition-all duration-300"></div>
+
+            <!-- Certificate Tracker -->
+            <div class="bg-black/50 border border-academia-gold/30 rounded-lg p-4 max-w-md mx-auto mb-4 text-left">
+                <h4 class="font-cinzel text-academia-gold text-xs font-bold text-center border-b border-academia-gold/30 pb-1.5 mb-2 uppercase">Master Trial Certificate</h4>
+                <div class="font-typewriter text-[11px] text-parchment-dark space-y-1.5">
+                    <p>Archivist Score: <span id="victoryScore" class="text-white font-bold">1200</span> points</p>
+                    <p>Rank Achieved: <span class="text-white font-bold">LITERARY GRANDMASTER</span></p>
+                    <p>Syllabus Origin: <span class="text-white">ISFD y T 10 • Buenos Aires, Argentina</span></p>
+                    <p>Date Certified: <span class="text-white" id="victoryDate">June 2026</span></p>
+                </div>
+            </div>
+
+            <button onclick="game.resetQuest()" class="bg-academia-gold text-academia-mahogany font-cinzel font-bold px-6 py-2 rounded hover:bg-white transition-all text-xs uppercase tracking-widest">
+                Study Anew
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Slide-Out Study Handbook Panel -->
+    <div id="handbookPanel" class="fixed top-0 right-0 h-full w-full max-w-xl bg-academia-mahogany border-l border-academia-gold/30 shadow-2xl z-50 transform translate-x-full transition-transform duration-500 ease-in-out flex flex-col justify-between">
+        <div class="p-4 border-b border-academia-gold/20 flex justify-between items-center bg-black/40">
+            <div class="flex items-center gap-2 text-academia-gold">
+                <i class="fa-solid fa-book-open"></i>
+                <h3 class="font-cinzel text-sm font-bold tracking-wide uppercase">Archivist's Reference Notes</h3>
+            </div>
+            <button onclick="game.toggleNotebook()" class="text-academia-gold hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Slides/Notes Container -->
+        <div id="handbookContent" class="flex-grow overflow-y-auto p-6 space-y-8 text-sm leading-relaxed text-parchment font-lora">
+            <!-- Slide 1 Content -->
+            <section class="border-b border-academia-gold/20 pb-6 space-y-2">
+                <span class="text-[10px] font-typewriter text-academia-gold uppercase">Directive 1 • Why study Literature in EFL?</span>
+                <h4 class="font-cinzel text-base text-white font-bold">Importance of Literature</h4>
+                <p>Literature builds language and communication skills, helps expand vocabulary, encourages wild imagination, and builds intense critical thinking tools. Reading works from different historical periods introduces us to foreign cultures, perspectives, and belief systems.</p>
+            </section>
+
+            <!-- Slide 2 Content -->
+            <section class="border-b border-academia-gold/20 pb-6 space-y-2">
+                <span class="text-[10px] font-typewriter text-academia-gold uppercase">Directive 2 • The Architecture of Genres</span>
+                <h4 class="font-cinzel text-base text-white font-bold">Prose vs Poetry</h4>
+                <p><strong>Prose:</strong> Written language in standard grammatical flow (novels, short stories, news). It consists of paragraphs and complete sentences.</p>
+                <p><strong>Poetry:</strong> Imaginative language using formal meter, rhyme scheme, or free verse to invoke complex emotions.</p>
+                <p><strong>Genres subdivisions:</strong> Narrative, Lyric (personal emotion), and Dramatic (plays meant to be performed with dialogue and monologues).</p>
+            </section>
+
+            <!-- Slide 3 Content -->
+            <section class="border-b border-academia-gold/20 pb-6 space-y-2">
+                <span class="text-[10px] font-typewriter text-academia-gold uppercase">Directive 3 • Point of View & Irony</span>
+                <h4 class="font-cinzel text-base text-white font-bold">POV & Irony Rules</h4>
+                <p>Point of view defines how stories are related: 1st Person (Participant narrator), 2nd Person (direct appeal), and 3rd Person (Omniscient / Limited views).</p>
+                <p><strong>Narrator Reliability:</strong> A gap can occur between narrator claims and reality. This produces <strong>Dramatic Irony</strong> when characters intend outcomes that readers know will fail due to underlying parameters.</p>
+            </section>
+
+            <!-- Slide 4 Content -->
+            <section class="border-b border-academia-gold/20 pb-6 space-y-2">
+                <span class="text-[10px] font-typewriter text-academia-gold uppercase">Directive 4 • Character & Setting Dynamics</span>
+                <h4 class="font-cinzel text-base text-white font-bold">Presentation of Self</h4>
+                <p><strong>Telling:</strong> Informing the reader directly about traits. <strong>Showing:</strong> Leaving it up to readers' interpretations of clues (Dress, speech patterns, social standings, actions, and reactions).</p>
+                <p><strong>Setting:</strong> The time, atmosphere, custom rules, beliefs, and places that generate social situations and control the characters' psychological situation.</p>
+            </section>
+
+            <!-- Slide 5 Content -->
+            <section class="border-b border-academia-gold/20 pb-6 space-y-2">
+                <span class="text-[10px] font-typewriter text-academia-gold uppercase">Directive 5 • Plot Arcs & Theme Clues</span>
+                <h4 class="font-cinzel text-base text-white font-bold">Plot and Themes</h4>
+                <p><strong>Plot Mountain:</strong> Exposition -> Rising Action -> Climax -> Falling Action -> Resolution.</p>
+                <p><strong>Plot Layouts:</strong> Linear (Chronological), Episodic (Loosely related incidents tied by theme), Parallel (Woven stories colliding at a main climax), and Flashback (Action starting in media res, tracing back in time).</p>
+                <p><strong>How to identify themes:</strong> Examine book titles, descriptive space density, symbol motifs, and direct authorial intrusions.</p>
+            </section>
+        </div>
+
+        <div class="p-4 border-t border-academia-gold/20 bg-black/40 text-center text-xs text-parchment-dark">
+            ISFD y T 10 • Literature Study Guide • Class of 2024
+        </div>
+    </div>
+
+    <!-- Footer Area -->
+    <footer class="border-t border-academia-gold/20 bg-academia-mahogany py-3 text-center text-xs text-parchment-dark relative z-10 font-typewriter">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2 px-6">
+            <span>© 2026 ISFD y T N°10 • Literatura y Juventud</span>
+            <span class="italic text-academia-gold">"Non scholae, sed vitae discimus"</span>
+        </div>
+    </footer>
+
+    <!-- Audio Synthesis and Game Logic Script -->
+    <script>
+        // Sound System using pure Web Audio API (No outside assets required!)
+        class SoundSystem {
+            constructor() {
+                this.ctx = null;
+                this.isMuted = true;
+                this.ambientNode = null;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+
+            playFreq(freq, type = 'sine', duration = 0.1, gainVal = 0.1) {
+                try {
+                    this.init();
+                    if (this.isMuted) return;
+
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch (e) {
+                    console.log("Audio not allowed yet.", e);
+                }
+            }
+
+            correct() {
+                this.playFreq(523.25, 'triangle', 0.15); // C5
+                setTimeout(() => this.playFreq(659.25, 'triangle', 0.2), 120); // E5
+            }
+
+            wrong() {
+                this.playFreq(220.00, 'sawtooth', 0.3, 0.05); // A3
+            }
+
+            click() {
+                this.playFreq(440.00, 'sine', 0.05, 0.05); // A4
+            }
+
+            victory() {
+                const notes = [523.25, 587.33, 659.25, 698.46, 783.99, 880.00, 987.77, 1046.50];
+                notes.forEach((freq, index) => {
+                    setTimeout(() => {
+                        this.playFreq(freq, 'triangle', 0.2, 0.08);
+                    }, index * 100);
+                });
+            }
+
+            toggleAmbience() {
+                this.init();
+                this.isMuted = !this.isMuted;
+                
+                const btn = document.getElementById('musicToggle');
+                const icon = document.getElementById('musicIcon');
+
+                if (this.isMuted) {
+                    icon.className = 'fa-solid fa-volume-xmark';
+                    btn.classList.replace('bg-academia-gold', 'bg-academia-mahogany/80');
+                    if (this.ambientNode) {
+                        try { this.ambientNode.stop(); } catch(e) {}
+                        this.ambientNode = null;
+                    }
+                } else {
+                    icon.className = 'fa-solid fa-volume-high text-green-400';
+                    btn.classList.add('bg-academia-gold');
+                    this.playAmbientPad();
+                }
+            }
+
+            playAmbientPad() {
+                if (this.isMuted) return;
+                try {
+                    // Generate a continuous synth arpeggiator/ambient pad using oscillators
+                    const osc1 = this.ctx.createOscillator();
+                    const osc2 = this.ctx.createOscillator();
+                    const gainNode = this.ctx.createGain();
+
+                    osc1.type = 'sine';
+                    osc1.frequency.setValueAtTime(110, this.ctx.currentTime); // Lofi drone A2
+                    osc2.type = 'triangle';
+                    osc2.frequency.setValueAtTime(220, this.ctx.currentTime); // A3
+
+                    gainNode.gain.setValueAtTime(0.015, this.ctx.currentTime);
+
+                    osc1.connect(gainNode);
+                    osc2.connect(gainNode);
+                    gainNode.connect(this.ctx.destination);
+
+                    osc1.start();
+                    osc2.start();
+
+                    this.ambientNode = {
+                        stop: () => {
+                            osc1.stop();
+                            osc2.stop();
+                        }
+                    };
+                } catch(e) {
+                    console.log("Ambience generation failed", e);
+                }
+            }
+        }
+
+        const audio = new SoundSystem();
+
+        // Game State Management
+        class GameEngine {
+            constructor() {
+                this.score = 0;
+                this.completedModules = [];
+                this.activeModule = null;
+                this.m1Index = 0;
+                this.m2Index = 0;
+                this.m3Index = 0;
+                this.studentAnswers = []; // Store student evaluations for reporting
+                
+                // M1: Specimen deck
+                this.m1Data = [
+                    { title: "Novel", category: "Fiction", desc: "Long narrative work focusing on complex character progression over multiple chapters." },
+                    { title: "Diary", category: "Non-Fiction", desc: "A personal chronological record of experiences, thoughts, and daily records." },
+                    { title: "Sonnet", category: "Poetry", desc: "A formal 14-line poem built around strict metric schemes, traditionally emotional lyric." },
+                    { title: "Short Story", category: "Fiction", desc: "A narrative prose shorter than a novel with a focused, singular scenario design." },
+                    { title: "Fable", category: "Fiction", desc: "A short story with animal characters designed to teach an enduring moral lesson." },
+                    { title: "Biography", category: "Non-Fiction", desc: "An accurate detailed timeline account of a historical person's entire life." },
+                    { title: "Epic Poem", category: "Poetry", desc: "A colossal narrative poem detailing the magnificent travels of heroic champions." },
+                    { title: "Essay", category: "Non-Fiction", desc: "A focused prose argument explaining a specific historical or conceptual topic." }
+                ];
+
+                // M2: Perspective cases
+                this.m2Data = [
+                    {
+                        passage: "“I turned around to look at the dusty library desk. My hands trembled as I opened the ancient record book from ISFD y T N°10. I didn't know what I was looking for, but the mystery gripped me.”",
+                        options: ["First Person POV (Participant)", "Second Person POV", "Third Person Omniscient", "Third Person Limited"],
+                        correct: 0,
+                        explanation: "Uses participant pronoun 'I' to tell the direct experience."
+                    },
+                    {
+                        passage: "“She was completely oblivious to the shadow watching from the window. However, her brother knew exactly who it was, and smiled, remembering the classic Tandil legends.”",
+                        options: ["First Person", "Second Person", "Third Person Omniscient", "Third Person Limited"],
+                        correct: 2,
+                        explanation: "Narrator reveals thoughts of multiple characters, demonstrating omniscient degrees of knowledge."
+                    },
+                    {
+                        passage: "“Mina walked with speed. She wondered if the class was already waiting. She didn't have time to worry about what they thought of her late entrance.”",
+                        options: ["First Person", "Third Person Limited", "Third Person Omniscient", "Dramatic/Objective"],
+                        correct: 1,
+                        explanation: "Follows one character's actions and internal thoughts intimately (Limited)."
+                    },
+                    {
+                        passage: "A character acts with confidence expecting a grand legacy outcome, but the reader can already see that the historical background will ensure complete failure.",
+                        options: ["Direct Irony", "Metaphoric style", "Dramatic/Situational Irony", "Anecdotal plotway"],
+                        correct: 2,
+                        explanation: "Dramatic Irony is the gap between character intentions and outcomes."
+                    },
+                    {
+                        passage: "A narrator who constantly steps into the story, directly telling the reader how they should interpret the characters' behaviors.",
+                        options: ["Reliable Narrator", "Intrusive Narrator", "Lyric voice", "Dramatic Persona"],
+                        correct: 1,
+                        explanation: "An intrusive narrator comments directly on characters and breaks the illusion of narration."
+                    }
+                ];
+
+                // M3: Character scenarios
+                this.m3Data = [
+                    {
+                        scenario: "A story details that James was an insecure, terrified academic. It explicitly states his flaws in the first paragraph, bypassing any actions.",
+                        charName: "James",
+                        options: [
+                            { text: "Characterization through Showing", correct: false },
+                            { text: "Direct Characterization through Telling", correct: true },
+                            { text: "Dynamic structural naming", correct: false },
+                            { text: "Context-driven situation", correct: false }
+                        ]
+                    },
+                    {
+                        scenario: "The writer presents Beatrice wearing an old, torn trench coat from the local EFL secondary school, complete with an old municipal library badge.",
+                        charName: "Beatrice",
+                        options: [
+                            { text: "Showing personality & social status via Dress", correct: true },
+                            { text: "Narrative lyric soliloquy", correct: false },
+                            { text: "Telling direct traits", correct: false },
+                            { text: "Parallel episodic mapping", correct: false }
+                        ]
+                    },
+                    {
+                        scenario: "We learn about Lord Sterling because his name mimics the absolute purity of the gold standard he protects.",
+                        charName: "Lord Sterling",
+                        options: [
+                            { text: "Showing details through Direct Speech", correct: false },
+                            { text: "Naming expressing the character's nature", correct: true },
+                            { text: "Atmospheric setting manipulation", correct: false },
+                            { text: "Objective POV mirroring", correct: false }
+                        ]
+                    },
+                    {
+                        scenario: "Instead of stating he is a thief, the narrative shows Arthur whispering, hiding his lockpick keys, and glancing over his shoulder every few seconds.",
+                        charName: "Arthur",
+                        options: [
+                            { text: "Telling direct facts", correct: false },
+                            { text: "Objective showing through Actions & Reactions", correct: true },
+                            { text: "Atmospheric social description", correct: false },
+                            { text: "Legend-based narration", correct: false }
+                        ]
+                    },
+                    {
+                        scenario: "The dialect, colloquialisms, and vocabulary choices used during dialogue immediately betray a character's regional origins and educational social status.",
+                        charName: "Professor Collins",
+                        options: [
+                            { text: "Characterization through Direct Speech Patterns", correct: true },
+                            { text: "Freytag's Climactic structure", correct: false },
+                            { text: "Telling moral values", correct: false },
+                            { text: "Aesthetic narrative mood", correct: false }
+                        ]
+                    }
+                ];
+
+                // M4: Plot mountain parts
+                this.plotMountainSelected = [];
+                this.plotMountainCorrect = ["Exposition", "Rising Action", "Climax", "Falling Action", "Resolution"];
+                
+                this.m4PlotShapes = [
+                    {
+                        desc: "A plot presenting loosely related incidents in a chronological structure, tied together only by a theme or common character.",
+                        options: ["Linear Plot", "Episodic Plot", "Parallel Plot", "Flashback Plot"],
+                        correct: 1
+                    },
+                    {
+                        desc: "Action starts in the middle of a high-tension scene, tracing back in time to provide critical backstories before resolving.",
+                        options: ["Linear Plot", "Parallel Plot", "Flashback Plot", "Episodic Plot"],
+                        correct: 2
+                    }
+                ];
+                this.m4ShapeIndex = 0;
+            }
+
+            toggleAmbience() {
+                audio.toggleAmbience();
+            }
+
+            toggleNotebook() {
+                const panel = document.getElementById('handbookPanel');
+                if (panel.classList.contains('translate-x-full')) {
+                    panel.classList.remove('translate-x-full');
+                    audio.click();
+                } else {
+                    panel.classList.add('translate-x-full');
+                    audio.click();
+                }
+            }
+
+            openStudyNotebookAt(index) {
+                this.toggleNotebook();
+                // Scrolls the study notebook to the top
+                document.getElementById('handbookContent').scrollTop = 0;
+            }
+
+            startQuest() {
+                audio.click();
+                this.showScreen('screen-map');
+                this.renderMap();
+            }
+
+            showScreen(id) {
+                // Hide all screens
+                ['screen-intro', 'screen-map', 'screen-mod1', 'screen-mod2', 'screen-mod3', 'screen-mod4', 'screen-mod5', 'screen-victory'].forEach(s => {
+                    document.getElementById(s).classList.add('hidden');
+                });
+                document.getElementById(id).classList.remove('hidden');
+            }
+
+            renderMap() {
+                // Update node visual status based on completion
+                for(let i = 1; i <= 5; i++) {
+                    const node = document.getElementById(`node-${i}`);
+                    const status = document.getElementById(`node-status-${i}`);
+                    const lock = document.getElementById(`node-lock-${i}`);
+
+                    if (this.completedModules.includes(i)) {
+                        node.className = "border border-green-500 bg-academia-emerald/20 rounded-lg p-4 flex flex-col justify-between cursor-pointer relative group transition-all hover:scale-105";
+                        status.innerText = "Completed";
+                        status.className = "font-typewriter text-green-400";
+                        lock.className = "fa-solid fa-circle-check text-green-400";
+                    } else if (i === 1 || this.completedModules.includes(i - 1)) {
+                        node.className = "border-2 border-academia-gold bg-black/60 rounded-lg p-4 flex flex-col justify-between cursor-pointer relative group transition-all hover:scale-105 hover:border-white shadow-xl";
+                        status.innerText = "Active";
+                        status.className = "font-typewriter text-academia-gold animate-pulse";
+                        lock.className = "fa-solid fa-lock-open text-academia-gold";
+                    } else {
+                        node.className = "border border-academia-gold/10 bg-black/20 rounded-lg p-4 flex flex-col justify-between opacity-40 cursor-not-allowed relative";
+                        status.innerText = "Locked";
+                        status.className = "font-typewriter text-parchment-dark";
+                        lock.className = "fa-solid fa-lock text-parchment-dark";
+                    }
+                }
+
+                // Render badges earned
+                const badgeContainer = document.getElementById('badgeContainer');
+                badgeContainer.innerHTML = '';
+                this.completedModules.forEach(modNum => {
+                    badgeContainer.innerHTML += `
+                        <div class="bg-academia-gold text-academia-mahogany font-cinzel font-bold text-[10px] px-2.5 py-1 rounded shadow-md border border-white/20 flex items-center gap-1">
+                            <i class="fa-solid fa-medal"></i> SHARD ${modNum}
+                        </div>
+                    `;
+                });
+
+                // Update rank
+                const rankSpan = document.getElementById('playerRank');
+                if (this.completedModules.length === 0) rankSpan.innerText = "Novice Archivist";
+                else if (this.completedModules.length < 3) rankSpan.innerText = "Scribe of Prose";
+                else if (this.completedModules.length < 5) rankSpan.innerText = "High Critic";
+                else rankSpan.innerText = "LITERARY GRANDMASTER";
+            }
+
+            startModule(num) {
+                if (num > 1 && !this.completedModules.includes(num - 1)) {
+                    audio.wrong();
+                    return; // Locked
+                }
+                audio.click();
+                this.activeModule = num;
+                this.showScreen(`screen-mod${num}`);
+                
+                if (num === 1) this.loadMod1Card();
+                if (num === 2) this.loadMod2Case();
+                if (num === 3) this.loadMod3Case();
+                if (num === 4) this.loadMod4Stage();
+            }
+
+            addScore(pts) {
+                this.score += pts;
+                document.getElementById('playerScore').innerText = String(this.score).padStart(4, '0');
+            }
+
+            // Helper to record student choices
+            recordChoice(moduleNum, itemTitle, studentSelection, correctSelection, isCorrect) {
+                this.studentAnswers.push({
+                    module: moduleNum,
+                    item: itemTitle,
+                    selection: studentSelection,
+                    correct: correctSelection,
+                    passed: isCorrect
+                });
+            }
+
+            // ==========================================
+            // MODULE 1: PORTAL OF GENRES (SORTING)
+            // ==========================================
+            loadMod1Card() {
+                if (this.m1Index >= this.m1Data.length) {
+                    // Complete Module 1
+                    this.completeActiveModule(1, 200);
+                    return;
+                }
+                const card = this.m1Data[this.m1Index];
+                document.getElementById('mod1-counter').innerText = `Card: ${this.m1Index + 1} / ${this.m1Data.length}`;
+                document.getElementById('card-title').innerText = card.title;
+                document.getElementById('card-desc').innerText = card.desc;
+                document.getElementById('card-specimen-id').innerText = 101 + this.m1Index;
+                document.getElementById('mod1-feedback').innerText = "";
+            }
+
+            classifyMod1(category) {
+                audio.click();
+                const card = this.m1Data[this.m1Index];
+                const feedback = document.getElementById('mod1-feedback');
+                const isCorrect = card.category === category;
+                
+                // Record choice
+                this.recordChoice(1, `Categorize: ${card.title}`, category, card.category, isCorrect);
+
+                if (isCorrect) {
+                    audio.correct();
+                    feedback.className = "mt-6 text-center text-sm font-semibold h-6 text-green-400";
+                    feedback.innerText = `Correct! ${card.title} aligns perfectly with ${category}.`;
+                    this.addScore(25);
+                } else {
+                    audio.wrong();
+                    feedback.className = "mt-6 text-center text-sm font-semibold h-6 text-red-400";
+                    feedback.innerText = `Incorrect! ${card.title} actually belongs to ${card.category}.`;
+                }
+
+                // Shake animation on card
+                const cardEl = document.getElementById('sorting-card');
+                cardEl.classList.add(isCorrect ? 'scale-105' : 'animate-bounce');
+                
+                setTimeout(() => {
+                    cardEl.classList.remove('scale-105', 'animate-bounce');
+                    this.m1Index++;
+                    this.loadMod1Card();
+                }, 1200);
+            }
+
+            // ==========================================
+            // MODULE 2: POINT OF VIEW (MCQ)
+            // ==========================================
+            loadMod2Case() {
+                if (this.m2Index >= this.m2Data.length) {
+                    this.completeActiveModule(2, 250);
+                    return;
+                }
+                const currentCase = this.m2Data[this.m2Index];
+                document.getElementById('mod2-counter').innerText = `Case: ${this.m2Index + 1} / ${this.m2Data.length}`;
+                document.getElementById('mod2-passage').innerText = currentCase.passage;
+                document.getElementById('mod2-feedback').innerText = "";
+
+                const optionsContainer = document.getElementById('mod2-options');
+                optionsContainer.innerHTML = "";
+                
+                currentCase.options.forEach((opt, idx) => {
+                    optionsContainer.innerHTML += `
+                        <button onclick="game.submitMod2(${idx})" class="w-full text-left bg-black/40 border border-academia-gold/30 hover:bg-academia-gold hover:text-academia-mahogany p-3.5 rounded-lg text-sm font-cinzel transition-all active:scale-95 duration-200">
+                            ${opt}
+                        </button>
+                    `;
+                });
+            }
+
+            submitMod2(selectedIndex) {
+                audio.click();
+                const currentCase = this.m2Data[this.m2Index];
+                const feedback = document.getElementById('mod2-feedback');
+                const isCorrect = selectedIndex === currentCase.correct;
+
+                // Record choice
+                this.recordChoice(
+                    2, 
+                    `POV Passage Excerpt: "${currentCase.passage.substring(0, 35)}..."`, 
+                    currentCase.options[selectedIndex], 
+                    currentCase.options[currentCase.correct], 
+                    isCorrect
+                );
+
+                if (isCorrect) {
+                    audio.correct();
+                    feedback.className = "mt-6 text-center text-sm font-semibold h-6 text-green-400";
+                    feedback.innerText = `Correct perspective! ${currentCase.explanation}`;
+                    this.addScore(30);
+                } else {
+                    audio.wrong();
+                    feedback.className = "mt-6 text-center text-sm font-semibold h-6 text-red-400";
+                    feedback.innerText = `Archival misalignment. Correct was: ${currentCase.options[currentCase.correct]}`;
+                }
+
+                // Temporary block clicking
+                document.getElementById('mod2-options').style.pointerEvents = "none";
+
+                setTimeout(() => {
+                    document.getElementById('mod2-options').style.pointerEvents = "auto";
+                    this.m2Index++;
+                    this.loadMod2Case();
+                }, 2000);
+            }
+
+            // ==========================================
+            // MODULE 3: CHARACTER PRESENTATION
+            // ==========================================
+            loadMod3Case() {
+                if (this.m3Index >= this.m3Data.length) {
+                    this.completeActiveModule(3, 300);
+                    return;
+                }
+                const currentCase = this.m3Data[this.m3Index];
+                document.getElementById('mod3-counter').innerText = `Diagnostic: ${this.m3Index + 1} / ${this.m3Data.length}`;
+                document.getElementById('mod3-scenario').innerText = currentCase.scenario;
+                document.getElementById('mod3-char-name').innerText = currentCase.charName;
+                document.getElementById('mod3-feedback').innerText = "";
+
+                const optionsContainer = document.getElementById('mod3-options');
+                optionsContainer.innerHTML = "";
+                
+                currentCase.options.forEach((opt, idx) => {
+                    optionsContainer.innerHTML += `
+                        <button onclick="game.submitMod3(${idx})" class="w-full text-left bg-black/40 border border-academia-gold/30 hover:bg-academia-gold hover:text-academia-mahogany p-3.5 rounded-lg text-xs font-cinzel transition-all active:scale-95 duration-200">
+                            ${opt.text}
+                        </button>
+                    `;
+                });
+            }
+
+            submitMod3(selectedIndex) {
+                audio.click();
+                const currentCase = this.m3Data[this.m3Index];
+                const selectedOption = currentCase.options[selectedIndex];
+                const correctOption = currentCase.options.find(o => o.correct);
+                const feedback = document.getElementById('mod3-feedback');
+
+                // Record choice
+                this.recordChoice(
+                    3, 
+                    `Character scenario for [${currentCase.charName}]`, 
+                    selectedOption.text, 
+                    correctOption.text, 
+                    selectedOption.correct
+                );
+
+                if (selectedOption.correct) {
+                    audio.correct();
+                    feedback.className = "mt-6 text-center text-sm font-semibold h-6 text-green-400";
+                    feedback.innerText = "Accurate analysis! You successfully decrypted character behavior.";
+                    this.addScore(40);
+                } else {
+                    audio.wrong();
+                    feedback.className = "mt-6 text-center text-sm font-semibold h-6 text-red-400";
+                    feedback.innerText = `Misdiagnosed character vector. Correct option: ${correctOption.text}`;
+                }
+
+                document.getElementById('mod3-options').style.pointerEvents = "none";
+
+                setTimeout(() => {
+                    document.getElementById('mod3-options').style.pointerEvents = "auto";
+                    this.m3Index++;
+                    this.loadMod3Case();
+                }, 2000);
+            }
+
+            // ==========================================
+            // MODULE 4: PLOT AND SHAPES (TIMELINE DRAG-DROP ALTERNATIVE)
+            // ==========================================
+            loadMod4Stage() {
+                this.plotMountainSelected = [];
+                document.getElementById('plot-sequence-text').innerText = "[Click elements below]";
+                document.getElementById('mod4-feedback').innerText = "";
+
+                // Render randomized elements of the Freytag mountain
+                const shuffler = [...this.plotMountainCorrect].sort(() => Math.random() - 0.5);
+                const itemsContainer = document.getElementById('plot-items-container');
+                itemsContainer.innerHTML = "";
+
+                shuffler.forEach((item) => {
+                    itemsContainer.innerHTML += `
+                        <button id="plot-btn-${item}" onclick="game.selectPlotItem('${item}')" class="bg-[#f5efe0] text-academia-mahogany font-cinzel border border-academia-gold rounded p-2 text-xs font-bold hover:bg-academia-gold transition-all duration-200">
+                            ${item}
+                        </button>
+                    `;
+                });
+
+                // Load Part B
+                const currentShape = this.m4PlotShapes[this.m4ShapeIndex];
+                document.getElementById('plot-shape-desc').innerText = currentShape.desc;
+                
+                const shapeOptions = document.getElementById('plot-shapes-options');
+                shapeOptions.innerHTML = "";
+                currentShape.options.forEach((opt, idx) => {
+                    shapeOptions.innerHTML += `
+                        <button onclick="game.submitPlotShape(${idx})" class="bg-black/50 border border-academia-gold/30 hover:border-white p-3.5 rounded text-xs font-cinzel text-white active:scale-95 transition-all">
+                            ${opt}
+                        </button>
+                    `;
+                });
+            }
+
+            selectPlotItem(item) {
+                audio.click();
+                const btn = document.getElementById(`plot-btn-${item}`);
+                
+                if (this.plotMountainSelected.includes(item)) {
+                    // Remove
+                    this.plotMountainSelected = this.plotMountainSelected.filter(i => i !== item);
+                    btn.classList.replace('bg-academia-gold', 'bg-[#f5efe0]');
+                    btn.classList.replace('text-white', 'text-academia-mahogany');
+                } else {
+                    // Add
+                    this.plotMountainSelected.push(item);
+                    btn.classList.replace('bg-[#f5efe0]', 'bg-academia-gold');
+                    btn.classList.replace('text-academia-mahogany', 'text-white');
+                }
+
+                document.getElementById('plot-sequence-text').innerText = this.plotMountainSelected.join(" → ");
+            }
+
+            checkPlotMountain() {
+                const isCorrect = JSON.stringify(this.plotMountainSelected) === JSON.stringify(this.plotMountainCorrect);
+                const feedback = document.getElementById('mod4-feedback');
+                
+                // Record choice
+                this.recordChoice(
+                    4, 
+                    "Part A: Freytag Plot Mountain Order", 
+                    this.plotMountainSelected.join(" -> ") || "None", 
+                    this.plotMountainCorrect.join(" -> "), 
+                    isCorrect
+                );
+
+                if (isCorrect) {
+                    audio.correct();
+                    feedback.className = "mt-4 text-center text-sm font-semibold h-6 text-green-400";
+                    feedback.innerText = "Excellent. Plot Mountain elements aligned in perfect narrative sequence.";
+                    this.addScore(100);
+                } else {
+                    audio.wrong();
+                    feedback.className = "mt-4 text-center text-sm font-semibold h-6 text-red-400";
+                    feedback.innerText = "Alignment failed. Standard flow: Exposition → Rising → Climax → Falling → Resolution.";
+                }
+            }
+
+            submitPlotShape(selectedIndex) {
+                audio.click();
+                const currentShape = this.m4PlotShapes[this.m4ShapeIndex];
+                const feedback = document.getElementById('mod4-feedback');
+                const isCorrect = selectedIndex === currentShape.correct;
+
+                // Record choice
+                this.recordChoice(
+                    4, 
+                    `Part B: Structure Shape: "${currentShape.desc.substring(0, 35)}..."`, 
+                    currentShape.options[selectedIndex], 
+                    currentShape.options[currentShape.correct], 
+                    isCorrect
+                );
+
+                if (isCorrect) {
+                    audio.correct();
+                    feedback.className = "mt-4 text-center text-sm font-semibold h-6 text-green-400";
+                    feedback.innerText = "Exactly! Plot format perfectly analyzed.";
+                    this.addScore(50);
+                    
+                    setTimeout(() => {
+                        this.m4ShapeIndex++;
+                        if (this.m4ShapeIndex >= this.m4PlotShapes.length) {
+                            this.completeActiveModule(4, 200);
+                        } else {
+                            this.loadMod4Stage();
+                        }
+                    }, 1500);
+                } else {
+                    audio.wrong();
+                    feedback.className = "mt-4 text-center text-sm font-semibold h-6 text-red-400";
+                    feedback.innerText = "Incorrect system. Please reread the timeline guidelines.";
+                }
+            }
+
+            // ==========================================
+            // MODULE 5: THE VAULT OF THEMES (FINAL TRIAL)
+            // ==========================================
+            checkVaultThemes() {
+                audio.click();
+                const qa = document.getElementById('mod5-qa').value;
+                const qb = document.getElementById('mod5-qb').value;
+                const qc = document.getElementById('mod5-qc').value;
+                const feedback = document.getElementById('mod5-feedback');
+
+                const isCorrect = (qa === "appearance_reality" && qb === "titles_and_space" && qc === "ordinary_prose");
+
+                // Record Choices
+                this.recordChoice(5, "Vault Themes Question A (Motif)", qa || "Unanswered", "appearance_reality", qa === "appearance_reality");
+                this.recordChoice(5, "Vault Themes Question B (Identify Clues)", qb || "Unanswered", "titles_and_space", qb === "titles_and_space");
+                this.recordChoice(5, "Vault Themes Question C (Style Pattern)", qc || "Unanswered", "ordinary_prose", qc === "ordinary_prose");
+
+                if (isCorrect) {
+                    audio.correct();
+                    feedback.className = "mt-4 text-center text-sm font-semibold h-6 text-green-400";
+                    feedback.innerText = "DECRYPT SUCCESSFUL! The literary coordinates have locked. Shard 5 retrieved!";
+                    this.addScore(300);
+                    
+                    setTimeout(() => {
+                        this.completeActiveModule(5, 0);
+                    }, 2000);
+                } else {
+                    audio.wrong();
+                    feedback.className = "mt-4 text-center text-sm font-semibold h-6 text-red-400";
+                    feedback.innerText = "Theme decoding failed. Cross-reference options with slide data notes.";
+                }
+            }
+
+            // ==========================================
+            // GENERAL UTILS / MODULE CONCLUSION
+            // ==========================================
+            completeActiveModule(num, bonus) {
+                audio.victory();
+                if (!this.completedModules.includes(num)) {
+                    this.completedModules.push(num);
+                }
+                this.addScore(bonus);
+                
+                if (this.completedModules.length === 5) {
+                    // Complete victory!
+                    this.showVictoryScreen();
+                } else {
+                    this.showScreen('screen-map');
+                    this.renderMap();
+                }
+            }
+
+            showVictoryScreen() {
+                this.showScreen('screen-victory');
+                document.getElementById('victoryScore').innerText = this.score;
+                
+                const currentDate = new Date();
+                const formattedDate = currentDate.toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' });
+                document.getElementById('victoryDate').innerText = `${formattedDate} (Tandil, Buenos Aires)`;
+            }
+
+            // ==========================================
+            // EXPORT / STUDENT DOWNLOAD & TEACHER EMAIL SYSTEMS
+            // ==========================================
+            generateReportText(studentName, studentGroup) {
+                const date = new Date().toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' });
+                let text = `==================================================\n`;
+                text += `        LITERATURE QUEST - PERFORMANCE REPORT      \n`;
+                text += `      ISFD y T N° 10 • Literatura y Juventud (2024)\n`;
+                text += `      Reference Slide: Elements of Literature 2024.pptx\n`;
+                text += `==================================================\n\n`;
+                text += `STUDENT IDENTIFICATION:\n`;
+                text += `--------------------------------------------------\n`;
+                text += `Name:        ${studentName || "Anonymous Scholar"}\n`;
+                text += `Class/Group: ${studentGroup || "Not Specified"}\n`;
+                text += `Evaluation Date: ${date} (Tandil, Buenos Aires)\n\n`;
+                text += `ARCHIVAL METRICS:\n`;
+                text += `--------------------------------------------------\n`;
+                text += `Final Score: ${this.score} / 1200\n`;
+                text += `Archivist Status Rank: LITERARY GRANDMASTER\n\n`;
+                text += `==================================================\n`;
+                text += `             DETAILED MODULE ANSWERS              \n`;
+                text += `==================================================\n\n`;
+
+                this.studentAnswers.forEach((ans, index) => {
+                    text += `[Trial #${index + 1}] Module ${ans.module}\n`;
+                    text += `Objective:   ${ans.item}\n`;
+                    text += `Student Answer: "${ans.selection}"\n`;
+                    text += `Correct Answer: "${ans.correct}"\n`;
+                    text += `Status:         ${ans.passed ? "✅ CORRECT" : "❌ INCORRECT"}\n`;
+                    text += `--------------------------------------------------\n\n`;
+                });
+
+                text += `==================================================\n`;
+                text += `End of evaluation. Verified via Chrono-Archival Engine\n`;
+                text += `==================================================\n`;
+                return text;
+            }
+
+            downloadReport() {
+                audio.click();
+                const name = document.getElementById('studentName').value.trim();
+                const group = document.getElementById('studentGroup').value.trim();
+
+                if (!name) {
+                    this.showActionFeedback("Verification failed: Please enter your Full Name to download answers.", "text-red-400");
+                    return;
+                }
+
+                const reportText = this.generateReportText(name, group);
+                const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `Literature_Quest_Report_${name.replace(/\s+/g, '_')}.txt`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+
+                this.showActionFeedback("Your answers have been compiled and downloaded successfully!", "text-green-400");
+            }
+
+            emailReport() {
+                audio.click();
+                const name = document.getElementById('studentName').value.trim();
+                const group = document.getElementById('studentGroup').value.trim();
+
+                if (!name) {
+                    this.showActionFeedback("Verification failed: Please enter your Full Name to email your teacher.", "text-red-400");
+                    return;
+                }
+
+                const teacherEmail = "gabriellallaneza@gmail.com";
+                const subject = `Literature Quest: Evaluation Record - ${name} (${group || "No Class"})`;
+                const reportText = this.generateReportText(name, group);
+                
+                const mailtoUrl = `mailto:${teacherEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(reportText)}`;
+                
+                window.location.href = mailtoUrl;
+                this.showActionFeedback("Mail service requested. Please verify your outbox! Fallback: Copy to clipboard if needed.", "text-academia-gold");
+            }
+
+            copyReport() {
+                audio.click();
+                const name = document.getElementById('studentName').value.trim();
+                const group = document.getElementById('studentGroup').value.trim();
+
+                const reportText = this.generateReportText(name || "Anonymous Scholar", group);
+
+                // Use robust iframe-compatible copying pattern mandated in rules
+                const tempTextarea = document.createElement("textarea");
+                tempTextarea.value = reportText;
+                tempTextarea.style.position = "fixed"; // Keep invisible
+                tempTextarea.style.opacity = "0";
+                document.body.appendChild(tempTextarea);
+                tempTextarea.select();
+
+                try {
+                    const copied = document.execCommand('copy');
+                    if (copied) {
+                        this.showActionFeedback("Complete report successfully copied to clipboard!", "text-green-400");
+                    } else {
+                        this.showActionFeedback("Copy failed. Please manually select and copy text.", "text-red-400");
+                    }
+                } catch (e) {
+                    this.showActionFeedback("Unable to copy automatically.", "text-red-400");
+                }
+                document.body.removeChild(tempTextarea);
+            }
+
+            showActionFeedback(msg, cssClass) {
+                const el = document.getElementById('victory-action-feedback');
+                el.className = `text-xs font-typewriter h-4 mb-4 ${cssClass}`;
+                el.innerText = msg;
+            }
+
+            resetQuest() {
+                audio.click();
+                this.score = 0;
+                this.completedModules = [];
+                this.activeModule = null;
+                this.m1Index = 0;
+                this.m2Index = 0;
+                this.m3Index = 0;
+                this.m4ShapeIndex = 0;
+                this.studentAnswers = []; // Clear recorded history
+                
+                document.getElementById('playerScore').innerText = "0000";
+                this.showScreen('screen-intro');
+            }
+        }
+
+        const game = new GameEngine();
+    </script>
+</body>
+</html>

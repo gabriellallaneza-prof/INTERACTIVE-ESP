@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LA SUERTE ES DONA 🍩 - PORTAL DE JUEGOS 1-100</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@600;700;800&display=swap');
+
+        :root {
+            --color-pink: #ff6b8b;
+            --color-pink-dark: #d81b60;
+            --color-purple: #7c4dff;
+            --color-purple-dark: #1a237e;
+            --color-green: #00e676;
+            --color-green-dark: #1b5e20;
+            --color-bg-light: #f4fbf7;
+            --color-bg-yellow: #fffde6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffeef8 0%, #e6f7ff 100%);
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* --- ESTILO TIPOGRÁFICO PEDAGÓGICO: TODO EN MAYÚSCULAS --- */
+        h1, h2, h3, button, .instruction-bar, .display-palabra, .memo-text, .choice-card-tren, .sound-toggle, .feedback-box {
+            text-transform: uppercase;
+            letter-spacing: 1px; /* Mayor separación para facilitar la decodificación silábica */
+        }
+
+        /* --- BOTÓN DE SONIDO GLOBAL --- */
+        .sound-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: #ffffff;
+            border: 4px solid #ff6b8b;
+            padding: 10px 15px;
+            border-radius: 50px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 0.9rem;
+            color: #ff6b8b;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sound-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* --- CAPA DE DONAS DE FONDO KAWAII --- */
+        .background-donuts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .kawaii-donut {
+            position: absolute;
+            border-radius: 50%;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+            animation: floatDonut 6s ease-in-out infinite alternate;
+        }
+
+        .kawaii-donut::before {
+            content: '👀';
+            position: absolute;
+            font-size: 1.2rem;
+            top: 25%;
+            left: 25%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .kawaii-donut::after {
+            content: '';
+            position: absolute;
+            width: 35%;
+            height: 35%;
+            background: #fff;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .d1 { width: 90px; height: 90px; background: #ff85a2; top: 8%; left: 6%; animation-delay: 0s; }
+        .d2 { width: 110px; height: 110px; background: #a29bfe; bottom: 10%; left: 8%; animation-delay: 1s; }
+        .d3 { width: 100px; height: 100px; background: #55efc4; top: 12%; right: 8%; animation-delay: 0.5s; }
+        .d4 { width: 85px; height: 85px; background: #ffeaa7; bottom: 8%; right: 10%; animation-delay: 1.5s; }
+
+        @keyframes floatDonut {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-15px) rotate(12deg); }
+        }
+
+        /* --- CONTENEDORES DE PANTALLA --- */
+        .screen {
+            display: none;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 750px;
+            background: rgba(255, 255, 255, 0.94);
+            padding: 30px;
+            border-radius: 40px;
+            border: 8px solid #ffffff;
+            box-shadow: 0 20px 40px rgba(255, 107, 139, 0.12);
+            text-align: center;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- PORTADA PRINCIPAL --- */
+        h1.logo-title {
+            font-family: 'Fredoka One', cursive;
+            color: var(--color-pink);
+            font-size: 3rem;
+            text-shadow: 3px 3px 0px #fff, 5px 5px 0px #ffccd5;
+            margin-bottom: 5px;
+            line-height: 1.1;
+        }
+
+        .home-subtitle {
+            font-size: 1.15rem;
+            color: var(--color-purple-dark);
+            font-weight: 800;
+            margin-bottom: 35px;
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .btn-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 28px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3rem;
+            color: #ffffff;
+            box-shadow: 0 8px 0px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-nav span {
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
+
+        .btn-nav .emoji {
+            font-size: 2.2rem;
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.15));
+        }
+
+        .btn-atrapa { background: #ff4081; border-bottom: 8px solid #c2185b; }
+        .btn-atrapa:hover { background: #ff5252; }
+        
+        .btn-memotec { background: #7c4dff; border-bottom: 8px solid #4527a0; }
+        .btn-memotec:hover { background: #651fff; }
+
+        .btn-tren { background: #00e676; border-bottom: 8px solid #2e7d32; color: #000000 !important; }
+        .btn-tren span { text-shadow: none !important; }
+        .btn-tren:hover { background: #00c853; }
+
+        .btn-nav:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0px rgba(0,0,0,0.15);
+        }
+
+        /* --- BOTÓN VOLVER GENERAL --- */
+        .btn-back-home {
+            background: #ffeaa7;
+            border: 3px solid #ffb300;
+            color: #ff6f00;
+            padding: 8px 20px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 0.95rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 0px #ffb300;
+        }
+        .btn-back-home:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0px #ffb300;
+        }
+
+        /* --- ESTILOS: JUEGO 1 (ATRAPA) --- */
+        .instruction-bar {
+            color: var(--color-purple-dark);
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .pizarra-palabra {
+            background: #ffffff;
+            padding: 25px 15px;
+            border-radius: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            border: 6px dashed var(--color-pink);
+            max-width: 480px;
+            margin: 0 auto 30px auto;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s;
+        }
+        .pizarra-palabra:hover {
+            transform: scale(1.02);
+        }
+        .pizarra-palabra::after {
+            content: '🔊 TOCA PARA ESCUCHAR';
+            position: absolute;
+            bottom: 4px;
+            right: 15px;
+            font-size: 0.75rem;
+            color: var(--color-pink-dark);
+            font-weight: 800;
+        }
+        .display-palabra {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.2rem;
+            color: var(--color-purple-dark);
+            word-break: break-word;
+        }
+
+        .options-grid-atrapa {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        /* Contenedor relativo para posicionar número sobre el SVG de dona */
+        .dona-option-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+        }
+        .dona-option-wrapper:hover {
+            transform: scale(1.08);
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));
+        }
+
+        /* Números con Contraste Absoluto */
+        .dona-number-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.8rem;
+            color: #000000;
+            text-shadow: 
+                -2px -2px 0 #fff,  
+                 2px -2px 0 #fff,
+                -2px  2px 0 #fff,
+                 2px  2px 0 #fff;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .feedback-box {
+            height: 45px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-top: 20px;
+        }
+        .correct-txt { color: #1b5e20; animation: popFeedback 0.4s ease; }
+        .incorrect-txt { color: #b71c1c; animation: shakeFeedback 0.4s ease; }
+
+        @keyframes popFeedback {
+            0% { transform: scale(0.8); }
+            100% { transform: scale(1.1); }
+        }
+        @keyframes shakeFeedback {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        /* --- ESTILOS: JUEGO 2 (MEMOTEC) --- */
+        .memotec-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 650px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+        @media (max-width: 550px) {
+            .memotec-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+        }
+
+        .memo-card {
+            aspect-ratio: 1;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+            cursor: pointer;
+        }
+        .memo-card.flipped {
+            transform: rotateY(180deg);
+        }
+        .memo-card.matched {
+            transform: rotateY(180deg) scale(0.92);
+            pointer-events: none;
+            opacity: 0.85;
+            animation: matchCelebrate 0.5s alternate 2;
+        }
+
+        @keyframes matchCelebrate {
+            0% { transform: rotateY(180deg) scale(0.92); }
+            100% { transform: rotateY(180deg) scale(1.05); box-shadow: 0 0 15px var(--color-pink); }
+        }
+
+        .memo-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            border: 5px solid #fff;
+        }
+
+        .memo-back {
+            background: #ff85a2;
+            background-image: 
+                radial-gradient(circle at 50% 50%, transparent 22%, #ff4081 23%, #ff4081 33%, transparent 34%),
+                radial-gradient(circle at 35% 35%, #fff 4%, transparent 5%),
+                radial-gradient(circle at 65% 35%, #ffeaa7 5%, transparent 6%),
+                radial-gradient(circle at 45% 65%, #a29bfe 5%, transparent 6%);
+            transform: rotateY(0deg);
+        }
+
+        .memo-front {
+            background: #ffffff;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            padding: 8px;
+            text-align: center;
+        }
+        .memo-front::before {
+            content: '';
+            position: absolute;
+            width: 34%;
+            height: 34%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffeef8 0%, #e6f7ff 100%);
+            border: 3px solid #fff;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+
+        .memo-text {
+            position: relative;
+            z-index: 2;
+            font-family: 'Fredoka One', cursive;
+            word-break: break-word;
+            line-height: 1.1;
+            user-select: none;
+        }
+
+        .m-type-number .memo-text {
+            font-size: 2.3rem;
+            color: #000000;
+            text-shadow: 
+                -1.5px -1.5px 0 #fff,  
+                 1.5px -1.5px 0 #fff,
+                -1.5px  1.5px 0 #fff,
+                 1.5px  1.5px 0 #fff;
+        }
+
+        .m-type-word .memo-text {
+            font-size: 0.95rem;
+            color: var(--color-purple-dark);
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 800;
+        }
+
+        @media (max-width: 480px) {
+            .m-type-number .memo-text { font-size: 1.8rem; }
+            .m-type-word .memo-text { font-size: 0.75rem; }
+        }
+
+        /* --- ESTILOS: JUEGO 3 (TREN DE SECUENCIAS) --- */
+        .train-container {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto 35px auto;
+            background: rgba(255,255,255,0.7);
+            padding: 20px 30px;
+            border-radius: 35px;
+            border: 4px dashed #95a5a6;
+            max-width: 550px;
+            flex-wrap: wrap;
+        }
+
+        .vagon {
+            width: 110px;
+            height: 110px;
+            border-radius: 24px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.6rem;
+            color: #ff4081;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+            border: 5px solid #ff4081;
+            position: relative;
+        }
+
+        .vagon.incognito {
+            border: 5px dashed var(--color-purple);
+            background: #f3e5f5;
+            color: var(--color-purple);
+            font-size: 3rem;
+        }
+
+        .vagon::after {
+            content: '● ●';
+            position: absolute;
+            bottom: -15px;
+            font-size: 0.9rem;
+            color: #34495e;
+            letter-spacing: 25px;
+            text-indent: 14px;
+        }
+
+        .train-choices {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .choice-card-tren {
+            background: #ffffff;
+            padding: 16px 24px;
+            border-radius: 22px;
+            border: 4px solid var(--color-purple-dark);
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--color-purple-dark);
+            cursor: pointer;
+            box-shadow: 0 6px 0px var(--color-purple-dark);
+            transition: all 0.2s;
+            text-align: center;
+            min-width: 140px;
+        }
+        .choice-card-tren:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 0px var(--color-purple-dark);
+        }
+        .choice-card-tren:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0px var(--color-purple-dark);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botón silenciador -->
+    <button class="sound-toggle" onclick="toggleMute()" id="soundBtn">
+        <span>🔊 SONIDO: SÍ</span>
+    </button>
+
+    <!-- Fondo de Donas -->
+    <div class="background-donuts">
+        <div class="kawaii-donut d1"></div>
+        <div class="kawaii-donut d2"></div>
+        <div class="kawaii-donut d3"></div>
+        <div class="kawaii-donut d4"></div>
+    </div>
+
+    <!-- ================= PANTALLA INICIAL (PORTAL) ================= -->
+    <div class="screen active" id="screen-home">
+        <h1 class="logo-title">LA SUERTE ES DONA 🍩</h1>
+        <p class="home-subtitle">¡APRENDE Y ESCRIBE LOS NÚMEROS DEL 1 AL 100 EN CASTELLANO!</p>
+
+        <nav class="menu-buttons">
+            <button class="btn-nav btn-atrapa" onclick="navigate('screen-atrapa')">
+                <span>1. ATRAPA LA DONA CORRECTA</span>
+                <span class="emoji">🎯</span>
+            </button>
+
+            <button class="btn-nav btn-memotec" onclick="navigate('screen-memotec')">
+                <span>2. MEMOTEC DE DONAS</span>
+                <span class="emoji">🧠</span>
+            </button>
+
+            <button class="btn-nav btn-tren" onclick="navigate('screen-tren')">
+                <span>3. EL TREN DE LAS DONAS</span>
+                <span class="emoji">🚂</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- ================= JUEGO 1: ATRAPA LA DONA ================= -->
+    <div class="screen" id="screen-atrapa">
+        <button class="btn-back-home" onclick="navigate('screen-home')">⬅ VOLVER AL MENÚ</button>
+        <h2 style="font-family:'Fredoka One'; color: var(--color-pink-dark); margin-bottom:10px;">¡ATRAPA LA DONA CORRECTA!</h2>
+        <div class="instruction-bar">¿QUÉ NÚMERO ES EL QUE ESTÁ ESCRITO?</div>
+
+        <div class="pizarra-palabra" onclick="speakCurrentWord()" title="Escuchar pronunciación">
+            <div class="display-palabra" id="atrapa-wordBox">...</div>
+        </div>
+
+        <div class="options-grid-atrapa" id="atrapa-optionsBox"></div>
+        <div class="feedback-box" id="atrapa-feedbackBox"></div>
+    </div>
+
+    <!-- ================= JUEGO 2: MEMOTEC ================= -->
+    <div class="screen" id="screen-memotec">
+        <button class="btn-back-home" onclick="navigate('screen-home')">⬅ VOLVER AL MENÚ</button>
+        <h2 style="font-family:'Fredoka One'; color: var(--color-purple); margin-bottom:10px;">MEMOTEC DE DONAS 🧠</h2>
+        <div class="instruction-bar">¡ENCUENTRA LAS PAREJAS DE NÚMERO Y PALABRA ESCRITA!</div>
+
+        <div class="memotec-grid" id="memotec-tablero"></div>
+        <div class="feedback-box" id="memotec-feedbackBox"></div>
+        <button class="btn-back-home" onclick="initMemotec()" style="margin-top:20px; background:#fff; border-color:#7c4dff; color:#7c4dff; box-shadow: 0 4px 0 #7c4dff;">
+            🔄 MEZCLAR Y REINICIAR
+        </button>
+    </div>
+
+    <!-- ================= JUEGO 3: EL TREN DE LAS DONAS ================= -->
+    <div class="screen" id="screen-tren">
+        <button class="btn-back-home" onclick="navigate('screen-home')">⬅ VOLVER AL MENÚ</button>
+        <h2 style="font-family:'Fredoka One'; color: var(--color-green-dark); margin-bottom:10px;">EL TREN DE LAS DONAS 🚂</h2>
+        <div class="instruction-bar">¿QUÉ NÚMERO FALTA EN EL VAGÓN PARA COMPLETAR EL TREN?</div>
+
+        <div class="train-container" id="tren-vagonesBox"></div>
+        <div class="train-choices" id="tren-choicesBox"></div>
+        <div class="feedback-box" id="tren-feedbackBox"></div>
+    </div>
+
+    <script>
+        // --- TRADUCTOR DE NÚMEROS A CASTELLANO (1 AL 100) ---
+        function getNumeroEnCastellano(n) {
+            if (n === 100) return "CIEN";
+            
+            const unidades = ["CERO", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE"];
+            
+            if (n < 10) {
+                return unidades[n];
+            }
+            
+            const especiales = {
+                10: "DIEZ", 11: "ONCE", 12: "DOCE", 13: "TRECE", 14: "CATORCE", 15: "QUINCE",
+                16: "DIECISÉIS", 17: "DIECISIETE", 18: "DIECIOCHO", 19: "DIECINUEVE",
+                20: "VEINTE", 21: "VEINTIUNO", 22: "VEINTIDÓS", 23: "VEINTITRÉS",
+                24: "VEINTICUATRO", 25: "VEINTICINCO", 26: "VEINTISÉIS", 27: "VEINTISIETE",
+                28: "VEINTIOCHO", 29: "VEINTINUEVE"
+            };
+            
+            if (especiales[n]) return especiales[n];
+            
+            const decenas = {
+                30: "TREINTA", 40: "CUARENTA", 50: "CINCUENTA", 60: "SESENTA",
+                70: "SETENTA", 80: "OCHENTA", 90: "NOVENTA"
+            };
+            
+            if (decenas[n]) return decenas[n];
+            
+            const dec = Math.floor(n / 10) * 10;
+            const uni = n % 10;
+            
+            const unidadesConector = ["", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE"];
+            return decenas[dec] + " Y " + unidadesConector[uni];
+        }
+
+        // --- SISTEMA DE NAVEGACIÓN ---
+        function navigate(screenId) {
+            if (typeof window !== 'undefined' && 'speechSynthesis' in window && window.speechSynthesis) {
+                try {
+                    window.speechSynthesis.cancel();
+                } catch(e) {}
+            }
+
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+
+            if (screenId === 'screen-atrapa') {
+                initAtrapa();
+            } else if (screenId === 'screen-memotec') {
+                initMemotec();
+            } else if (screenId === 'screen-tren') {
+                initTren();
+            }
+        }
+
+        // --- AUDIO Y SINTETIZADOR DE TONOS ---
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        function toggleMute() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('soundBtn');
+            btn.innerHTML = soundEnabled ? '<span>🔊 SONIDO: SÍ</span>' : '<span>❌ SONIDO: NO</span>';
+        }
+
+        function playSynthTone(freq, type, duration) {
+            if (!soundEnabled) return;
+            try {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContextClass) return;
+                
+                if (!audioCtx) {
+                    audioCtx = new AudioContextClass();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.warn("Contexto de audio no habilitado.");
+            }
+        }
+
+        function soundSuccess() {
+            playSynthTone(523.25, 'triangle', 0.12); // Do5
+            setTimeout(() => playSynthTone(659.25, 'triangle', 0.12), 90); // Mi5
+            setTimeout(() => playSynthTone(783.99, 'triangle', 0.25), 180); // Sol5
+        }
+
+        function soundFail() {
+            playSynthTone(170, 'sawtooth', 0.25);
+        }
+
+        function soundFlip() {
+            playSynthTone(350, 'sine', 0.08);
+        }
+
+        function speakText(text) {
+            if (!soundEnabled) return;
+            if (typeof window !== 'undefined' && 'speechSynthesis' in window && window.speechSynthesis) {
+                try {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'es-ES';
+                    utterance.rate = 0.82; // Velocidad adaptada
+                    window.speechSynthesis.speak(utterance);
+                } catch (e) {
+                    console.warn("Voz no soportada.");
+                }
+            }
+        }
+
+        // --- SVGs VECTORIALES DE DONAS KAWAII ---
+        function getDonutSVG(frostingColor) {
+            return `
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <!-- Base -->
+                    <circle cx="50" cy="50" r="42" fill="#ffcc80" stroke="#ffb74d" stroke-width="4"/>
+                    <!-- Glaseado -->
+                    <path d="M 50 14 
+                             A 36 36 0 0 1 86 50 
+                             Q 80 58 76 52 
+                             Q 70 42 64 52 
+                             Q 58 64 50 58 
+                             Q 42 52 36 58 
+                             Q 28 64 22 56 
+                             Q 14 46 14 50 
+                             A 36 36 0 0 1 50 14 Z" fill="${frostingColor}"/>
+                    <!-- Centro de alto contraste -->
+                    <circle cx="50" cy="50" r="18" fill="#ffffff" stroke="#ffb74d" stroke-width="3"/>
+                    <!-- Expresión facial -->
+                    <circle cx="36" cy="42" r="3" fill="#2c3e50"/>
+                    <circle cx="64" cy="42" r="3" fill="#2c3e50"/>
+                    <circle cx="31" cy="46" r="2" fill="#ff8a80" opacity="0.8"/>
+                    <circle cx="69" cy="46" r="2" fill="#ff8a80" opacity="0.8"/>
+                    <path d="M 46 47 Q 50 51 54 47" fill="none" stroke="#2c3e50" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            `;
+        }
+
+        // ================= JUEGO 1: ATRAPA LA DONA =================
+        let atrapaCorrectNum = 0;
+        let atrapaCanPlay = true;
+
+        function initAtrapa() {
+            atrapaCanPlay = true;
+            document.getElementById('atrapa-feedbackBox').innerHTML = "";
+            
+            atrapaCorrectNum = Math.floor(Math.random() * 100) + 1;
+            const correctName = getNumeroEnCastellano(atrapaCorrectNum);
+            
+            document.getElementById('atrapa-wordBox').innerText = correctName;
+            
+            setTimeout(() => {
+                speakText(`Busca el número ${correctName}`);
+            }, 350);
+
+            let options = [atrapaCorrectNum];
+            while (options.length < 3) {
+                let candidate = Math.floor(Math.random() * 100) + 1;
+                if (!options.includes(candidate)) {
+                    options.push(candidate);
+                }
+            }
+            options.sort(() => 0.5 - Math.random());
+
+            const container = document.getElementById('atrapa-optionsBox');
+            container.innerHTML = "";
+
+            const colors = ["#ff7675", "#a29bfe", "#55efc4"];
+
+            options.forEach((num, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = "dona-option-wrapper";
+                wrapper.innerHTML = `
+                    ${getDonutSVG(colors[index])}
+                    <div class="dona-number-overlay">${num}</div>
+                `;
+                
+                wrapper.onclick = () => {
+                    if (audioCtx && audioCtx.state === 'suspended') {
+                        audioCtx.resume();
+                    }
+                    verifyAtrapa(num, wrapper);
+                };
+                container.appendChild(wrapper);
+            });
+        }
+
+        function speakCurrentWord() {
+            const word = document.getElementById('atrapa-wordBox').innerText;
+            speakText(word);
+        }
+
+        function verifyAtrapa(selected, element) {
+            if (!atrapaCanPlay) return;
+            atrapaCanPlay = false;
+
+            const feedback = document.getElementById('atrapa-feedbackBox');
+            if (selected === atrapaCorrectNum) {
+                soundSuccess();
+                feedback.innerHTML = "<span class='correct-txt'>¡EXCELENTE! 🎉 🍩 ¡LO LOGRASTE!</span>";
+                element.style.transform = "scale(1.15)";
+                setTimeout(initAtrapa, 1800);
+            } else {
+                soundFail();
+                feedback.innerHTML = "<span class='incorrect-txt'>¡CASI! INTÉNTALO OTRA VEZ ✨</span>";
+                setTimeout(() => {
+                    feedback.innerHTML = "";
+                    atrapaCanPlay = true;
+                }, 1200);
+            }
+        }
+
+        // ================= JUEGO 2: MEMOTEC =================
+        let memoFirstCard = null;
+        let memoSecondCard = null;
+        let memoLockBoard = false;
+
+        function initMemotec() {
+            memoFirstCard = null;
+            memoSecondCard = null;
+            memoLockBoard = false;
+            document.getElementById('memotec-feedbackBox').innerHTML = "";
+
+            let selectedNums = [];
+            while (selectedNums.length < 6) {
+                let candidate = Math.floor(Math.random() * 100) + 1;
+                if (!selectedNums.includes(candidate)) {
+                    selectedNums.push(candidate);
+                }
+            }
+
+            let deck = [];
+            selectedNums.forEach(num => {
+                deck.push({ id: num, value: num, type: 'number' });
+                deck.push({ id: num, value: getNumeroEnCastellano(num), type: 'word' });
+            });
+
+            deck.sort(() => 0.5 - Math.random());
+
+            const tablero = document.getElementById('memotec-tablero');
+            tablero.innerHTML = "";
+
+            deck.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "memo-card";
+                card.dataset.id = item.id;
+
+                card.innerHTML = `
+                    <div class="memo-face memo-back"></div>
+                    <div class="memo-face memo-front m-type-${item.type}">
+                        <span class="memo-text">${item.value}</span>
+                    </div>
+                `;
+
+                card.onclick = function() {
+                    if (audioCtx && audioCtx.state === 'suspended') {
+                        audioCtx.resume();
+                    }
+                    flipMemoCard(this);
+                };
+                tablero.appendChild(card);
+            });
+        }
+
+        function flipMemoCard(card) {
+            if (memoLockBoard) return;
+            if (card === memoFirstCard) return;
+
+            soundFlip();
+            card.classList.add('flipped');
+
+            if (!memoFirstCard) {
+                memoFirstCard = card;
+                return;
+            }
+
+            memoSecondCard = card;
+            checkMemoMatch();
+        }
+
+        function checkMemoMatch() {
+            memoLockBoard = true;
+            let isMatch = memoFirstCard.dataset.id === memoSecondCard.dataset.id;
+
+            if (isMatch) {
+                soundSuccess();
+                memoFirstCard.classList.add('matched');
+                memoSecondCard.classList.add('matched');
+                
+                const numVal = parseInt(memoFirstCard.dataset.id);
+                speakText(getNumeroEnCastellano(numVal));
+
+                resetMemoState();
+                checkMemoVictory();
+            } else {
+                setTimeout(() => {
+                    soundFail();
+                    memoFirstCard.classList.remove('flipped');
+                    memoSecondCard.classList.remove('flipped');
+                    resetMemoState();
+                }, 1300);
+            }
+        }
+
+        function resetMemoState() {
+            memoFirstCard = null;
+            memoSecondCard = null;
+            memoLockBoard = false;
+        }
+
+        function checkMemoVictory() {
+            const unmatched = document.querySelectorAll('.memo-card:not(.matched)');
+            if (unmatched.length === 0) {
+                setTimeout(() => {
+                    document.getElementById('memotec-feedbackBox').innerHTML = "<span class='correct-txt'>¡FELICITACIONES! ¡COMPLETASTE EL MEMOTEC! 🏆🥳</span>";
+                    speakText("¡Felicidades, completaste el memotec!");
+                }, 500);
+            }
+        }
+
+        // ================= JUEGO 3: EL TREN DE LAS DONAS =================
+        let trenCorrectAnswer = 0;
+        let trenCanPlay = true;
+
+        function initTren() {
+            trenCanPlay = true;
+            document.getElementById('tren-feedbackBox').innerHTML = "";
+
+            let base = Math.floor(Math.random() * 98) + 1; 
+            let sequence = [base, base + 1, base + 2];
+
+            let missingIndex = Math.floor(Math.random() * 3);
+            trenCorrectAnswer = sequence[missingIndex];
+
+            const vagonesBox = document.getElementById('tren-vagonesBox');
+            vagonesBox.innerHTML = "";
+
+            sequence.forEach((num, index) => {
+                const wagon = document.createElement('div');
+                if (index === missingIndex) {
+                    wagon.className = "vagon incognito";
+                    wagon.innerText = "?";
+                } else {
+                    wagon.className = "vagon";
+                    wagon.innerText = num;
+                }
+                vagonesBox.appendChild(wagon);
+            });
+
+            setTimeout(() => {
+                speakText(`¿Qué número falta en el vagón?`);
+            }, 300);
+
+            let options = [trenCorrectAnswer];
+            while (options.length < 3) {
+                let candidate = Math.floor(Math.random() * 100) + 1;
+                if (!options.includes(candidate)) {
+                    options.push(candidate);
+                }
+            }
+            options.sort(() => 0.5 - Math.random());
+
+            const choicesBox = document.getElementById('tren-choicesBox');
+            choicesBox.innerHTML = "";
+
+            options.forEach(num => {
+                const card = document.createElement('div');
+                card.className = "choice-card-tren";
+                card.innerText = getNumeroEnCastellano(num);
+                card.onclick = () => {
+                    if (audioCtx && audioCtx.state === 'suspended') {
+                        audioCtx.resume();
+                    }
+                    verifyTren(num, card);
+                };
+                choicesBox.appendChild(card);
+            });
+        }
+
+        // --- VERIFICAR TREN ---
+        function verifyTren(selected, element) {
+            if (!trenCanPlay) return;
+            trenCanPlay = false;
+
+            const feedback = document.getElementById('tren-feedbackBox');
+            if (selected === trenCorrectAnswer) {
+                soundSuccess();
+                feedback.innerHTML = "<span class='correct-txt'>¡GENIAL! EL TREN AVANZA 🚂💨</span>";
+                element.style.transform = "scale(1.1)";
+                speakText(`¡Excelente! El número es el ${getNumeroEnCastellano(trenCorrectAnswer)}`);
+                setTimeout(initTren, 1900);
+            } else {
+                soundFail();
+                feedback.innerHTML = "<span class='incorrect-txt'>ESE NO ES. ¡PRUEBA OTRA VEZ! ✨</span>";
+                setTimeout(() => {
+                    feedback.innerHTML = "";
+                    trenCanPlay = true;
+                }, 1200);
+            }
+        }
+
+        document.body.addEventListener('click', () => {
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>

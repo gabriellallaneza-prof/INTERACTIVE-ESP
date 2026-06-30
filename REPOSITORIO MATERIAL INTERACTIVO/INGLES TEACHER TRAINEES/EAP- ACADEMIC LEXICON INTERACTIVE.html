@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Lexicon & Syntax Mastery Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            200: '#b9ddfd',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        argentine: {
+                            light: '#74acdf',
+                            DEFAULT: '#74acdf',
+                            dark: '#163f66',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header Banner -->
+    <header class="bg-gradient-to-r from-brand-900 via-brand-800 to-argentine-dark text-white border-b-4 border-argentine px-4 py-6 md:py-8 shadow-md">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="bg-argentine text-brand-900 font-bold px-2.5 py-0.5 rounded text-xs tracking-wider uppercase">ELF Argentina</span>
+                    <span class="text-slate-300 text-xs">Self-Study Module</span>
+                </div>
+                <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">Academic Lexicon &amp; Syntax Mastery Hub</h1>
+                <p class="text-slate-200 text-sm mt-1 max-w-2xl">
+                    Tailored for adult trainees preparing to teach English as a Lingua Franca. Grounded in Bailey (2014), Penston (2005), and local teacher training syllabi.
+                </p>
+            </div>
+            <div class="flex flex-row md:flex-col items-end gap-2 shrink-0">
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/10 text-right">
+                    <div class="text-xs text-slate-300 uppercase font-semibold">Overall Progress</div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-24 bg-slate-700 rounded-full h-2">
+                            <div id="overall-progress-bar" class="bg-argentine h-2 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <span id="overall-progress-text" class="text-sm font-bold text-white">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Navigation Tabs (Col 1-3 on LG) -->
+        <nav class="lg:col-span-3 flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible gap-2 bg-white p-2 rounded-xl shadow-sm border border-slate-200 shrink-0 self-start">
+            <button onclick="switchTab('codex')" id="tab-codex" class="tab-btn w-full text-left px-4 py-3 rounded-lg font-medium text-sm flex items-center gap-3 whitespace-nowrap transition bg-brand-50 text-brand-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                Lexical Codex
+            </button>
+            <button onclick="switchTab('activity1')" id="tab-activity1" class="tab-btn w-full text-left px-4 py-3 rounded-lg font-medium text-sm flex items-center gap-3 whitespace-nowrap transition text-slate-600 hover:bg-slate-50">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                1. Stance Tuning
+            </button>
+            <button onclick="switchTab('activity2')" id="tab-activity2" class="tab-btn w-full text-left px-4 py-3 rounded-lg font-medium text-sm flex items-center gap-3 whitespace-nowrap transition text-slate-600 hover:bg-slate-50">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                2. Syntax Reconstruction
+            </button>
+            <button onclick="switchTab('activity3')" id="tab-activity3" class="tab-btn w-full text-left px-4 py-3 rounded-lg font-medium text-sm flex items-center gap-3 whitespace-nowrap transition text-slate-600 hover:bg-slate-50">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"></path></svg>
+                3. Classical Plurals
+            </button>
+            <button onclick="switchTab('activity4')" id="tab-activity4" class="tab-btn w-full text-left px-4 py-3 rounded-lg font-medium text-sm flex items-center gap-3 whitespace-nowrap transition text-slate-600 hover:bg-slate-50">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                4. Colligations
+            </button>
+            <button onclick="switchTab('report')" id="tab-report" class="tab-btn w-full text-left px-4 py-3 rounded-lg font-medium text-sm flex items-center gap-3 whitespace-nowrap transition text-slate-600 hover:bg-slate-50">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                Module Summary
+            </button>
+        </nav>
+
+        <!-- Dynamic Content Area (Col 4-12 on LG) -->
+        <section class="lg:col-span-9 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            
+            <!-- CODEX TAB -->
+            <div id="content-codex" class="tab-content block">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-slate-100 pb-4 mb-6 gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">Academic Lexical Codex</h2>
+                        <p class="text-slate-500 text-xs">Explore the 30 target academic terms before testing your competencies.</p>
+                    </div>
+                    <div class="w-full md:w-auto flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="codex-search" oninput="filterCodex()" placeholder="Search terms, formulas, or notes..." class="text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600 w-full sm:w-60">
+                        <select id="codex-filter" onchange="filterCodex()" class="text-sm px-3 py-2 border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-brand-600">
+                            <option value="all">All Categories</option>
+                            <option value="A">Reporting Verbs</option>
+                            <option value="B">Transitions</option>
+                            <option value="C">Nouns &amp; Loanwords</option>
+                            <option value="D">Evaluative Adjectives</option>
+                            <option value="E">Collocations</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="codex-container" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+                    <!-- Dynamic Injection of 30 vocabulary items -->
+                </div>
+            </div>
+
+            <!-- TAB 1: STANCE TUNING -->
+            <div id="content-activity1" class="tab-content hidden">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="text-xs font-semibold text-brand-600 uppercase tracking-widest">Activity 1</span>
+                    <h2 class="text-xl font-bold text-slate-900">Stance &amp; Attribution Selection</h2>
+                    <p class="text-slate-500 text-xs mt-1">
+                        Select the correct verb or adjective based on the desired pragmatic stance or structural demands.
+                    </p>
+                </div>
+
+                <div id="act1-container" class="space-y-6">
+                    <!-- Dynamically Injected MCQ Questions -->
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <button onclick="resetActivity1()" class="px-4 py-2 text-sm border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 font-medium transition">Reset Progress</button>
+                    <span id="act1-score-display" class="text-sm font-semibold text-slate-700">Score: 0 / 5</span>
+                </div>
+            </div>
+
+            <!-- TAB 2: SYNTAX RECONSTRUCTION -->
+            <div id="content-activity2" class="tab-content hidden">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="text-xs font-semibold text-brand-600 uppercase tracking-widest">Activity 2</span>
+                    <h2 class="text-xl font-bold text-slate-900">Syntax Reconstruction</h2>
+                    <p class="text-slate-500 text-xs mt-1">
+                        Rewrite typical errors made by Argentine L1 Spanish speakers due to structural transfer into formal, standard academic English.
+                    </p>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-amber-500 p-4 rounded-r-lg mb-6 text-xs text-amber-900 leading-relaxed">
+                    <strong>Argentine L1 Interference Warning:</strong> Pay close attention to word orders, forbidden infinitives after <em>suggest</em>/<em>advocate</em>, and wrong preposition translations (e.g. using "of" instead of "from").
+                </div>
+
+                <div id="act2-container" class="space-y-8">
+                    <!-- Dynamic injection of translation/syntax tasks -->
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <button onclick="resetActivity2()" class="px-4 py-2 text-sm border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 font-medium transition">Reset Progress</button>
+                    <span id="act2-score-display" class="text-sm font-semibold text-slate-700">Correct: 0 / 5</span>
+                </div>
+            </div>
+
+            <!-- TAB 3: CLASSICAL PLURALS -->
+            <div id="content-activity3" class="tab-content hidden">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="text-xs font-semibold text-brand-600 uppercase tracking-widest">Activity 3</span>
+                    <h2 class="text-xl font-bold text-slate-900">Classical Plurals &amp; Concord</h2>
+                    <p class="text-slate-500 text-xs mt-1">
+                        Determine the grammatical status of Greek/Latin loanwords and select the corresponding correct form to ensure subject-verb agreement.
+                    </p>
+                </div>
+
+                <div id="act3-container" class="space-y-6">
+                    <!-- Dynamic interactive plural tasks -->
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <button onclick="resetActivity3()" class="px-4 py-2 text-sm border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 font-medium transition">Reset Progress</button>
+                    <span id="act3-score-display" class="text-sm font-semibold text-slate-700">Correct: 0 / 5</span>
+                </div>
+            </div>
+
+            <!-- TAB 4: COLLIGATIONS -->
+            <div id="content-activity4" class="tab-content hidden">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="text-xs font-semibold text-brand-600 uppercase tracking-widest">Activity 4</span>
+                    <h2 class="text-xl font-bold text-slate-900">Prepositional Colligations</h2>
+                    <p class="text-slate-500 text-xs mt-1">
+                        Select the correct preposition to complete the academic collocation, correcting typical Argentine literal translation transfers.
+                    </p>
+                </div>
+
+                <div id="act4-container" class="space-y-6">
+                    <!-- Dynamic preposition drop-downs -->
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <button onclick="resetActivity4()" class="px-4 py-2 text-sm border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-50 font-medium transition">Reset Progress</button>
+                    <span id="act4-score-display" class="text-sm font-semibold text-slate-700">Correct: 0 / 5</span>
+                </div>
+            </div>
+
+            <!-- TAB REPORT -->
+            <div id="content-report" class="tab-content hidden">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <h2 class="text-xl font-bold text-slate-900">Module Performance Summary</h2>
+                    <p class="text-slate-500 text-xs mt-1">
+                        Track your scores, download the comprehensive study guide, or generate the complete answer key with structural explanations.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                        <h3 class="font-semibold text-sm text-slate-900 mb-3">Module Progress Report</h3>
+                        <div class="space-y-2.5">
+                            <div class="flex justify-between items-center text-xs text-slate-600">
+                                <span>1. Stance Selection</span>
+                                <span id="rep-s1" class="font-bold">0 / 5</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs text-slate-600">
+                                <span>2. Syntax Reconstruction</span>
+                                <span id="rep-s2" class="font-bold">0 / 5</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs text-slate-600">
+                                <span>3. Classical Plurals</span>
+                                <span id="rep-s3" class="font-bold">0 / 5</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs text-slate-600">
+                                <span>4. Prepositional Colligations</span>
+                                <span id="rep-s4" class="font-bold">0 / 5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-brand-50 border border-brand-200 rounded-lg flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-semibold text-sm text-brand-900 mb-1">Pedagogical Companion</h3>
+                            <p class="text-xs text-brand-700 leading-relaxed">
+                                Get a complete printable study guide of all 30 target lexical terms, complete with Argentine Spanish interference warnings, along with your quiz score and a fully annotated key.
+                            </p>
+                        </div>
+                        <button onclick="downloadDocument()" class="w-full mt-4 bg-brand-700 hover:bg-brand-800 text-white font-semibold text-xs py-2 px-4 rounded transition shadow flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            Download Study Guide &amp; Answers
+                        </button>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-6">
+                    <h3 class="font-bold text-slate-900 text-sm mb-4">Annotated Answer Key (Full Explanations)</h3>
+                    <div class="space-y-4 text-xs" id="interactive-key-container">
+                        <!-- Instantly loads explanations for all questions -->
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Custom Modal for user notifications (instead of native alert) -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 hidden">
+        <div class="bg-white rounded-xl shadow-xl border border-slate-200 max-w-sm w-full p-6 text-center transform scale-95 transition-all">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 text-emerald-600 mb-4" id="modal-icon-container">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900" id="modal-title">Success</h3>
+            <p class="text-xs text-slate-500 mt-2" id="modal-body">Your progress has been saved successfully.</p>
+            <div class="mt-6">
+                <button onclick="closeModal()" class="w-full inline-flex justify-center rounded-lg px-4 py-2 bg-slate-900 text-white hover:bg-slate-800 text-xs font-semibold transition">
+                    Acknowledge
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 mt-12 border-t border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 text-center space-y-2">
+            <p>&copy; 2026 Academic Lexicon &amp; Syntax Mastery Hub. Argentine ELF Teacher Training Edition.</p>
+            <p>Designed for adult professional preparation courses under standard SLA (Second Language Acquisition) structures.</p>
+        </div>
+    </footer>
+
+    <!-- App State and Logic Script -->
+    <script>
+        // 30 Lexical Items Database
+        const lexicon = [
+            { id: 1, category: "A", term: "Assert", type: "verb", definition: "To state a fact or belief confidently and forcefully, often without immediate empirical proof.", formula: "Subject + assert + that-clause OR Subject + assert + noun phrase", warning: "Argentine trainees often underuse it in academic writing, defaulting to simpler verbs like 'say' or 'write'.", example: "Kachru (1992) asserts that outer-circle varieties of English possess distinct codification systems." },
+            { id: 2, category: "A", term: "Substantiate", type: "verb", definition: "To provide evidence to support or prove the truth of a claim.", formula: "Subject + substantiate + noun phrase OR Subject + be substantiated by + agent (passive)", warning: "Often confused with 'substance' or misinterpreted in legal context, instead of referencing academic or scientific data.", example: "These initial assumptions were subsequently substantiated by empirical findings." },
+            { id: 3, category: "A", term: "Refute", type: "verb", definition: "To prove a statement, theory, or claim to be wrong or false by offering counter-evidence.", formula: "Subject + refute + noun phrase/theory/claim", warning: "Often loosely misused as a simple synonym for 'disagree with'. In academic English, you cannot refute a claim merely by denying it—you must prove it false through evidence.", example: "The researchers refuted the hypothesis that L1 transfer is the sole impediment." },
+            { id: 4, category: "A", term: "Concede", type: "verb", definition: "To admit that something is true, valid, or logical after initially denying or resisting it.", formula: "Subject + concede + that-clause OR Subject + concede + noun phrase", warning: "Spanish 'conceder' is more commonly associated with granting (e.g. conceder una beca), which can obscure its concession-argument usage in English.", example: "Although Jenkins concedes that native norms dominate testing, she argues ELF is expanding." },
+            { id: 5, category: "A", term: "Indicate", type: "verb", definition: "To suggest, point out, or show indirectly; highly useful for tentative claims (hedging).", formula: "Subject (usually inanimate) + indicate + that-clause OR Subject + indicate + noun phrase", warning: "Argentine writers frequently insert an incorrect indirect object, e.g. '*The author indicates us that...'. It does not take an indirect object without the preposition 'to'.", example: "The high standard deviation indicates that student performance was highly polarized." },
+            { id: 6, category: "A", term: "Advocate", type: "verb/noun", definition: "To publicly recommend or support a particular policy, theory, or course of action.", formula: "Subject + advocate + noun phrase/gerund (Warning: Never followed by a to-infinitive!)", warning: "Highly prone to being followed by an infinitive due to 'abogar por' allowing infinitives in Spanish (*'They advocate to modify the syllabus').", example: "Widdowson (1994) advocates separating the concept of English from native ownership." },
+            { id: 7, category: "A", term: "Hypothesize", type: "verb", definition: "To put forward a tentative explanation or hypothesis as a starting point for further investigation.", formula: "Subject + hypothesize + that-clause", warning: "Spelling variation (BrE: hypothesise vs. AmE: hypothesize) and phonetic shift from 'hypothesis'.", example: "It is hypothesized that adult learners with explicit training perform better." },
+            { id: 8, category: "A", term: "Suggest", type: "verb", definition: "To propose a theory or explanation for consideration. (Classified as a tentative reporting verb).", formula: "Subject + suggest + that-clause (triggers subjunctive) OR Subject + suggest + gerund", warning: "One of the most persistent errors: inserting 'pronoun + to-infinitive' (*'He suggested me to read the text'). Instructors must drill correct nominal/that-clause structures.", example: "The evidence suggests that syntactic awareness plays a major role in reading." },
+            { id: 9, category: "A", term: "Challenge", type: "verb", definition: "To dispute the truth or validity of a statement, theory, or methodology.", formula: "Subject + challenge + noun phrase (concept/theory/study)", warning: "Ensure trainees use this in academic contexts rather than purely physical or confrontational situations.", example: "Recent studies challenge the traditional assumption that native models are preferred." },
+            { id: 10, category: "A", term: "Dispute", type: "verb", definition: "To argue against, call into question, or deny the validity of a claim.", formula: "Subject + dispute + noun phrase", warning: "Confused with 'discuss' (Spanish 'discutir'). Dispute means to contest or challenge truth, not merely to have a debate.", example: "Many linguists dispute the validity of the critical period hypothesis." },
+            { id: 11, category: "B", term: "Conversely", type: "adverb", definition: "Introduces a statement or idea that reverses or directly contrasts with the one just made.", formula: "Conversely, + independent clause OR clause; conversely, + clause", warning: "Trainees often use 'on the contrary' which denies a truth. 'Conversely' introduces a contrasting but true alternative perspective.", example: "Highly motivated students seek out reading; conversely, low-motivation students do not." },
+            { id: 12, category: "B", term: "Consequently", type: "adverb", definition: "As a result of a cause previously mentioned.", formula: "Consequently, + clause OR clause; consequently, + clause", warning: "Often misspelled as '*consequentely' due to suffix pronunciation slip.", example: "The sample size was limited; consequently, findings cannot be widely generalized." },
+            { id: 13, category: "B", term: "Notably", type: "adverb", definition: "Especially, particularly; used to highlight an important or striking detail.", formula: "notably + adjective OR Notably, + clause", warning: "Translates closely to 'notablemente' or 'particularmente'. Excellent for academic emphasis.", example: "Several variables were controlled, notably the participants' socioeconomic background." },
+            { id: 14, category: "B", term: "Predominantly", type: "adverb", definition: "Mainly, for the most part, or mostly.", formula: "predominantly + adjective/verb", warning: "Useful for accurate descriptive parameters in statistics.", example: "Prior to the 1970s, teaching was predominantly structural and grammar-focused." },
+            { id: 15, category: "B", term: "Subsequently", type: "adverb", definition: "After a particular thing has happened; afterwards.", formula: "Subsequently, + clause OR Subject + subsequently + verb", warning: "Often confused with 'consequently'. Ensure trainees understand that subsequently is purely temporal (not causal).", example: "Primary data was collected in March, and the subjects were subsequently interviewed in June." },
+            { id: 16, category: "C", term: "Phenomenon", type: "noun", definition: "A fact or situation that is observed to exist or happen, especially one whose cause is in question.", formula: "Singular: phenomenon | Plural: phenomena", warning: "Trainees frequently apply standard Spanish plural rules, writing '*phenomenons' or mismatching 'these phenomena is'.", example: "Code-switching is a linguistic phenomenon that occurs in many multilingual societies." },
+            { id: 17, category: "C", term: "Hypothesis", type: "noun", definition: "A proposed explanation made on the basis of limited evidence as a starting point.", formula: "Singular: hypothesis (/sɪs/) | Plural: hypotheses (/siːz/)", warning: "In Spanish, 'hipótesis' is orthographically identical in singular and plural. This causes agreement drops in English.", example: "To test this hypothesis, a longitudinal study was conducted over two semesters." },
+            { id: 18, category: "C", term: "Synthesis", type: "noun", definition: "The combination of ideas, elements, or sources to form a connected, coherent whole.", formula: "Singular: synthesis | Plural: syntheses", warning: "Ensure spelling is not written with 'i' in the first syllable (*'sintesis') due to Spanish transfer.", example: "The literature review provides a synthesis of current research on classroom interaction." },
+            { id: 19, category: "C", term: "Implication", type: "noun", definition: "The conclusion or future effect that can be drawn from something, although not explicitly stated.", formula: "Usually plural: implications of [something] for [someone]", warning: "Used in final sections of papers. Translates as 'implicación' or 'implicancia'.", example: "The implications of these findings for teacher training programs are significant." },
+            { id: 20, category: "C", term: "Paradigm", type: "noun", definition: "A typical pattern, model, or conceptual framework of something; set of concepts.", formula: "Collocations: shift in paradigm, paradigm shift", warning: "Pronunciation pitfall: the 'g' is silent in English (/ˈpærədaɪm/) but pronounced in Spanish 'paradigma'.", example: "The communicative approach represented a major paradigm shift in pedagogy." },
+            { id: 21, category: "C", term: "Discrepancy", type: "noun", definition: "A lack of compatibility or similarity between two or more facts or data points that should match.", formula: "Discrepancy between A and B OR discrepancy in [noun phrase]", warning: "Translates to 'discrepancia', but in academic English, it usually refers to an inconsistency in objective data rather than people arguing.", example: "There was a noticeable discrepancy between self-reports and actual test scores." },
+            { id: 22, category: "D", term: "Empirical", type: "adjective", definition: "Based on, concerned with, or verifiable by observation or experience rather than theory or logic.", formula: "empirical + evidence/study/research", warning: "High pragmatic value for proving points in argument-based assignments.", example: "There is strong empirical evidence to suggest comprehensible input speeds up learning." },
+            { id: 23, category: "D", term: "Tentative", type: "adjective", definition: "Not certain, fixed, or definite; provisional. Essential for 'hedging'.", formula: "tentative + conclusion/explanation/agreement", warning: "Allows writers to present findings with a formal safety margin, safeguarding academic objectivity.", example: "The researchers offered a tentative explanation for the unexpected data drop." },
+            { id: 24, category: "D", term: "Plausible", type: "adjective", definition: "Seeming reasonable, probable, or worthy of belief.", formula: "plausible + explanation/scenario", warning: "Argentine trainees often write '*plausible' to mean 'deserving praise' due to false friend 'plausible'. In English, it means 'believable'.", example: "Given the socioeconomic context of the school, this explanation appears highly plausible." },
+            { id: 25, category: "D", term: "Rigorous", type: "adjective", definition: "Extremely thorough, exhaustive, accurate, and adhering strictly to high standards.", formula: "rigorous + methodology/analysis/training", warning: "Careful with the spelling suffix '-ous'.", example: "A rigorous analysis of transcripts revealed several conversational turns." },
+            { id: 26, category: "D", term: "Subsequent", type: "adjective", definition: "Coming after something in time; following.", formula: "subsequent + noun (e.g. subsequent research)", warning: "Use instead of informal 'next' to elevate academic register.", example: "The pilot was flawed, but subsequent versions of the test corrected these design errors." },
+            { id: 27, category: "E", term: "Account for", type: "prepositional verb", definition: "To explain the cause of something; to make up a specified proportion or amount.", formula: "Subject + account for + noun phrase", warning: "Argentine writers often omit 'for' because 'explicar' is direct transitive in Spanish (*'this accounts the difference').", example: "Grammatical errors accounted for more than fifty percent of the deducted marks." },
+            { id: 28, category: "E", term: "Attribute to", type: "prepositional verb", definition: "To regard something as being caused by a specific factor.", formula: "Effect + be attributed to + Cause (usually passive)", warning: "Do not substitute 'to' with 'with' (incorrect transfer from 'associate with').", example: "The sudden increase in output was attributed to task-based learning." },
+            { id: 29, category: "E", term: "Coincide with", type: "prepositional verb", definition: "To occur at the same time; to agree or be identical with.", formula: "Subject + coincide with + noun phrase", warning: "Students often write '*coincide on' or '*coincide in' under Spanish influence ('coincidir en que').", example: "The financial crisis coincided with a drop in public school enrolment." },
+            { id: 30, category: "E", term: "Deviate from", type: "prepositional verb", definition: "To depart from an established course, rule, norm, or standard.", formula: "Subject + deviate from + noun phrase", warning: "Argentine students often write '*deviate of' because of Spanish transfer 'desviarse de' where 'de' translates literally as 'of'.", example: "In casual speech, many speakers deviate from standard grammatical norms." }
+        ];
+
+        // Question Datasets
+        const activity1Questions = [
+            {
+                id: 1,
+                prompt: "Although Krashen _________ that second language acquisition is entirely subconscious, several cognitive linguists concede that explicit focus on form accelerates the process.",
+                options: ["concedes", "asserts", "refutes"],
+                correct: "asserts",
+                explanation: "<strong>Asserts</strong> fits perfectly because Krashen holds a firm, confident claim without absolute empirical consensus. 'Concedes' implies yielding a point (which doesn't fit the sentence's structure here) and 'refutes' implies proving something wrong, which does not match his position on subconscious acquisition."
+            },
+            {
+                id: 2,
+                prompt: "The sudden surge in motivation among adult learners can be _________ to the contextualized communicative tasks used in the module.",
+                options: ["attributed", "deviated", "accounted"],
+                correct: "attributed",
+                explanation: "The passive verb <strong>attributed</strong> followed by 'to' matches the cause-and-effect relationship (causal factor). 'Accounted' would require the preposition 'for' to form 'accounted for'."
+            },
+            {
+                id: 3,
+                prompt: "The research cohort was extremely small and limited to one specific region in Tandil; _________, we must treat the generalizability of these findings with high caution.",
+                options: ["subsequently", "predominantly", "consequently"],
+                correct: "consequently",
+                explanation: "<strong>Consequently</strong> is correct because it introduces a logical causal result (consequence). 'Subsequently' refers to time sequence, and 'predominantly' means mostly."
+            },
+            {
+                id: 4,
+                prompt: "The preliminary questionnaire results do not prove anything definitively, but they do _________ that students prefer dynamic speaking activities over mechanical grammar drills.",
+                options: ["assert", "refute", "indicate"],
+                correct: "indicate",
+                explanation: "<strong>Indicate</strong> acts as an excellent 'hedging' verb (tentative stance) suitable for preliminary, non-definitive findings. 'Assert' is too forceful, and 'refute' denotes proving a claim wrong."
+            },
+            {
+                id: 5,
+                prompt: "To guarantee reliability, the research board established a _________ methodology that eliminated external confounding factors.",
+                options: ["rigorous", "tentative", "plausible"],
+                correct: "rigorous",
+                explanation: "<strong>Rigorous</strong> denotes extreme thoroughness, accuracy, and compliance with strict criteria. It is the appropriate academic evaluator for high reliability."
+            }
+        ];
+
+        const activity2Questions = [
+            {
+                id: 1,
+                prompt: "The advisor suggested me to select an ELF thesis topic.",
+                correct: ["The advisor suggested selecting an ELF thesis topic.", "The advisor suggested that I select an ELF thesis topic.", "The advisor suggested that I should select an ELF thesis topic."],
+                explanation: "<strong>suggest + [gerund / that-clause]</strong>. The structure <em>*suggest someone to do</em> is an ungrammatical transfer of Spanish <em>sugerir que yo haga / sugerirme hacer</em>. It must be reconstructed as a gerund clause or a subjunctive 'that' clause."
+            },
+            {
+                id: 2,
+                prompt: "Our academic department advocates to adopt communicative standards.",
+                correct: ["Our academic department advocates adopting communicative standards."],
+                explanation: "<strong>advocate + [gerund / noun]</strong>. Academic English prohibits using a to-infinitive after the verb 'advocate'. This error stems from Spanish <em>abogar por adoptar</em>."
+            },
+            {
+                id: 3,
+                prompt: "This phenomenons was observed during classroom research.",
+                correct: ["This phenomenon was observed during classroom research.", "These phenomena were observed during classroom research."],
+                explanation: "<strong>Concord & Inflection error</strong>. 'Phenomena' is the plural of 'phenomenon'. You must write either 'This phenomenon was...' (singular) or 'These phenomena were...' (plural)."
+            },
+            {
+                id: 4,
+                prompt: "The spelling variations do not deviate of standard norms.",
+                correct: ["The spelling variations do not deviate from standard norms."],
+                explanation: "<strong>deviate + from</strong>. Spanish speakers often write <em>*deviate of</em> because they literally translate the Spanish preposition 'de' into 'of'. In English, 'deviate' strictly collocates with 'from'."
+            },
+            {
+                id: 5,
+                prompt: "Local cultural aspects accounts the linguistic deviations.",
+                correct: ["Local cultural aspects account for the linguistic deviations.", "Local cultural aspects accounted for the linguistic deviations."],
+                explanation: "<strong>account for + plural agreement</strong>. First, the plural subject 'aspects' requires 'account' (no -s). Second, 'account' requires the preposition 'for' to mean 'explain'."
+            }
+        ];
+
+        const activity3Questions = [
+            {
+                id: 1,
+                sentence: "These singular, puzzling ____ of code-switching ____ still under investigation by sociolinguists.",
+                slots: [
+                    { type: "noun", options: ["phenomenon", "phenomena"], correct: "phenomena" },
+                    { type: "verb", options: ["is", "are"], correct: "are" }
+                ],
+                explanation: "'Phenomena' is plural; therefore, it requires the plural auxiliary verb 'are'."
+            },
+            {
+                id: 2,
+                sentence: "The researcher's primary academic ____ ____ validated by the latest data.",
+                slots: [
+                    { type: "noun", options: ["hypothesis", "hypotheses"], correct: "hypothesis" },
+                    { type: "verb", options: ["was", "were"], correct: "was" }
+                ],
+                explanation: "'Hypothesis' is singular (indicated by 'primary academic [hypothesis]'); therefore, it takes the singular auxiliary verb 'was'."
+            },
+            {
+                id: 3,
+                sentence: "The comparative ____ of academic studies ____ a strong correlation.",
+                slots: [
+                    { type: "noun", options: ["synthesis", "syntheses"], correct: "synthesis" },
+                    { type: "verb", options: ["indicates", "indicate"], correct: "indicates" }
+                ],
+                explanation: "Using singular 'synthesis' goes with singular verb agreement ('indicates'). If plural 'syntheses' is intended, it would require 'indicate'."
+            },
+            {
+                id: 4,
+                sentence: "Many theoretical ____ ____ formulated but never tested.",
+                slots: [
+                    { type: "noun", options: ["hypothesis", "hypotheses"], correct: "hypotheses" },
+                    { type: "verb", options: ["was", "were"], correct: "were" }
+                ],
+                explanation: "'Many' signifies a plural noun, requiring plural 'hypotheses' and plural auxiliary verb 'were'."
+            },
+            {
+                id: 5,
+                sentence: "Both of these natural ____ ____ to occur in secondary schools.",
+                slots: [
+                    { type: "noun", options: ["phenomenon", "phenomena"], correct: "phenomena" },
+                    { type: "verb", options: ["seems", "seem"], correct: "seem" }
+                ],
+                explanation: "'Both' requires plural 'phenomena' and plural concord verb 'seem' (without -s)."
+            }
+        ];
+
+        const activity4Questions = [
+            { id: 1, text: "Adult acquisition rates deviate", preposition: "from", options: ["of", "from", "at"], explanation: "<em>Deviate</em> always couples with <em>from</em> in formal academic discourse (departure from a standard). Avoid Spanish transfer <em>*desviarse de -> deviate of</em>." },
+            { id: 2, text: "The researcher could not account", preposition: "for", options: ["for", "about", "to"], explanation: "<em>Account for</em> means to explain or make up. Omitting 'for' is an L1 transfer from transitive 'explicar'." },
+            { id: 3, text: "The drop in test scores coincided", preposition: "with", options: ["with", "on", "in"], explanation: "<em>Coincide</em> requires <em>with</em>. Translating literally from 'coincidir en' often causes errors in Spanish speakers." },
+            { id: 4, text: "The rapid progress was attributed", preposition: "to", options: ["to", "by", "with"], explanation: "<em>Attribute [something] to</em> is the standard collocation indicating a causal link." },
+            { id: 5, text: "There is a noticeable discrepancy", preposition: "between", options: ["between", "among", "of"], explanation: "We analyze a discrepancy <em>between</em> two distinct sets of variables (A and B)." }
+        ];
+
+        // App Progress State Tracker
+        let userProgress = {
+            act1: [null, null, null, null, null],
+            act2: ["", "", "", "", ""],
+            act2Checked: [false, false, false, false, false],
+            act3: [
+                [null, null], [null, null], [null, null], [null, null], [null, null]
+            ],
+            act4: [null, null, null, null, null]
+        };
+
+        // Window Onload Init
+        window.onload = function() {
+            renderCodex();
+            renderActivity1();
+            renderActivity2();
+            renderActivity3();
+            renderActivity4();
+            calculateOverallProgress();
+            renderInteractiveKey();
+        }
+
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('block'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-50', 'text-brand-700', 'font-semibold');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-50');
+            });
+
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            document.getElementById(`content-${tabId}`).classList.add('block');
+            document.getElementById(`tab-${tabId}`).classList.add('bg-brand-50', 'text-brand-700', 'font-semibold');
+            document.getElementById(`tab-${tabId}`).classList.remove('text-slate-600', 'hover:bg-slate-50');
+
+            if(tabId === 'report') {
+                updateReportTab();
+            }
+        }
+
+        // Render Codex
+        function renderCodex() {
+            const container = document.getElementById('codex-container');
+            container.innerHTML = '';
+            lexicon.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `p-4 border border-slate-200 rounded-lg hover:border-brand-300 transition bg-white codex-card` ;
+                card.setAttribute('data-category', item.category);
+                card.setAttribute('data-term', item.term.toLowerCase());
+                card.setAttribute('data-definition', item.definition.toLowerCase());
+
+                let categoryLabel = "";
+                let badgeColor = "";
+                switch(item.category) {
+                    case "A": categoryLabel = "Reporting Verb"; badgeColor = "bg-indigo-50 text-indigo-700 border-indigo-200"; break;
+                    case "B": categoryLabel = "Transition"; badgeColor = "bg-emerald-50 text-emerald-700 border-emerald-200"; break;
+                    case "C": categoryLabel = "Noun / Loanword"; badgeColor = "bg-purple-50 text-purple-700 border-purple-200"; break;
+                    case "D": categoryLabel = "Evaluative Adjective"; badgeColor = "bg-amber-50 text-amber-700 border-amber-200"; break;
+                    case "E": categoryLabel = "Prepositional Collocation"; badgeColor = "bg-sky-50 text-sky-700 border-sky-200"; break;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm font-bold text-slate-900">${item.id}. ${item.term}</span>
+                            <span class="text-[10px] italic text-slate-400">(${item.type})</span>
+                        </div>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full border ${badgeColor}">${categoryLabel}</span>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-3">${item.definition}</p>
+                    <div class="space-y-1.5 border-t border-slate-100 pt-2 text-[11px]">
+                        <div><strong class="text-slate-700">Syntax Formula:</strong> <code class="bg-slate-50 px-1 rounded text-brand-700">${item.formula}</code></div>
+                        <div class="text-slate-500"><strong class="text-amber-700">Argentine L1 Alert:</strong> ${item.warning}</div>
+                        <div class="text-slate-600 italic"><strong class="text-slate-700">Example:</strong> "${item.example}"</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Filter Codex
+        function filterCodex() {
+            const query = document.getElementById('codex-search').value.toLowerCase();
+            const category = document.getElementById('codex-filter').value;
+
+            document.querySelectorAll('.codex-card').forEach(card => {
+                const term = card.getAttribute('data-term');
+                const def = card.getAttribute('data-definition');
+                const cat = card.getAttribute('data-category');
+
+                const matchesQuery = term.includes(query) || def.includes(query);
+                const matchesCategory = category === 'all' || cat === category;
+
+                if(matchesQuery && matchesCategory) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Render Activity 1 (MCQ)
+        function renderActivity1() {
+            const container = document.getElementById('act1-container');
+            container.innerHTML = '';
+
+            activity1Questions.forEach((q, idx) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "p-5 border border-slate-200 rounded-lg bg-slate-50/50 space-y-3";
+                
+                let optionsHTML = q.options.map(opt => {
+                    const isSelected = userProgress.act1[idx] === opt;
+                    const buttonClass = isSelected 
+                        ? 'bg-brand-600 text-white border-brand-600' 
+                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50';
+                    return `
+                        <button onclick="selectAct1(${idx}, '${opt}')" class="px-4 py-2 text-xs border rounded-lg font-medium transition ${buttonClass}">
+                            ${opt}
+                        </button>
+                    `;
+                }).join('');
+
+                const isCorrect = userProgress.act1[idx] === q.correct;
+                const feedbackHTML = userProgress.act1[idx] !== null
+                    ? `<div class="p-3 rounded-lg text-xs leading-relaxed ${isCorrect ? 'bg-emerald-50 text-emerald-900 border border-emerald-100' : 'bg-rose-50 text-rose-900 border border-rose-100'}">
+                        <strong>${isCorrect ? 'Correct' : 'Incorrect'}:</strong> ${q.explanation}
+                       </div>`
+                    : '';
+
+                qDiv.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="bg-brand-100 text-brand-800 rounded-full w-5 h-5 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">${idx+1}</span>
+                        <p class="text-xs text-slate-800 font-medium leading-relaxed">${q.prompt}</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                        ${optionsHTML}
+                    </div>
+                    ${feedbackHTML}
+                `;
+                container.appendChild(qDiv);
+            });
+            updateScores();
+        }
+
+        function selectAct1(qIdx, option) {
+            userProgress.act1[qIdx] = option;
+            renderActivity1();
+            calculateOverallProgress();
+        }
+
+        function resetActivity1() {
+            userProgress.act1 = [null, null, null, null, null];
+            renderActivity1();
+            calculateOverallProgress();
+        }
+
+        // Render Activity 2 (Syntax Reconstruction)
+        function renderActivity2() {
+            const container = document.getElementById('act2-container');
+            container.innerHTML = '';
+
+            activity2Questions.forEach((q, idx) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "p-5 border border-slate-200 rounded-lg bg-slate-50/50 space-y-3";
+                
+                const userVal = userProgress.act2[idx];
+                const isChecked = userProgress.act2Checked[idx];
+                
+                let checkBtnHTML = `<button onclick="checkAct2(${idx})" class="bg-slate-900 hover:bg-slate-800 text-white text-xs px-4 py-2 rounded-lg font-semibold transition">Check Syntax</button>`;
+                
+                let feedbackHTML = "";
+                if (isChecked) {
+                    const cleanUser = userVal.trim().replace(/\s+/g, ' ').toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+                    const matched = q.correct.some(ans => {
+                        const cleanAns = ans.trim().replace(/\s+/g, ' ').toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+                        return cleanUser === cleanAns;
+                    });
+
+                    feedbackHTML = `
+                        <div class="p-4 rounded-lg border text-xs leading-relaxed ${matched ? 'bg-emerald-50 text-emerald-900 border-emerald-200' : 'bg-rose-50 text-rose-900 border-rose-200'}">
+                            <div class="font-bold mb-1">${matched ? '✓ Syntactically Correct' : '✗ Structural Discrepancy Found'}</div>
+                            <p class="mb-2"><strong>Acceptable Version(s):</strong></p>
+                            <ul class="list-disc pl-4 space-y-1">
+                                ${q.correct.map(ans => `<li class="font-mono bg-white/60 px-1 py-0.5 rounded">${ans}</li>`).join('')}
+                            </ul>
+                            <p class="mt-3 text-[11px] text-slate-600"><strong>Teacher Insight:</strong> ${q.explanation}</p>
+                        </div>
+                    `;
+                }
+
+                qDiv.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="bg-amber-100 text-amber-800 rounded-full w-5 h-5 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">${idx+1}</span>
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-rose-600 tracking-wider">Incorrect Syntax:</span>
+                            <p class="text-xs text-slate-700 italic font-medium leading-relaxed font-mono bg-rose-50/50 p-2 border border-rose-100 rounded mt-1">${q.prompt}</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-[11px] font-bold text-slate-600">Your Reconstructed Standard Academic Sentence:</label>
+                        <input type="text" id="act2-input-${idx}" oninput="updateAct2Val(${idx}, this.value)" value="${userVal}" placeholder="Type reconstructed sentence..." class="w-full text-xs p-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600 font-mono">
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        ${checkBtnHTML}
+                    </div>
+                    ${feedbackHTML}
+                `;
+                container.appendChild(qDiv);
+            });
+            updateScores();
+        }
+
+        function updateAct2Val(idx, val) {
+            userProgress.act2[idx] = val;
+        }
+
+        function checkAct2(idx) {
+            if(!userProgress.act2[idx].trim()) {
+                openModal("Input Required", "Please type a reconstructed sentence before checking.", "rose");
+                return;
+            }
+            userProgress.act2Checked[idx] = true;
+            renderActivity2();
+            calculateOverallProgress();
+        }
+
+        function resetActivity2() {
+            userProgress.act2 = ["", "", "", "", ""];
+            userProgress.act2Checked = [false, false, false, false, false];
+            renderActivity2();
+            calculateOverallProgress();
+        }
+
+        // Render Activity 3 (Plurals Agreement)
+        function renderActivity3() {
+            const container = document.getElementById('act3-container');
+            container.innerHTML = '';
+
+            activity3Questions.forEach((q, idx) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "p-5 border border-slate-200 rounded-lg bg-slate-50/50 space-y-3";
+
+                let sentenceHTML = q.sentence;
+                // Substitute the blank underscores with custom select dropdown markup
+                q.slots.forEach((slot, sIdx) => {
+                    const currentVal = userProgress.act3[idx][sIdx];
+                    let dropdownOptions = `<option value="">-- select --</option>`;
+                    slot.options.forEach(opt => {
+                        const sel = currentVal === opt ? "selected" : "";
+                        dropdownOptions += `<option value="${opt}" ${sel}>${opt}</option>`;
+                    });
+                    
+                    const selectMarkup = `
+                        <select onchange="selectAct3(${idx}, ${sIdx}, this.value)" class="text-xs px-2.5 py-1 border border-slate-300 rounded bg-white font-semibold text-brand-700 focus:outline-none focus:ring-1 focus:ring-brand-500">
+                            ${dropdownOptions}
+                        </select>
+                    `;
+                    sentenceHTML = sentenceHTML.replace("____", selectMarkup);
+                });
+
+                // Check answers if both slots are filled
+                const allFilled = userProgress.act3[idx][0] !== null && userProgress.act3[idx][1] !== null;
+                let feedbackHTML = "";
+                if(allFilled) {
+                    const correct0 = userProgress.act3[idx][0] === q.slots[0].correct;
+                    const correct1 = userProgress.act3[idx][1] === q.slots[1].correct;
+                    const bothCorrect = correct0 && correct1;
+
+                    feedbackHTML = `
+                        <div class="p-3 rounded-lg border text-xs leading-relaxed ${bothCorrect ? 'bg-emerald-50 text-emerald-900 border-emerald-150' : 'bg-rose-50 text-rose-900 border-rose-150'}">
+                            <strong>${bothCorrect ? 'Correct Concord' : 'Agreement Discrepancy'}:</strong> ${q.explanation}
+                        </div>
+                    `;
+                }
+
+                qDiv.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="bg-purple-100 text-purple-800 rounded-full w-5 h-5 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">${idx+1}</span>
+                        <div class="text-xs text-slate-800 leading-loose">
+                            ${sentenceHTML}
+                        </div>
+                    </div>
+                    ${feedbackHTML}
+                `;
+                container.appendChild(qDiv);
+            });
+            updateScores();
+        }
+
+        function selectAct3(qIdx, slotIdx, val) {
+            userProgress.act3[qIdx][slotIdx] = val === "" ? null : val;
+            renderActivity3();
+            calculateOverallProgress();
+        }
+
+        function resetActivity3() {
+            userProgress.act3 = [
+                [null, null], [null, null], [null, null], [null, null], [null, null]
+            ];
+            renderActivity3();
+            calculateOverallProgress();
+        }
+
+        // Render Activity 4 (Prepositions Colligations)
+        function renderActivity4() {
+            const container = document.getElementById('act4-container');
+            container.innerHTML = '';
+
+            activity4Questions.forEach((q, idx) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "p-5 border border-slate-200 rounded-lg bg-slate-50/50 space-y-3";
+
+                const currentVal = userProgress.act4[idx];
+                let dropdownOptions = `<option value="">-- select preposition --</option>`;
+                q.options.forEach(opt => {
+                    const sel = currentVal === opt ? "selected" : "";
+                    dropdownOptions += `<option value="${opt}" ${sel}>${opt}</option>`;
+                });
+
+                const selectMarkup = `
+                    <select onchange="selectAct4(${idx}, this.value)" class="text-xs px-2.5 py-1.5 border border-slate-300 rounded bg-white font-mono text-brand-700 focus:outline-none focus:ring-1 focus:ring-brand-500">
+                        ${dropdownOptions}
+                    </select>
+                `;
+
+                const isChecked = currentVal !== null;
+                let feedbackHTML = "";
+                if(isChecked) {
+                    const isCorrect = currentVal === q.preposition;
+                    feedbackHTML = `
+                        <div class="p-3 rounded-lg border text-xs leading-relaxed ${isCorrect ? 'bg-emerald-50 text-emerald-900 border-emerald-150' : 'bg-rose-50 text-rose-900 border-rose-150'}">
+                            <strong>${isCorrect ? 'Correct Collocation' : 'Incorrect Preposition'}:</strong> ${q.explanation}
+                        </div>
+                    `;
+                }
+
+                qDiv.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <span class="bg-sky-100 text-sky-800 rounded-full w-5 h-5 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">${idx+1}</span>
+                        <div class="text-xs text-slate-800 font-medium">
+                            ${q.text} ${selectMarkup} standard academic norms.
+                        </div>
+                    </div>
+                    ${feedbackHTML}
+                `;
+                container.appendChild(qDiv);
+            });
+            updateScores();
+        }
+
+        function selectAct4(qIdx, val) {
+            userProgress.act4[qIdx] = val === "" ? null : val;
+            renderActivity4();
+            calculateOverallProgress();
+        }
+
+        function resetActivity4() {
+            userProgress.act4 = [null, null, null, null, null];
+            renderActivity4();
+            calculateOverallProgress();
+        }
+
+        // Calculate and Render Scores
+        function updateScores() {
+            // Act 1
+            const score1 = userProgress.act1.filter((ans, idx) => ans === activity1Questions[idx].correct).length;
+            document.getElementById('act1-score-display').innerText = `Score: ${score1} / 5`;
+
+            // Act 2
+            let score2 = 0;
+            userProgress.act2Checked.forEach((chk, idx) => {
+                if(chk) {
+                    const userVal = userProgress.act2[idx].trim().replace(/\s+/g, ' ').toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+                    const isMatched = activity2Questions[idx].correct.some(ans => {
+                        const cleanAns = ans.trim().replace(/\s+/g, ' ').toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+                        return userVal === cleanAns;
+                    });
+                    if(isMatched) score2++;
+                }
+            });
+            document.getElementById('act2-score-display').innerText = `Correct: ${score2} / 5`;
+
+            // Act 3
+            let score3 = 0;
+            activity3Questions.forEach((q, idx) => {
+                const matched0 = userProgress.act3[idx][0] === q.slots[0].correct;
+                const matched1 = userProgress.act3[idx][1] === q.slots[1].correct;
+                if(matched0 && matched1) score3++;
+            });
+            document.getElementById('act3-score-display').innerText = `Correct: ${score3} / 5`;
+
+            // Act 4
+            const score4 = userProgress.act4.filter((ans, idx) => ans === activity4Questions[idx].preposition).length;
+            document.getElementById('act4-score-display').innerText = `Correct: ${score4} / 5`;
+        }
+
+        function calculateOverallProgress() {
+            let totalTasks = 20; // 5 + 5 + 5 + 5
+            let completed = 0;
+
+            completed += userProgress.act1.filter(a => a !== null).length;
+            completed += userProgress.act2Checked.filter(a => a === true).length;
+            completed += userProgress.act3.filter(slots => slots[0] !== null && slots[1] !== null).length;
+            completed += userProgress.act4.filter(a => a !== null).length;
+
+            const percentage = Math.round((completed / totalTasks) * 100);
+            
+            document.getElementById('overall-progress-bar').style.width = `${percentage}%`;
+            document.getElementById('overall-progress-text').innerText = `${percentage}%`;
+        }
+
+        // Update Report Tab Summary Displays
+        function updateReportTab() {
+            // Section scores
+            const s1 = userProgress.act1.filter((ans, idx) => ans === activity1Questions[idx].correct).length;
+            
+            let s2 = 0;
+            userProgress.act2Checked.forEach((chk, idx) => {
+                if(chk) {
+                    const userVal = userProgress.act2[idx].trim().replace(/\s+/g, ' ').toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+                    const isMatched = activity2Questions[idx].correct.some(ans => {
+                        const cleanAns = ans.trim().replace(/\s+/g, ' ').toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+                        return userVal === cleanAns;
+                    });
+                    if(isMatched) s2++;
+                }
+            });
+
+            let s3 = 0;
+            activity3Questions.forEach((q, idx) => {
+                if(userProgress.act3[idx][0] === q.slots[0].correct && userProgress.act3[idx][1] === q.slots[1].correct) {
+                    s3++;
+                }
+            });
+
+            const s4 = userProgress.act4.filter((ans, idx) => ans === activity4Questions[idx].preposition).length;
+
+            document.getElementById('rep-s1').innerText = `${s1} / 5`;
+            document.getElementById('rep-s2').innerText = `${s2} / 5`;
+            document.getElementById('rep-s3').innerText = `${s3} / 5`;
+            document.getElementById('rep-s4').innerText = `${s4} / 5`;
+        }
+
+        // Render Answer Key
+        function renderInteractiveKey() {
+            const container = document.getElementById('interactive-key-container');
+            container.innerHTML = '';
+
+            // Section 1 Key
+            let keyHTML = `<div class="bg-slate-50 p-4 rounded-lg border border-slate-200 mb-4">
+                <h4 class="font-bold text-slate-800 text-xs mb-3">Activity 1: Stance &amp; Attribution Selection</h4>
+                <ol class="list-decimal pl-4 space-y-3">
+            `;
+            activity1Questions.forEach(q => {
+                keyHTML += `
+                    <li>
+                        <span class="font-semibold text-slate-900">${q.prompt.replace("_________", `[${q.correct}]`)}</span>
+                        <p class="text-slate-500 text-[10px] mt-1">${q.explanation}</p>
+                    </li>
+                `;
+            });
+            keyHTML += `</ol></div>`;
+
+            // Section 2 Key
+            keyHTML += `<div class="bg-slate-50 p-4 rounded-lg border border-slate-200 mb-4">
+                <h4 class="font-bold text-slate-800 text-xs mb-3">Activity 2: Syntax Reconstruction</h4>
+                <ol class="list-decimal pl-4 space-y-3">
+            `;
+            activity2Questions.forEach(q => {
+                keyHTML += `
+                    <li>
+                        <span class="text-rose-700 italic block font-mono">Incorrect: "${q.prompt}"</span>
+                        <span class="text-emerald-700 font-bold block font-mono mt-0.5">Correct: "${q.correct[0]}"</span>
+                        <p class="text-slate-500 text-[10px] mt-1">${q.explanation}</p>
+                    </li>
+                `;
+            });
+            keyHTML += `</ol></div>`;
+
+            // Section 3 Key
+            keyHTML += `<div class="bg-slate-50 p-4 rounded-lg border border-slate-200 mb-4">
+                <h4 class="font-bold text-slate-800 text-xs mb-3">Activity 3: Classical Plurals &amp; Concord</h4>
+                <ol class="list-decimal pl-4 space-y-3">
+            `;
+            activity3Questions.forEach(q => {
+                let ansSentence = q.sentence
+                    .replace("____", ` [${q.slots[0].correct}] `)
+                    .replace("____", ` [${q.slots[1].correct}] `);
+                keyHTML += `
+                    <li>
+                        <span class="font-semibold text-slate-900">${ansSentence}</span>
+                        <p class="text-slate-500 text-[10px] mt-1">${q.explanation}</p>
+                    </li>
+                `;
+            });
+            keyHTML += `</ol></div>`;
+
+            // Section 4 Key
+            keyHTML += `<div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                <h4 class="font-bold text-slate-800 text-xs mb-3">Activity 4: Prepositional Colligations</h4>
+                <ol class="list-decimal pl-4 space-y-3">
+            `;
+            activity4Questions.forEach(q => {
+                keyHTML += `
+                    <li>
+                        <span class="font-semibold text-slate-900">${q.text} <span class="underline">${q.preposition}</span> standard academic norms.</span>
+                        <p class="text-slate-500 text-[10px] mt-1">${q.explanation}</p>
+                    </li>
+                `;
+            });
+            keyHTML += `</ol></div>`;
+
+            container.innerHTML = keyHTML;
+        }
+
+        // Custom Modal Control
+        function openModal(title, body, type = "emerald") {
+            const modal = document.getElementById('custom-modal');
+            const mTitle = document.getElementById('modal-title');
+            const mBody = document.getElementById('modal-body');
+            const mIcon = document.getElementById('modal-icon-container');
+
+            mTitle.innerText = title;
+            mBody.innerText = body;
+
+            if (type === "rose") {
+                mIcon.className = "mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-rose-100 text-rose-600 mb-4";
+                mIcon.innerHTML = `<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+            } else {
+                mIcon.className = "mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 text-emerald-600 mb-4";
+                mIcon.innerHTML = `<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        // Close modal function
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        // Document Downloader Tool
+        function downloadDocument() {
+            // Compile overall performance scores
+            const s1 = userProgress.act1.filter((ans, idx) => ans === activity1Questions[idx].correct).length;
+            let s2 = 0;
+            userProgress.act2Checked.forEach((chk, idx) => {
+                if(chk) {
+                    const userVal = userProgress.act2[idx].trim().replace(/\s+/g, ' ').toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+                    const isMatched = activity2Questions[idx].correct.some(ans => {
+                        const cleanAns = ans.trim().replace(/\s+/g, ' ').toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+                        return userVal === cleanAns;
+                    });
+                    if(isMatched) s2++;
+                }
+            });
+            let s3 = 0;
+            activity3Questions.forEach((q, idx) => {
+                if(userProgress.act3[idx][0] === q.slots[0].correct && userProgress.act3[idx][1] === q.slots[1].correct) {
+                    s3++;
+                }
+            });
+            const s4 = userProgress.act4.filter((ans, idx) => ans === activity4Questions[idx].preposition).length;
+
+            let fileContent = `# Academic Lexicon & Syntax Study Companion Report
+Date generated: ${new Date().toLocaleDateString()}
+Target Audience: Argentine ELF Teacher Trainees
+
+------------------------------------------------------------------------
+## YOUR MODULE PERFORMANCE REPORT
+* Activity 1 (Stance & Attribution MCQ): ${s1} / 5
+* Activity 2 (Argentine L1 Syntax Reconstruction): ${s2} / 5
+* Activity 3 (Classical Plurals Concord): ${s3} / 5
+* Activity 4 (Prepositional Colligations): ${s4} / 5
+------------------------------------------------------------------------
+
+## TARGET LEXICON DECK (30 Key Terms & Argentine Alerts)
+
+`;
+
+            lexicon.forEach(item => {
+                fileContent += `### ${item.id}. ${item.term} (${item.type})
+* **Academic Definition:** ${item.definition}
+* **Syntactic Formula:** ${item.formula}
+* **Argentine L1 Spanish Danger:** ${item.warning}
+* **Authentic Classroom Example:** "${item.example}"
+
+`;
+            });
+
+            fileContent += `------------------------------------------------------------------------
+## ANNOTATED QUIZ ANSWER KEY & COMPLEMENTARY PEDAGOGY
+
+### SECTION 1: Stance & Attribution
+`;
+            activity1Questions.forEach((q, idx) => {
+                fileContent += `\nTask ${idx+1}: "${q.prompt.replace('_________', '[' + q.correct + ']')}"
+- Explanation: ${q.explanation}\n`;
+            });
+
+            fileContent += `\n### SECTION 2: Syntax Reconstruction (Argentine L1 Interference Solutions)
+`;
+            activity2Questions.forEach((q, idx) => {
+                fileContent += `\nTask ${idx+1}: Correcting: "${q.prompt}"
+- Standard Reconstruction: "${q.correct[0]}"
+- Pedagogical Insight: ${q.explanation}\n`;
+            });
+
+            fileContent += `\n### SECTION 3: Classical Plurals & Concord
+`;
+            activity3Questions.forEach((q, idx) => {
+                const finishedSentence = q.sentence
+                    .replace('____', `[${q.slots[0].correct}]`)
+                    .replace('____', `[${q.slots[1].correct}]`);
+                fileContent += `\nTask ${idx+1}: "${finishedSentence}"
+- Pedagogical Explanation: ${q.explanation}\n`;
+            });
+
+            fileContent += `\n### SECTION 4: Prepositional Colligations
+`;
+            activity4Questions.forEach((q, idx) => {
+                fileContent += `\nTask ${idx+1}: "${q.text} [${q.preposition}] standard academic norms."
+- Pedagogical Explanation: ${q.explanation}\n`;
+            });
+
+            fileContent += `
+------------------------------------------------------------------------
+### References & Recommended Literature
+* Bailey, S. (2014). Academic Writing: A Handbook for International Students. Routledge.
+* Foley, M., & Hall, D. (2012). MyGrammarLab Advanced C1/C2. Pearson.
+* Penston, T. (2005). A Concise Grammar for English Language Teachers. TP Publications.
+* Llaneza, G. A. (2025). Prácticas discursivas de la comunicación escrita III. UTN/ISFD.
+`;
+
+            // Browser-safe download trigger
+            const blob = new Blob([fileContent], { type: 'text/markdown;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "Academic_Lexicon_Mastery_Study_Guide.md");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            openModal("Download Started", "Your complete Study Guide containing lexicon notes, your performance, and structural answer explanations has been successfully downloaded as a Markdown (.md) file.");
+        }
+    </script>
+</body>
+</html>

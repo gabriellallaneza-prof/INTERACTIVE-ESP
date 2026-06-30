@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EFL Technology Integration: Interactive Self-Study Module</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .serif-title {
+      font-family: 'Playfair Display', serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- TOP DECORATIVE ACRYLIC HEADER -->
+  <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-xl">
+    <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 mb-3">
+            <i class="fa-solid fa-graduation-cap"></i> EFL Teacher Education
+          </span>
+          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight serif-title">
+            Integrating Educational Technology in EFL
+          </h1>
+          <p class="mt-2 text-sm md:text-base text-slate-300 max-w-3xl">
+            An interactive self-study module exploring theoretical integration models (TPACK, SAMR, TIM, RAT, PICRAT, Triple E) calibrated specifically for English language learning contexts.
+          </p>
+        </div>
+        <div class="flex items-center gap-3 bg-white/5 border border-white/10 p-3 rounded-xl backdrop-blur-sm self-start md:self-center">
+          <div class="w-10 h-10 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-lg" id="overall-progress-circle">
+            0%
+          </div>
+          <div>
+            <div class="text-xs uppercase tracking-wider text-slate-400 font-bold">Your Progress</div>
+            <div class="text-xs text-slate-300 font-semibold" id="progress-summary">0 of 5 Steps Completed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVIGATION TABS -->
+  <nav class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex space-x-1 overflow-x-auto py-2 scrollbar-none">
+        <button onclick="switchTab('trigger')" id="tab-trigger" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 inline-flex items-center gap-2 text-indigo-600 bg-indigo-50 whitespace-nowrap">
+          <i class="fa-solid fa-lightbulb"></i> 1. Trigger Questions
+        </button>
+        <button onclick="switchTab('dynamic')" id="tab-dynamic" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 inline-flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-50 whitespace-nowrap">
+          <i class="fa-solid fa-cubes"></i> 2. Dynamic Models
+        </button>
+        <button onclick="switchTab('compare')" id="tab-compare" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 inline-flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-50 whitespace-nowrap">
+          <i class="fa-solid fa-scale-balanced"></i> 3. Comparative Matrix
+        </button>
+        <button onclick="switchTab('assessment')" id="tab-assessment" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 inline-flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-50 whitespace-nowrap">
+          <i class="fa-solid fa-clipboard-question"></i> 4. Self-Assessments
+        </button>
+        <button onclick="switchTab('record')" id="tab-record" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 inline-flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-50 whitespace-nowrap">
+          <i class="fa-solid fa-award"></i> 5. Performance Record
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN MODULE CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8 sm:px-6 lg:px-8">
+
+    <!-- TAB CONTENT: 1. TRIGGER QUESTIONS -->
+    <section id="content-trigger" class="tab-content block space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
+        <div class="flex items-start gap-4">
+          <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">
+            <i class="fa-solid fa-comments-question text-2xl"></i>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900 serif-title">EFL-Specific Schema Activation</h2>
+            <p class="text-slate-600 mt-1">
+              Before exploring theoretical frameworks, consider how language learning differs from content subjects. Reflect on the trigger questions below to evaluate your current beliefs regarding educational technology in English language classrooms.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-8 space-y-6">
+          <!-- Question 1 -->
+          <div class="border border-slate-100 rounded-xl p-5 bg-slate-50/50 hover:bg-slate-50 transition-colors">
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs flex items-center justify-center font-bold">1</span>
+              How does technology shift the "input vs. output" dynamic in an EFL class?
+            </h3>
+            <p class="text-sm text-slate-500 mt-1 ml-8">Think about traditional text reading versus student-driven podcasts, digital storytelling, or interactive voice synthesis.</p>
+            <div class="mt-3 ml-8">
+              <textarea id="q1-response" rows="3" class="w-full rounded-lg border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400" placeholder="Write your reflection here (minimum 20 characters)..." oninput="validateTrigger(1)"></textarea>
+              <div class="mt-2 flex justify-between items-center">
+                <span class="text-xs text-slate-400" id="q1-char-count">0 characters</span>
+                <button onclick="toggleTriggerFeedback(1)" id="q1-feedback-btn" disabled class="px-3 py-1.5 bg-slate-200 text-slate-400 font-semibold text-xs rounded-lg transition-all cursor-not-allowed">
+                  Explore EFL Expert Perspectives <i class="fa-solid fa-chevron-down ml-1"></i>
+                </button>
+              </div>
+              <div id="q1-feedback" class="hidden mt-4 p-4 rounded-lg bg-indigo-50 border-l-4 border-indigo-600 text-sm text-slate-700 animate-fadeIn">
+                <strong class="text-indigo-900 block mb-1">EFL Expert Perspective:</strong>
+                Traditional approaches frequently relegate students to passive receivers of language input (reading static texts, listening to tape recorders). Technology shifts this dynamic from passive reception to active production. It enables instant publishing, speech-to-text pronunciation drilling, and digital multimodal authoring. Learners don't just study language structure—they apply it to construct expressive artifacts for authentic global audiences.
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 2 -->
+          <div class="border border-slate-100 rounded-xl p-5 bg-slate-50/50 hover:bg-slate-50 transition-colors">
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs flex items-center justify-center font-bold">2</span>
+              What risks are posed by the "novelty factor" of shiny new educational apps in vocabulary acquisition?
+            </h3>
+            <p class="text-sm text-slate-500 mt-1 ml-8">Does a gamified word-matching app construct deep lexical knowledge, or is it merely substitution of a paper flashcard?</p>
+            <div class="mt-3 ml-8">
+              <textarea id="q2-response" rows="3" class="w-full rounded-lg border border-slate-200 p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-400" placeholder="Write your reflection here (minimum 20 characters)..." oninput="validateTrigger(2)"></textarea>
+              <div class="mt-2 flex justify-between items-center">
+                <span class="text-xs text-slate-400" id="q2-char-count">0 characters</span>
+                <button onclick="toggleTriggerFeedback(2)" id="q2-feedback-btn" disabled class="px-3 py-1.5 bg-slate-200 text-slate-400 font-semibold text-xs rounded-lg transition-all cursor-not-allowed">
+                  Explore EFL Expert Perspectives <i class="fa-solid fa-chevron-down ml-1"></i>
+                </button>
+              </div>
+              <div id="q2-feedback" class="hidden mt-4 p-4 rounded-lg bg-indigo-50 border-l-4 border-indigo-600 text-sm text-slate-700 animate-fadeIn">
+                <strong class="text-indigo-900 block mb-1">EFL Expert Perspective:</strong>
+                Gamified vocabulary drills (like simple multiple-choice word apps) provide engaging reinforcement, but they often only operate at the *Substitution* or *Augmentation* levels (SAMR) or *Passive/Interactive* levels (PICRAT). They risk isolating vocabulary from contextualized communicative use. Effective integration moves past flashcard-style novelty to constructive, authentic projects, such as student-curated digital corpus investigations or collaborative semantic mapping tools.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-100 flex justify-end">
+          <button id="trigger-next-btn" onclick="markStepComplete('trigger'); switchTab('dynamic');" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all">
+            Proceed to Dynamic Models <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB CONTENT: 2. DYNAMIC MODEL REPRESENTATIONS -->
+    <section id="content-dynamic" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900 serif-title">Dynamic Framework Explorers</h2>
+            <p class="text-slate-600 mt-1">Click the tabs below to explore interactive models and see exactly how they apply to specific EFL teaching scenarios.</p>
+          </div>
+          <div class="inline-flex rounded-xl p-1 bg-slate-100 self-start">
+            <button onclick="switchModel('tpack')" id="btn-m-tpack" class="model-tab-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-slate-900 shadow-sm">TPACK</button>
+            <button onclick="switchModel('samr')" id="btn-m-samr" class="model-tab-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">SAMR</button>
+            <button onclick="switchModel('picrat')" id="btn-m-picrat" class="model-tab-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">PICRAT</button>
+            <button onclick="switchModel('triplee')" id="btn-m-triplee" class="model-tab-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">Triple E</button>
+          </div>
+        </div>
+
+        <!-- MODEL CONTENT: TPACK -->
+        <div id="model-content-tpack" class="model-view block mt-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div class="lg:col-span-5 flex flex-col items-center">
+              <h3 class="text-lg font-bold text-slate-900 mb-6 text-center">Interactive TPACK Venn Diagram (Click an Area)</h3>
+              
+              <!-- SVG Venn Diagram -->
+              <svg viewBox="0 0 400 400" class="w-full max-w-[340px] h-auto drop-shadow-md">
+                <!-- TK Circle -->
+                <circle cx="200" cy="150" r="95" fill="rgba(168, 85, 247, 0.15)" stroke="rgb(168, 85, 247)" stroke-width="2" class="cursor-pointer hover:fill-purple-500/25 transition-all" onclick="selectTpackDomain('TK')"/>
+                <!-- PK Circle -->
+                <circle cx="140" cy="250" r="95" fill="rgba(59, 130, 246, 0.15)" stroke="rgb(59, 130, 246)" stroke-width="2" class="cursor-pointer hover:fill-blue-500/25 transition-all" onclick="selectTpackDomain('PK')"/>
+                <!-- CK Circle -->
+                <circle cx="260" cy="250" r="95" fill="rgba(16, 185, 129, 0.15)" stroke="rgb(16, 185, 129)" stroke-width="2" class="cursor-pointer hover:fill-emerald-500/25 transition-all" onclick="selectTpackDomain('CK')"/>
+                
+                <!-- Overlaps -->
+                <!-- TPK Intersect -->
+                <path d="M 140,250 A 95,95 0 0,1 200,150 A 95,95 0 0,1 200,345 A 95,95 0 0,1 140,250" fill="transparent" class="cursor-pointer hover:fill-indigo-500/10" onclick="selectTpackDomain('TPK')"/>
+                <!-- TCK Intersect -->
+                <path d="M 260,250 A 95,95 0 0,0 200,150 A 95,95 0 0,0 200,345 A 95,95 0 0,0 260,250" fill="transparent" class="cursor-pointer hover:fill-pink-500/10" onclick="selectTpackDomain('TCK')"/>
+                <!-- PCK Intersect -->
+                <path d="M 140,250 A 95,95 0 0,0 260,250 A 95,95 0 0,1 200,345 A 95,95 0 0,0 140,250" fill="transparent" class="cursor-pointer hover:fill-yellow-500/10" onclick="selectTpackDomain('PCK')"/>
+                <!-- TPACK Center -->
+                <path d="M 200,195 A 95,95 0 0,1 240,250 A 95,95 0 0,1 200,305 A 95,95 0 0,1 160,250 A 95,95 0 0,1 200,195" fill="rgba(99, 102, 241, 0.4)" stroke="rgb(99, 102, 241)" stroke-width="2" class="cursor-pointer hover:fill-indigo-600/65 transition-all" onclick="selectTpackDomain('TPACK')"/>
+                
+                <!-- Text Labels -->
+                <text x="200" y="100" font-family="Inter" font-size="12" font-weight="bold" fill="rgb(107, 33, 168)" text-anchor="middle" class="pointer-events-none">TK</text>
+                <text x="90" y="270" font-family="Inter" font-size="12" font-weight="bold" fill="rgb(30, 58, 138)" text-anchor="middle" class="pointer-events-none">PK</text>
+                <text x="310" y="270" font-family="Inter" font-size="12" font-weight="bold" fill="rgb(6, 78, 59)" text-anchor="middle" class="pointer-events-none">CK</text>
+                <text x="200" y="255" font-family="Inter" font-size="10" font-weight="extrabold" fill="white" text-anchor="middle" class="pointer-events-none">TPACK</text>
+              </svg>
+            </div>
+            
+            <div class="lg:col-span-7 space-y-4">
+              <div id="tpack-details" class="bg-slate-50 border border-slate-200 rounded-2xl p-6 transition-all duration-300">
+                <div class="flex items-center gap-3 mb-3">
+                  <span class="inline-flex px-3 py-1 bg-indigo-600 text-white font-bold rounded-lg text-xs" id="tpack-badge">TPACK</span>
+                  <h4 class="text-lg font-bold text-slate-900" id="tpack-title">Technological Pedagogical Content Knowledge</h4>
+                </div>
+                <p class="text-sm text-slate-600 leading-relaxed" id="tpack-desc">
+                  Click the segments in the Venn diagram to explore specific components. Under TPACK (the core intersection), you formulate a dynamic synthesis of target language structures, language teaching methods, and appropriate digital technologies.
+                </p>
+                <div class="mt-6 border-t border-slate-200 pt-4">
+                  <span class="text-xs uppercase tracking-wider text-slate-400 font-bold block mb-2">EFL Implementation Scenario:</span>
+                  <div class="bg-white border border-indigo-100 rounded-xl p-4 text-sm text-slate-700" id="tpack-scenario">
+                    <strong>EFL Case Study:</strong> To teach structural collocation patterns (Content - CK), an instructor implements an inductive discover-and-categorize activity (Pedagogy - PK). Students use an online corpus and concordancing tool (Technology - TK) to systematically analyze authentic adjective-noun collocations in context, drafting collaborative summaries.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODEL CONTENT: SAMR -->
+        <div id="model-content-samr" class="model-view hidden mt-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <!-- Interative SAMR Steps -->
+            <div class="lg:col-span-5 space-y-3">
+              <h3 class="text-lg font-bold text-slate-900 mb-4 text-center lg:text-left">The SAMR Ladder (Select a Rung)</h3>
+              
+              <!-- Redefinition -->
+              <button onclick="selectSamrLevel('R')" id="btn-samr-R" class="samr-rung w-full flex items-center justify-between p-4 bg-red-50 hover:bg-red-100 text-red-900 border-2 border-red-200 rounded-xl transition-all font-semibold">
+                <span class="flex items-center gap-3">
+                  <span class="w-8 h-8 rounded-lg bg-red-600 text-white flex items-center justify-center font-bold">R</span>
+                  Redefinition
+                </span>
+                <span class="text-xs uppercase bg-red-200 text-red-800 px-2.5 py-1 rounded-full font-bold">Transformation</span>
+              </button>
+              
+              <!-- Modification -->
+              <button onclick="selectSamrLevel('M')" id="btn-samr-M" class="samr-rung w-full flex items-center justify-between p-4 bg-orange-50 hover:bg-orange-100 text-orange-900 border-2 border-slate-200 rounded-xl transition-all font-semibold">
+                <span class="flex items-center gap-3">
+                  <span class="w-8 h-8 rounded-lg bg-orange-500 text-white flex items-center justify-center font-bold">M</span>
+                  Modification
+                </span>
+                <span class="text-xs uppercase bg-orange-200 text-orange-800 px-2.5 py-1 rounded-full font-bold">Transformation</span>
+              </button>
+              
+              <!-- Augmentation -->
+              <button onclick="selectSamrLevel('A')" id="btn-samr-A" class="samr-rung w-full flex items-center justify-between p-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border-2 border-slate-200 rounded-xl transition-all font-semibold">
+                <span class="flex items-center gap-3">
+                  <span class="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center font-bold">A</span>
+                  Augmentation
+                </span>
+                <span class="text-xs uppercase bg-emerald-200 text-emerald-800 px-2.5 py-1 rounded-full font-bold">Enhancement</span>
+              </button>
+              
+              <!-- Substitution -->
+              <button onclick="selectSamrLevel('S')" id="btn-samr-S" class="samr-rung w-full flex items-center justify-between p-4 bg-blue-50 hover:bg-blue-100 text-blue-900 border-2 border-slate-200 rounded-xl transition-all font-semibold">
+                <span class="flex items-center gap-3">
+                  <span class="w-8 h-8 rounded-lg bg-blue-500 text-white flex items-center justify-center font-bold">S</span>
+                  Substitution
+                </span>
+                <span class="text-xs uppercase bg-blue-200 text-blue-800 px-2.5 py-1 rounded-full font-bold">Enhancement</span>
+              </button>
+            </div>
+            
+            <div class="lg:col-span-7">
+              <div id="samr-details" class="bg-slate-50 border border-slate-200 rounded-2xl p-6 min-h-[350px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-2 mb-3">
+                    <span class="text-xs uppercase tracking-widest font-extrabold text-red-600 bg-red-100 px-2 py-0.5 rounded-md" id="samr-cat">Transformation</span>
+                    <h4 class="text-xl font-bold text-slate-900" id="samr-title">Redefinition</h4>
+                  </div>
+                  <p class="text-sm text-slate-600 leading-relaxed" id="samr-desc">
+                    At the redefinition stage, educational technology allows for the creation of brand new, historically impossible activities. The traditional parameters of the EFL classroom boundaries expand, permitting authentic communicative encounters with native interlocutors, outside audiences, and worldwide peers.
+                  </p>
+                </div>
+                <div class="mt-6 border-t border-slate-200 pt-4">
+                  <span class="text-xs uppercase tracking-wider text-slate-400 font-bold block mb-2">Practical Writing Lesson Transformation:</span>
+                  <div class="bg-white border border-red-100 rounded-xl p-4 text-sm text-slate-700" id="samr-scenario">
+                    <strong>Writing Exercise Transformation:</strong> Students collaborate synchronously inside dynamic global digital spaces with cross-border pen-pals to construct a multi-author interactive digital guide. They embed video reflections explaining complex vocabulary and host live, web-based critique exchanges.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODEL CONTENT: PICRAT -->
+        <div id="model-content-picrat" class="model-view hidden mt-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <!-- 3x3 Grid of PICRAT -->
+            <div class="lg:col-span-6 flex flex-col items-center">
+              <h3 class="text-lg font-bold text-slate-900 mb-4 text-center">Interactive PICRAT Grid (Select a Cell)</h3>
+              
+              <div class="w-full max-w-[380px] grid grid-cols-4 gap-2 text-center text-xs font-bold">
+                <!-- Label Row -->
+                <div></div>
+                <div class="py-1 text-slate-500">P (Passive)</div>
+                <div class="py-1 text-slate-500">I (Interactive)</div>
+                <div class="py-1 text-slate-500">C (Creative)</div>
+                
+                <!-- Transforming Row -->
+                <div class="flex items-center justify-end pr-2 text-slate-500 text-[10px] md:text-xs">Transforming (T)</div>
+                <button onclick="selectPicratCell('PT')" id="picrat-PT" class="picrat-cell py-4 bg-orange-50 hover:bg-orange-100 border border-orange-200 text-orange-800 rounded-lg transition-all">PT</button>
+                <button onclick="selectPicratCell('IT')" id="picrat-IT" class="picrat-cell py-4 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-800 rounded-lg transition-all">IT</button>
+                <button onclick="selectPicratCell('CT')" id="picrat-CT" class="picrat-cell py-4 bg-red-100 hover:bg-red-200 border-2 border-red-500 text-red-900 rounded-lg transition-all font-extrabold shadow-sm">CT (Target)</button>
+                
+                <!-- Amplifying Row -->
+                <div class="flex items-center justify-end pr-2 text-slate-500 text-[10px] md:text-xs">Amplifying (A)</div>
+                <button onclick="selectPicratCell('PA')" id="picrat-PA" class="picrat-cell py-4 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 rounded-lg transition-all">PA</button>
+                <button onclick="selectPicratCell('IA')" id="picrat-IA" class="picrat-cell py-4 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 rounded-lg transition-all">IA</button>
+                <button onclick="selectPicratCell('CA')" id="picrat-CA" class="picrat-cell py-4 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 rounded-lg transition-all">CA</button>
+                
+                <!-- Replacing Row -->
+                <div class="flex items-center justify-end pr-2 text-slate-500 text-[10px] md:text-xs">Replacing (R)</div>
+                <button onclick="selectPicratCell('PR')" id="picrat-PR" class="picrat-cell py-4 bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-600 rounded-lg transition-all">PR</button>
+                <button onclick="selectPicratCell('IR')" id="picrat-IR" class="picrat-cell py-4 bg-slate-50 hover:bg-slate-150 border border-slate-200 text-slate-700 rounded-lg transition-all">IR</button>
+                <button onclick="selectPicratCell('CR')" id="picrat-CR" class="picrat-cell py-4 bg-yellow-50 hover:bg-yellow-100 border border-yellow-200 text-yellow-800 rounded-lg transition-all">CR</button>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-3 italic">Aim for the top right (CT) to maximize transformative agency.</p>
+            </div>
+            
+            <div class="lg:col-span-6">
+              <div id="picrat-details" class="bg-slate-50 border border-slate-200 rounded-2xl p-6 min-h-[350px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xs uppercase tracking-widest font-extrabold text-red-700 bg-red-100 px-2 py-0.5 rounded-md" id="picrat-coords">Cell: CT</span>
+                    <h4 class="text-lg font-bold text-slate-900" id="picrat-title">Creative & Transforming</h4>
+                  </div>
+                  <p class="text-sm text-slate-600 leading-relaxed" id="picrat-desc">
+                    In the CT quadrant, student interactions are fully creative (constructing knowledge artifacts), and the teacher's pedagogy is transformed, utilizing practices that would be completely unfeasible without technology.
+                  </p>
+                </div>
+                <div class="mt-4 border-t border-slate-200 pt-4">
+                  <span class="text-xs uppercase tracking-wider text-slate-400 font-bold block mb-2">EFL Speaking/Listening Case:</span>
+                  <div class="bg-white border border-red-100 rounded-xl p-3.5 text-sm text-slate-700" id="picrat-scenario">
+                    Students conduct structured voice interviews in English with native-speaker representatives of global NGOs via targeted videoconferencing. They edit and compile these conversations into a multi-episode public podcast addressing local-global actions.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODEL CONTENT: TRIPLE E -->
+        <div id="model-content-triplee" class="model-view hidden mt-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <!-- Interative Triple E Pillars -->
+            <div class="lg:col-span-5 space-y-4">
+              <h3 class="text-lg font-bold text-slate-900 mb-4 text-center lg:text-left">Triple E Framework Checklist</h3>
+              
+              <button onclick="selectTripleE('engage')" id="btn-eee-engage" class="eee-card w-full text-left p-4 bg-indigo-50 border-2 border-indigo-200 rounded-xl hover:bg-indigo-100 transition-all">
+                <h4 class="font-bold text-indigo-900 flex items-center gap-2">
+                  <i class="fa-solid fa-bolt"></i> Engage in Learning Goals
+                </h4>
+                <p class="text-xs text-indigo-700 mt-1">Focusing, initiating, and social interaction.</p>
+              </button>
+              
+              <button onclick="selectTripleE('enhance')" id="btn-eee-enhance" class="eee-card w-full text-left p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all">
+                <h4 class="font-bold text-slate-800 flex items-center gap-2">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> Enhance Learning Goals
+                </h4>
+                <p class="text-xs text-slate-500 mt-1">Scaffolding, comprehension, and unique demonstrations.</p>
+              </button>
+              
+              <button onclick="selectTripleE('extend')" id="btn-eee-extend" class="eee-card w-full text-left p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all">
+                <h4 class="font-bold text-slate-800 flex items-center gap-2">
+                  <i class="fa-solid fa-bridge"></i> Extend Learning Goals
+                </h4>
+                <p class="text-xs text-slate-500 mt-1">Life-long learning, real-world bridging, and contexts.</p>
+              </button>
+            </div>
+            
+            <div class="lg:col-span-7">
+              <div id="eee-details" class="bg-slate-50 border border-slate-200 rounded-2xl p-6 min-h-[350px] flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-2 mb-3">
+                    <span class="text-xs uppercase tracking-widest font-extrabold text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded-md" id="eee-badge">Engage</span>
+                    <h4 class="text-xl font-bold text-slate-900" id="eee-title">Engagement Goals</h4>
+                  </div>
+                  <p class="text-sm text-slate-600 leading-relaxed" id="eee-desc">
+                    According to Liz Kolb (2017), engagement should not be mistaken for shallow entertainment. In the EFL context, the chosen tech must support focus directly on target language outcomes with minimal mechanical friction, transitioning them into active, collaborative communicators.
+                  </p>
+                </div>
+                <div class="mt-6 border-t border-slate-200 pt-4">
+                  <span class="text-xs uppercase tracking-wider text-slate-400 font-bold block mb-2">EFL Vocabulary Engagement Scenario:</span>
+                  <div class="bg-white border border-indigo-100 rounded-xl p-4 text-sm text-slate-700" id="eee-scenario">
+                    Instead of solo gamified vocabulary matches, students work in pairs to construct semantic clusters in interactive collaborative maps (e.g., Padlet, Miro), directly negotiating lexical meanings aloud in English to reach co-designed targets.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-100 flex justify-between items-center">
+          <button onclick="switchTab('trigger')" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all">
+            <i class="fa-solid fa-arrow-left"></i> Back to triggers
+          </button>
+          <button id="dynamic-next-btn" onclick="markStepComplete('dynamic'); switchTab('compare');" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all">
+            Go to Comparison Matrix <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB CONTENT: 3. COMPARATIVE MATRIX -->
+    <section id="content-compare" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
+        <div class="flex items-start gap-4 border-b border-slate-100 pb-6">
+          <div class="p-3 bg-teal-50 text-teal-600 rounded-xl">
+            <i class="fa-solid fa-scale-balanced text-2xl"></i>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900 serif-title">Comparative Synthesis of Integration Models</h2>
+            <p class="text-slate-600 mt-1">
+              Analyze structural differences between each design matrix. Different contexts demand distinct reflective focuses—there is no single "best" model.
+            </p>
+          </div>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="flex flex-wrap gap-2 mt-6">
+          <button onclick="filterCompareTable('all')" id="compare-btn-all" class="compare-filter-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-indigo-600 text-white shadow-sm">Show All</button>
+          <button onclick="filterCompareTable('knowledge')" id="compare-btn-knowledge" class="compare-filter-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200">Teacher Knowledge Focus</button>
+          <button onclick="filterCompareTable('task')" id="compare-btn-task" class="compare-filter-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200">Task & Environment Focus</button>
+          <button onclick="filterCompareTable('student')" id="compare-btn-student" class="compare-filter-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200">Student Agency Focus</button>
+        </div>
+
+        <!-- TABLE -->
+        <div class="mt-6 overflow-x-auto border border-slate-200 rounded-xl">
+          <table class="w-full text-left border-collapse text-xs md:text-sm">
+            <thead>
+              <tr class="bg-slate-100 border-b border-slate-200 text-slate-700 uppercase tracking-wider text-[10px] md:text-xs">
+                <th class="p-4 font-bold">Model</th>
+                <th class="p-4 font-bold">Primary Focus</th>
+                <th class="p-4 font-bold">Strengths in EFL</th>
+                <th class="p-4 font-bold">Key Limitations</th>
+                <th class="p-4 font-bold">Optimal EFL Use Case</th>
+              </tr>
+            </thead>
+            <tbody id="compare-table-body" class="divide-y divide-slate-100">
+              <!-- TPACK -->
+              <tr class="hover:bg-slate-50 transition-colors" data-category="knowledge">
+                <td class="p-4 font-bold text-slate-900">
+                  <div class="text-xs text-indigo-600">Mishra & Koehler (2006)</div>
+                  TPACK
+                </td>
+                <td class="p-4 text-slate-600">Teacher knowledge intersections (TK, PK, CK)</td>
+                <td class="p-4 text-slate-700">Encourages alignment between linguistic goals (CK) and communicative methodologies (PK).</td>
+                <td class="p-4 text-slate-500">Can be complex to assess empirically or self-evaluate on the fly during live lessons.</td>
+                <td class="p-4 italic font-medium">Syllabus structural design; foundational teacher prep curriculum.</td>
+              </tr>
+              <!-- SAMR -->
+              <tr class="hover:bg-slate-50 transition-colors" data-category="task">
+                <td class="p-4 font-bold text-slate-900">
+                  <div class="text-xs text-indigo-600">Puentedura (2006)</div>
+                  SAMR
+                </td>
+                <td class="p-4 text-slate-600">Four-tier taxonomy of tasks (Substitution &rarr; Redefinition)</td>
+                <td class="p-4 text-slate-700">Highly intuitive for quickly redesigning reading/writing materials into dynamic, collaborative ones.</td>
+                <td class="p-4 text-slate-500">Hierarchical nature sometimes pathologizes useful substitution tasks (e.g., electronic reading).</td>
+                <td class="p-4 italic font-medium">Rapid redesign of worksheet-based grammar tasks or written assignments.</td>
+              </tr>
+              <!-- TIM -->
+              <tr class="hover:bg-slate-50 transition-colors" data-category="task">
+                <td class="p-4 font-bold text-slate-900">
+                  <div class="text-xs text-indigo-600">FCIT (2011)</div>
+                  TIM
+                </td>
+                <td class="p-4 text-slate-600">25-cell grid combining integration levels & meaningful environment</td>
+                <td class="p-4 text-slate-700">Extremely robust. Measures authenticity and collaborative dialogue parameters.</td>
+                <td class="p-4 text-slate-500">Resource intensive to implement; high cognitive load for solo teacher reflection.</td>
+                <td class="p-4 italic font-medium">Departmental reviews, curriculum evaluation, and school-wide tech integration.</td>
+              </tr>
+              <!-- RAT -->
+              <tr class="hover:bg-slate-50 transition-colors" data-category="task">
+                <td class="p-4 font-bold text-slate-900">
+                  <div class="text-xs text-indigo-600">Hughes (2005)</div>
+                  RAT
+                </td>
+                <td class="p-4 text-slate-600">Replacement, Amplification, Transformation</td>
+                <td class="p-4 text-slate-700">Focuses directly on cognitive shifts and procedural efficiency.</td>
+                <td class="p-4 text-slate-500">Lacks explicit, detailed mapping of student-directed agency and creation.</td>
+                <td class="p-4 italic font-medium">Personal reflection on classroom lesson pacing and workflow streamlining.</td>
+              </tr>
+              <!-- PICRAT -->
+              <tr class="hover:bg-slate-50 transition-colors" data-category="student">
+                <td class="p-4 font-bold text-slate-900">
+                  <div class="text-xs text-indigo-600">Kimmons et al. (2020)</div>
+                  PICRAT
+                </td>
+                <td class="p-4 text-slate-600">Student relationship (PIC) x Pedagogical influence (RAT)</td>
+                <td class="p-4 text-slate-700">Avoids simplistic linear hierarchies. Highlights creative production in English.</td>
+                <td class="p-4 text-slate-500">Two-axis system requires training to parse accurately in real-time settings.</td>
+                <td class="p-4 italic font-medium">Evaluating active productive skills (speaking, writing) vs receptive tasks.</td>
+              </tr>
+              <!-- Triple E -->
+              <tr class="hover:bg-slate-50 transition-colors" data-category="student">
+                <td class="p-4 font-bold text-slate-900">
+                  <div class="text-xs text-indigo-600">Kolb (2017)</div>
+                  Triple E
+                </td>
+                <td class="p-4 text-slate-600">Alignment of tech tools with curriculum learning goals</td>
+                <td class="p-4 text-slate-700">Combats superficial engagement. Emphasizes real-world extension (bridging boundaries).</td>
+                <td class="p-4 text-slate-500">Slightly less structural focus on specific digital skill scaffolding.</td>
+                <td class="p-4 italic font-medium">Vetting mobile apps, communicative language task planning.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-100 flex justify-between items-center">
+          <button onclick="switchTab('dynamic')" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all">
+            <i class="fa-solid fa-arrow-left"></i> Back to dynamic models
+          </button>
+          <button id="compare-next-btn" onclick="markStepComplete('compare'); switchTab('assessment');" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all">
+            Proceed to Self-Assessments <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB CONTENT: 4. SELF-ASSESSMENT ACTIVITIES -->
+    <section id="content-assessment" class="tab-content hidden space-y-6">
+      <!-- Welcome card for assessments -->
+      <div class="bg-gradient-to-br from-indigo-900 to-slate-950 text-white rounded-2xl p-6 md:p-8 shadow-md">
+        <h2 class="text-2xl font-bold serif-title">Lesson Evaluation Labs</h2>
+        <p class="text-indigo-200 mt-2 text-sm max-w-3xl">
+          Apply the technology integration frameworks to actual English as a Foreign Language classrooms. Complete both interactive exercises below to test your design competencies.
+        </p>
+      </div>
+
+      <!-- ACTIVITY 1: EFL LESSON REDESIGN LAB -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
+        <div class="flex items-start gap-4 border-b border-slate-100 pb-5">
+          <span class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center font-bold text-lg">A1</span>
+          <div>
+            <h3 class="text-lg font-bold text-slate-900">Activity 1: EFL Lesson Redesign Challenge</h3>
+            <p class="text-slate-500 text-xs md:text-sm">Redesign a passive grammar lesson using SAMR and PICRAT principles to unlock maximum learner agency.</p>
+          </div>
+        </div>
+
+        <!-- The Scenario -->
+        <div class="mt-6 bg-slate-50 border border-slate-200 rounded-xl p-5">
+          <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wide">Base EFL Lesson Plan:</h4>
+          <p class="text-sm text-slate-600 mt-2">
+            <strong>Target Structure:</strong> Describing travel using Past Simple vs Past Continuous. <br>
+            <strong>Standard Action:</strong> Students fill in blank spaces on a printed worksheet detailing standard narrative stories, then read the correct paragraphs aloud.
+          </p>
+        </div>
+
+        <!-- Interactive Steps Selectors -->
+        <div class="mt-8 space-y-4">
+          <h4 class="text-sm font-bold text-slate-800">Select the correct integration step description for each category:</h4>
+          
+          <!-- Augmentation Select -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Redesign Step 1: Augmentation Level (Enhancement)</label>
+            <select id="act1-aug" class="w-full rounded-lg border border-slate-200 p-2.5 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
+              <option value="">-- Select optimal scenario --</option>
+              <option value="wrong1">Students read the paper worksheet via flat PDF files on a laptop screen instead of paper.</option>
+              <option value="correct">Students complete the worksheet on an interactive learning platform that gives immediate corrective grammar feedback and hyperlinks words to digital dictionary definitions.</option>
+              <option value="wrong2">Students collaborate in cross-border groups to write interactive past-tense travel stories on an open wiki.</option>
+            </select>
+          </div>
+
+          <!-- Modification Select -->
+          <div class="pt-2">
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Redesign Step 2: Modification Level (Transformation)</label>
+            <select id="act1-mod" class="w-full rounded-lg border border-slate-200 p-2.5 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
+              <option value="">-- Select optimal scenario --</option>
+              <option value="wrong1">Students open Google Docs, type their past tense sentences out, and click "spellcheck" to self-correct.</option>
+              <option value="correct">Students draft Travel Log blog posts, embedding digital maps with location tags and self-recorded audio clips narration of their stories using targeted past tenses.</option>
+              <option value="wrong2">Students project a scanned worksheet on an interactive whiteboard and fill the blanks using electronic digital pens.</option>
+            </select>
+          </div>
+
+          <!-- Transforming / Creative Select -->
+          <div class="pt-2">
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Redesign Step 3: Transforming & Creative (PICRAT Target - CT)</label>
+            <select id="act1-ct" class="w-full rounded-lg border border-slate-200 p-2.5 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
+              <option value="">-- Select optimal scenario --</option>
+              <option value="correct">Students co-author dynamic multimedia travel brochures with peers in other countries, embedding student-produced podcasts interviewing foreign tourists.</option>
+              <option value="wrong1">Students play a gamified past-tense trivia quiz on Kahoot to see who answers correct syntax configurations fastest.</option>
+              <option value="wrong2">Students watch a short cartoon about tourist travel in London and write a five-sentence summary inside their paper journals.</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 flex items-center justify-between">
+          <div id="act1-feedback" class="hidden text-xs md:text-sm font-semibold"></div>
+          <button onclick="checkActivity1()" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs md:text-sm font-bold rounded-xl transition-all">
+            Verify Redesign Steps
+          </button>
+        </div>
+      </div>
+
+      <!-- ACTIVITY 2: MULTIPLE-CHOICE CASE SCENARIOS -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
+        <div class="flex items-start gap-4 border-b border-slate-100 pb-5">
+          <span class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-lg">A2</span>
+          <div>
+            <h3 class="text-lg font-bold text-slate-900">Activity 2: EFL Scenario Classification Test</h3>
+            <p class="text-slate-500 text-xs md:text-sm">Diagnose tech integration models based on short academic case studies from live language classrooms.</p>
+          </div>
+        </div>
+
+        <div class="mt-8 space-y-8">
+          <!-- Scenario 1 -->
+          <div class="border border-slate-100 rounded-xl p-5 bg-slate-50/50">
+            <span class="inline-block px-2.5 py-0.5 text-[10px] font-extrabold text-indigo-700 bg-indigo-100 rounded-md uppercase mb-2">Scenario 1</span>
+            <p class="text-sm text-slate-800 font-medium">
+              EFL teacher Sarah has her class practice relative clauses by editing Wikipedia stubs for local historical landmarks in English, adding descriptive structures, and citing local sources for external audiences. Which SAMR level is this?
+            </p>
+            <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2.5">
+              <label class="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
+                <input type="radio" name="scen1" value="S" class="accent-indigo-600">
+                <span class="text-xs font-semibold text-slate-700">Substitution</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
+                <input type="radio" name="scen1" value="A" class="accent-indigo-600">
+                <span class="text-xs font-semibold text-slate-700">Augmentation</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
+                <input type="radio" name="scen1" value="M" class="accent-indigo-600">
+                <span class="text-xs font-semibold text-slate-700">Modification</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
+                <input type="radio" name="scen1" value="R" class="accent-indigo-600">
+                <span class="text-xs font-semibold text-slate-700">Redefinition</span>
+              </label>
+            </div>
+            <div id="scen1-fb" class="hidden mt-3 p-3 text-xs bg-indigo-50 border-l-2 border-indigo-600 text-slate-700 rounded-lg"></div>
+          </div>
+
+          <!-- Scenario 2 -->
+          <div class="border border-slate-100 rounded-xl p-5 bg-slate-50/50">
+            <span class="inline-block px-2.5 py-0.5 text-[10px] font-extrabold text-indigo-700 bg-indigo-100 rounded-md uppercase mb-2">Scenario 2</span>
+            <p class="text-sm text-slate-800 font-medium">
+              Mr. Garcia's students read interactive digital novels in English, using linked dictionary lookups and highlighting vocabulary with color-coded tags. The baseline activity is reading, but the task is enhanced by immediate functional support. Which SAMR level matches this?
+            </p>
+            <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2.5">
+              <label class="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
+                <input type="radio" name="scen2" value="S" class="accent-indigo-600">
+                <span class="text-xs font-semibold text-slate-700">Substitution</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
+                <input type="radio" name="scen2" value="A" class="accent-indigo-600">
+                <span class="text-xs font-semibold text-slate-700">Augmentation</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
+                <input type="radio" name="scen2" value="M" class="accent-indigo-600">
+                <span class="text-xs font-semibold text-slate-700">Modification</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
+                <input type="radio" name="scen2" value="R" class="accent-indigo-600">
+                <span class="text-xs font-semibold text-slate-700">Redefinition</span>
+              </label>
+            </div>
+            <div id="scen2-fb" class="hidden mt-3 p-3 text-xs bg-indigo-50 border-l-2 border-indigo-600 text-slate-700 rounded-lg"></div>
+          </div>
+
+          <!-- Scenario 3 -->
+          <div class="border border-slate-100 rounded-xl p-5 bg-slate-50/50">
+            <span class="inline-block px-2.5 py-0.5 text-[10px] font-extrabold text-indigo-700 bg-indigo-100 rounded-md uppercase mb-2">Scenario 3</span>
+            <p class="text-sm text-slate-800 font-medium">
+              EFL students record short audio monologues on Flipgrid, detailing their weekend plans to get pronunciation feedback from their teacher. How is this categorized on the student-interaction axis (PIC) of the PICRAT model?
+            </p>
+            <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-2.5">
+              <label class="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
+                <input type="radio" name="scen3" value="P" class="accent-indigo-600">
+                <span class="text-xs font-semibold text-slate-700">Passive (P)</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
+                <input type="radio" name="scen3" value="I" class="accent-indigo-600">
+                <span class="text-xs font-semibold text-slate-700">Interactive (I)</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50">
+                <input type="radio" name="scen3" value="C" class="accent-indigo-600">
+                <span class="text-xs font-semibold text-slate-700">Creative (C)</span>
+              </label>
+            </div>
+            <div id="scen3-fb" class="hidden mt-3 p-3 text-xs bg-indigo-50 border-l-2 border-indigo-600 text-slate-700 rounded-lg"></div>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+          <div id="quiz-overall-score" class="text-sm font-bold text-slate-700"></div>
+          <button onclick="checkQuizActivity2()" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-sm transition-all">
+            Submit Test Answers
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-4 flex justify-between items-center">
+        <button onclick="switchTab('compare')" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all">
+          <i class="fa-solid fa-arrow-left"></i> Back to Comparisons
+        </button>
+        <button id="assessment-next-btn" onclick="markStepComplete('assessment'); switchTab('record');" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all">
+          Check Performance Record <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- TAB CONTENT: 5. PERFORMANCE RECORD & AUDITING TOOL -->
+    <section id="content-record" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Progress Checklists and Performance Summary -->
+        <div class="lg:col-span-5 space-y-6">
+          <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-900 serif-title">Completion Record</h2>
+            <p class="text-xs text-slate-500 mt-1">Verify that you have addressed each component of this professional training framework.</p>
+
+            <div class="mt-6 space-y-4">
+              <!-- Check 1 -->
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center" id="chk-ico-trigger">
+                    <i class="fa-solid fa-circle-question"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-800">Trigger Reflection</h4>
+                    <p class="text-[10px] text-slate-400">Schema activation commentary</p>
+                  </div>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase" id="chk-txt-trigger">Pending</span>
+              </div>
+
+              <!-- Check 2 -->
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center" id="chk-ico-dynamic">
+                    <i class="fa-solid fa-cube"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-800">Visual Model Review</h4>
+                    <p class="text-[10px] text-slate-400">Interpreting dynamic diagrams</p>
+                  </div>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase" id="chk-txt-dynamic">Pending</span>
+              </div>
+
+              <!-- Check 3 -->
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center" id="chk-ico-compare">
+                    <i class="fa-solid fa-table-list"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-800">Framework Matrix</h4>
+                    <p class="text-[10px] text-slate-400">Analytical comparative synthesis</p>
+                  </div>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase" id="chk-txt-compare">Pending</span>
+              </div>
+
+              <!-- Check 4 -->
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center" id="chk-ico-assessment">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-800">Design Assessments</h4>
+                    <p class="text-[10px] text-slate-400">Classrooms application checks</p>
+                  </div>
+                </div>
+                <span class="text-xs font-bold text-slate-400 uppercase" id="chk-txt-assessment">Pending</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Study Certificate -->
+          <div class="bg-indigo-900 text-white rounded-2xl p-6 shadow-md relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-800 rounded-full opacity-40"></div>
+            <h3 class="text-lg font-bold serif-title flex items-center gap-2 relative z-10">
+              <i class="fa-solid fa-award text-yellow-400"></i> Trainee Certificate
+            </h3>
+            <p class="text-indigo-200 text-xs mt-1 relative z-10">Enter your full name to configure a certified PDF reflection report detailing your completion.</p>
+            <div class="mt-4 relative z-10">
+              <input type="text" id="trainee-name" class="w-full text-slate-800 text-sm bg-white border border-indigo-700 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Trainee Name...">
+              <button onclick="generateCertificate()" class="w-full mt-3 px-4 py-2 bg-yellow-400 text-indigo-950 hover:bg-yellow-350 text-xs font-extrabold rounded-lg transition-all">
+                Download Study Report Certificate
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive Lesson Audit Tool -->
+        <div class="lg:col-span-7">
+          <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-900 serif-title">EFL Lesson Integration Auditor</h2>
+            <p class="text-slate-500 text-sm mt-1">Audit your own digital lesson designs to calculate your exact SAMR, PICRAT, and Triple E scores.</p>
+
+            <div class="mt-6 space-y-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Proposed Lesson / Target Topic</label>
+                <input type="text" id="audit-topic" class="w-full text-sm border border-slate-200 rounded-lg p-2.5 bg-slate-50 focus:bg-white outline-none" placeholder="e.g., Present Perfect for past experience narration...">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Target Language Skill</label>
+                <select id="audit-skill" class="w-full text-sm border border-slate-200 rounded-lg p-2.5 bg-slate-50 focus:bg-white outline-none">
+                  <option value="productive">Productive Focus: Speaking & Multimodal Output</option>
+                  <option value="collaborative">Collaborative Focus: Shared Interactive Writing</option>
+                  <option value="receptive">Receptive Focus: Vocabulary Drilling & Listening</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Describe Student Activity with Digital Tool</label>
+                <textarea id="audit-activity" rows="3" class="w-full text-sm border border-slate-200 rounded-lg p-2.5 bg-slate-50 focus:bg-white outline-none" placeholder="Explain what the EFL learners will do with the selected software/tool..."></textarea>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Which level on SAMR matches this?</label>
+                  <select id="audit-samr" class="w-full text-xs border border-slate-200 rounded-lg p-2 bg-slate-50 outline-none">
+                    <option value="S">Substitution (Direct tool substitute)</option>
+                    <option value="A">Augmentation (Functional improvement)</option>
+                    <option value="M">Modification (Significant task redesign)</option>
+                    <option value="R">Redefinition (Previously inconceivable tasks)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">Which PICRAT quadrant matches this?</label>
+                  <select id="audit-picrat" class="w-full text-xs border border-slate-200 rounded-lg p-2 bg-slate-50 outline-none">
+                    <option value="PR">PR (Passive / Replacing)</option>
+                    <option value="IA">IA (Interactive / Amplifying)</option>
+                    <option value="CT">CT (Creative / Transforming)</option>
+                    <option value="other">Other intermediary cell</option>
+                  </select>
+                </div>
+              </div>
+
+              <button onclick="runLessonAudit()" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-xl shadow-sm transition-all">
+                Audit and Record Lesson Plan
+              </button>
+
+              <div id="audit-results-card" class="hidden mt-6 p-5 border border-indigo-100 bg-indigo-50/50 rounded-xl">
+                <h4 class="text-sm font-bold text-indigo-900 uppercase tracking-wide flex items-center gap-2">
+                  <i class="fa-solid fa-chart-line"></i> Integration Performance Diagnostics:
+                </h4>
+                <div class="mt-3 space-y-2 text-xs md:text-sm text-slate-700" id="audit-results-content">
+                  <!-- Generated dynamically -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- CUSTOM ALERTS POPUP MODAL (Alternative to default alert) -->
+  <div id="alert-modal" class="hidden fixed inset-0 z-50 bg-slate-950/40 flex items-center justify-center p-4 backdrop-blur-xs">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-sm w-full p-6 animate-scaleIn">
+      <div id="alert-icon-wrapper" class="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl mx-auto mb-4">
+        <i class="fa-solid fa-circle-info" id="alert-icon"></i>
+      </div>
+      <h3 class="text-base font-bold text-slate-900 text-center" id="alert-title">Notification</h3>
+      <p class="text-xs text-slate-500 text-center mt-2 leading-relaxed" id="alert-msg">Information message details go here.</p>
+      <button onclick="closeAlert()" class="mt-5 w-full py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg transition-all">
+        Acknowledge
+      </button>
+    </div>
+  </div>
+
+  <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-400">
+      <p>EFL Technology Integration Self-Study Module. Designed for Preservice and Inservice Teacher Education programs.</p>
+      <p class="mt-1">Academic citations reference Mishra & Koehler (2006), Puentedura (2006), Hughes (2005), Kimmons (2020), and Kolb (2017).</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT FOR MODULE LOGIC & INTERACTIVITY -->
+  <script>
+    // State Tracking
+    const userProgress = {
+      trigger: false,
+      dynamic: false,
+      compare: false,
+      assessment: false,
+      record: false
+    };
+
+    let userAnswers = {
+      q1: '',
+      q2: '',
+      act1: { aug: false, mod: false, ct: false },
+      act2: { scen1: null, scen2: null, scen3: null }
+    };
+
+    // Tab Switching Function
+    function switchTab(tabId) {
+      // Hide all content blocks
+      document.querySelectorAll('.tab-content').forEach(block => block.classList.add('hidden'));
+      
+      // Remove styling from navigation buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('text-indigo-600', 'bg-indigo-50');
+        btn.classList.add('text-slate-600', 'hover:text-indigo-600', 'hover:bg-slate-50');
+      });
+
+      // Show selected tab content
+      document.getElementById(`content-${tabId}`).classList.remove('hidden');
+
+      // Style active button
+      const activeBtn = document.getElementById(`tab-${tabId}`);
+      activeBtn.classList.remove('text-slate-600', 'hover:text-indigo-600', 'hover:bg-slate-50');
+      activeBtn.classList.add('text-indigo-600', 'bg-indigo-50');
+      
+      // Auto-trigger completion of compare step when opened
+      if (tabId === 'compare' && !userProgress.compare) {
+        markStepComplete('compare');
+      }
+    }
+
+    // Custom Alert Mechanism
+    function showAlert(title, text, style = 'success') {
+      const modal = document.getElementById('alert-modal');
+      const wrapper = document.getElementById('alert-icon-wrapper');
+      const icon = document.getElementById('alert-icon');
+      const titleEl = document.getElementById('alert-title');
+      const msgEl = document.getElementById('alert-msg');
+
+      titleEl.innerText = title;
+      msgEl.innerText = text;
+
+      if (style === 'success') {
+        wrapper.className = "w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mx-auto mb-4";
+        icon.className = "fa-solid fa-circle-check";
+      } else if (style === 'warning') {
+        wrapper.className = "w-12 h-12 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-xl mx-auto mb-4";
+        icon.className = "fa-solid fa-triangle-exclamation";
+      } else {
+        wrapper.className = "w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xl mx-auto mb-4";
+        icon.className = "fa-solid fa-circle-info";
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeAlert() {
+      document.getElementById('alert-modal').classList.add('hidden');
+    }
+
+    // Trigger Reflection Validation
+    function validateTrigger(num) {
+      const resp = document.getElementById(`q${num}-response`).value.trim();
+      const countLabel = document.getElementById(`q${num}-char-count`);
+      const btn = document.getElementById(`q${num}-feedback-btn`);
+
+      countLabel.innerText = `${resp.length} characters`;
+
+      if (resp.length >= 20) {
+        btn.disabled = false;
+        btn.className = "px-3 py-1.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-semibold text-xs rounded-lg transition-all cursor-pointer";
+        userAnswers[`q${num}`] = resp;
+      } else {
+        btn.disabled = true;
+        btn.className = "px-3 py-1.5 bg-slate-200 text-slate-400 font-semibold text-xs rounded-lg transition-all cursor-not-allowed";
+      }
+    }
+
+    function toggleTriggerFeedback(num) {
+      const feedback = document.getElementById(`q${num}-feedback`);
+      const btn = document.getElementById(`q${num}-feedback-btn`);
+      
+      if (feedback.classList.contains('hidden')) {
+        feedback.classList.remove('hidden');
+        btn.innerHTML = `Hide Expert Perspectives <i class="fa-solid fa-chevron-up ml-1"></i>`;
+      } else {
+        feedback.classList.add('hidden');
+        btn.innerHTML = `Explore EFL Expert Perspectives <i class="fa-solid fa-chevron-down ml-1"></i>`;
+      }
+    }
+
+    // Progress Mechanics
+    function markStepComplete(step) {
+      userProgress[step] = true;
+      updateProgressBar();
+    }
+
+    function updateProgressBar() {
+      let count = 0;
+      for (let key in userProgress) {
+        if (userProgress[key]) count++;
+      }
+
+      const pct = Math.round((count / 5) * 100);
+      document.getElementById('overall-progress-circle').innerText = `${pct}%`;
+      document.getElementById('progress-summary').innerText = `${count} of 5 Steps Completed`;
+
+      // Update checklists on Section 5
+      const steps = ['trigger', 'dynamic', 'compare', 'assessment'];
+      steps.forEach(st => {
+        const icon = document.getElementById(`chk-ico-${st}`);
+        const text = document.getElementById(`chk-txt-${st}`);
+        
+        if (userProgress[st]) {
+          icon.className = "w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm";
+          icon.innerHTML = `<i class="fa-solid fa-check"></i>`;
+          text.className = "text-xs font-bold text-emerald-600 uppercase";
+          text.innerText = "Completed";
+        }
+      });
+    }
+
+    // Switch Model Dynamic Explorers
+    function switchModel(model) {
+      document.querySelectorAll('.model-view').forEach(view => view.classList.add('hidden'));
+      document.querySelectorAll('.model-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-slate-900', 'shadow-sm');
+        btn.classList.add('text-slate-600', 'hover:text-slate-900');
+      });
+
+      document.getElementById(`model-content-${model}`).classList.remove('hidden');
+      
+      const activeBtn = document.getElementById(`btn-m-${model}`);
+      activeBtn.classList.remove('text-slate-600', 'hover:text-slate-900');
+      activeBtn.classList.add('bg-white', 'text-slate-900', 'shadow-sm');
+
+      // Auto-complete step 2 when they look at different models
+      if (model !== 'tpack') {
+        markStepComplete('dynamic');
+      }
+    }
+
+    // Interactive TPACK Customizations
+    const tpackData = {
+      TK: {
+        title: "Technological Knowledge (TK)",
+        desc: "Knowledge of basic and advanced technologies. In an EFL classroom, this encompasses mastery over interactive boards, speech recognition software, digital corpora, podcast platforms, and synchronous writing tools.",
+        scenario: "<strong>TK Component:</strong> Understanding how to navigate, manipulate, and modify the parameters of a dynamic language learning application or a virtual collaborative canvas."
+      },
+      PK: {
+        title: "Pedagogical Knowledge (PK)",
+        desc: "Deep knowledge about educational practices, methodologies, classroom management, and formative assessments. In EFL, this emphasizes communicative approach frameworks and collaborative task scaffolding.",
+        scenario: "<strong>PK Component:</strong> Structuring student groups, setting up peer peer reviews, and using diagnostic methods to scaffold English communicative competence."
+      },
+      CK: {
+        title: "Content Knowledge (CK)",
+        desc: "Knowledge of subject matter. For EFL, this refers to English language structure, lexics, syntax patterns, register parameters, socio-cultural pragmatics, and standard genre conventions.",
+        scenario: "<strong>CK Component:</strong> Correctly organizing target lessons on conditional sentences, academic essay organization, or semantic sets for tourism discourse."
+      },
+      TPK: {
+        title: "Technological Pedagogical Knowledge (TPK)",
+        desc: "Understanding how teaching configurations shift when specific technological interfaces are utilized. It guides the setup of digital collaborative writing or managing virtual speech interactions.",
+        scenario: "<strong>TPK Component:</strong> Leveraging dynamic cloud document folders to run instant peer evaluation activities and keep students structurally aligned."
+      },
+      TCK: {
+        title: "Technological Content Knowledge (TCK)",
+        desc: "Understanding the relationship between content structures and technology. In EFL, this involves how English language resources are analyzed and processed via digital corpora or phonemic feedback tools.",
+        scenario: "<strong>TCK Component:</strong> Utilizing advanced concordancing systems that search massive corpuses of natural English speech to help students discover collocations."
+      },
+      PCK: {
+        title: "Pedagogical Content Knowledge (PCK)",
+        desc: "The core specialized teaching domain of Shulman's framework. Represents the classic capacity to render English structure and usage accessible using target communicative pedagogy.",
+        scenario: "<strong>PCK Component:</strong> Selecting communicative grammar games or situational context-rich dialogues instead of dry translation to explain syntax patterns."
+      },
+      TPACK: {
+        title: "Technological Pedagogical Content Knowledge",
+        desc: "The integration target. Employs appropriate technology to support tailored language tasks. It avoids superficial tech usage, focusing instead on optimizing the communicative scaffolding of the target language content.",
+        scenario: "<strong>TPACK Component:</strong> Using an interactive collaborative whiteboard tool (TK) to execute a Task-Based Writing project (PK) focused on helping students build descriptive essay components and semantic collocations (CK)."
+      }
+    };
+
+    function selectTpackDomain(domain) {
+      const data = tpackData[domain];
+      const detailsCard = document.getElementById('tpack-details');
+      
+      // Update details card dynamically
+      document.getElementById('tpack-badge').innerText = domain;
+      document.getElementById('tpack-title').innerText = data.title;
+      document.getElementById('tpack-desc').innerText = data.desc;
+      document.getElementById('tpack-scenario').innerHTML = data.scenario;
+      
+      // Visual feedback: brief color flash
+      detailsCard.classList.remove('bg-slate-50', 'border-slate-200');
+      detailsCard.classList.add('bg-indigo-50/50', 'border-indigo-200');
+      setTimeout(() => {
+        detailsCard.classList.remove('bg-indigo-50/50', 'border-indigo-200');
+        detailsCard.classList.add('bg-slate-50', 'border-slate-200');
+      }, 500);
+    }
+
+    // SAMR Ladder Interactive Details
+    const samrData = {
+      S: {
+        title: "Substitution (Enhancement Category)",
+        desc: "Computer technology performs the exact same task as traditional paper-based methods, introducing no changes to actual functional design or cognitive load.",
+        scenario: "<strong>EFL Reading Task:</strong> Instead of holding printed text journals, language learners read travel narratives off static PDF documents displayed on tablet screens.",
+        color: "bg-blue-100 border-blue-200 text-blue-900"
+      },
+      A: {
+        title: "Augmentation (Enhancement Category)",
+        desc: "Technology acts as a direct substitute for conventional tools, but adds essential functional improvements that streamline tasks and optimize student action.",
+        scenario: "<strong>EFL Reading Task:</strong> Learners read the digital travel story and use embedded hyperlinked dictionaries, instant pronunciation lookups, and built-in text-to-speech to support comprehension.",
+        color: "bg-emerald-100 border-emerald-200 text-emerald-900"
+      },
+      M: {
+        title: "Modification (Transformation Category)",
+        desc: "The core educational task undergoes significant redesign, introducing collaborative and multimodal parameters to restructure the classroom flow.",
+        scenario: "<strong>EFL Writing Redesign:</strong> Students construct travel log blogs, integrating dynamic interactive map paths, voice clips detailing their plans, and peer commenting sections.",
+        color: "bg-orange-100 border-orange-200 text-orange-900"
+      },
+      R: {
+        title: "Redefinition (Transformation Category)",
+        desc: "Technology allows for the formulation of entirely new instructional opportunities, opening up international boundaries and communicative collaboration.",
+        scenario: "<strong>EFL Communicative Expansion:</strong> Students co-write digital books with foreign partner schools, conducting live video discussions and digital revision loops to co-publish for authentic international audiences.",
+        color: "bg-red-100 border-red-200 text-red-900"
+      }
+    };
+
+    function selectSamrLevel(lvl) {
+      const data = samrData[lvl];
+      const card = document.getElementById('samr-details');
+      
+      // Update active level styling on left
+      document.querySelectorAll('.samr-rung').forEach(btn => {
+        btn.classList.remove('border-indigo-500', 'ring-2', 'ring-indigo-200');
+      });
+      document.getElementById(`btn-samr-${lvl}`).classList.add('border-indigo-500', 'ring-2', 'ring-indigo-200');
+
+      // Update SAMR Details
+      document.getElementById('samr-cat').className = `text-xs uppercase tracking-widest font-extrabold px-2.5 py-0.5 rounded-md ${data.color}`;
+      document.getElementById('samr-cat').innerText = lvl === 'S' || lvl === 'A' ? "Enhancement" : "Transformation";
+      document.getElementById('samr-title').innerText = data.title;
+      document.getElementById('samr-desc').innerText = data.desc;
+      document.getElementById('samr-scenario').innerHTML = data.scenario;
+    }
+
+    // PICRAT Cell Interactive Customizations
+    const picratData = {
+      PR: { title: "Passive & Replacing", desc: "Traditional instructions are directly substituted. Student learning actions are entirely receptive.", scenario: "Students watch a pre-recorded grammar video introducing the Past Simple instead of listening to a live teacher's lecture." },
+      IR: { title: "Interactive & Replacing", desc: "Direct technological replacement of classic materials, but adds basic tactile control options.", scenario: "Learners click through digital textbook vocab pages on laptops instead of flipping physical pages." },
+      CR: { title: "Creative & Replacing", desc: "Students construct an English artifact, but the technological task mirrors old mechanical output.", scenario: "Students type basic grammar vocabulary definitions verbatim onto an electronic notepad template." },
+      PA: { title: "Passive & Amplifying", desc: "No student-driven technological creation, but the functional capacity of input elements is enhanced.", scenario: "Students watch interactive online English stories with automated smart transcripts highlighting key vocabulary." },
+      IA: { title: "Interactive & Amplifying", desc: "Active manipulation of interactive apps. Exercises provide adaptive correction pathways.", scenario: "Students complete communicative grammar tasks inside self-paced adaptive programs with corrective cues." },
+      CA: { title: "Creative & Amplifying", desc: "Students collaborate to produce digital work, enhancing traditional paper outcomes.", scenario: "Students build descriptive vocabulary minds-maps collaboratively on interactive boards." },
+      PT: { title: "Passive & Transforming", desc: "Receptive language input, but set in an entirely transformed immersive setting.", scenario: "Learners attend immersive VR spaces, observing language exchanges with simulated interactions." },
+      IT: { title: "Interactive & Transforming", desc: "High engagement dialogue loops using complex systems to simulate native communications.", scenario: "Students complete voice-guided travel tasks interacting with AI conversational interfaces." },
+      CT: { title: "Creative & Transforming (Ideal Target)", desc: "Maximum learner output and production. Tech completely restructures target pedagogy.", scenario: "Learners formulate and record travel podcasts with actual NGOs, co-authoring narratives published globally." }
+    };
+
+    function selectPicratCell(cell) {
+      const data = picratData[cell];
+      
+      // Reset active styles on grid
+      document.querySelectorAll('.picrat-cell').forEach(btn => {
+        btn.classList.remove('ring-4', 'ring-indigo-400', 'scale-105');
+      });
+      document.getElementById(`picrat-${cell}`).classList.add('ring-4', 'ring-indigo-400', 'scale-105');
+
+      // Update panel details
+      document.getElementById('picrat-coords').innerText = `Cell: ${cell}`;
+      document.getElementById('picrat-title').innerText = data.title;
+      document.getElementById('picrat-desc').innerText = data.desc;
+      document.getElementById('picrat-scenario').innerHTML = data.scenario;
+    }
+
+    // Triple E Content Selection
+    const tripleEData = {
+      engage: {
+        title: "Engage in Learning Goals",
+        desc: "Does the digital tool prevent off-task distractions? Does it prompt active focus on English communicative outcomes over simple button clicking?",
+        scenario: "<strong>EFL Vocabulary Match:</strong> Students negotiate meaning aloud in pairs using online interactive cards to construct semantic category stacks, maintaining focal alignment."
+      },
+      enhance: {
+        title: "Enhance Learning Goals",
+        desc: "Does the tech make it easier to understand, scaffold, or connect English concepts? Does it enable students to demonstrate their skills uniquely?",
+        scenario: "<strong>Formulating Essay Outlines:</strong> Students use dynamic visual outlining systems to scaffold and organize ideas before writing, facilitating easier paragraph grouping."
+      },
+      extend: {
+        title: "Extend Learning Goals",
+        desc: "Does the technology bridge classroom activities with real-world experiences? Does it enable continued, self-paced learning beyond standard hours?",
+        scenario: "<strong>Authentic Interactions:</strong> Using secure online message boards to hold cross-border conversations with English-speaking schools about joint projects."
+      }
+    };
+
+    function selectTripleE(pillar) {
+      const data = tripleEData[pillar];
+      
+      // Active Styles on cards
+      document.querySelectorAll('.eee-card').forEach(card => {
+        card.className = "eee-card w-full text-left p-4 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-all";
+        card.querySelector('h4').className = "font-bold text-slate-800 flex items-center gap-2";
+        card.querySelector('p').className = "text-xs text-slate-500 mt-1";
+      });
+
+      const activeCard = document.getElementById(`btn-eee-${pillar}`);
+      activeCard.className = "eee-card w-full text-left p-4 bg-indigo-50 border-2 border-indigo-200 rounded-xl hover:bg-indigo-100 transition-all";
+      activeCard.querySelector('h4').className = "font-bold text-indigo-900 flex items-center gap-2";
+      activeCard.querySelector('p').className = "text-xs text-indigo-700 mt-1";
+
+      // Update Panel Details
+      document.getElementById('eee-badge').innerText = pillar.charAt(0).toUpperCase() + pillar.slice(1);
+      document.getElementById('eee-title').innerText = data.title;
+      document.getElementById('eee-desc').innerText = data.desc;
+      document.getElementById('eee-scenario').innerHTML = data.scenario;
+    }
+
+    // Comparative Table Filters
+    function filterCompareTable(cat) {
+      // Style buttons
+      document.querySelectorAll('.compare-filter-btn').forEach(btn => {
+        btn.className = "compare-filter-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200";
+      });
+      document.getElementById(`compare-btn-${cat}`).className = "compare-filter-btn px-4 py-1.5 text-xs font-bold rounded-lg bg-indigo-600 text-white shadow-sm";
+
+      // Toggle visible rows
+      const tbody = document.getElementById('compare-table-body');
+      const rows = tbody.querySelectorAll('tr');
+
+      rows.forEach(row => {
+        if (cat === 'all') {
+          row.classList.remove('hidden');
+        } else {
+          const rowCat = row.getAttribute('data-category');
+          if (rowCat === cat) {
+            row.classList.remove('hidden');
+          } else {
+            row.classList.add('hidden');
+          }
+        }
+      });
+    }
+
+    // Activity 1 Validation Check
+    function checkActivity1() {
+      const aug = document.getElementById('act1-aug').value;
+      const mod = document.getElementById('act1-mod').value;
+      const ct = document.getElementById('act1-ct').value;
+      const feedback = document.getElementById('act1-feedback');
+
+      if (!aug || !mod || !ct) {
+        showAlert("Incomplete Lab", "Please select an answer for all three levels before verifying.", "warning");
+        return;
+      }
+
+      feedback.classList.remove('hidden');
+
+      if (aug === 'correct' && mod === 'correct' && ct === 'correct') {
+        feedback.className = "text-xs md:text-sm font-semibold text-emerald-600";
+        feedback.innerHTML = `<i class="fa-solid fa-circle-check"></i> Outstanding! You correctly mapped all three technology-enabled redesign scenarios.`;
+        userAnswers.act1 = { aug: true, mod: true, ct: true };
+        showAlert("Congratulations!", "Outstanding! You mapped the scaffolding correctly under both SAMR and PICRAT systems.", "success");
+      } else {
+        feedback.className = "text-xs md:text-sm font-semibold text-red-600";
+        feedback.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Some configurations are suboptimal. Hint: Look for solutions prioritizing communication & active collaboration.`;
+        userAnswers.act1 = { aug: false, mod: false, ct: false };
+        showAlert("Review Scaffold Steps", "Some selected transitions do not maximize interactive student creation. Try again!", "warning");
+      }
+    }
+
+    // Activity 2 Quiz Validation Check
+    function checkQuizActivity2() {
+      const q1Ans = document.querySelector('input[name="scen1"]:checked');
+      const q2Ans = document.querySelector('input[name="scen2"]:checked');
+      const q3Ans = document.querySelector('input[name="scen3"]:checked');
+
+      if (!q1Ans || !q2Ans || !q3Ans) {
+        showAlert("Incomplete Quiz", "Please select an answer for all three scenario cases.", "warning");
+        return;
+      }
+
+      let score = 0;
+
+      // Q1 Check (Redefinition)
+      const q1Val = q1Ans.value;
+      const fb1 = document.getElementById('scen1-fb');
+      fb1.classList.remove('hidden');
+      if (q1Val === 'R') {
+        score++;
+        fb1.innerHTML = `<strong class="text-emerald-800">Correct!</strong> Wikipedia-editing offers authentic communicative objectives for external global audiences, redefining traditional classroom essay boundaries (Redefinition).`;
+      } else {
+        fb1.innerHTML = `<strong class="text-red-800">Suboptimal.</strong> Expected: <strong>Redefinition</strong>. Real-world stub contribution represents task structures completely inconceivable without collaborative web connectivity.`;
+      }
+
+      // Q2 Check (Augmentation)
+      const q2Val = q2Ans.value;
+      const fb2 = document.getElementById('scen2-fb');
+      fb2.classList.remove('hidden');
+      if (q2Val === 'A') {
+        score++;
+        fb2.innerHTML = `<strong class="text-emerald-800">Correct!</strong> Built-in vocabulary hyperlinking offers immediate, functional improvements supporting reading tasks (Augmentation).`;
+      } else {
+        fb2.innerHTML = `<strong class="text-red-800">Suboptimal.</strong> Expected: <strong>Augmentation</strong>. Direct substitution (reading text) is maintained, but with real functional enhancements (instant lookups).`;
+      }
+
+      // Q3 Check (Creative)
+      const q3Val = q3Ans.value;
+      const fb3 = document.getElementById('scen3-fb');
+      fb3.classList.remove('hidden');
+      if (q3Val === 'C') {
+        score++;
+        fb3.innerHTML = `<strong class="text-emerald-800">Correct!</strong> Producing self-made audio clips constitutes student design and creation of dynamic language artifacts (Creative).`;
+      } else {
+        fb3.innerHTML = `<strong class="text-red-800">Suboptimal.</strong> Expected: <strong>Creative</strong>. Learners build and record personalized audio expressions in English, transitioning them beyond passive consumption (P) or basic manipulation (I).`;
+      }
+
+      // Record score
+      userAnswers.act2 = { scen1: q1Val, scen2: q2Val, scen3: q3Val, score: score };
+      
+      const summaryScore = document.getElementById('quiz-overall-score');
+      summaryScore.innerText = `Final Test Score: ${score} of 3 Correct.`;
+      
+      if (score === 3) {
+        summaryScore.className = "text-sm font-bold text-emerald-600";
+        showAlert("Perfect Score!", "Awesome! You demonstrated masterful academic diagnosis of EFL technology integration.", "success");
+        markStepComplete('assessment');
+      } else {
+        summaryScore.className = "text-sm font-bold text-amber-600";
+        showAlert("Reflect & Try Again", `You scored ${score}/3. Review the explanations to refine your pedagogical diagnosis!`, "warning");
+      }
+    }
+
+    // Dynamic Lesson Audit Tool Logic
+    function runLessonAudit() {
+      const topic = document.getElementById('audit-topic').value.trim();
+      const activity = document.getElementById('audit-activity').value.trim();
+      const skill = document.getElementById('audit-skill').value;
+      const samr = document.getElementById('audit-samr').value;
+      const picrat = document.getElementById('audit-picrat').value;
+
+      if (!topic || !activity) {
+        showAlert("Missing Specifications", "Please specify your target lesson topic and describe the digital student activities.", "warning");
+        return;
+      }
+
+      const resultsCard = document.getElementById('audit-results-card');
+      const resultsContent = document.getElementById('audit-results-content');
+      resultsCard.classList.remove('hidden');
+
+      // Diagnostic generation
+      let samrFeedback = "";
+      if (samr === 'S' || samr === 'A') {
+        samrFeedback = `<strong>Enhancement Level:</strong> Your plan facilitates functional workflows, but does not restructure classroom dynamics. Try moving to <em>Modification</em> or <em>Redefinition</em> by including peer publication elements or real-world audience feedback loops.`;
+      } else {
+        samrFeedback = `<strong>Transformation Level:</strong> Fantastic! Redesigning travel tasks beyond traditional physical boundaries actively scaffolds linguistic production and increases student ownership over target communicative goals.`;
+      }
+
+      let picratFeedback = "";
+      if (picrat === 'PR' || picrat === 'IA') {
+        picratFeedback = `<strong>Passive/Interactive Phase:</strong> The setup features technology interaction, but learners are consuming language constructs or doing closed exercises. Integrate creator roles (e.g., student-curated recordings or wikis) to push into <em>Creative</em> quadrants.`;
+      } else {
+        picratFeedback = `<strong>Creative Phase (Ideal Target):</strong> Excellent language engagement. Having students generate multimodal communicative outputs forces functional grammar synthesis and lexical contextualization.`;
+      }
+
+      let generalEflAdvice = "";
+      if (skill === 'receptive') {
+        generalEflAdvice = `<strong>EFL Skill Tip:</strong> Receptive drilling exercises benefit from systematic spelling and audio feedback, but ensure they transition quickly into active, collaborative language production tasks.`;
+      } else {
+        generalEflAdvice = `<strong>EFL Skill Tip:</strong> Your productive approach activates linguistic competencies. Provide sufficient lexical scaffolding templates to help weaker learners thrive in open creative environments.`;
+      }
+
+      resultsContent.innerHTML = `
+        <p class="mb-2"><strong>Lesson Evaluated:</strong> "${topic}"</p>
+        <p class="mb-2">${samrFeedback}</p>
+        <p class="mb-2">${picratFeedback}</p>
+        <p class="mt-3 text-xs text-indigo-700 italic border-t border-indigo-100 pt-2">${generalEflAdvice}</p>
+      `;
+
+      showAlert("Plan Audited", "Diagnostic report successfully compiled inside your results card. Performance recorded!", "success");
+      
+      // Auto-complete step 5
+      userProgress.record = true;
+      updateProgressBar();
+    }
+
+    // Trainee Certificate PDF generator simulation
+    function generateCertificate() {
+      const name = document.getElementById('trainee-name').value.trim();
+      
+      if (!name) {
+        showAlert("Name Required", "Please enter your full name to generate your printable study completion record.", "warning");
+        return;
+      }
+
+      const quizScore = userAnswers.act2.score || 0;
+      const totalPct = Math.round(((quizScore + (userAnswers.act1.aug ? 3 : 0)) / 6) * 100);
+
+      const win = window.open("", "_blank");
+      win.document.write(`
+        <html>
+        <head>
+          <title>Completion Certificate - EFL Technology Integration</title>
+          <script src="https://cdn.tailwindcss.com"><\/script>
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,450&family=Inter:wght@400;600;700&display=swap');
+            body { font-family: 'Inter', sans-serif; }
+            .serif { font-family: 'Playfair Display', serif; }
+          </style>
+        </head>
+        <body class="bg-slate-100 py-12 px-6 flex items-center justify-center min-h-screen">
+          <div class="max-w-2xl w-full bg-white border-8 border-indigo-900 p-8 md:p-12 shadow-2xl relative rounded-xl">
+            <!-- Frame corners -->
+            <div class="absolute top-2 left-2 right-2 bottom-2 border border-indigo-100 pointer-events-none rounded-lg"></div>
+            
+            <div class="text-center space-y-4">
+              <span class="text-xs uppercase tracking-widest text-indigo-600 font-extrabold">EFL Teacher Education Academy</span>
+              <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-950 serif tracking-wide">Certificate of Completion</h1>
+              
+              <div class="py-6">
+                <p class="text-sm text-slate-500 italic">This document certifies that</p>
+                <h2 class="text-2xl font-bold text-slate-900 border-b border-indigo-200 inline-block px-8 py-1 mt-2 serif">${name}</h2>
+              </div>
+              
+              <p class="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
+                has successfully completed the interactive study module and assessed target knowledge of 
+                <strong>Educational Technology Integration Models (TPACK, SAMR, RAT, PICRAT, TIM, Triple E)</strong> 
+                applied specifically to Communicative Language Teaching (CLT) contexts.
+              </p>
+              
+              <div class="grid grid-cols-2 gap-4 border-t border-slate-100 pt-6 mt-8">
+                <div class="text-left">
+                  <span class="text-[10px] text-slate-400 uppercase font-bold block">Assessed Score</span>
+                  <span class="text-sm font-bold text-indigo-700">Self-Assessment Grade: ${totalPct}%</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-slate-400 uppercase font-bold block">Certified Date</span>
+                  <span class="text-sm font-bold text-slate-700">${new Date().toLocaleDateString()}</span>
+                </div>
+              </div>
+
+              <div class="pt-8">
+                <button onclick="window.print()" class="px-5 py-2.5 bg-indigo-950 text-white font-bold text-xs rounded-lg hover:bg-indigo-900 transition-all shadow-md">
+                  Print Certificate / Save as PDF
+                </button>
+              </div>
+            </div>
+          </div>
+        </body>
+        </html>
+      `);
+      win.document.close();
+    }
+
+    // Initialize Page State
+    window.onload = function() {
+      // Set initial styles for Venn diagram highlights
+      selectTpackDomain('TPACK');
+      selectSamrLevel('R');
+      selectPicratCell('CT');
+      selectTripleE('engage');
+    }
+  </script>
+</body>
+</html>

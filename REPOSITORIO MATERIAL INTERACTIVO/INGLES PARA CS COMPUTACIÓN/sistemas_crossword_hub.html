@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Systems Vocabulary Crossword Arena</title>
+    <!-- Tailwind CSS para el diseño estético premium -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome para iconos de la interfaz -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            --cell-size: 2.2rem;
+        }
+        @media (min-width: 768px) {
+            body {
+                --cell-size: 2.6rem;
+            }
+        }
+        /* Ajustar el tamaño de la celda de forma dinámica */
+        .crossword-cell-wrapper {
+            width: var(--cell-size);
+            height: var(--cell-size);
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        .cell-transition {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .correct-animate {
+            animation: popSuccess 0.4s ease-out forwards;
+        }
+        @keyframes popSuccess {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+        /* Barra de scroll personalizada elegante */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.3);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.6);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Encabezado principal -->
+    <header class="bg-slate-800 border-b border-slate-700 py-4 px-6 shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 p-2.5 rounded-xl shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-graduation-cap text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                        Systems Crossword Hub
+                    </h1>
+                    <p class="text-xs text-slate-400">Plataforma lúdica de aprendizaje técnico en computación y desarrollo</p>
+                </div>
+            </div>
+
+            <!-- Panel de acciones de control superior -->
+            <div class="flex flex-wrap items-center gap-3">
+                <button onclick="downloadHTML()" class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-4 py-2 rounded-lg text-sm transition cell-transition shadow-lg shadow-emerald-900/20">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Descargar Todo (HTML)</span>
+                </button>
+                <button onclick="toggleDarkMode()" id="themeBtn" class="bg-slate-700 hover:bg-slate-600 p-2.5 rounded-lg text-slate-300 transition" title="Cambiar Tema">
+                    <i class="fa-solid fa-sun"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Selector de Niveles -->
+    <div class="bg-slate-850 border-b border-slate-800 py-4 px-6">
+        <div class="max-w-7xl mx-auto">
+            <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Selecciona el nivel de complejidad:</span>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <!-- Nivel 1 -->
+                <button onclick="switchLevel(1)" id="btn-level-1" class="flex items-center justify-between p-3.5 rounded-xl border text-left transition duration-200 bg-slate-850 border-slate-700 hover:bg-slate-800">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold flex items-center justify-center">1</span>
+                        <div>
+                            <span class="block text-sm font-bold text-white">Nivel 1: Fundamentos</span>
+                            <span class="text-xs text-slate-400">10 Palabras clave de sistemas</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-500 text-sm"></i>
+                </button>
+
+                <!-- Nivel 2 -->
+                <button onclick="switchLevel(2)" id="btn-level-2" class="flex items-center justify-between p-3.5 rounded-xl border text-left transition duration-200 bg-indigo-600/10 border-indigo-500/40 shadow-inner">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-600 border border-indigo-500 text-white font-bold flex items-center justify-center">2</span>
+                        <div>
+                            <span class="block text-sm font-bold text-white">Nivel 2: Práctica Profesional</span>
+                            <span class="text-xs text-indigo-300">20 Palabras de la industria real</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-play text-indigo-400 text-xs"></i>
+                </button>
+
+                <!-- Nivel 3 -->
+                <button onclick="switchLevel(3)" id="btn-level-3" class="flex items-center justify-between p-3.5 rounded-xl border text-left transition duration-200 bg-slate-850 border-slate-700 hover:bg-slate-800">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold flex items-center justify-center">3</span>
+                        <div>
+                            <span class="block text-sm font-bold text-white">Nivel 3: Teoría Avanzada</span>
+                            <span class="text-xs text-slate-400">20 Palabras de ciencias de la computación</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-slate-500 text-sm"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barra de Estado de juego en tiempo real -->
+    <div class="bg-slate-900 border-b border-slate-800 py-3 px-6">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4 text-sm">
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <span class="text-slate-400">Progreso del Nivel:</span>
+                    <span id="progressPercent" class="font-bold text-indigo-400">0%</span>
+                    <div class="w-24 bg-slate-700 h-2 rounded-full overflow-hidden hidden sm:block">
+                        <div id="progressBar" class="bg-indigo-500 h-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-slate-400">Resueltas:</span>
+                    <span id="solvedCount" class="font-bold text-emerald-400">0 / 20</span>
+                </div>
+            </div>
+
+            <!-- Botones auxiliares de rejilla y tiempo -->
+            <div class="flex items-center gap-4 flex-wrap">
+                <!-- Controles de Zoom -->
+                <div class="flex items-center bg-slate-800 rounded-lg border border-slate-700 p-1">
+                    <button onclick="changeZoom(-0.15)" class="hover:bg-slate-700 p-1.5 rounded text-slate-300 text-xs" title="Alejar Rejilla">
+                        <i class="fa-solid fa-magnifying-glass-minus"></i>
+                    </button>
+                    <span class="px-2 text-xs font-mono font-semibold" id="zoomVal">100%</span>
+                    <button onclick="changeZoom(0.15)" class="hover:bg-slate-700 p-1.5 rounded text-slate-300 text-xs" title="Acercar Rejilla">
+                        <i class="fa-solid fa-magnifying-glass-plus"></i>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300 font-mono">
+                    <i class="fa-regular fa-clock text-indigo-400"></i>
+                    <span id="timer">00:00</span>
+                </div>
+                
+                <button onclick="resetCurrentGame()" class="text-slate-400 hover:text-white transition flex items-center gap-1">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>Reiniciar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor Principal -->
+    <main class="flex-grow max-w-7xl mx-auto w-full p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Tablero del Crucigrama (Izquierda) -->
+        <section class="lg:col-span-7 bg-slate-800/40 border border-slate-700/60 p-4 md:p-6 rounded-2xl flex flex-col justify-between shadow-sm relative overflow-hidden">
+            <div class="absolute top-4 right-4 text-xs text-slate-500 hidden md:block">
+                Usa las flechas <i class="fa-solid fa-arrows-up-down-left-right"></i> para navegar por la rejilla
+            </div>
+            
+            <h2 class="text-lg font-semibold text-slate-300 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-border-all text-indigo-500"></i> 
+                Tablero de Juego: <span id="boardLevelTitle" class="text-indigo-400">Nivel 2</span>
+            </h2>
+
+            <!-- Contenedor con scroll para matrices grandes -->
+            <div class="flex justify-center items-center py-4 overflow-auto max-h-[550px] border border-slate-800/80 rounded-xl bg-slate-950/20 p-2">
+                <!-- Grid dinámico generado vía JS -->
+                <div id="crosswordGrid" class="grid gap-1 bg-slate-900/20 p-2.5 rounded-xl shadow-inner">
+                    <!-- Las celdas se inyectarán dinámicamente -->
+                </div>
+            </div>
+
+            <!-- Botones de Acción de Validación Rápida -->
+            <div class="mt-6 flex flex-wrap gap-3 justify-center sm:justify-start">
+                <button onclick="checkAnswers()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/10 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Verificar Respuestas</span>
+                </button>
+                <button onclick="revealAll()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium px-5 py-2.5 rounded-xl transition flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i>
+                    <span>Revelar Respuestas</span>
+                </button>
+                <button onclick="showCustomAlert('Información', 'Para jugar, selecciona cualquier casilla en la rejilla. La definición correspondiente se mostrará en el cuadro de la derecha. Completa el crucigrama y haz clic en Verificar Respuestas.', 'info')" class="text-slate-400 hover:text-white p-2.5 rounded-xl text-sm transition">
+                    <i class="fa-solid fa-circle-question"></i> Guía
+                </button>
+            </div>
+        </section>
+
+        <!-- Pistas y Definiciones (Derecha) -->
+        <section class="lg:col-span-5 flex flex-col gap-6">
+            
+            <!-- Cuadro de ayuda/pista para la palabra seleccionada -->
+            <div class="bg-indigo-950/40 border border-indigo-800/50 p-4 rounded-2xl shadow-md">
+                <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                    <i class="fa-solid fa-magnifying-glass-arrow-right"></i> Concepto Seleccionado
+                </h3>
+                <div id="currentClueBox" class="text-sm text-slate-300 italic">
+                    Selecciona una casilla en el crucigrama para visualizar su definición aquí.
+                </div>
+            </div>
+
+            <!-- Listado Completo de Pistas -->
+            <div class="bg-slate-800/40 border border-slate-700/60 rounded-2xl p-5 flex flex-col flex-grow min-h-[400px]">
+                <h2 class="text-lg font-semibold text-slate-300 mb-4 flex items-center gap-2 border-b border-slate-700 pb-3">
+                    <i class="fa-solid fa-list-check text-indigo-500"></i> Listado de Pistas
+                </h2>
+
+                <div class="grid grid-cols-1 gap-5 overflow-y-auto max-h-[450px] pr-2">
+                    <!-- Horizontales -->
+                    <div>
+                        <h3 class="text-xs font-bold text-emerald-400 mb-2.5 flex items-center gap-2 uppercase tracking-wide">
+                            <i class="fa-solid fa-arrows-left-right"></i> Across (Horizontales)
+                        </h3>
+                        <div id="acrossClues" class="space-y-2">
+                            <!-- Inyectadas por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Verticales -->
+                    <div>
+                        <h3 class="text-xs font-bold text-sky-400 mb-2.5 flex items-center gap-2 uppercase tracking-wide">
+                            <i class="fa-solid fa-arrows-up-down"></i> Down (Verticales)
+                        </h3>
+                        <div id="downClues" class="space-y-2">
+                            <!-- Inyectadas por JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Victoria Completa -->
+    <div id="victoryModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-slate-800 border border-slate-700 rounded-3xl p-6 max-w-md w-full text-center shadow-2xl relative overflow-hidden transform scale-95 transition-transform duration-300">
+            <!-- Canvas para efectos de confeti internos -->
+            <canvas id="confettiCanvas" class="absolute inset-0 pointer-events-none w-full h-full"></canvas>
+            
+            <div class="bg-indigo-600/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-400 border border-indigo-500/30">
+                <i class="fa-solid fa-trophy text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-2">¡Felicitaciones!</h3>
+            <p class="text-slate-300 text-sm mb-6">Has resuelto correctamente todas las palabras técnicas de esta sesión.</p>
+            
+            <div class="bg-slate-900/60 rounded-xl p-4 mb-6 border border-slate-700 flex justify-around text-sm">
+                <div>
+                    <span class="block text-slate-400 text-xs mb-0.5">Tiempo Final</span>
+                    <strong id="finalTime" class="text-lg text-indigo-400 font-mono">00:00</strong>
+                </div>
+                <div>
+                    <span class="block text-slate-400 text-xs mb-0.5">Puntuación</span>
+                    <strong class="text-lg text-emerald-400">100% Correcto</strong>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2 relative z-10">
+                <button onclick="closeVictoryModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition w-full">
+                    Cerrar y Ver Tablero
+                </button>
+                <button onclick="advanceNextLevel()" id="nextLevelBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 rounded-xl transition w-full hidden">
+                    Ir al Siguiente Nivel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Personalizado (Evita usar alerts del sistema) -->
+    <div id="customAlert" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+        <div class="bg-slate-850 border border-slate-700 rounded-2xl p-5 max-w-sm w-full shadow-xl">
+            <div class="flex items-center gap-3 mb-3">
+                <div id="alertIconContainer" class="w-10 h-10 rounded-full flex items-center justify-center">
+                    <i id="alertIcon" class="text-lg"></i>
+                </div>
+                <h4 id="alertTitle" class="font-bold text-white text-base">Título</h4>
+            </div>
+            <p id="alertMessage" class="text-slate-300 text-xs leading-relaxed mb-4">Mensaje de alerta detallado.</p>
+            <button onclick="closeCustomAlert()" class="bg-slate-700 hover:bg-slate-600 text-white font-medium text-xs py-2 px-4 rounded-lg w-full transition">
+                Aceptar
+            </button>
+        </div>
+    </div>
+
+    <!-- Pie de página integrado -->
+    <footer class="bg-slate-950 border-t border-slate-800 text-slate-500 text-xs py-4 text-center">
+        <p>© 2026 Interactive Systems Vocabulary. Desarrollado de manera autónoma en HTML5/CSS3/JS.</p>
+    </footer>
+
+    <script>
+        /* ==================== CONFIGURACIÓN DE DATOS DE LOS NIVELES ==================== */
+        const levelData = {
+            1: [
+                {word: "ALGORITHM", clue: "A step-by-step procedure or set of rules for solving a problem or performing a computation."},
+                {word: "BINARY", clue: "A number system that uses only two symbols, typically 0 and 1."},
+                {word: "COMPILER", clue: "Software that translates high-level programming code into machine code that a computer can execute."},
+                {word: "DATABASE", clue: "A structured collection of organized data that allows easy storage, retrieval, and management."},
+                {word: "FIREWALL", clue: "A security system that monitors and controls incoming and outgoing network traffic based on predetermined rules."},
+                {word: "ENCRYPTION", clue: "The process of converting data into a code (ciphertext) to prevent unauthorized access."},
+                {word: "JAVASCRIPT", clue: "A programming language used primarily for web development to add interactive and dynamic elements to web pages."},
+                {word: "KERNEL", clue: "The central component of an operating system that manages system resources."},
+                {word: "NETWORK", clue: "A group of interconnected computer systems and devices linked together to facilitate communication."},
+                {word: "BUFFER", clue: "A part of RAM used for temporary storage of data, often during input/output operations."}
+            ],
+            2: [
+                {word: "API", clue: "A set of protocols and rules that allows different software applications to communicate with each other."},
+                {word: "GIT", clue: "A distributed version control system used to track changes in source code during software development."},
+                {word: "JSON", clue: "A lightweight data-interchange format that is easy for humans to read and write, and easy for machines to parse."},
+                {word: "DOCKER", clue: "A platform used to containerize, deploy, and run applications in isolated environments."},
+                {word: "DEBUGGING", clue: "The process of identifying, analyzing, and removing bugs or errors from a computer program."},
+                {word: "AGILE", clue: "A software development methodology focused on iterative development, team collaboration, and adaptability."},
+                {word: "CYBERSECURITY", clue: "The practice of protecting computer systems, networks, and data from digital attacks and unauthorized access."},
+                {word: "VIRTUALIZATION", clue: "The technology that allows creating multiple simulated environments or dedicated resources from a single physical hardware system."},
+                {word: "CLOUD", clue: "Internet-based computing that provides on-demand access to shared resources, databases, servers, and software."},
+                {word: "BACKEND", clue: "The server-side of an application that handles data storage, security, and business logic."},
+                {word: "FRONTEND", clue: "The client-side of an application representing the user interface and visual elements that users interact with directly."},
+                {word: "SERVER", clue: "A computer program or device that provides services, data, or resources to other computers (clients) in a network."},
+                {word: "IPADDRESS", clue: "A unique numerical label assigned to each device connected to a computer network that uses the Internet Protocol."},
+                {word: "BACKUP", clue: "A copy of data taken and stored elsewhere so that it may be used to restore the original after a data loss event."},
+                {word: "SCRUM", clue: "An agile framework for managing complex projects, characterized by short work cycles called sprints."},
+                {word: "DEVOPS", clue: "A set of practices that combines software development (Dev) and IT operations (Ops) to shorten the systems development life cycle."},
+                {word: "LINUX", clue: "An open-source, Unix-like operating system kernel widely used for servers, cloud systems, and embedded devices."},
+                {word: "HTTP", clue: "The fundamental protocol used to transmit web pages, images, and other resources across the World Wide Web."},
+                {word: "CACHE", clue: "A high-speed hardware or software data storage layer that stores a subset of data so that future requests are served faster."},
+                {word: "SSL", clue: "A standard security technology for establishing an encrypted link between a web server and a web browser."}
+            ],
+            3: [
+                {word: "POLYMORPHISM", clue: "The ability of different objects to respond to the same message or method call in unique ways."},
+                {word: "INHERITANCE", clue: "A mechanism where a new class acquires the properties and behaviors of an existing class."},
+                {word: "ENCAPSULATION", clue: "The bundling of data and methods that operate on that data within a single unit, restricting direct access."},
+                {word: "ABSTRACTION", clue: "Hiding complex implementation details and showing only the essential features of an object or interface."},
+                {word: "RECURSION", clue: "A programming technique where a function calls itself directly or indirectly to solve a smaller sub-problem."},
+                {word: "CONCURRENCY", clue: "The execution of multiple instruction sequences at the same time or in overlapping time periods."},
+                {word: "DEADLOCK", clue: "A state where a set of processes are blocked because each process is holding a resource and waiting for another."},
+                {word: "HEURISTIC", clue: "A problem-solving approach that employs a practical method not guaranteed to be optimal, but sufficient for immediate goals."},
+                {word: "ASYNCHRONOUS", clue: "A form of input/output processing that permits other processing to continue before the current transmission has finished."},
+                {word: "SERIALIZATION", clue: "The process of translating a data structure or object state into a format that can be easily stored or transmitted."},
+                {word: "METADATA", clue: "Information about other data, such as its structure, origin, format, or size."},
+                {word: "MIDDLEWARE", clue: "Software that acts as a bridge between an operating system or database and applications, especially on a network."},
+                {word: "SCALABILITY", clue: "The measure of a system's ability to increase or decrease in performance and cost in response to changing demands."},
+                {word: "OPTIMIZATION", clue: "The process of modifying a system to make some features of it work more efficiently or use fewer resources."},
+                {word: "CRYPTOGRAPHY", clue: "The practice and study of techniques for secure communication in the presence of adversarial third parties."},
+                {word: "PARADIGM", clue: "A fundamental style or approach to programming, such as declarative, imperative, or object-oriented."},
+                {word: "INTERPRETER", clue: "A computer program that directly executes instructions written in a scripting language, without requiring compilation."},
+                {word: "REFACTORING", clue: "The process of restructuring existing computer code without changing its external behavior."},
+                {word: "LATENCY", clue: "The time delay between a cause and its effect, or the time it takes for data to travel from one point to another."},
+                {word: "BANDWIDTH", clue: "The maximum rate of data transfer across a given path or network link in a specific unit of time."}
+            ]
+        };
+
+        /* Algoritmo de Compilación y Generación del Crucigrama en Tiempo Real */
+        class CrosswordCompiler {
+            constructor(words) {
+                this.words = words.map(w => ({
+                    word: w.word.toUpperCase().replace(/[^A-Z]/g, ''),
+                    clue: w.clue,
+                    originalWord: w.word
+                })).sort((a, b) => b.word.length - a.word.length);
+            }
+
+            generate(maxAttempts = 80) {
+                let bestLayout = null;
+                let maxPlaced = 0;
+
+                for (let attempt = 0; attempt < maxAttempts; attempt++) {
+                    const size = 30; // Matriz holgada inicial
+                    const grid = Array(size).fill(null).map(() => Array(size).fill(null));
+                    const placed = [];
+
+                    const wordsToPlace = [...this.words];
+                    if (attempt > 0) {
+                        // Cambiar levemente el orden para diversificar la semilla
+                        const swapIdx = 1 + Math.floor(Math.random() * Math.min(6, wordsToPlace.length - 1));
+                        const temp = wordsToPlace[0];
+                        wordsToPlace[0] = wordsToPlace[swapIdx];
+                        wordsToPlace[swapIdx] = temp;
+                    }
+
+                    // Colocar primera palabra en el centro horizontal
+                    const first = wordsToPlace[0];
+                    const startRow = 15;
+                    const startCol = Math.max(0, Math.floor((size - first.word.length) / 2));
+                    this.placeWordOnGrid(grid, first, startRow, startCol, "across", placed);
+
+                    // Colocar el resto de palabras
+                    for (let i = 1; i < wordsToPlace.length; i++) {
+                        const wordObj = wordsToPlace[i];
+                        const bestPos = this.scanBestPlacement(grid, wordObj, placed);
+                        if (bestPos) {
+                            this.placeWordOnGrid(grid, wordObj, bestPos.row, bestPos.col, bestPos.direction, placed);
+                        }
+                    }
+
+                    if (placed.length > maxPlaced) {
+                        maxPlaced = placed.length;
+                        bestLayout = { grid: this.cloneGrid(grid), placed: [...placed] };
+                    }
+
+                    if (placed.length === this.words.length) {
+                        break; // Se colocaron todas con éxito
+                    }
+                }
+
+                return this.cropToBoundingBox(bestLayout.grid, bestLayout.placed);
+            }
+
+            cloneGrid(grid) {
+                return grid.map(row => [...row]);
+            }
+
+            placeWordOnGrid(grid, wordObj, row, col, direction, placed) {
+                const word = wordObj.word;
+                for (let i = 0; i < word.length; i++) {
+                    const r = direction === "across" ? row : row + i;
+                    const c = direction === "across" ? col + i : col;
+                    grid[r][c] = {
+                        char: word[i],
+                        isStart: i === 0,
+                        wordObj: wordObj
+                    };
+                }
+                placed.push({ ...wordObj, row, col, direction });
+            }
+
+            scanBestPlacement(grid, wordObj, placed) {
+                const word = wordObj.word;
+                let bestPos = null;
+                let highestScore = -1000;
+
+                for (let r = 0; r < grid.length; r++) {
+                    for (let c = 0; c < grid[r].length; c++) {
+                        const charAtCell = grid[r][c] ? grid[r][c].char : null;
+                        if (!charAtCell) continue;
+
+                        let indexInWord = -1;
+                        while ((indexInWord = word.indexOf(charAtCell, indexInWord + 1)) !== -1) {
+                            const directions = ["across", "down"];
+                            for (const dir of directions) {
+                                const startR = dir === "across" ? r : r - indexInWord;
+                                const startC = dir === "across" ? c - indexInWord : c;
+
+                                if (this.verifyPlacementSafety(grid, word, startR, startC, dir, r, c)) {
+                                    const score = this.scorePlacement(grid, word, startR, startC, dir);
+                                    if (score > highestScore) {
+                                        highestScore = score;
+                                        bestPos = { row: startR, col: startC, direction: dir };
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return bestPos;
+            }
+
+            verifyPlacementSafety(grid, word, startR, startC, direction, intersectR, intersectC) {
+                const size = grid.length;
+                if (startR < 0 || startC < 0) return false;
+                if (direction === "across" && startC + word.length > size) return false;
+                if (direction === "down" && startR + word.length > size) return false;
+
+                // Celdas antes y después de la palabra deben estar limpias
+                if (direction === "across") {
+                    if (startC > 0 && grid[startR][startC - 1] !== null) return false;
+                    if (startC + word.length < size && grid[startR][startC + word.length] !== null) return false;
+                } else {
+                    if (startR > 0 && grid[startR - 1][startC] !== null) return false;
+                    if (startR + word.length < size && grid[startR + word.length][startC] !== null) return false;
+                }
+
+                // Evaluar celdas por donde pasará la palabra
+                for (let i = 0; i < word.length; i++) {
+                    const r = direction === "across" ? startR : startR + i;
+                    const c = direction === "across" ? startC + i : startC;
+
+                    if (r === intersectR && c === intersectC) continue; // Intersección válida permitida
+
+                    const current = grid[r][c];
+                    if (current !== null) {
+                        if (current.char !== word[i]) return false; // Choque de letras
+                    } else {
+                        // Alrededores deben estar limpios para evitar que queden pegadas paralelamente
+                        if (direction === "across") {
+                            if (r > 0 && grid[r - 1][c] !== null) return false;
+                            if (r < size - 1 && grid[r + 1][c] !== null) return false;
+                        } else {
+                            if (c > 0 && grid[r][c - 1] !== null) return false;
+                            if (c < size - 1 && grid[r][c + 1] !== null) return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            scorePlacement(grid, word, row, col, direction) {
+                let intersections = 0;
+                for (let i = 0; i < word.length; i++) {
+                    const r = direction === "across" ? row : row + i;
+                    const c = direction === "across" ? col + i : col;
+                    if (grid[r][c] !== null) intersections++;
+                }
+                return intersections * 15;
+            }
+
+            cropToBoundingBox(grid, placed) {
+                if (!placed.length) return null;
+
+                let minR = 999, maxR = 0, minC = 999, maxC = 0;
+                placed.forEach(p => {
+                    minR = Math.min(minR, p.row);
+                    minC = Math.min(minC, p.col);
+                    if (p.direction === "across") {
+                        maxR = Math.max(maxR, p.row);
+                        maxC = Math.max(maxC, p.col + p.word.length - 1);
+                    } else {
+                        maxR = Math.max(maxR, p.row + p.word.length - 1);
+                        maxC = Math.max(maxC, p.col);
+                    }
+                });
+
+                // Añadir un margen estético de una casilla vacía
+                minR = Math.max(0, minR - 1);
+                minC = Math.max(0, minC - 1);
+                maxR = Math.min(grid.length - 1, maxR + 1);
+                maxC = Math.min(grid[0].length - 1, maxC + 1);
+
+                const finalRows = maxR - minR + 1;
+                const finalCols = maxC - minC + 1;
+
+                const croppedGrid = Array(finalRows).fill(null).map(() => Array(finalCols).fill(null));
+                const shiftedPlaced = placed.map((p, idx) => ({
+                    ...p,
+                    row: p.row - minR,
+                    col: p.col - minC,
+                    clueNumber: idx + 1
+                }));
+
+                // Reconstruir la matriz recortada con identificadores únicos
+                shiftedPlaced.forEach(item => {
+                    const len = item.word.length;
+                    let r = item.row;
+                    let c = item.col;
+                    for (let i = 0; i < len; i++) {
+                        if (!croppedGrid[r][c]) {
+                            croppedGrid[r][c] = {
+                                char: item.word[i],
+                                clueNumbers: [item.clueNumber],
+                                directions: [item.direction],
+                                isStart: i === 0,
+                                startClueNum: i === 0 ? item.clueNumber : null
+                            };
+                        } else {
+                            if (!croppedGrid[r][c].clueNumbers.includes(item.clueNumber)) {
+                                croppedGrid[r][c].clueNumbers.push(item.clueNumber);
+                            }
+                            if (!croppedGrid[r][c].directions.includes(item.direction)) {
+                                croppedGrid[r][c].directions.push(item.direction);
+                            }
+                            if (i === 0) {
+                                croppedGrid[r][c].isStart = true;
+                                croppedGrid[r][c].startClueNum = item.clueNumber;
+                            }
+                        }
+                        if (item.direction === "across") c++;
+                        else r++;
+                    }
+                });
+
+                return {
+                    grid: croppedGrid,
+                    rows: finalRows,
+                    cols: finalCols,
+                    placedWords: shiftedPlaced
+                };
+            }
+        }
+
+        /* ==================== ESTADO GLOBAL DEL JUEGO ==================== */
+        let currentLevel = 2; // Nivel activo por defecto
+        let activeDirection = "across";
+        let elapsedSeconds = 0;
+        let timerInterval = null;
+        let isLightMode = false;
+        let currentZoom = 1.0;
+
+        // Persistencia interna del progreso de cada nivel
+        let levelStateCache = {
+            1: { gridData: null, userInputs: {}, solved: 0 },
+            2: { gridData: null, userInputs: {}, solved: 0 },
+            3: { gridData: null, userInputs: {}, solved: 0 }
+        };
+
+        /* ==================== EVENTOS DE ARRANQUE ==================== */
+        window.onload = function() {
+            // Generar la disposición para todos los niveles de forma silenciosa e instantánea
+            [1, 2, 3].forEach(lvl => {
+                const compiler = new CrosswordCompiler(levelData[lvl]);
+                levelStateCache[lvl].gridData = compiler.generate();
+            });
+
+            // Inicializar nivel actual
+            loadLevel(currentLevel);
+            startGlobalTimer();
+            setupKeyboardNavigation();
+        };
+
+        /* ==================== CARGA DE NIVELES Y ELEMENTOS ==================== */
+        function loadLevel(levelId) {
+            currentLevel = levelId;
+            const lvlState = levelStateCache[levelId];
+            const boardData = lvlState.gridData;
+
+            // Actualizar interfaz visual de los botones de nivel
+            [1, 2, 3].forEach(id => {
+                const btn = document.getElementById(`btn-level-${id}`);
+                const span = btn.querySelector("span");
+                if (id === levelId) {
+                    btn.className = "flex items-center justify-between p-3.5 rounded-xl border text-left transition duration-200 bg-indigo-600/10 border-indigo-500/50 shadow-md";
+                    if (span) {
+                        span.className = "w-8 h-8 rounded-lg bg-indigo-600 border border-indigo-500 text-white font-bold flex items-center justify-center";
+                    }
+                } else {
+                    btn.className = "flex items-center justify-between p-3.5 rounded-xl border text-left transition duration-200 bg-slate-850/50 border-slate-700/60 hover:bg-slate-800";
+                    if (span) {
+                        span.className = "w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold flex items-center justify-center";
+                    }
+                }
+            });
+
+            // Actualizar Título
+            const titles = { 1: "Nivel 1: Fundamentos", 2: "Nivel 2: Práctica Profesional", 3: "Nivel 3: Teoría Avanzada" };
+            document.getElementById("boardLevelTitle").innerText = titles[levelId];
+
+            // Renderizar la rejilla
+            renderCrosswordGrid(boardData, lvlState.userInputs);
+            
+            // Renderizar pistas
+            renderClueLists(boardData.placedWords);
+
+            // Actualizar KPIs de la barra
+            updateProgressKPIs();
+
+            // Limpiar caja de pista seleccionada
+            document.getElementById("currentClueBox").innerHTML = `Selecciona una casilla en el crucigrama para visualizar su definición aquí.`;
+        }
+
+        function renderCrosswordGrid(boardData, userInputs) {
+            const container = document.getElementById("crosswordGrid");
+            container.innerHTML = "";
+            container.style.gridTemplateRows = `repeat(${boardData.rows}, minmax(0, 1fr))`;
+            container.style.gridTemplateColumns = `repeat(${boardData.cols}, minmax(0, 1fr))`;
+
+            for (let r = 0; r < boardData.rows; r++) {
+                for (let c = 0; c < boardData.cols; c++) {
+                    const cell = boardData.grid[r][c];
+                    const cellDiv = document.createElement("div");
+
+                    if (cell) {
+                        cellDiv.className = "relative crossword-cell-wrapper bg-slate-800 border border-slate-700 text-slate-100 flex items-center justify-center rounded-lg font-bold uppercase select-none cell-transition focus-within:ring-2 focus-within:ring-indigo-500 cursor-pointer";
+                        cellDiv.dataset.row = r;
+                        cellDiv.dataset.col = c;
+
+                        if (cell.isStart) {
+                            const numSpan = document.createElement("span");
+                            numSpan.className = "absolute top-0.5 left-0.5 text-[8px] md:text-[9px] text-indigo-400 font-extrabold";
+                            numSpan.innerText = cell.startClueNum;
+                            cellDiv.appendChild(numSpan);
+                        }
+
+                        const input = document.createElement("input");
+                        input.type = "text";
+                        input.maxLength = 1;
+                        input.className = "w-full h-full bg-transparent text-center text-sm md:text-base font-bold focus:outline-none focus:text-white caret-indigo-400 uppercase pt-2 text-slate-100";
+                        input.dataset.row = r;
+                        input.dataset.col = c;
+                        input.id = `input-${r}-${c}`;
+
+                        // Cargar valor previo si existe
+                        const cachedVal = userInputs[`${r}-${c}`];
+                        if (cachedVal) input.value = cachedVal;
+
+                        input.addEventListener("input", (e) => handleCellInput(e, r, c));
+                        input.addEventListener("keydown", (e) => handleCellKeyDown(e, r, c));
+                        input.addEventListener("focus", () => handleCellSelect(r, c));
+
+                        cellDiv.appendChild(input);
+                        cellDiv.addEventListener("click", () => input.focus());
+                    } else {
+                        cellDiv.className = "crossword-cell-wrapper bg-slate-950/40 rounded-lg border border-transparent";
+                    }
+                    container.appendChild(cellDiv);
+                }
+            }
+        }
+
+        function renderClueLists(placedWords) {
+            const acrossContainer = document.getElementById("acrossClues");
+            const downContainer = document.getElementById("downClues");
+
+            acrossContainer.innerHTML = "";
+            downContainer.innerHTML = "";
+
+            placedWords.forEach(item => {
+                const clueDiv = document.createElement("div");
+                clueDiv.id = `clue-${item.clueNumber}`;
+                clueDiv.className = "p-2.5 rounded-lg border border-slate-800 bg-slate-900/40 text-xs md:text-sm text-slate-300 cursor-pointer hover:bg-slate-850 hover:border-slate-700 transition cell-transition flex items-start gap-2";
+                clueDiv.onclick = () => focusOnWord(item);
+
+                clueDiv.innerHTML = `
+                    <span class="font-extrabold text-indigo-400 min-w-[20px] shrink-0">${item.clueNumber}.</span>
+                    <span class="flex-grow leading-relaxed">${item.clue}</span>
+                `;
+
+                if (item.direction === "across") {
+                    acrossContainer.appendChild(clueDiv);
+                } else {
+                    downContainer.appendChild(clueDiv);
+                }
+            });
+        }
+
+        /* ==================== INTERACCIONES Y EVENTOS DEL TABLERO ==================== */
+        function handleCellSelect(row, col) {
+            // Remover realces de selección antiguos
+            document.querySelectorAll(".bg-indigo-900\\/25").forEach(el => {
+                el.classList.remove("bg-indigo-900/25", "border-indigo-500/70");
+                el.classList.add("bg-slate-800", "border-slate-700");
+            });
+
+            const lvlState = levelStateCache[currentLevel];
+            const cell = lvlState.gridData.grid[row][col];
+            if (!cell) return;
+
+            if (cell.directions.length > 1) {
+                if (!cell.directions.includes(activeDirection)) {
+                    activeDirection = cell.directions[0];
+                }
+            } else {
+                activeDirection = cell.directions[0];
+            }
+
+            const activeWord = lvlState.gridData.placedWords.find(w => 
+                cell.clueNumbers.includes(w.clueNumber) && w.direction === activeDirection
+            );
+
+            if (activeWord) {
+                highlightWord(activeWord);
+                
+                const box = document.getElementById("currentClueBox");
+                const dirLabel = activeWord.direction === "across" ? "Horizontal" : "Vertical";
+                box.innerHTML = `<span class="font-bold text-indigo-400 font-mono text-xs uppercase bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/20 mr-2">${activeWord.clueNumber} ${dirLabel}</span> <span class="leading-relaxed">${activeWord.clue}</span>`;
+                
+                // Realzar panel de pista correspondiente
+                document.querySelectorAll("[id^='clue-']").forEach(el => el.classList.remove("bg-indigo-600/20", "border-indigo-500/50"));
+                const clueEl = document.getElementById(`clue-${activeWord.clueNumber}`);
+                if (clueEl) {
+                    clueEl.classList.add("bg-indigo-600/20", "border-indigo-500/50");
+                    clueEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                }
+            }
+        }
+
+        function highlightWord(word) {
+            let r = word.row;
+            let c = word.col;
+            for (let i = 0; i < word.word.length; i++) {
+                const inputEl = document.getElementById(`input-${r}-${c}`);
+                if (inputEl) {
+                    const cellDiv = inputEl.parentElement;
+                    cellDiv.classList.remove("bg-slate-800", "border-slate-700");
+                    cellDiv.classList.add("bg-indigo-900/25", "border-indigo-500/70");
+                }
+                if (word.direction === "across") c++;
+                else r++;
+            }
+        }
+
+        function handleCellInput(e, row, col) {
+            const val = e.target.value.toUpperCase();
+            e.target.value = val;
+
+            // Guardar en caché local
+            levelStateCache[currentLevel].userInputs[`${row}-${col}`] = val;
+
+            if (val) {
+                advanceGridFocus(row, col);
+            }
+            updateProgressKPIs();
+        }
+
+        function advanceGridFocus(row, col) {
+            let nextR = row;
+            let nextC = col;
+
+            if (activeDirection === "across") {
+                nextC++;
+            } else {
+                nextR++;
+            }
+
+            const nextInput = document.getElementById(`input-${nextR}-${nextC}`);
+            if (nextInput) {
+                nextInput.focus();
+            }
+        }
+
+        function handleCellKeyDown(e, row, col) {
+            if (e.key === "Backspace" && !e.target.value) {
+                let prevR = row;
+                let prevC = col;
+
+                if (activeDirection === "across") {
+                    prevC--;
+                } else {
+                    prevR--;
+                }
+
+                const prevInput = document.getElementById(`input-${prevR}-${prevC}`);
+                if (prevInput) {
+                    prevInput.focus();
+                }
+            }
+        }
+
+        function setupKeyboardNavigation() {
+            document.addEventListener("keydown", (e) => {
+                const active = document.activeElement;
+                if (!active || !active.id.startsWith("input-")) return;
+
+                const parts = active.id.split("-");
+                let r = parseInt(parts[1]);
+                let c = parseInt(parts[2]);
+
+                switch (e.key) {
+                    case "ArrowRight":
+                        e.preventDefault();
+                        activeDirection = "across";
+                        focusTargetCell(r, c + 1);
+                        break;
+                    case "ArrowLeft":
+                        e.preventDefault();
+                        activeDirection = "across";
+                        focusTargetCell(r, c - 1);
+                        break;
+                    case "ArrowDown":
+                        e.preventDefault();
+                        activeDirection = "down";
+                        focusTargetCell(r + 1, c);
+                        break;
+                    case "ArrowUp":
+                        e.preventDefault();
+                        activeDirection = "down";
+                        focusTargetCell(r - 1, c);
+                        break;
+                }
+            });
+        }
+
+        function focusTargetCell(r, c) {
+            const target = document.getElementById(`input-${r}-${c}`);
+            if (target) target.focus();
+        }
+
+        function focusOnWord(word) {
+            activeDirection = word.direction;
+            focusTargetCell(word.row, word.col);
+        }
+
+        /* ==================== VALIDACIÓN Y PUNTUACIÓN ==================== */
+        function checkAnswers() {
+            const lvlState = levelStateCache[currentLevel];
+            const boardData = lvlState.gridData;
+            let solvedWordsCount = 0;
+
+            // 1. Validar celdas individualmente con animación
+            for (let r = 0; r < boardData.rows; r++) {
+                for (let c = 0; c < boardData.cols; c++) {
+                    const cell = boardData.grid[r][c];
+                    if (!cell) continue;
+
+                    const input = document.getElementById(`input-${r}-${c}`);
+                    const cellDiv = input.parentElement;
+                    const val = input.value.trim().toUpperCase();
+
+                    if (val === cell.char) {
+                        cellDiv.className = "relative crossword-cell-wrapper bg-emerald-900/30 border border-emerald-500 text-slate-100 flex items-center justify-center rounded-lg font-bold uppercase select-none correct-animate";
+                    } else if (val !== "") {
+                        cellDiv.className = "relative crossword-cell-wrapper bg-red-950/40 border border-red-500 text-slate-100 flex items-center justify-center rounded-lg font-bold uppercase select-none";
+                    }
+                }
+            }
+
+            // 2. Validar qué palabras completas están correctas
+            boardData.placedWords.forEach(item => {
+                let wordCorrect = true;
+                let r = item.row;
+                let c = item.col;
+
+                for (let i = 0; i < item.word.length; i++) {
+                    const input = document.getElementById(`input-${r}-${c}`);
+                    if (!input || input.value.trim().toUpperCase() !== item.word[i]) {
+                        wordCorrect = false;
+                        break;
+                    }
+                    if (item.direction === "across") c++;
+                    else r++;
+                }
+
+                const clueEl = document.getElementById(`clue-${item.clueNumber}`);
+                if (wordCorrect) {
+                    solvedWordsCount++;
+                    if (clueEl) {
+                        clueEl.className = "p-2.5 rounded-lg border border-emerald-900/30 bg-emerald-950/20 text-xs md:text-sm text-slate-400 line-through opacity-60 flex items-start gap-2";
+                    }
+                } else {
+                    if (clueEl) {
+                        clueEl.className = "p-2.5 rounded-lg border border-slate-800 bg-slate-900/40 text-xs md:text-sm text-slate-300 cursor-pointer hover:bg-slate-850 hover:border-slate-700 transition flex items-start gap-2";
+                    }
+                }
+            });
+
+            lvlState.solved = solvedWordsCount;
+            updateProgressKPIs();
+
+            if (solvedWordsCount === boardData.placedWords.length) {
+                triggerVictory();
+            } else {
+                showCustomAlert("Verificación", `Has resuelto ${solvedWordsCount} de las ${boardData.placedWords.length} palabras de este nivel. Sigue intentándolo.`, "info");
+            }
+        }
+
+        function updateProgressKPIs() {
+            const lvlState = levelStateCache[currentLevel];
+            const boardData = lvlState.gridData;
+            
+            let totalCells = 0;
+            let filledCells = 0;
+
+            for (let r = 0; r < boardData.rows; r++) {
+                for (let c = 0; c < boardData.cols; c++) {
+                    if (boardData.grid[r][c]) {
+                        totalCells++;
+                        const input = document.getElementById(`input-${r}-${c}`);
+                        if (input && input.value.trim() !== "") {
+                            filledCells++;
+                        }
+                    }
+                }
+            }
+
+            const pct = Math.round((filledCells / totalCells) * 100);
+            document.getElementById("progressPercent").innerText = `${pct}%`;
+            document.getElementById("progressBar").style.width = `${pct}%`;
+            document.getElementById("solvedCount").innerText = `${lvlState.solved} / ${boardData.placedWords.length}`;
+        }
+
+        function revealAll() {
+            const lvlState = levelStateCache[currentLevel];
+            const boardData = lvlState.gridData;
+
+            for (let r = 0; r < boardData.rows; r++) {
+                for (let c = 0; c < boardData.cols; c++) {
+                    const cell = boardData.grid[r][c];
+                    if (!cell) continue;
+
+                    const input = document.getElementById(`input-${r}-${c}`);
+                    input.value = cell.char;
+                    lvlState.userInputs[`${r}-${c}`] = cell.char;
+                }
+            }
+            checkAnswers();
+        }
+
+        function resetCurrentGame() {
+            const lvlState = levelStateCache[currentLevel];
+            lvlState.userInputs = {};
+            lvlState.solved = 0;
+
+            loadLevel(currentLevel);
+        }
+
+        function switchLevel(lvlId) {
+            if (lvlId === currentLevel) return;
+            loadLevel(lvlId);
+        }
+
+        /* ==================== UTILIDADES DE ZOOM Y TEMPORIZADOR ==================== */
+        function changeZoom(factor) {
+            currentZoom = Math.min(1.8, Math.max(0.6, currentZoom + factor));
+            document.documentElement.style.setProperty('--cell-size', `${2.4 * currentZoom}rem`);
+            document.getElementById("zoomVal").innerText = `${Math.round(currentZoom * 100)}%`;
+        }
+
+        function startGlobalTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                elapsedSeconds++;
+                const mins = Math.floor(elapsedSeconds / 60).toString().padStart(2, "0");
+                const secs = (elapsedSeconds % 60).toString().padStart(2, "0");
+                document.getElementById("timer").innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        /* ==================== MODALES Y ALERTS ==================== */
+        function showCustomAlert(title, message, type = "info") {
+            const alertModal = document.getElementById("customAlert");
+            const iconContainer = document.getElementById("alertIconContainer");
+            const icon = document.getElementById("alertIcon");
+            
+            document.getElementById("alertTitle").innerText = title;
+            document.getElementById("alertMessage").innerText = message;
+
+            if (type === "success") {
+                iconContainer.className = "w-10 h-10 rounded-full flex items-center justify-center bg-emerald-500/10 border border-emerald-500/30 text-emerald-400";
+                icon.className = "fa-solid fa-circle-check";
+            } else {
+                iconContainer.className = "w-10 h-10 rounded-full flex items-center justify-center bg-indigo-500/10 border border-indigo-500/30 text-indigo-400";
+                icon.className = "fa-solid fa-circle-info";
+            }
+
+            alertModal.classList.remove("hidden");
+            setTimeout(() => alertModal.classList.remove("opacity-0"), 20);
+        }
+
+        function closeCustomAlert() {
+            const alertModal = document.getElementById("customAlert");
+            alertModal.classList.add("opacity-0");
+            setTimeout(() => alertModal.classList.add("hidden"), 200);
+        }
+
+        function triggerVictory() {
+            const modal = document.getElementById("victoryModal");
+            const nextBtn = document.getElementById("nextLevelBtn");
+
+            document.getElementById("finalTime").innerText = document.getElementById("timer").innerText;
+            
+            if (currentLevel < 3) {
+                nextBtn.classList.remove("hidden");
+            } else {
+                nextBtn.classList.add("hidden");
+            }
+
+            modal.classList.remove("hidden");
+            setTimeout(() => {
+                modal.classList.remove("opacity-0");
+                modal.querySelector(".transform").classList.remove("scale-95");
+            }, 50);
+
+            renderVictoryConfetti();
+        }
+
+        function closeVictoryModal() {
+            const modal = document.getElementById("victoryModal");
+            modal.classList.add("opacity-0");
+            modal.querySelector(".transform").classList.add("scale-95");
+            setTimeout(() => modal.classList.add("hidden"), 300);
+        }
+
+        function advanceNextLevel() {
+            closeVictoryModal();
+            if (currentLevel < 3) {
+                loadLevel(currentLevel + 1);
+            }
+        }
+
+        /* ==================== EFECTOS DE CONFETI EN CANVAS ==================== */
+        function renderVictoryConfetti() {
+            const canvas = document.getElementById("confettiCanvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+
+            let particles = [];
+            const colors = ["#4f46e5", "#10b981", "#3b82f6", "#f59e0b", "#ec4899"];
+
+            for (let i = 0; i < 80; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    r: Math.random() * 3 + 2,
+                    d: Math.random() * canvas.height,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    tilt: Math.random() * 8 - 4,
+                    tiltAngleIncremental: Math.random() * 0.08 + 0.02,
+                    tiltAngle: 0
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p) => {
+                    ctx.beginPath();
+                    ctx.lineWidth = p.r;
+                    ctx.strokeStyle = p.color;
+                    ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+                    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+                    ctx.stroke();
+                });
+                update();
+            }
+
+            function update() {
+                particles.forEach((p) => {
+                    p.tiltAngle += p.tiltAngleIncremental;
+                    p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+                    p.tilt = Math.sin(p.tiltAngle - p.r / 2) * 8;
+                    if (p.y > canvas.height) {
+                        p.y = -20;
+                        p.x = Math.random() * canvas.width;
+                    }
+                });
+            }
+
+            let animationFrame;
+            function loop() {
+                draw();
+                animationFrame = requestAnimationFrame(loop);
+            }
+            loop();
+
+            setTimeout(() => {
+                cancelAnimationFrame(animationFrame);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }, 5000);
+        }
+
+        /* ==================== MODO OSCURO / CLARO ==================== */
+        function toggleDarkMode() {
+            isLightMode = !isLightMode;
+            const body = document.body;
+            const header = document.querySelector("header");
+            const themeBtn = document.getElementById("themeBtn");
+
+            if (isLightMode) {
+                body.className = "bg-slate-50 text-slate-800 min-h-screen flex flex-col transition-colors duration-300";
+                header.className = "bg-white border-b border-slate-200 py-4 px-6 shadow-sm sticky top-0 z-30";
+                themeBtn.innerHTML = `<i class="fa-solid fa-moon"></i>`;
+                themeBtn.className = "bg-slate-100 hover:bg-slate-200 p-2.5 rounded-lg text-slate-600 transition";
+            } else {
+                body.className = "bg-slate-900 text-slate-100 min-h-screen flex flex-col transition-colors duration-300";
+                header.className = "bg-slate-800 border-b border-slate-700 py-4 px-6 shadow-md sticky top-0 z-30";
+                themeBtn.innerHTML = `<i class="fa-solid fa-sun"></i>`;
+                themeBtn.className = "bg-slate-700 hover:bg-slate-600 p-2.5 rounded-lg text-slate-300 transition";
+            }
+        }
+
+        /* ==================== EXPORTACIÓN AUTÓNOMA HTML ==================== */
+        function downloadHTML() {
+            // Limpiar valores temporales de inputs antes de la descarga para mantener el archivo limpio
+            for (let r = 0; r < 30; r++) {
+                for (let c = 0; c < 30; c++) {
+                    const el = document.getElementById(`input-${r}-${c}`);
+                    if (el) el.setAttribute('value', '');
+                }
+            }
+
+            const currentHTML = document.documentElement.outerHTML;
+            const blob = new Blob([currentHTML], { type: "text/html;charset=utf-8" });
+            const tempUrl = URL.createObjectURL(blob);
+            
+            const downloadLink = document.createElement("a");
+            downloadLink.href = tempUrl;
+            downloadLink.download = "arena_crucigramas_sistemas.html";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(tempUrl);
+        }
+    </script>
+</body>
+</html>

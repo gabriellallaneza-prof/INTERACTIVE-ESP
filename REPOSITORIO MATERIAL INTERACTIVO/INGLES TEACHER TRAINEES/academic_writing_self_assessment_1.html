@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Writing & APA 7th Referencing Companion</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header Banner -->
+    <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <span class="bg-indigo-500/30 text-indigo-300 text-xs font-semibold px-2.5 py-1 rounded-full border border-indigo-500/20 uppercase tracking-wider">APA 7th & Bailey Frameworks</span>
+                <h1 class="serif-title text-3xl md:text-4xl font-bold mt-2">Academic Integrity Module</h1>
+                <p class="text-slate-300 text-sm mt-1">Inspired by Stephen Bailey's <span class="italic">Academic Writing: A Handbook for International Students</span></p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="downloadReport()" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 transition-colors px-4 py-2.5 rounded-lg font-medium text-sm shadow-sm shadow-indigo-900/30">
+                    <i class="fa-solid fa-download"></i> Download My Portfolio
+                </button>
+                <button onclick="showResetModal()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 transition-colors px-4 py-2.5 rounded-lg font-medium text-sm border border-slate-700">
+                    <i class="fa-solid fa-arrows-rotate"></i> Reset Progress
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Navigation Sidebar -->
+        <nav class="lg:col-span-3 space-y-2">
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-4">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Overall Completion</h3>
+                <div class="w-full bg-slate-100 rounded-full h-2.5 mb-2">
+                    <div id="overall-progress-bar" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-slate-500 font-medium">
+                    <span id="overall-score-display">Completed: 0/5 modules</span>
+                    <span id="overall-percentage">0%</span>
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <button onclick="switchTab('tab-intro')" id="btn-tab-intro" class="w-full flex items-center justify-between px-4 py-3 text-left rounded-lg transition-all duration-200 font-medium text-slate-700 bg-white shadow-sm border border-slate-200 hover:bg-slate-50">
+                    <span class="flex items-center gap-3">
+                        <i class="fa-solid fa-book-open text-indigo-500 w-5"></i> Welcome & Overview
+                    </span>
+                    <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
+                </button>
+
+                <button onclick="switchTab('tab-m1')" id="btn-tab-m1" class="w-full flex items-center justify-between px-4 py-3 text-left rounded-lg transition-all duration-200 font-medium text-slate-600 hover:bg-slate-100">
+                    <span class="flex items-center gap-3">
+                        <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-bold shrink-0" id="step-1">1</span>
+                        What is Plagiarism?
+                    </span>
+                    <i class="fa-solid fa-circle-check text-emerald-500 hidden" id="check-1"></i>
+                </button>
+
+                <button onclick="switchTab('tab-m2')" id="btn-tab-m2" class="w-full flex items-center justify-between px-4 py-3 text-left rounded-lg transition-all duration-200 font-medium text-slate-600 hover:bg-slate-100">
+                    <span class="flex items-center gap-3">
+                        <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-bold shrink-0" id="step-2">2</span>
+                        Types of Plagiarism
+                    </span>
+                    <i class="fa-solid fa-circle-check text-emerald-500 hidden" id="check-2"></i>
+                </button>
+
+                <button onclick="switchTab('tab-m3')" id="btn-tab-m3" class="w-full flex items-center justify-between px-4 py-3 text-left rounded-lg transition-all duration-200 font-medium text-slate-600 hover:bg-slate-100">
+                    <span class="flex items-center gap-3">
+                        <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-bold shrink-0" id="step-3">3</span>
+                        Referencing (APA 7th)
+                    </span>
+                    <i class="fa-solid fa-circle-check text-emerald-500 hidden" id="check-3"></i>
+                </button>
+
+                <button onclick="switchTab('tab-m4')" id="btn-tab-m4" class="w-full flex items-center justify-between px-4 py-3 text-left rounded-lg transition-all duration-200 font-medium text-slate-600 hover:bg-slate-100">
+                    <span class="flex items-center gap-3">
+                        <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-bold shrink-0" id="step-4">4</span>
+                        Quoting & Combining
+                    </span>
+                    <i class="fa-solid fa-circle-check text-emerald-500 hidden" id="check-4"></i>
+                </button>
+
+                <button onclick="switchTab('tab-m5')" id="btn-tab-m5" class="w-full flex items-center justify-between px-4 py-3 text-left rounded-lg transition-all duration-200 font-medium text-slate-600 hover:bg-slate-100">
+                    <span class="flex items-center gap-3">
+                        <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-bold shrink-0" id="step-5">5</span>
+                        Paraphrasing Builder
+                    </span>
+                    <i class="fa-solid fa-circle-check text-emerald-500 hidden" id="check-5"></i>
+                </button>
+
+                <button onclick="switchTab('tab-further')" id="btn-tab-further" class="w-full flex items-center justify-between px-4 py-3 text-left rounded-lg transition-all duration-200 font-medium text-slate-600 hover:bg-slate-100">
+                    <span class="flex items-center gap-3">
+                        <i class="fa-solid fa-graduation-cap text-indigo-500 w-5 text-center"></i> Further Study Directory
+                    </span>
+                    <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Content Area -->
+        <main class="lg:col-span-9 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+            
+            <!-- TAB: INTRO -->
+            <section id="tab-intro" class="space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <h2 class="serif-title text-2xl sm:text-3xl font-bold text-slate-900">Academic Integrity & Practical Writing Skills</h2>
+                    <p class="text-slate-500 mt-1">This module guides you through five essential segments of Stephen Bailey's practical text to ensure you reference clearly, write responsibly, and avoid common errors.</p>
+                </div>
+
+                <!-- Guided Video Resource Container -->
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                    <h3 class="font-semibold text-slate-900 flex items-center gap-2 mb-3">
+                        <i class="fa-brands fa-youtube text-red-600"></i> Video Briefing: Academic Integrity Explained
+                    </h3>
+                    <p class="text-xs text-slate-500 mb-4">
+                        Watch this introductory guide on citation strategies, paraphrase foundations, and international academic standards before proceeding with the self-assessment modules.
+                    </p>
+                    <div class="relative w-full aspect-video rounded-xl overflow-hidden shadow-md border border-slate-200 bg-black">
+                        <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube.com/embed/bH2MLTMVbxg?si=uKijtjvgzSO1SgFI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-5 rounded-xl bg-indigo-50/50 border border-indigo-100">
+                        <h3 class="font-semibold text-indigo-900 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-info"></i> Why Use This App?
+                        </h3>
+                        <p class="text-xs text-indigo-950 mt-2 leading-relaxed">
+                            Many international students encounter difficulty translating their ideas safely into academic texts. This dashboard helps you learn, practice, and catalog your development. Use the interactive cards and inputs, receive feedback, and compile your work into a personal archive.
+                        </p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-slate-50 border border-slate-100">
+                        <h3 class="font-semibold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-compass"></i> Study Checklist
+                        </h3>
+                        <ul class="text-xs text-slate-600 mt-2 space-y-1.5 list-disc pl-4">
+                            <li>Define parameters of academic integrity.</li>
+                            <li>Analyze scenarios across multiple degrees of malpractice.</li>
+                            <li>Construct and order standard APA 7th-format references.</li>
+                            <li>Integrate quotes cleanly and synthesize multiple opinions.</li>
+                            <li>Formulate accurate academic paraphrases.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-6 flex justify-end">
+                    <button onclick="switchTab('tab-m1')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm px-6 py-2.5 rounded-lg transition-colors shadow-sm">
+                        Start Module 1 <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- TAB: MODULE 1 -->
+            <section id="tab-m1" class="hidden space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Module 1</span>
+                    <h2 class="serif-title text-2xl font-bold text-slate-900">What is Plagiarism?</h2>
+                    <p class="text-slate-500 mt-1">Understanding the boundaries of intellectual property and common knowledge.</p>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-sm space-y-3">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2 uppercase tracking-wider text-xs">
+                        <i class="fa-solid fa-book"></i> Textbook Briefing (Unit 1.4)
+                    </h3>
+                    <p class="text-xs leading-relaxed text-slate-600">
+                        In global academia, ideas are treated as private property belonging to the originating creator. <strong>Plagiarism</strong> means taking ideas, words, or data without giving clear credit. However, <strong>common knowledge</strong> (facts widely known and accepted) does not require a citation.
+                    </p>
+                </div>
+
+                <!-- Activity 1.1 -->
+                <div>
+                    <h3 class="font-semibold text-slate-800 mb-1">Activity 1.1: Truth or Fallacy?</h3>
+                    <p class="text-xs text-slate-500">Read each academic situation and evaluate if it constitutes plagiarism.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Scenario 1.1 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3">
+                        <div class="flex justify-between items-start gap-4">
+                            <span class="text-xs font-semibold text-slate-400">Situation 1.1</span>
+                            <div class="flex gap-2">
+                                <button onclick="answerM1Act1(1, true)" id="m1-q1-yes" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50">Yes, it's Plagiarism</button>
+                                <button onclick="answerM1Act1(1, false)" id="m1-q1-no" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50">No, it's acceptable</button>
+                            </div>
+                        </div>
+                        <p class="text-sm font-medium text-slate-800">"Using a paragraph from an essay you wrote and had marked during the previous semester, without any citation."</p>
+                        <div id="m1-q1-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                    </div>
+
+                    <!-- Scenario 1.2 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3">
+                        <div class="flex justify-between items-start gap-4">
+                            <span class="text-xs font-semibold text-slate-400">Situation 1.2</span>
+                            <div class="flex gap-2">
+                                <button onclick="answerM1Act1(2, true)" id="m1-q2-yes" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50">Yes, it's Plagiarism</button>
+                                <button onclick="answerM1Act1(2, false)" id="m1-q2-no" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50">No, it's acceptable</button>
+                            </div>
+                        </div>
+                        <p class="text-sm font-medium text-slate-800">"Stating that the global climate is getting warmer, without providing an in-text source citation."</p>
+                        <div id="m1-q2-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                    </div>
+                </div>
+
+                <!-- Activity 1.2 -->
+                <div class="border-t border-slate-100 pt-6">
+                    <h3 class="font-semibold text-slate-800 mb-1">Activity 1.2: Citation Necessity Sort</h3>
+                    <p class="text-xs text-slate-500">Determine whether the following academic statements require an in-text citation under APA 7th guidelines.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3">
+                        <p class="text-sm font-medium text-slate-800">"Water boils at 100°C at standard atmospheric pressure."</p>
+                        <div class="flex gap-2">
+                            <button onclick="answerM1Act2(1, 'no')" id="m1-a2q1-no" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50">No Citation Needed</button>
+                            <button onclick="answerM1Act2(1, 'yes')" id="m1-a2q1-yes" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50">Requires Citation</button>
+                        </div>
+                        <div id="m1-a2q1-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3">
+                        <p class="text-sm font-medium text-slate-800">"The global average temperature has risen by precisely 1.1°C since the pre-industrial period, drastically shifting sub-polar rainfall zones."</p>
+                        <div class="flex gap-2">
+                            <button onclick="answerM1Act2(2, 'no')" id="m1-a2q2-no" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50">No Citation Needed</button>
+                            <button onclick="answerM1Act2(2, 'yes')" id="m1-a2q2-yes" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50">Requires Citation</button>
+                        </div>
+                        <div id="m1-a2q2-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-6 flex justify-between items-center">
+                    <span class="text-xs font-medium text-slate-400" id="m1-completed-text">Module not yet evaluated</span>
+                    <button onclick="switchTab('tab-m2')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm px-6 py-2.5 rounded-lg transition-colors shadow-sm">
+                        Proceed to Module 2 <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- TAB: MODULE 2 -->
+            <section id="tab-m2" class="hidden space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Module 2</span>
+                    <h2 class="serif-title text-2xl font-bold text-slate-900">Types of Plagiarism</h2>
+                    <p class="text-slate-500 mt-1">Differentiating between intentional malpractice, patchworking, and accidental mistakes.</p>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-sm space-y-3">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2 uppercase tracking-wider text-xs">
+                        <i class="fa-solid fa-book"></i> Textbook Briefing (Unit 1.4 / Degrees of Plagiarism)
+                    </h3>
+                    <p class="text-xs leading-relaxed text-slate-600">
+                        Academic systems classify violations to assign proportional responses. Copy-pasting chunks of prose and replacing single words is called **patchworking** (often tied to developing writing fluency). **Collusion** involves presenting peer collaboration as purely individual work.
+                    </p>
+                </div>
+
+                <!-- Activity 2.1 -->
+                <div>
+                    <h3 class="font-semibold text-slate-800 mb-1">Activity 2.1: Classify the Infraction</h3>
+                    <p class="text-xs text-slate-500">Read each scenario and select the most appropriate categorization from the dropdown menu.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- MCQ 2.1.1 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <p class="text-sm font-medium text-slate-800 sm:w-2/3">"A student copies three paragraphs from different websites, changing every fourth word to a synonym, and inserts it without any quotation or source attribution."</p>
+                            <select id="m2-opt1" onchange="evaluateM2()" class="border border-slate-300 rounded-lg p-2 text-xs bg-white text-slate-700 font-medium">
+                                <option value="">-- Choose Classification --</option>
+                                <option value="patchwork">Patchwork Plagiarism / Omission</option>
+                                <option value="accidental">Accidental Mistake / Typo</option>
+                                <option value="collusion">Collusion / Shared Work</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- MCQ 2.1.2 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <p class="text-sm font-medium text-slate-800 sm:w-2/3">"Two students split the writing of an individual research report, submitting identical method sections while pretending they worked entirely alone."</p>
+                            <select id="m2-opt2" onchange="evaluateM2()" class="border border-slate-300 rounded-lg p-2 text-xs bg-white text-slate-700 font-medium">
+                                <option value="">-- Choose Classification --</option>
+                                <option value="patchwork">Patchwork Plagiarism / Omission</option>
+                                <option value="accidental">Accidental Mistake / Typo</option>
+                                <option value="collusion">Collusion / Shared Work</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity 2.2 -->
+                <div class="border-t border-slate-100 pt-6">
+                    <h3 class="font-semibold text-slate-800 mb-1">Activity 2.2: Intent & Severity Quiz</h3>
+                    <p class="text-xs text-slate-500">Read each student profile and determine if their action represents Intentional Malpractice or an Accidental Oversight.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3">
+                        <p class="text-sm font-medium text-slate-800">"Sarah uses her own words to summarize a complex argument but accidentally spells the author's name as 'Smitch' instead of 'Smith' in the in-text citation."</p>
+                        <div class="flex gap-2">
+                            <button onclick="answerM2Act2(1, 'accidental')" id="m2-a2-acc" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50">Accidental Oversight</button>
+                            <button onclick="answerM2Act2(1, 'intentional')" id="m2-a2-int" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50">Intentional Malpractice</button>
+                        </div>
+                        <div id="m2-a2q1-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3">
+                        <p class="text-sm font-medium text-slate-800">"John copies and pastes a long, expressive quote directly from an online journal. He writes a correct source citation but forgets to add quotation marks around the text."</p>
+                        <div class="flex gap-2">
+                            <button onclick="answerM2Act2(2, 'accidental')" id="m2-a2q2-acc" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50">Accidental Oversight</button>
+                            <button onclick="answerM2Act2(2, 'intentional')" id="m2-a2q2-int" class="px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50">Intentional Malpractice</button>
+                        </div>
+                        <div id="m2-a2q2-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                    </div>
+                </div>
+
+                <div id="m2-feedback" class="hidden p-4 rounded-xl border text-xs"></div>
+
+                <div class="border-t border-slate-100 pt-6 flex justify-between items-center">
+                    <span class="text-xs font-medium text-slate-400" id="m2-completed-text">Module not yet evaluated</span>
+                    <button onclick="switchTab('tab-m3')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm px-6 py-2.5 rounded-lg transition-colors shadow-sm">
+                        Proceed to Module 3 <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- TAB: MODULE 3 -->
+            <section id="tab-m3" class="hidden space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Module 3</span>
+                    <h2 class="serif-title text-2xl font-bold text-slate-900">Referencing Mechanics (APA 7th)</h2>
+                    <p class="text-slate-500 mt-1">Mastering APA 7th editions, abbreviations in citations, secondary references, and bibliography structure.</p>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-sm space-y-3">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2 uppercase tracking-wider text-xs">
+                        <i class="fa-solid fa-book"></i> Textbook Briefing (APA 7th Standards)
+                    </h3>
+                    <p class="text-xs leading-relaxed text-slate-600">
+                        The **APA 7th edition** system governs in-text citations and reference lists. Key components:
+                    </p>
+                    <ul class="text-xs text-slate-600 space-y-1.5 list-disc pl-4">
+                        <li><strong>Book Reference:</strong> Author, A. A. (Year). <em>Title of book in italics</em> (Edition). Publisher. (Note: No place of publication is listed in the 7th edition!).</li>
+                        <li><strong>In-text abbreviations:</strong> Use "et al." immediately from the first citation for three or more authors. Do not use *ibid.* or *op. cit.*—these are not used in APA style.</li>
+                        <li><strong>Secondary References:</strong> When citing a source you read within another source, name the original but cite the one you actually read: e.g., <em>McEwan (2015, as cited in Kelman, 2016)</em>.</li>
+                        <li><strong>Reference List vs. Bibliography:</strong> A Reference List only includes works cited in your text. A Bibliography contains background or consulted material not directly cited.</li>
+                    </ul>
+                </div>
+
+                <!-- Activity 3.1 -->
+                <div>
+                    <h3 class="font-semibold text-slate-800 mb-1">Activity 3.1: Reconstruct the Book Reference (APA 7th)</h3>
+                    <p class="text-xs text-slate-500">Click the scrambled blocks below to arrange them in the correct sequence matching APA 7th Book Reference standards.</p>
+                </div>
+
+                <div class="p-4 border border-slate-200 rounded-xl bg-slate-50/50 space-y-3">
+                    <!-- Scrambled Blocks Container -->
+                    <div class="flex flex-wrap gap-2" id="scrambled-m3-container">
+                        <!-- Filled by JS -->
+                    </div>
+
+                    <!-- Drop Zone -->
+                    <div class="space-y-2 mt-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Your Current Sequence:</span>
+                        <div id="dropzone-m3" class="min-h-[50px] border-2 border-dashed border-slate-300 rounded-xl bg-white p-2 flex flex-wrap gap-2 items-center">
+                            <!-- Filled by click interactions -->
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="checkM3Act1()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs px-4 py-2 rounded-lg transition-colors">Verify APA 7th Order</button>
+                        <button onclick="resetM3Act1()" class="border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium text-xs px-4 py-2 rounded-lg transition-colors">Reset Blocks</button>
+                    </div>
+
+                    <div id="m3-act1-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                </div>
+
+                <!-- Activity 3.2 -->
+                <div class="border-t border-slate-100 pt-6">
+                    <h3 class="font-semibold text-slate-800 mb-1">Activity 3.2: Abbreviations in In-Text Citations</h3>
+                    <p class="text-xs text-slate-500">Assess how Latin abbreviations and multiple-author conditions are handled in APA 7th.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3">
+                        <p class="text-sm font-medium text-slate-800">1. "Which in-text citation correctly refers to a work by three authors (Smith, Jones, and Brown, published in 2020) on its very first appearance in APA 7th?"</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                            <button onclick="answerM3Act2(1, 'A')" id="m3-a2q1-btnA" class="p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium">A) (Smith, Jones, & Brown, 2020)</button>
+                            <button onclick="answerM3Act2(1, 'B')" id="m3-a2q1-btnB" class="p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium">B) (Smith et al., 2020)</button>
+                        </div>
+                        <div id="m3-a2q1-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3">
+                        <p class="text-sm font-medium text-slate-800">2. "How does APA 7th view the use of 'ibid.' when referencing the exact same page/source as the immediately preceding sentence?"</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                            <button onclick="answerM3Act2(2, 'A')" id="m3-a2q2-btnA" class="p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium">A) It is recommended to reduce character length.</button>
+                            <button onclick="answerM3Act2(2, 'B')" id="m3-a2q2-btnB" class="p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium">B) It is prohibited; repeat the author and year.</button>
+                        </div>
+                        <div id="m3-a2q2-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                    </div>
+                </div>
+
+                <!-- Activity 3.3 -->
+                <div class="border-t border-slate-100 pt-6">
+                    <h3 class="font-semibold text-slate-800 mb-1">Activity 3.3: Secondary References</h3>
+                    <p class="text-xs text-slate-500">Construct secondary source citations for material you found inside an intermediate text.</p>
+                </div>
+
+                <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3">
+                    <p class="text-sm font-medium text-slate-800">"You read a study by McEwan (published in 2015) that was discussed on page 45 of a book by Kelman (published in 2016). Choose the correct APA 7th secondary citation:"</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                        <button onclick="answerM3Act3('A')" id="m3-a3-btnA" class="p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium">A) According to McEwan (2015, as cited in Kelman, 2016)...</button>
+                        <button onclick="answerM3Act3('B')" id="m3-a3-btnB" class="p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium">B) According to McEwan (op. cit. Kelman, 2016)...</button>
+                    </div>
+                    <div id="m3-a3-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                </div>
+
+                <!-- Activity 3.4 -->
+                <div class="border-t border-slate-100 pt-6">
+                    <h3 class="font-semibold text-slate-800 mb-1">Activity 3.4: Reference List vs. Bibliography (APA 7th)</h3>
+                    <p class="text-xs text-slate-500">Distinguish between the structural listings of background and direct source files.</p>
+                </div>
+
+                <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3">
+                    <p class="text-sm font-medium text-slate-800">"Which statement is true regarding the reference page standard in APA 7th?"</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                        <button onclick="answerM3Act4('A')" id="m3-a4-btnA" class="p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium">A) It is titled 'Bibliography' and contains all background readings consultatively explored.</button>
+                        <button onclick="answerM3Act4('B')" id="m3-a4-btnB" class="p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium">B) It is titled 'References' and must contain only sources directly cited within your text.</button>
+                    </div>
+                    <div id="m3-a4-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-6 flex justify-between items-center">
+                    <span class="text-xs font-medium text-slate-400" id="m3-completed-text">Module not yet evaluated</span>
+                    <button onclick="switchTab('tab-m4')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm px-6 py-2.5 rounded-lg transition-colors shadow-sm">
+                        Proceed to Module 4 <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- TAB: MODULE 4 -->
+            <section id="tab-m4" class="hidden space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Module 4</span>
+                    <h2 class="serif-title text-2xl font-bold text-slate-900">Quoting & Combining Sources</h2>
+                    <p class="text-slate-500 mt-1">Integrating external voices cleanly while building cohesive, multi-source arguments.</p>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-sm space-y-3">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2 uppercase tracking-wider text-xs">
+                        <i class="fa-solid fa-book"></i> Textbook Briefing (Units 1.8 & 1.9)
+                    </h3>
+                    <p class="text-xs leading-relaxed text-slate-600">
+                        When quoting under APA 7th, always specify page numbers (e.g., <em>p. 45</em> or <em>pp. 45–46</em>). Quotes with 40 or more words must be formatted as **block quotations** (indented 0.5 inches, double-spaced, no quotation marks). When synthesizing, use logical connectives to bridge opposing views.
+                    </p>
+                </div>
+
+                <!-- Activity 4.1 -->
+                <div>
+                    <h3 class="font-semibold text-slate-800 mb-1">Activity 4.1: Structuring a Multi-Source Argument</h3>
+                    <p class="text-xs text-slate-500">Read the student draft below and fill in the missing cohesive linkers and citations.</p>
+                </div>
+
+                <div class="p-5 border border-slate-200 rounded-xl bg-slate-50/50 space-y-4">
+                    <div class="bg-white p-3 rounded-lg border text-xs space-y-1">
+                        <p><strong>Source 1 (Lombardo, 2009):</strong> "Atmospheric CO2 concentrations generated by burning fossil fuels are warming the planet."</p>
+                        <p><strong>Source 2 (Wong, 2011):</strong> "Climate fluctuations are natural and caused by historical sunspot cycles rather than greenhouse gases."</p>
+                    </div>
+
+                    <!-- Interactive Text -->
+                    <div class="text-sm leading-relaxed text-slate-700 space-y-3">
+                        <p>
+                            Lombardo (2009) argues that rising global temperatures are primarily driven by carbon emissions. 
+                            <select id="m4-input-1" class="border-b border-slate-400 bg-white font-semibold text-xs py-0.5 px-1 rounded">
+                                <option value="">-- Choose Linker --</option>
+                                <option value="however">However, (Opposition)</option>
+                                <option value="consequently">Consequently, (Result)</option>
+                            </select>
+                            Wong (2011) presents a comprehensive counter-argument, maintaining that climate changes are natural fluctuations triggered by 
+                            <select id="m4-input-2" class="border-b border-slate-400 bg-white font-semibold text-xs py-0.5 px-1 rounded">
+                                <option value="">-- Choose Fact --</option>
+                                <option value="solar">solar activity and sunspot cycles.</option>
+                                <option value="industrial">industrial factory emissions.</option>
+                            </select>
+                        </p>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="checkM4Act1()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs px-4 py-2 rounded-lg transition-colors">Verify Synthesis</button>
+                    </div>
+
+                    <div id="m4-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                </div>
+
+                <!-- Activity 4.2 -->
+                <div class="border-t border-slate-100 pt-6">
+                    <h3 class="font-semibold text-slate-800 mb-1">Activity 4.2: Direct Quotation Standards (APA 7th)</h3>
+                    <p class="text-xs text-slate-500">Identify correct syntax structures for in-text direct quotations.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3">
+                        <p class="text-sm font-medium text-slate-800">"Which citation matches correct short quotation parameters under APA 7th?"</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                            <button onclick="answerM4Act2('A')" id="m4-a2-btnA" class="p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium">A) Harris (2015) claimed, "The data lacks empirical validation" (p. 102).</button>
+                            <button onclick="answerM4Act2('B')" id="m4-a2-btnB" class="p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium">B) Harris (2015) claimed, "The data lacks empirical validation," 102.</button>
+                        </div>
+                        <div id="m4-act2-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-6 flex justify-between items-center">
+                    <span class="text-xs font-medium text-slate-400" id="m4-completed-text">Module not yet evaluated</span>
+                    <button onclick="switchTab('tab-m5')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm px-6 py-2.5 rounded-lg transition-colors shadow-sm">
+                        Proceed to Module 5 <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- TAB: MODULE 5 -->
+            <section id="tab-m5" class="hidden space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Module 5</span>
+                    <h2 class="serif-title text-2xl font-bold text-slate-900">Paraphrasing Builder</h2>
+                    <p class="text-slate-500 mt-1">Applying the three pillars of text transformations: Synonyms, Word Class, and Word Order.</p>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-sm space-y-3">
+                    <h3 class="font-bold text-slate-800 flex items-center gap-2 uppercase tracking-wider text-xs">
+                        <i class="fa-solid fa-book"></i> Textbook Briefing (Unit 1.7)
+                    </h3>
+                    <p class="text-xs leading-relaxed text-slate-600">
+                        A paraphrase must reflect a significant change in structural layout and vocabulary while keeping the exact logic of the original source text. Master paraphrasing by:
+                    </p>
+                    <ul class="text-xs text-slate-600 space-y-1 list-disc pl-4">
+                        <li><strong>Lexical Substitution:</strong> Generating synonyms (e.g., *hesited* &rarr; *demonstrated reluctance*).</li>
+                        <li><strong>Word Class Change:</strong> Transmuting nouns to verbs, or adjectives to nouns (e.g., *hesitation* [noun] &rarr; *hesitated* [verb]).</li>
+                        <li><strong>Word Order/Voice:</strong> Reorganizing active clauses to passive layouts.</li>
+                    </ul>
+                </div>
+
+                <!-- Activity 5.1 -->
+                <div>
+                    <h3 class="font-semibold text-slate-800 mb-1">Activity 5.1: Interactive Builder</h3>
+                    <p class="text-xs text-slate-500">Alternatively, complete this sentence to build a professional paraphrase:</p>
+                </div>
+
+                <div class="p-5 border border-slate-200 rounded-xl bg-slate-50/50 space-y-4">
+                    <div class="bg-white p-3 rounded-lg border text-xs">
+                        <span class="font-bold block mb-1">Original Text (Stephen Bailey, 2018):</span>
+                        <span class="italic text-slate-600">"Consequently food producers have added omega-3s to products ranging from margarine to soft drinks in an attempt to make their products appear healthier and hence increase sales."</span>
+                    </div>
+
+                    <div class="p-4 bg-indigo-50/50 border border-indigo-100 rounded-xl space-y-3">
+                        <div class="flex flex-wrap gap-2 items-center text-xs">
+                            <span>As a result,</span>
+                            <select id="m5-opt-1" class="border border-slate-300 rounded px-1.5 py-1 bg-white font-medium text-slate-700">
+                                <option value="">-- select synonym --</option>
+                                <option value="food-manufacturers">food manufacturers</option>
+                                <option value="supermarket-outlets">supermarket outlets</option>
+                            </select>
+                            <span>have</span>
+                            <select id="m5-opt-2" class="border border-slate-300 rounded px-1.5 py-1 bg-white font-medium text-slate-700">
+                                <option value="">-- select synonym --</option>
+                                <option value="supplemented">supplemented commodities like</option>
+                                <option value="inserted">inserted fats into</option>
+                            </select>
+                            <span>spreads and beverages with omega-3 fatty acids in an effort to</span>
+                            <select id="m5-opt-3" class="border border-slate-300 rounded px-1.5 py-1 bg-white font-medium text-slate-700">
+                                <option value="">-- select synonym --</option>
+                                <option value="maximize">maximize profitability by projecting a healthier image.</option>
+                                <option value="falsify">falsify consumer reports and raise retail prices.</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="checkM5Act1()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs px-4 py-2 rounded-lg transition-colors">Submit Builder Evaluation</button>
+                    </div>
+
+                    <div id="m5-act1-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                </div>
+
+                <!-- Activity 5.2 -->
+                <div class="border-t border-slate-100 pt-6">
+                    <h3 class="font-semibold text-slate-800 mb-1">Activity 5.2: Self-Guided Paraphrase Workspace</h3>
+                    <p class="text-xs text-slate-500">Read the original text below and write your own paraphrase. Check the validation boxes as you complete each technique.</p>
+                </div>
+
+                <div class="p-5 border border-slate-200 rounded-xl bg-slate-50/50 space-y-4">
+                    <div class="bg-white p-3 rounded-lg border text-xs">
+                        <span class="font-bold block mb-1">Original Text:</span>
+                        <span class="italic text-slate-600">"The government hesitated to lower taxes, which caused severe social unrest."</span>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Your Custom Paraphrase:</label>
+                        <textarea id="m5-user-paraphrase" rows="3" placeholder="Draft your academic paraphrase here..." class="w-full p-3 border border-slate-300 rounded-xl text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"></textarea>
+                    </div>
+
+                    <div class="space-y-2 text-xs">
+                        <span class="font-semibold text-slate-700 block mb-1">Self-Assessment Rubric Checklist:</span>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="flex items-center gap-2 text-slate-600">
+                                <input type="checkbox" id="m5-check-syn" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                I substituted at least 3 key words with academic synonyms (e.g. government -> state/authorities).
+                            </label>
+                            <label class="flex items-center gap-2 text-slate-600">
+                                <input type="checkbox" id="m5-check-class" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                I transformed the word class/parts of speech (e.g. hesitated [verb] -> hesitation [noun]).
+                            </label>
+                            <label class="flex items-center gap-2 text-slate-600">
+                                <input type="checkbox" id="m5-check-order" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                I completely reordered the clause structure or flipped to a passive perspective.
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="checkM5Act2()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs px-4 py-2 rounded-lg transition-colors">Submit Paraphrase</button>
+                        <button onclick="showModelM5()" class="border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium text-xs px-4 py-2 rounded-lg transition-colors">View Exemplary Model Answers</button>
+                    </div>
+
+                    <div id="m5-act2-feedback" class="hidden p-3 rounded-lg text-xs mt-2"></div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-6 flex justify-between items-center">
+                    <span class="text-xs font-medium text-slate-400" id="m5-completed-text">Module not yet evaluated</span>
+                    <button onclick="switchTab('tab-further')" class="bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm px-6 py-2.5 rounded-lg transition-colors shadow-sm">
+                        Go to Directory <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- TAB: FURTHER STUDY -->
+            <section id="tab-further" class="space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <h2 class="serif-title text-2xl font-bold text-slate-900">Further Study Directory</h2>
+                    <p class="text-slate-500 mt-1">Cross-references, APA 7th standards, and curated guidelines based on the handbook.</p>
+                </div>
+
+                <div class="space-y-4 text-sm text-slate-600">
+                    <p>To master academic writing and referencing, continue reviewing these units in Stephen Bailey's handbook:</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 border border-slate-200 rounded-xl bg-slate-50/50 space-y-2">
+                            <span class="font-bold text-slate-800 block text-xs uppercase tracking-wider">Chapter References</span>
+                            <ul class="space-y-1 list-disc pl-4 text-xs">
+                                <li><strong>Unit 1.4:</strong> Avoiding Plagiarism</li>
+                                <li><strong>Unit 1.7:</strong> Summarising and Paraphrasing</li>
+                                <li><strong>Unit 1.8:</strong> References and Quotations</li>
+                                <li><strong>Unit 1.9:</strong> Combining Sources</li>
+                            </ul>
+                        </div>
+
+                        <div class="p-4 border border-slate-200 rounded-xl bg-slate-50/50 space-y-2">
+                            <span class="font-bold text-slate-800 block text-xs uppercase tracking-wider">APA 7th Guidelines</span>
+                            <ul class="space-y-1 list-disc pl-4 text-xs">
+                                <li>Always list the publisher directly without the geographical city.</li>
+                                <li>Utilize the serial (Oxford) comma before "and" in listing authors inside the References block.</li>
+                                <li>Provide DOIs as active URLs formatted as https://doi.org/xxxx.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="p-5 border border-slate-200 rounded-xl bg-indigo-50/30">
+                        <span class="font-bold text-indigo-900 block text-xs uppercase tracking-wider mb-2">Final Step Checklist</span>
+                        <ul class="space-y-1.5 text-xs text-indigo-950 pl-4 list-decimal">
+                            <li>Always compile full source metadata *during* the initial reading stage.</li>
+                            <li>Ensure that any in-text direct citations have corresponding page numbers.</li>
+                            <li>When paraphrasing, first look away from the text and explain the concept out loud before writing. This helps preserve your own natural voice.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-6 flex justify-between items-center">
+                    <button onclick="downloadReport()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-sm px-6 py-2.5 rounded-lg transition-colors shadow-sm">
+                        <i class="fa-solid fa-download mr-1"></i> Download My Report
+                    </button>
+                    <button onclick="switchTab('tab-intro')" class="border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium text-sm px-4 py-2.5 rounded-lg transition-colors">
+                        Back to Welcome
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Confirmation Modal Overlay -->
+    <div id="reset-modal" class="fixed inset-0 bg-slate-900/60 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white rounded-xl max-w-sm w-full p-6 text-center space-y-4 shadow-xl">
+            <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="font-bold text-slate-900 text-lg">Reset All Progress?</h3>
+            <p class="text-xs text-slate-500">This will clear your local storage history, score achievements, and customized paraphrasing drafts.</p>
+            <div class="flex gap-2 justify-center">
+                <button onclick="confirmReset()" class="bg-rose-600 hover:bg-rose-500 text-white px-4 py-2 rounded-lg text-xs font-semibold">Yes, Clear Everything</button>
+                <button onclick="closeResetModal()" class="border border-slate-300 hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-lg text-xs font-semibold">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-500 py-6 border-t border-slate-800 text-center text-xs mt-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>&copy; 2026 Academic Writing Self-Assessment Tool. Structured for adult English learners and educators.</p>
+        </div>
+    </footer>
+
+    <!-- Logic / JavaScript -->
+    <script>
+        // Track the completion status of all interactive activities across 5 modules
+        let state = {
+            m1: { 
+                completed: false, 
+                act1: { q1: null, q2: null }, 
+                act2: { q1: null, q2: null } 
+            },
+            m2: { 
+                completed: false, 
+                act1: { opt1: "", opt2: "" }, 
+                act2: { q1: null, q2: null } 
+            },
+            m3: { 
+                completed: false, 
+                act1: { arrangement: [] }, 
+                act2: { q1: null, q2: null },
+                act3: { answered: null },
+                act4: { answered: null }
+            },
+            m4: { 
+                completed: false, 
+                act1: { opt1: "", opt2: "" }, 
+                act2: { answered: null } 
+            },
+            m5: { 
+                completed: false, 
+                act1: { opt1: "", opt2: "", opt3: "" }, 
+                act2: { userText: "", checkedList: [] } 
+            }
+        };
+
+        // Modal triggers (replacing raw confirm)
+        function showResetModal() {
+            document.getElementById('reset-modal').classList.remove('hidden');
+        }
+
+        function closeResetModal() {
+            document.getElementById('reset-modal').classList.add('hidden');
+        }
+
+        function confirmReset() {
+            localStorage.removeItem("academic_writing_module_state_v2");
+            window.location.reload();
+        }
+
+        // Tab switcher
+        function switchTab(tabId) {
+            const tabs = ['tab-intro', 'tab-m1', 'tab-m2', 'tab-m3', 'tab-m4', 'tab-m5', 'tab-further'];
+            tabs.forEach(t => {
+                document.getElementById(t).classList.add('hidden');
+                const btn = document.getElementById('btn-' + t);
+                if (btn) {
+                    btn.className = "w-full flex items-center justify-between px-4 py-3 text-left rounded-lg transition-all duration-200 font-medium text-slate-600 hover:bg-slate-100";
+                }
+            });
+
+            document.getElementById(tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if (activeBtn) {
+                activeBtn.className = "w-full flex items-center justify-between px-4 py-3 text-left rounded-lg transition-all duration-200 font-medium text-slate-700 bg-white shadow-sm border border-slate-200";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Module 1 Activity 1.1 Evaluator
+        function answerM1Act1(questionNum, answer) {
+            state.m1.act1['q' + questionNum] = answer;
+            const feedbackBox = document.getElementById(`m1-q${questionNum}-feedback`);
+            feedbackBox.classList.remove('hidden');
+
+            const yesBtn = document.getElementById(`m1-q${questionNum}-yes`);
+            const noBtn = document.getElementById(`m1-q${questionNum}-no`);
+
+            yesBtn.className = "px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white";
+            noBtn.className = "px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white";
+
+            if (questionNum === 1) {
+                if (answer === true) {
+                    yesBtn.classList.add('bg-emerald-100', 'border-emerald-400', 'text-emerald-800');
+                    feedbackBox.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                    feedbackBox.innerHTML = "<strong>Correct!</strong> Using your own previously graded work without citation is considered 'self-plagiarism' or replication malpractice.";
+                } else {
+                    noBtn.classList.add('bg-rose-100', 'border-rose-400', 'text-rose-800');
+                    feedbackBox.className = "p-3 rounded-lg text-xs mt-2 bg-rose-50 text-rose-800 border border-rose-200";
+                    feedbackBox.innerHTML = "<strong>Incorrect.</strong> Reusing your own material for a different course without citation is replication malpractice.";
+                }
+            } else if (questionNum === 2) {
+                if (answer === false) {
+                    noBtn.classList.add('bg-emerald-100', 'border-emerald-400', 'text-emerald-800');
+                    feedbackBox.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                    feedbackBox.innerHTML = "<strong>Correct!</strong> Broad statements that represent general consensus/common knowledge (e.g. climate is getting warmer) do not require specific in-text source citations.";
+                } else {
+                    yesBtn.classList.add('bg-rose-100', 'border-rose-400', 'text-rose-800');
+                    feedbackBox.className = "p-3 rounded-lg text-xs mt-2 bg-rose-50 text-rose-800 border border-rose-200";
+                    feedbackBox.innerHTML = "<strong>Incorrect.</strong> Highly generalized facts of public consensus do not constitute proprietary intellectual ideas.";
+                }
+            }
+            saveAndCheckProgress();
+        }
+
+        // Module 1 Activity 1.2 Evaluator
+        function answerM1Act2(questionNum, answer) {
+            state.m1.act2['q' + questionNum] = answer;
+            const feedbackBox = document.getElementById(`m1-a2q${questionNum}-feedback`);
+            feedbackBox.classList.remove('hidden');
+
+            const yesBtn = document.getElementById(`m1-a2q${questionNum}-yes`);
+            const noBtn = document.getElementById(`m1-a2q${questionNum}-no`);
+
+            yesBtn.className = "px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white";
+            noBtn.className = "px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white";
+
+            if (questionNum === 1) {
+                if (answer === 'no') {
+                    noBtn.classList.add('bg-emerald-100', 'border-emerald-400', 'text-emerald-800');
+                    feedbackBox.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                    feedbackBox.innerHTML = "<strong>Correct!</strong> Standard physical values, scientific formulas, and widely verified facts (e.g. water's boiling point) are public knowledge and require no citation.";
+                } else {
+                    yesBtn.classList.add('bg-rose-100', 'border-rose-400', 'text-rose-800');
+                    feedbackBox.className = "p-3 rounded-lg text-xs mt-2 bg-rose-50 text-rose-800 border border-rose-200";
+                    feedbackBox.innerHTML = "<strong>Incorrect.</strong> Standard physical properties belong to common scientific knowledge.";
+                }
+            } else if (questionNum === 2) {
+                if (answer === 'yes') {
+                    yesBtn.classList.add('bg-emerald-100', 'border-emerald-400', 'text-emerald-800');
+                    feedbackBox.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                    feedbackBox.innerHTML = "<strong>Correct!</strong> Specific statistical claims and research outcomes require a source reference to substantiate the exact empirical finding.";
+                } else {
+                    noBtn.classList.add('bg-rose-100', 'border-rose-400', 'text-rose-800');
+                    feedbackBox.className = "p-3 rounded-lg text-xs mt-2 bg-rose-50 text-rose-800 border border-rose-200";
+                    feedbackBox.innerHTML = "<strong>Incorrect.</strong> Precise data metrics and specific empirical results must have citation sources.";
+                }
+            }
+            saveAndCheckProgress();
+        }
+
+        // Module 2 Activity 2.1 Evaluator
+        function evaluateM2() {
+            const opt1 = document.getElementById("m2-opt1").value;
+            const opt2 = document.getElementById("m2-opt2").value;
+
+            state.m2.act1.opt1 = opt1;
+            state.m2.act1.opt2 = opt2;
+
+            const feedback = document.getElementById("m2-feedback");
+            feedback.classList.remove('hidden');
+
+            if (opt1 && opt2) {
+                let matches = 0;
+                if (opt1 === "patchwork") matches++;
+                if (opt2 === "collusion") matches++;
+
+                if (matches === 2) {
+                    feedback.className = "p-4 rounded-xl border text-xs bg-emerald-50 text-emerald-800 border-emerald-200";
+                    feedback.innerHTML = "<strong>Perfect!</strong> You correctly differentiated patchworking (rearranging text chunks without citing) from collusion (sharing individual work files).";
+                } else {
+                    feedback.className = "p-4 rounded-xl border text-xs bg-amber-50 text-amber-800 border-amber-200";
+                    feedback.innerHTML = `<strong>Feedback:</strong> You have correctly matched ${matches} out of 2. Re-examine your classifications.`;
+                }
+            }
+            saveAndCheckProgress();
+        }
+
+        // Module 2 Activity 2.2 Evaluator
+        function answerM2Act2(questionNum, answer) {
+            state.m2.act2['q' + questionNum] = answer;
+            const feedbackBox = document.getElementById(`m2-a2q${questionNum}-feedback`);
+            feedbackBox.classList.remove('hidden');
+
+            const accBtn = document.getElementById(questionNum === 1 ? 'm2-a2-acc' : 'm2-a2q2-acc');
+            const intBtn = document.getElementById(questionNum === 1 ? 'm2-a2-int' : 'm2-a2q2-int');
+
+            accBtn.className = "px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white";
+            intBtn.className = "px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold bg-white";
+
+            if (questionNum === 1) {
+                if (answer === 'accidental') {
+                    accBtn.classList.add('bg-emerald-100', 'border-emerald-400', 'text-emerald-800');
+                    feedbackBox.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                    feedbackBox.innerHTML = "<strong>Correct!</strong> A minor spelling mistake or typographical error in an author's name represents an accidental citation error, not intentional theft.";
+                } else {
+                    intBtn.classList.add('bg-rose-100', 'border-rose-400', 'text-rose-800');
+                    feedbackBox.className = "p-3 rounded-lg text-xs mt-2 bg-rose-50 text-rose-800 border border-rose-200";
+                    feedbackBox.innerHTML = "<strong>Incorrect.</strong> Typographical slips do not signal a structural attempt to deceive the reader.";
+                }
+            } else if (questionNum === 2) {
+                if (answer === 'intentional') {
+                    intBtn.classList.add('bg-emerald-100', 'border-emerald-400', 'text-emerald-800');
+                    feedbackBox.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                    feedbackBox.innerHTML = "<strong>Correct!</strong> Presenting a block of identical text verbatim as your own phrasing—even if followed by a source reference—constitutes intentional plagiarism unless placed inside quotation marks.";
+                } else {
+                    accBtn.classList.add('bg-rose-100', 'border-rose-400', 'text-rose-800');
+                    feedbackBox.className = "p-3 rounded-lg text-xs mt-2 bg-rose-50 text-rose-800 border border-rose-200";
+                    feedbackBox.innerHTML = "<strong>Incorrect.</strong> Verbatim extraction without quotation indicator boxes cannot be classified as a mere citation oversight.";
+                }
+            }
+            saveAndCheckProgress();
+        }
+
+        // Module 3 Activity 3.1: Reordering Blocks
+        const m3Blocks = [
+            { id: "m3b-1", text: "Bailey, S." },
+            { id: "m3b-2", text: "(2018)." },
+            { id: "m3b-3", text: "<i>Academic writing: A handbook for international students</i>" },
+            { id: "m3b-4", text: "(5th ed.)." },
+            { id: "m3b-5", text: "Routledge." }
+        ];
+
+        function renderM3Blocks() {
+            const container = document.getElementById("scrambled-m3-container");
+            container.innerHTML = "";
+
+            // Display remaining scrambled items
+            m3Blocks.forEach(item => {
+                if (!state.m3.act1.arrangement.includes(item.id)) {
+                    const el = document.createElement("button");
+                    el.className = "bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold hover:border-indigo-400 transition-colors shadow-sm";
+                    el.innerHTML = item.text;
+                    el.onclick = () => addToM3Arrangement(item.id);
+                    container.appendChild(el);
+                }
+            });
+
+            // Display placed items in dropzone
+            const dropzone = document.getElementById("dropzone-m3");
+            dropzone.innerHTML = "";
+
+            if (state.m3.act1.arrangement.length === 0) {
+                dropzone.innerHTML = `<p class="text-xs text-slate-400 italic mx-auto">Click the available reference blocks above to arrange them in order.</p>`;
+            } else {
+                state.m3.act1.arrangement.forEach(id => {
+                    const blockObj = m3Blocks.find(b => b.id === id);
+                    if (blockObj) {
+                        const el = document.createElement("button");
+                        el.className = "bg-indigo-50 border border-indigo-200 text-indigo-900 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-indigo-100 transition-colors flex items-center gap-1.5";
+                        el.innerHTML = `${blockObj.text} <i class="fa-solid fa-xmark text-indigo-400"></i>`;
+                        el.onclick = () => removeFromM3Arrangement(id);
+                        dropzone.appendChild(el);
+                    }
+                });
+            }
+        }
+
+        function addToM3Arrangement(id) {
+            if (!state.m3.act1.arrangement.includes(id)) {
+                state.m3.act1.arrangement.push(id);
+                renderM3Blocks();
+            }
+        }
+
+        function removeFromM3Arrangement(id) {
+            state.m3.act1.arrangement = state.m3.act1.arrangement.filter(item => item !== id);
+            renderM3Blocks();
+        }
+
+        function resetM3Act1() {
+            state.m3.act1.arrangement = [];
+            document.getElementById("m3-act1-feedback").classList.add("hidden");
+            renderM3Blocks();
+        }
+
+        function checkM3Act1() {
+            const feedback = document.getElementById("m3-act1-feedback");
+            feedback.classList.remove("hidden");
+
+            const correctOrder = ["m3b-1", "m3b-2", "m3b-3", "m3b-4", "m3b-5"];
+            const isCorrect = JSON.stringify(state.m3.act1.arrangement) === JSON.stringify(correctOrder);
+
+            if (isCorrect) {
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                feedback.innerHTML = "<strong>Correct!</strong> Under APA 7th, the citation contains no geographic city: <em>Bailey, S. (2018). Academic writing: A handbook for international students (5th ed.). Routledge.</em>";
+            } else {
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-rose-50 text-rose-800 border border-rose-200";
+                feedback.innerHTML = "<strong>Incorrect order.</strong> The APA 7th pattern requires: Author Surnames & Initials &rarr; Year &rarr; Book Title in Italics &rarr; Edition statement &rarr; Publisher.";
+            }
+            saveAndCheckProgress();
+        }
+
+        // Module 3 Activity 3.2 Evaluator
+        function answerM3Act2(questionNum, option) {
+            if (!state.m3.act2) state.m3.act2 = {};
+            state.m3.act2['q' + questionNum] = option;
+
+            const feedback = document.getElementById(`m3-a2q${questionNum}-feedback`);
+            feedback.classList.remove("hidden");
+
+            const btnA = document.getElementById(`m3-a2q${questionNum}-btnA`);
+            const btnB = document.getElementById(`m3-a2q${questionNum}-btnB`);
+
+            btnA.className = "p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium";
+            btnB.className = "p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium";
+
+            if (questionNum === 1) {
+                if (option === 'B') {
+                    btnB.classList.add('bg-emerald-50', 'border-emerald-400', 'text-emerald-800');
+                    feedback.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                    feedback.innerHTML = "<strong>Correct!</strong> APA 7th style uses 'et al.' immediately from the first occurrence for any source having three or more authors.";
+                } else {
+                    btnA.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-800');
+                    feedback.className = "p-3 rounded-lg text-xs mt-2 bg-rose-50 text-rose-800 border border-rose-200";
+                    feedback.innerHTML = "<strong>Incorrect.</strong> While older styles wrote all names in the first citation, APA 7th uses 'et al.' immediately for three or more authors.";
+                }
+            } else if (questionNum === 2) {
+                if (option === 'B') {
+                    btnB.classList.add('bg-emerald-50', 'border-emerald-400', 'text-emerald-800');
+                    feedback.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                    feedback.innerHTML = "<strong>Correct!</strong> APA strictly prohibits 'ibid.' or 'op. cit.'. Repetitive references require repeating the surname and publication year.";
+                } else {
+                    btnA.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-800');
+                    feedback.className = "p-3 rounded-lg text-xs mt-2 bg-rose-50 text-rose-800 border border-rose-200";
+                    feedback.innerHTML = "<strong>Incorrect.</strong> 'Ibid.' is an outdated Latin system not supported in APA style guides.";
+                }
+            }
+            saveAndCheckProgress();
+        }
+
+        // Module 3 Activity 3.3 Evaluator
+        function answerM3Act3(option) {
+            state.m3.act3.answered = option;
+            const feedback = document.getElementById("m3-a3-feedback");
+            feedback.classList.remove("hidden");
+
+            const btnA = document.getElementById("m3-a3-btnA");
+            const btnB = document.getElementById("m3-a3-btnB");
+
+            btnA.className = "p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium";
+            btnB.className = "p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium";
+
+            if (option === 'A') {
+                btnA.classList.add('bg-emerald-50', 'border-emerald-400', 'text-emerald-800');
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                feedback.innerHTML = "<strong>Correct!</strong> This represents the correct secondary reference standard in APA 7th, mentioning the original work and citing the source you actually read.";
+            } else {
+                btnB.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-800');
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-rose-50 text-rose-800 border border-rose-200";
+                feedback.innerHTML = "<strong>Incorrect.</strong> This formatting does not correspond to APA referencing standards.";
+            }
+            saveAndCheckProgress();
+        }
+
+        // Module 3 Activity 3.4 Evaluator
+        function answerM3Act4(option) {
+            state.m3.act4.answered = option;
+            const feedback = document.getElementById("m3-a4-feedback");
+            feedback.classList.remove("hidden");
+
+            const btnA = document.getElementById("m3-a4-btnA");
+            const btnB = document.getElementById("m3-a4-btnB");
+
+            btnA.className = "p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium";
+            btnB.className = "p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium";
+
+            if (option === 'B') {
+                btnB.classList.add('bg-emerald-50', 'border-emerald-400', 'text-emerald-800');
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                feedback.innerHTML = "<strong>Correct!</strong> APA 7th requires the section to be titled 'References' and contain *only* the sources directly cited within your text.";
+            } else {
+                btnA.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-800');
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-rose-50 text-rose-800 border border-rose-200";
+                feedback.innerHTML = "<strong>Incorrect.</strong> A 'Bibliography' contains background consulting works, which is not the standard APA bibliography listing page.";
+            }
+            saveAndCheckProgress();
+        }
+
+        // Module 4 Activity 4.1 Evaluator
+        function checkM4Act1() {
+            const val1 = document.getElementById("m4-input-1").value;
+            const val2 = document.getElementById("m4-input-2").value;
+
+            state.m4.act1.opt1 = val1;
+            state.m4.act1.opt2 = val2;
+
+            const feedback = document.getElementById("m4-feedback");
+            feedback.classList.remove('hidden');
+
+            if (!val1 || !val2) {
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-amber-50 text-amber-800 border border-amber-200";
+                feedback.innerHTML = "Please select all choices to evaluate your synthesis.";
+                return;
+            }
+
+            const correct = (val1 === "however" && val2 === "solar");
+
+            if (correct) {
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                feedback.innerHTML = "<strong>Perfect Synthesis!</strong> You used 'However' to connect the contrasting viewpoints and 'solar activity...' to specify Wong's reasoning.";
+            } else {
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-rose-50 text-rose-800 border border-rose-200";
+                feedback.innerHTML = "<strong>Review needed.</strong> Make sure your transition words correctly identify the contrast between Wong and Lombardo.";
+            }
+            saveAndCheckProgress();
+        }
+
+        // Module 4 Activity 4.2 Evaluator
+        function answerM4Act2(option) {
+            state.m4.act2.answered = option;
+            const feedback = document.getElementById("m4-act2-feedback");
+            feedback.classList.remove("hidden");
+
+            const btnA = document.getElementById("m4-a2-btnA");
+            const btnB = document.getElementById("m4-a2-btnB");
+
+            btnA.className = "p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium";
+            btnB.className = "p-2.5 border text-left rounded bg-white hover:bg-slate-50 font-medium";
+
+            if (option === 'A') {
+                btnA.classList.add('bg-emerald-50', 'border-emerald-400', 'text-emerald-800');
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                feedback.innerHTML = "<strong>Correct!</strong> For direct short quotations under APA 7th, specify the year, followed by the page indicator 'p.' inside the parentheses.";
+            } else {
+                btnB.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-800');
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-rose-50 text-rose-800 border border-rose-200";
+                feedback.innerHTML = "<strong>Incorrect.</strong> You must use 'p.' before the page number under APA 7th formatting rules.";
+            }
+            saveAndCheckProgress();
+        }
+
+        // Module 5 Activity 5.1 Evaluator
+        function checkM5Act1() {
+            const opt1 = document.getElementById("m5-opt-1").value;
+            const opt2 = document.getElementById("m5-opt-2").value;
+            const opt3 = document.getElementById("m5-opt-3").value;
+
+            state.m5.act1.opt1 = opt1;
+            state.m5.act1.opt2 = opt2;
+            state.m5.act1.opt3 = opt3;
+
+            const feedback = document.getElementById("m5-act1-feedback");
+            feedback.classList.remove('hidden');
+
+            let helperMatches = (opt1 === "food-manufacturers" && opt2 === "supplemented" && opt3 === "maximize");
+
+            if (helperMatches) {
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                feedback.innerHTML = "<strong>Submission Received!</strong> Your generated sentence represents an academic paraphrase based on Bailey's original model text.";
+            } else {
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-amber-50 text-amber-800 border-amber-200";
+                feedback.innerHTML = "Please complete the choices to test your structural transformations.";
+            }
+            saveAndCheckProgress();
+        }
+
+        // Module 5 Activity 5.2 Evaluator
+        function checkM5Act2() {
+            const userText = document.getElementById("m5-user-paraphrase").value;
+            const checkedSyn = document.getElementById("m5-check-syn").checked;
+            const checkedClass = document.getElementById("m5-check-class").checked;
+            const checkedOrder = document.getElementById("m5-check-order").checked;
+
+            state.m5.act2.userText = userText;
+            state.m5.act2.checkedList = [checkedSyn, checkedClass, checkedOrder];
+
+            const feedback = document.getElementById("m5-act2-feedback");
+            feedback.classList.remove('hidden');
+
+            if (userText.trim().length > 15) {
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-emerald-50 text-emerald-800 border border-emerald-200";
+                feedback.innerHTML = "<strong>Submission Evaluated!</strong> Your customized draft paraphrase has been stored in your active portfolio directory.";
+            } else {
+                feedback.className = "p-3 rounded-lg text-xs mt-2 bg-amber-50 text-amber-800 border-amber-200";
+                feedback.innerHTML = "Please draft a paraphrase of at least 15 characters to register your response.";
+            }
+            saveAndCheckProgress();
+        }
+
+        function showModelM5() {
+            const feedback = document.getElementById("m5-act2-feedback");
+            feedback.classList.remove('hidden');
+            feedback.className = "p-4 rounded-xl border text-xs bg-indigo-50 text-indigo-900 border-indigo-200 space-y-2";
+            feedback.innerHTML = `
+                <span class="font-bold block">Academic Model Solutions:</span>
+                <p><strong>Active Style (Word Class Transmutation):</strong> "The state's hesitation to implement tax reductions precipitated severe social turmoil."</p>
+                <p><strong>Passive Style (Syntactic Reordering):</strong> "Severe social unrest was induced by the federal authorities' reluctance to lower taxation."</p>
+            `;
+        }
+
+        // Save progress, update checklists and score displays
+        function saveAndCheckProgress() {
+            // M1 evaluation
+            if (state.m1.act1.q1 !== null && state.m1.act1.q2 !== null && state.m1.act2.q1 !== null && state.m1.act2.q2 !== null) {
+                state.m1.completed = true;
+                let score = 0;
+                if (state.m1.act1.q1 === true) score += 25;
+                if (state.m1.act1.q2 === false) score += 25;
+                if (state.m1.act2.q1 === 'no') score += 25;
+                if (state.m1.act2.q2 === 'yes') score += 25;
+                document.getElementById("m1-completed-text").innerHTML = `<span class="text-emerald-600 font-semibold"><i class="fa-solid fa-check"></i> Evaluated (${score}%)</span>`;
+            }
+
+            // M2 evaluation
+            if (state.m2.act1.opt1 && state.m2.act1.opt2 && state.m2.act2.q1 !== null && state.m2.act2.q2 !== null) {
+                state.m2.completed = true;
+                document.getElementById("m2-completed-text").innerHTML = `<span class="text-emerald-600 font-semibold"><i class="fa-solid fa-check"></i> Evaluated</span>`;
+            }
+
+            // M3 evaluation
+            if (state.m3.act1.arrangement.length > 0 && state.m3.act2.q1 !== null && state.m3.act2.q2 !== null && state.m3.act3.answered !== null && state.m3.act4.answered !== null) {
+                state.m3.completed = true;
+                document.getElementById("m3-completed-text").innerHTML = `<span class="text-emerald-600 font-semibold"><i class="fa-solid fa-check"></i> Evaluated</span>`;
+            }
+
+            // M4 evaluation
+            if (state.m4.act1.opt1 && state.m4.act1.opt2 && state.m4.act2.answered !== null) {
+                state.m4.completed = true;
+                document.getElementById("m4-completed-text").innerHTML = `<span class="text-emerald-600 font-semibold"><i class="fa-solid fa-check"></i> Evaluated</span>`;
+            }
+
+            // M5 evaluation
+            if (state.m5.act1.opt1 && state.m5.act1.opt2 && state.m5.act1.opt3 && state.m5.act2.userText.trim().length > 15) {
+                state.m5.completed = true;
+                document.getElementById("m5-completed-text").innerHTML = `<span class="text-emerald-600 font-semibold"><i class="fa-solid fa-check"></i> Evaluated</span>`;
+            }
+
+            // Calculate overall percentage
+            let modulesCompleted = 0;
+            if (state.m1.completed) { modulesCompleted++; document.getElementById("check-1").classList.remove("hidden"); document.getElementById("step-1").classList.add("bg-emerald-100", "text-emerald-700"); }
+            if (state.m2.completed) { modulesCompleted++; document.getElementById("check-2").classList.remove("hidden"); document.getElementById("step-2").classList.add("bg-emerald-100", "text-emerald-700"); }
+            if (state.m3.completed) { modulesCompleted++; document.getElementById("check-3").classList.remove("hidden"); document.getElementById("step-3").classList.add("bg-emerald-100", "text-emerald-700"); }
+            if (state.m4.completed) { modulesCompleted++; document.getElementById("check-4").classList.remove("hidden"); document.getElementById("step-4").classList.add("bg-emerald-100", "text-emerald-700"); }
+            if (state.m5.completed) { modulesCompleted++; document.getElementById("check-5").classList.remove("hidden"); document.getElementById("step-5").classList.add("bg-emerald-100", "text-emerald-700"); }
+
+            const percent = Math.round((modulesCompleted / 5) * 100);
+            document.getElementById("overall-progress-bar").style.width = percent + "%";
+            document.getElementById("overall-score-display").innerText = `Completed: ${modulesCompleted}/5 modules`;
+            document.getElementById("overall-percentage").innerText = percent + "%";
+
+            // Save to localStorage
+            localStorage.setItem("academic_writing_module_state_v2", JSON.stringify(state));
+        }
+
+        // Download Portfolio / Report File
+        function downloadReport() {
+            let reportContent = `================================================================
+ACADEMIC INTEGRITY PORTFOLIO REPORT
+Stephen Bailey's Academic Writing Companion (APA 7th Focus)
+Generated: 2026
+================================================================\n\n`;
+
+            reportContent += `OVERALL STATUS: ${document.getElementById("overall-percentage").innerText} Completed.\n\n`;
+
+            reportContent += `----------------------------------------------------------------
+MODULE 1: WHAT IS PLAGIARISM?
+----------------------------------------------------------------\n`;
+            reportContent += `Situation 1.1 (Self-Plagiarism): User Answered: ${state.m1.act1.q1 ? "Yes" : "No"}\n`;
+            reportContent += `Situation 1.2 (General Knowledge): User Answered: ${state.m1.act1.q2 ? "Yes" : "No"}\n`;
+            reportContent += `Statement 1.2.1 (Water Boiling): User Answered: ${state.m1.act2.q1 ? "Requires" : "No Citation"}\n`;
+            reportContent += `Statement 1.2.2 (Climate Data): User Answered: ${state.m1.act2.q2 ? "Requires" : "No Citation"}\n\n`;
+
+            reportContent += `----------------------------------------------------------------
+MODULE 2: TYPES OF PLAGIARISM
+----------------------------------------------------------------\n`;
+            reportContent += `Classification 2.1 (Patchwork): ${state.m2.act1.opt1 || "Not Answered"}\n`;
+            reportContent += `Classification 2.2 (Collusion): ${state.m2.act1.opt2 || "Not Answered"}\n`;
+            reportContent += `Profile 2.2.1 (Sarah Typo): ${state.m2.act2.q1 || "Not Answered"}\n`;
+            reportContent += `Profile 2.2.2 (John verbatim): ${state.m2.act2.q2 || "Not Answered"}\n\n`;
+
+            reportContent += `----------------------------------------------------------------
+MODULE 3: REFERENCING MECHANICS (APA 7th)
+----------------------------------------------------------------\n`;
+            reportContent += `Book Reference Arranged: ${state.m3.act1.arrangement.length > 0 ? "Yes" : "No"}\n`;
+            reportContent += `Abbreviation MCQ 1: Option ${state.m3.act2.q1 || "Not Answered"}\n`;
+            reportContent += `Abbreviation MCQ 2: Option ${state.m3.act2.q2 || "Not Answered"}\n`;
+            reportContent += `Secondary Citation choice: Option ${state.m3.act3.answered || "Not Answered"}\n`;
+            reportContent += `References vs Bibliography choice: Option ${state.m3.act4.answered || "Not Answered"}\n\n`;
+
+            reportContent += `----------------------------------------------------------------
+MODULE 4: QUOTING & COMBINING SOURCES
+----------------------------------------------------------------\n`;
+            reportContent += `Linker choice selected: ${state.m4.act1.opt1 || "Not Answered"}\n`;
+            reportContent += `Direct Quotation choice: Option ${state.m4.act2.answered || "Not Answered"}\n\n`;
+
+            reportContent += `----------------------------------------------------------------
+MODULE 5: PARAPHRASING BUILDER
+----------------------------------------------------------------\n`;
+            reportContent += `Builder Choices:\n- Synonym 1: ${state.m5.act1.opt1 || "Not Selected"}\n- Synonym 2: ${state.m5.act1.opt2 || "Not Selected"}\n- Synonym 3: ${state.m5.act1.opt3 || "Not Selected"}\n\n`;
+            reportContent += `Your Draft Paraphrase:\n"${state.m5.act2.userText || "No custom draft written"}"\n\n`;
+
+            reportContent += `================================================================
+END OF REPORT - PORTFOLIO SUCCESSFUL
+================================================================`;
+
+            const blob = new Blob([reportContent], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "Academic_Writing_Portfolio_Report.txt";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize from localstorage if available
+        window.onload = function() {
+            const savedState = localStorage.getItem("academic_writing_module_state_v2");
+            if (savedState) {
+                state = JSON.parse(savedState);
+                
+                // Restore state indicators for Module 1
+                if (state.m1.act1.q1 !== null) answerM1Act1(1, state.m1.act1.q1);
+                if (state.m1.act1.q2 !== null) answerM1Act1(2, state.m1.act1.q2);
+                if (state.m1.act2.q1 !== null) answerM1Act2(1, state.m1.act2.q1);
+                if (state.m1.act2.q2 !== null) answerM1Act2(2, state.m1.act2.q2);
+
+                // Restore Module 2 dropdowns
+                if (state.m2.act1.opt1) document.getElementById("m2-opt1").value = state.m2.act1.opt1;
+                if (state.m2.act1.opt2) document.getElementById("m2-opt2").value = state.m2.act1.opt2;
+                if (state.m2.act1.opt1 && state.m2.act1.opt2) evaluateM2();
+                if (state.m2.act2.q1 !== null) answerM2Act2(1, state.m2.act2.q1);
+                if (state.m2.act2.q2 !== null) answerM2Act2(2, state.m2.act2.q2);
+
+                // Restore Module 3
+                if (state.m3.act2.q1 !== null) answerM3Act2(1, state.m3.act2.q1);
+                if (state.m3.act2.q2 !== null) answerM3Act2(2, state.m3.act2.q2);
+                if (state.m3.act3.answered !== null) answerM3Act3(state.m3.act3.answered);
+                if (state.m3.act4.answered !== null) answerM3Act4(state.m3.act4.answered);
+
+                // Restore Module 4
+                if (state.m4.act1.opt1) document.getElementById("m4-input-1").value = state.m4.act1.opt1;
+                if (state.m4.act1.opt2) document.getElementById("m4-input-2").value = state.m4.act1.opt2;
+                if (state.m4.act1.opt1 && state.m4.act1.opt2) checkM4Act1();
+                if (state.m4.act2.answered !== null) answerM4Act2(state.m4.act2.answered);
+
+                // Restore Module 5
+                if (state.m5.act1.opt1) document.getElementById("m5-opt-1").value = state.m5.act1.opt1;
+                if (state.m5.act1.opt2) document.getElementById("m5-opt-2").value = state.m5.act1.opt2;
+                if (state.m5.act1.opt3) document.getElementById("m5-opt-3").value = state.m5.act1.opt3;
+                if (state.m5.act1.opt1) checkM5Act1();
+
+                if (state.m5.act2.userText) {
+                    document.getElementById("m5-user-paraphrase").value = state.m5.act2.userText;
+                    document.getElementById("m5-check-syn").checked = state.m5.act2.checkedList[0];
+                    document.getElementById("m5-check-class").checked = state.m5.act2.checkedList[1];
+                    document.getElementById("m5-check-order").checked = state.m5.act2.checkedList[2];
+                    checkM5Act2();
+                }
+
+                saveAndCheckProgress();
+            }
+            renderM3Blocks();
+        }
+    </script>
+</body>
+</html>
