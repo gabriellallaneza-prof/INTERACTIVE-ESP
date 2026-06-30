@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Software Hero - IT Vocabulary Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: white;
+            overflow: hidden; /* Prevent scrolling on mobile */
+            touch-action: none; /* Prevent default touch actions like pinch-zoom */
+        }
+        h1, h2, h3, .arcade-font {
+            font-family: 'Fredoka One', cursive;
+        }
+        #game-canvas {
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+        }
+        /* Mobile D-Pad styles */
+        .dpad-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            user-select: none;
+            backdrop-filter: blur(4px);
+        }
+        .dpad-btn:active {
+            background-color: rgba(6, 182, 212, 0.5); /* Cyan active state */
+            transform: scale(0.95);
+        }
+        /* Grid pattern overlay for arcade feel */
+        .grid-overlay {
+            background-image: 
+                linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col items-center justify-center relative">
+
+    <!-- Top HUD -->
+    <div id="hud" class="absolute top-4 left-4 right-4 flex justify-between items-start z-30 hidden pointer-events-none">
+        <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-600 shadow-lg pointer-events-auto">
+            <div class="text-pink-400 arcade-font text-xl mb-1">Target Word:</div>
+            <div id="target-word-display" class="text-3xl md:text-4xl arcade-font text-white uppercase tracking-wider text-shadow-sm">WORD</div>
+        </div>
+        <div class="flex flex-col items-end gap-2 text-right pointer-events-auto">
+            <div class="bg-slate-800/80 px-4 py-2 rounded-full border border-slate-600 arcade-font text-amber-400 text-sm md:text-base">
+                Score: <span id="score-display">0</span>
+            </div>
+            <div class="bg-slate-800/80 px-4 py-2 rounded-full border border-slate-600 arcade-font text-emerald-400 text-sm md:text-base">
+                Level: <span id="level-display">1</span>
+            </div>
+            <div class="bg-slate-800/80 px-4 py-2 rounded-full border border-slate-600 arcade-font text-red-400 text-sm md:text-base">
+                Lives: <span id="lives-display">❤️❤️❤️</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Game Area -->
+    <div class="relative w-full max-w-5xl h-full max-h-[800px] p-2 md:p-6 flex-grow flex items-center justify-center">
+        <div class="relative w-full h-full rounded-xl overflow-hidden border-4 border-slate-700" id="canvas-container">
+            <canvas id="game-canvas"></canvas>
+            <div class="grid-overlay"></div>
+            
+            <!-- Start Screen Overlay -->
+            <div id="start-screen" class="absolute inset-0 bg-slate-900/90 flex flex-col items-center justify-center z-40 backdrop-blur-sm">
+                <h1 class="text-5xl md:text-7xl text-cyan-400 arcade-font mb-4 text-center drop-shadow-[0_0_15px_rgba(6,182,212,0.8)]">SOFTWARE<br><span class="text-pink-500">HERO</span></h1>
+                <p class="text-lg md:text-xl text-slate-300 mb-8 max-w-md text-center px-4">¡Asimila el vocabulario IT! Atrapa la traducción correcta para el término en inglés, ¡pero ten cuidado con los bugs!</p>
+                <button id="btn-start" class="arcade-font text-xl md:text-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white px-8 py-4 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.6)] transform transition hover:scale-105 active:scale-95">
+                    START GAME
+                </button>
+                <p class="text-sm text-slate-400 mt-6">(¡Enciende el sonido! 🔊)</p>
+            </div>
+
+            <!-- Level Complete Overlay -->
+            <div id="level-complete-screen" class="absolute inset-0 bg-emerald-900/95 flex flex-col items-center justify-center z-40 backdrop-blur-sm hidden">
+                <h2 class="text-5xl md:text-6xl text-white arcade-font mb-4 text-center drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]">LEVEL 1 COMPLETE!</h2>
+                <div class="animate-bounce mb-8">
+                    <p class="text-2xl text-emerald-200 arcade-font text-center">"Yes!! You are a software hero!"</p>
+                </div>
+                <button id="btn-next-level" class="arcade-font text-2xl bg-amber-500 hover:bg-amber-400 text-white px-8 py-4 rounded-full shadow-[0_0_20px_rgba(245,158,11,0.6)]">
+                    NEXT LEVEL
+                </button>
+            </div>
+
+            <!-- Game Over Overlay -->
+            <div id="game-over-screen" class="absolute inset-0 bg-red-900/95 flex flex-col items-center justify-center z-40 backdrop-blur-md hidden">
+                <h2 class="text-6xl text-white arcade-font mb-4 text-center drop-shadow-[0_0_15px_rgba(239,68,68,0.8)]">GAME OVER</h2>
+                <p class="text-xl text-red-200 mb-8">Your code had too many bugs!</p>
+                <p class="text-3xl text-white arcade-font mb-8">Final Score: <span id="final-score">0</span></p>
+                <button id="btn-restart" class="arcade-font text-2xl bg-slate-800 hover:bg-slate-700 border-2 border-red-500 text-white px-8 py-4 rounded-full shadow-[0_0_20px_rgba(239,68,68,0.4)]">
+                    TRY AGAIN
+                </button>
+            </div>
+            
+            <!-- Victory Screen -->
+            <div id="victory-screen" class="absolute inset-0 bg-pink-900/95 flex flex-col items-center justify-center z-40 backdrop-blur-md hidden">
+                <h2 class="text-5xl md:text-6xl text-white arcade-font mb-4 text-center drop-shadow-[0_0_15px_rgba(236,72,153,0.8)]">YOU WIN!</h2>
+                <div class="animate-pulse mb-8">
+                    <p class="text-2xl text-pink-200 arcade-font text-center">"Yes!! You are a software hero!"<br><span class="text-lg text-white mt-4 block">Vocabulary Mastered!</span></p>
+                </div>
+                <p class="text-3xl text-white arcade-font mb-8">Final Score: <span id="victory-final-score">0</span></p>
+                <button id="btn-victory-restart" class="arcade-font text-2xl bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white px-8 py-4 rounded-full shadow-[0_0_20px_rgba(236,72,153,0.6)]">
+                    PLAY AGAIN
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile D-Pad (Visible only on touch/small screens) -->
+    <div class="md:hidden flex flex-col items-center justify-center gap-2 mb-4 z-30">
+        <div class="dpad-btn" id="dpad-up">▲</div>
+        <div class="flex gap-12">
+            <div class="dpad-btn" id="dpad-left">◀</div>
+            <div class="dpad-btn" id="dpad-right">▶</div>
+        </div>
+        <div class="dpad-btn" id="dpad-down">▼</div>
+    </div>
+
+    <script>
+        const vocabulary = [
+            // Nivel 1 (Palabras 1-10)
+            { en: "Requirement", es: "Requisito / Requerimiento", level: 1 },
+            { en: "Framework", es: "Marco de trabajo", level: 1 },
+            { en: "Stakeholder", es: "Parte interesada", level: 1 },
+            { en: "Deliverable", es: "Entregable", level: 1 },
+            { en: "Sprint", es: "Ciclo de desarrollo", level: 1 },
+            { en: "Backlog", es: "Lista de pendientes", level: 1 },
+            { en: "Deployment", es: "Despliegue / Implementación", level: 1 },
+            { en: "Feature", es: "Funcionalidad / Característica", level: 1 },
+            { en: "Bug", es: "Error / Defecto", level: 1 },
+            { en: "Testing", es: "Pruebas / Testeo", level: 1 },
+            // Nivel 2 (Palabras 11-20)
+            { en: "Release", es: "Lanzamiento / Versión", level: 2 },
+            { en: "Iterative", es: "Iterativo", level: 2 },
+            { en: "Scalability", es: "Escalabilidad", level: 2 },
+            { en: "User Story", es: "Historia de usuario", level: 2 },
+            { en: "Repository", es: "Repositorio", level: 2 },
+            { en: "Middleware", es: "Software de intermediación", level: 2 },
+            { en: "Agile", es: "Ágil", level: 2 },
+            { en: "Waterfall", es: "Cascada", level: 2 },
+            { en: "Frontend", es: "Interfaz de usuario", level: 2 },
+            { en: "Backend", es: "Lógica del servidor", level: 2 }
+        ];
+
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvas-container');
+        
+        // UI Elements
+        const screens = {
+            start: document.getElementById('start-screen'),
+            levelComplete: document.getElementById('level-complete-screen'),
+            gameOver: document.getElementById('game-over-screen'),
+            victory: document.getElementById('victory-screen'),
+            hud: document.getElementById('hud')
+        };
+        
+        const displays = {
+            targetWord: document.getElementById('target-word-display'),
+            score: document.getElementById('score-display'),
+            level: document.getElementById('level-display'),
+            lives: document.getElementById('lives-display'),
+            finalScore: document.getElementById('final-score'),
+            victoryScore: document.getElementById('victory-final-score')
+        };
+
+        let isPlaying = false;
+        let animationId;
+        let currentLevel = 1;
+        let score = 0;
+        let lives = 3;
+        
+        let levelWords = []; 
+        let currentTarget = null;
+        let gameEntities = { player: null, options: [], bugs: [] };
+        let lastTime = 0;
+        let lastBugSpawn = 0;
+        
+        // Input state
+        const keys = {
+            ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
+            w: false, s: false, a: false, d: false
+        };
+
+        let synth;
+        let canSpeak = false;
+
+        function initAudio() {
+            if (!synth) {
+                synth = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: "square" },
+                    envelope: { attack: 0.05, decay: 0.1, sustain: 0.1, release: 0.5 }
+                }).toDestination();
+                synth.volume.value = -10;
+            }
+            if (Tone.context.state !== 'running') {
+                Tone.start();
+            }
+            canSpeak = true; // Unlock speech synthesis
+        }
+
+        function playSound(type) {
+            if (!synth) return;
+            const now = Tone.now();
+            switch(type) {
+                case 'correct':
+                    synth.triggerAttackRelease(["C5", "E5", "G5"], "8n", now);
+                    break;
+                case 'wrong':
+                    synth.triggerAttackRelease("C3", "4n", now);
+                    break;
+                case 'hit': 
+                    synth.triggerAttackRelease("F2", "8n", now);
+                    synth.triggerAttackRelease("C2", "8n", now + 0.1);
+                    break;
+                case 'levelUp':
+                case 'victory':
+                    synth.triggerAttackRelease("C4", "8n", now);
+                    synth.triggerAttackRelease("E4", "8n", now + 0.15);
+                    synth.triggerAttackRelease("G4", "8n", now + 0.3);
+                    synth.triggerAttackRelease("C5", "4n", now + 0.45);
+                    break;
+            }
+        }
+
+        function speakText(text, lang = 'en-US') {
+            if (!canSpeak || !('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+            utterance.rate = 0.9;
+            utterance.pitch = 1.1;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function speakHeroPhrase() {
+            if (!canSpeak || !('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance("Yes!! You are a software hero!");
+            utterance.lang = 'en-US';
+            utterance.rate = 1.0;
+            utterance.pitch = 1.2; 
+            window.speechSynthesis.speak(utterance);
+        }
+
+        class Player {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.radius = 18;
+                this.speed = 300; // pixels per second
+                this.color = '#06b6d4'; // Cyan
+                this.glow = 0;
+                this.glowDir = 1;
+                this.invulnerableTime = 0;
+            }
+
+            update(dt) {
+                let dx = 0, dy = 0;
+                if (keys.ArrowUp || keys.w) dy -= 1;
+                if (keys.ArrowDown || keys.s) dy += 1;
+                if (keys.ArrowLeft || keys.a) dx -= 1;
+                if (keys.ArrowRight || keys.d) dx += 1;
+
+                // Normalize diagonal movement
+                if (dx !== 0 && dy !== 0) {
+                    const length = Math.sqrt(dx * dx + dy * dy);
+                    dx /= length;
+                    dy /= length;
+                }
+
+                this.x += dx * this.speed * dt;
+                this.y += dy * this.speed * dt;
+
+                // Boundaries
+                this.x = Math.max(this.radius, Math.min(canvas.width - this.radius, this.x));
+                this.y = Math.max(this.radius, Math.min(canvas.height - this.radius, this.y));
+                
+                if (this.invulnerableTime > 0) {
+                    this.invulnerableTime -= dt;
+                }
+            }
+
+            draw() {
+                this.glow += 30 * this.glowDir * (1/60);
+                if (this.glow > 15 || this.glow < 0) this.glowDir *= -1;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                
+                if (this.invulnerableTime > 0) {
+                    ctx.fillStyle = (Math.floor(Date.now() / 100) % 2 === 0) ? '#ffffff' : this.color;
+                } else {
+                    ctx.fillStyle = this.color;
+                }
+                
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 10 + this.glow;
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#ffffff';
+                ctx.stroke();
+                
+                // Cute eyes
+                ctx.fillStyle = 'white';
+                ctx.shadowBlur = 0;
+                ctx.beginPath(); ctx.arc(this.x - 6, this.y - 4, 5, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(this.x + 6, this.y - 4, 5, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = 'black';
+                ctx.beginPath(); ctx.arc(this.x - 6, this.y - 4, 2, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(this.x + 6, this.y - 4, 2, 0, Math.PI * 2); ctx.fill();
+                
+                ctx.restore();
+            }
+        }
+
+        class WordOption {
+            constructor(text, isCorrect) {
+                this.text = text;
+                this.isCorrect = isCorrect;
+                this.w = 200; // Increased width for longer texts
+                this.h = 50;
+                
+                // Random position safely away from edges
+                this.x = Math.random() * (canvas.width - this.w - 40) + 20 + this.w/2;
+                this.y = Math.random() * (canvas.height - this.h - 40) + 20 + this.h/2;
+                
+                // Random velocity depending on level
+                const speed = currentLevel === 1 ? 50 : 90;
+                const angle = Math.random() * Math.PI * 2;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.color = '#1e293b'; // Slate 800
+                this.borderColor = '#ec4899'; // Pink
+            }
+
+            update(dt) {
+                this.x += this.vx * dt;
+                this.y += this.vy * dt;
+
+                // Bounce off walls
+                if (this.x - this.w/2 < 0) { this.x = this.w/2; this.vx *= -1; }
+                if (this.x + this.w/2 > canvas.width) { this.x = canvas.width - this.w/2; this.vx *= -1; }
+                if (this.y - this.h/2 < 0) { this.y = this.h/2; this.vy *= -1; }
+                if (this.y + this.h/2 > canvas.height) { this.y = canvas.height - this.h/2; this.vy *= -1; }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                
+                // Draw rounded rect
+                ctx.fillStyle = this.color;
+                ctx.strokeStyle = this.borderColor;
+                ctx.lineWidth = 2;
+                ctx.shadowColor = this.borderColor;
+                ctx.shadowBlur = 10;
+                
+                const r = 10;
+                const w = this.w; const h = this.h;
+                ctx.beginPath();
+                ctx.moveTo(-w/2 + r, -h/2);
+                ctx.lineTo(w/2 - r, -h/2);
+                ctx.quadraticCurveTo(w/2, -h/2, w/2, -h/2 + r);
+                ctx.lineTo(w/2, h/2 - r);
+                ctx.quadraticCurveTo(w/2, h/2, w/2 - r, h/2);
+                ctx.lineTo(-w/2 + r, h/2);
+                ctx.quadraticCurveTo(-w/2, h/2, -w/2, h/2 - r);
+                ctx.lineTo(-w/2, -h/2 + r);
+                ctx.quadraticCurveTo(-w/2, -h/2, -w/2 + r, -h/2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Draw Text
+                ctx.fillStyle = '#ffffff';
+                ctx.shadowBlur = 0;
+                ctx.font = 'bold 13px Nunito';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.text, 0, 0, this.w - 10); // max width for text
+                ctx.restore();
+            }
+        }
+
+        class Bug {
+            constructor() {
+                this.radius = 15;
+                // Spawn on edges
+                if (Math.random() > 0.5) {
+                    this.x = Math.random() > 0.5 ? -20 : canvas.width + 20;
+                    this.y = Math.random() * canvas.height;
+                } else {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() > 0.5 ? -20 : canvas.height + 20;
+                }
+                
+                const speed = currentLevel === 1 ? 100 : 160;
+                // Aim slightly towards player
+                const p = gameEntities.player;
+                const angle = Math.atan2((p ? p.y : canvas.height/2) - this.y, (p ? p.x : canvas.width/2) - this.x) + (Math.random() - 0.5);
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.rotation = 0;
+            }
+
+            update(dt) {
+                this.x += this.vx * dt;
+                this.y += this.vy * dt;
+                this.rotation += 2 * dt;
+
+                if (this.x < -50 || this.x > canvas.width + 50 || this.y < -50 || this.y > canvas.height + 50) {
+                    this.isOffscreen = true; 
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                
+                // Draw Bug (Spiky virus-like)
+                ctx.fillStyle = '#ef4444'; // Red 500
+                ctx.shadowColor = '#dc2626';
+                ctx.shadowBlur = 10;
+                
+                ctx.beginPath();
+                for (let i = 0; i < 8; i++) {
+                    const rot = (Math.PI * 2 / 8) * i;
+                    const r1 = this.radius;
+                    const r2 = this.radius * 0.5;
+                    ctx.lineTo(Math.cos(rot) * r1, Math.sin(rot) * r1);
+                    ctx.lineTo(Math.cos(rot + Math.PI/8) * r2, Math.sin(rot + Math.PI/8) * r2);
+                }
+                ctx.closePath();
+                ctx.fill();
+                
+                // Bug eye
+                ctx.fillStyle = '#fef08a';
+                ctx.shadowBlur = 0;
+                ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI * 2); ctx.fill();
+                
+                ctx.restore();
+            }
+        }
+
+        function resizeCanvas() {
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function spawnRound() {
+            if (levelWords.length === 0) {
+                handleLevelComplete();
+                return;
+            }
+
+            // Pop next word
+            currentTarget = levelWords.pop();
+            displays.targetWord.textContent = currentTarget.en;
+            speakText(currentTarget.en);
+
+            gameEntities.options = [];
+            
+            // Get 3 incorrect options from the *entire* vocabulary (to guarantee variety)
+            let wrongOptions = vocabulary.filter(v => v.en !== currentTarget.en);
+            shuffleArray(wrongOptions);
+            wrongOptions = wrongOptions.slice(0, 3);
+            
+            const optionsData = [
+                { text: currentTarget.es, isCorrect: true },
+                ...wrongOptions.map(w => ({ text: w.es, isCorrect: false }))
+            ];
+            
+            shuffleArray(optionsData);
+            
+            optionsData.forEach(opt => {
+                gameEntities.options.push(new WordOption(opt.text, opt.isCorrect));
+            });
+        }
+
+        function updateHUD() {
+            displays.score.textContent = score;
+            displays.level.textContent = currentLevel;
+            displays.lives.textContent = '❤️'.repeat(Math.max(0, lives));
+        }
+
+        function handleHitBug() {
+            if (gameEntities.player.invulnerableTime > 0) return;
+            
+            lives--;
+            playSound('hit');
+            updateHUD();
+            
+            if (lives <= 0) {
+                gameOver();
+            } else {
+                gameEntities.player.invulnerableTime = 2; // 2 seconds invulnerability
+            }
+        }
+
+        function handleHitOption(option) {
+            if (option.isCorrect) {
+                score += 100 * currentLevel;
+                playSound('correct');
+                spawnRound(); // Next word
+            } else {
+                score = Math.max(0, score - 20);
+                playSound('wrong');
+                // Remove the wrong option
+                gameEntities.options = gameEntities.options.filter(o => o !== option);
+            }
+            updateHUD();
+        }
+
+        function checkCollisions() {
+            const p = gameEntities.player;
+            if(!p) return;
+
+            // Player vs Bugs
+            for (let bug of gameEntities.bugs) {
+                const dist = Math.hypot(p.x - bug.x, p.y - bug.y);
+                if (dist < p.radius + bug.radius - 5) { // slightly forgiving hitbox
+                    handleHitBug();
+                }
+            }
+
+            // Player vs Options (using AABB / bounding box approximation)
+            for (let opt of gameEntities.options) {
+                // Expanded hitbox for easier collecting
+                const hitBoxX = opt.w/2 + p.radius;
+                const hitBoxY = opt.h/2 + p.radius;
+                
+                if (Math.abs(p.x - opt.x) < hitBoxX && Math.abs(p.y - opt.y) < hitBoxY) {
+                    handleHitOption(opt);
+                    break; // Handle one at a time
+                }
+            }
+        }
+
+        function handleLevelComplete() {
+            isPlaying = false;
+            screens.hud.classList.add('hidden');
+            
+            if (currentLevel === 1) {
+                screens.levelComplete.classList.remove('hidden');
+                playSound('levelUp');
+                setTimeout(speakHeroPhrase, 500); // Delay for level complete sound
+            } else {
+                screens.victory.classList.remove('hidden');
+                displays.victoryScore.textContent = score;
+                playSound('victory');
+                setTimeout(speakHeroPhrase, 500);
+            }
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            screens.hud.classList.add('hidden');
+            screens.gameOver.classList.remove('hidden');
+            displays.finalScore.textContent = score;
+        }
+
+        function startLevel(levelNum) {
+            currentLevel = levelNum;
+            levelWords = vocabulary.filter(v => v.level === currentLevel);
+            shuffleArray(levelWords);
+            
+            gameEntities.player = new Player(canvas.width/2, canvas.height/2);
+            gameEntities.bugs = [];
+            
+            updateHUD();
+            screens.hud.classList.remove('hidden');
+            screens.start.classList.add('hidden');
+            screens.levelComplete.classList.add('hidden');
+            screens.gameOver.classList.add('hidden');
+            screens.victory.classList.add('hidden');
+            
+            isPlaying = true;
+            lastTime = performance.now();
+            spawnRound();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function startGame() {
+            initAudio();
+            score = 0;
+            lives = 3;
+            startLevel(1);
+        }
+
+        function gameLoop(currentTime) {
+            if (!isPlaying) return;
+            
+            const dt = Math.min((currentTime - lastTime) / 1000, 0.1); // Cap dt to prevent huge jumps
+            lastTime = currentTime;
+
+            // Clear Canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update & Draw Player
+            gameEntities.player.update(dt);
+            gameEntities.player.draw();
+
+            // Update & Draw Options
+            for (let opt of gameEntities.options) {
+                opt.update(dt);
+                opt.draw();
+            }
+
+            // Manage Bugs
+            if (currentTime - lastBugSpawn > (currentLevel === 1 ? 2000 : 1200)) {
+                if (gameEntities.bugs.length < (currentLevel * 4 + 2)) {
+                    gameEntities.bugs.push(new Bug());
+                }
+                lastBugSpawn = currentTime;
+            }
+
+            for (let i = gameEntities.bugs.length - 1; i >= 0; i--) {
+                const bug = gameEntities.bugs[i];
+                bug.update(dt);
+                bug.draw();
+                if (bug.isOffscreen) {
+                    gameEntities.bugs.splice(i, 1);
+                }
+            }
+
+            checkCollisions();
+
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Keyboard Event Listeners
+        window.addEventListener('keydown', e => { if(keys.hasOwnProperty(e.key)) keys[e.key] = true; });
+        window.addEventListener('keyup', e => { if(keys.hasOwnProperty(e.key)) keys[e.key] = false; });
+
+        // Mobile D-Pad Touch/Mouse Events
+        const setupDpad = (id, keyName) => {
+            const btn = document.getElementById(id);
+            if(!btn) return;
+            const press = (e) => { e.preventDefault(); keys[keyName] = true; };
+            const release = (e) => { e.preventDefault(); keys[keyName] = false; };
+            
+            btn.addEventListener('touchstart', press);
+            btn.addEventListener('touchend', release);
+            btn.addEventListener('mousedown', press);
+            btn.addEventListener('mouseup', release);
+            btn.addEventListener('mouseleave', release); // In case cursor leaves while pressed
+        };
+
+        setupDpad('dpad-up', 'ArrowUp');
+        setupDpad('dpad-down', 'ArrowDown');
+        setupDpad('dpad-left', 'ArrowLeft');
+        setupDpad('dpad-right', 'ArrowRight');
+
+        // Button Event Listeners
+        document.getElementById('btn-start').addEventListener('click', startGame);
+        
+        document.getElementById('btn-next-level').addEventListener('click', () => {
+            initAudio(); // Ensure context is awake
+            startLevel(2);
+        });
+        
+        document.getElementById('btn-restart').addEventListener('click', () => {
+            initAudio();
+            startGame();
+        });
+        
+        document.getElementById('btn-victory-restart').addEventListener('click', () => {
+            initAudio();
+            startGame();
+        });
+
+    </script>
+</body>
+</html>
