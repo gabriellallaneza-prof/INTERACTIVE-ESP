@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering the Stand-up | ESP for Developers</title>
+    <!-- Added Tailwind Typography plugin for rendering AI Markdown, and Marked.js library -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* Chosen Palette: Tech Calm (Warm Neutrals & Professional Blues) */
+        :root {
+            --bg-main: #fdfcfb;
+            --primary: #3b82f6;
+            --primary-dark: #1e40af;
+            --accent: #f59e0b;
+            --text-main: #1f2937;
+            --card-bg: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+
+        .module-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .hidden-section {
+            display: none;
+        }
+
+        .flashcard-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .flashcard-flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Chosen Palette: Tech Calm -->
+    <!-- Application Structure Plan: 
+        The SPA is organized into a dashboard-style interface. 
+        1. Sidebar Navigation: Allows non-linear access to Course Overview, Modules, Vocabulary, and a 'Practice Tool'.
+        2. Dashboard: Provides high-level goals and a 'Skill Radar' (Chart.js) to visualize the learning outcomes.
+        3. Module Explorer: An interactive breakdown of the 4 Modules, using a clean card layout.
+        4. Interactive Module 1: A deep-dive simulation of the e-learning module, including the 'True Purpose' drag-and-drop logic and flashcards.
+        5. Vocabulary Bank: A centralized repository for tech jargon.
+        WHY: Developers prefer efficient, modular interfaces. A dashboard approach allows them to track progress and jump to specific resources (like the blocker phrases) when they need them immediately.
+    -->
+    <!-- Visualization & Content Choices: 
+        - Skill Radar Chart: Report Goals -> Visualize Mastery -> Radar Chart (Chart.js) -> Interactive hover -> Shows multi-dimensional learning goals (Grammar, Tech Jargon, Soft Skills).
+        - Purpose Sorting: Warm-up Activity -> Clarify Goals -> Interactive Button Selection -> Immediate feedback -> Replaces standard text with active learning.
+        - Vocabulary Flashcards: Essential Jargon -> Memorization -> CSS 3D Transforms -> Flip on click -> Standard interactive learning pattern.
+        - Mock Jira Board: Assignment Task -> Contextual Practice -> HTML/Tailwind Layout -> Visual anchor for the speaking task.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. 
+    -->
+
+    <div class="flex h-screen overflow-hidden">
+        <!-- Navigation Sidebar -->
+        <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex flex-col">
+            <div class="p-6">
+                <h1 class="text-xl font-bold text-blue-600 flex items-center gap-2">
+                    <span class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white">S</span>
+                    Stand-up Pro
+                </h1>
+            </div>
+            <nav class="flex-1 px-4 space-y-2 overflow-y-auto">
+                <button onclick="showSection('dashboard')" class="w-full text-left px-4 py-3 rounded-lg bg-blue-50 text-blue-700 font-medium nav-link" id="nav-dashboard">Dashboard</button>
+                <button onclick="showSection('curriculum')" class="w-full text-left px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 nav-link" id="nav-curriculum">Full Curriculum</button>
+                <div class="pt-2 pb-1">
+                    <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Modules</p>
+                </div>
+                <button onclick="showSection('module1')" class="w-full text-left px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 nav-link" id="nav-module1">1. Anatomy</button>
+                <button onclick="showSection('module2')" class="w-full text-left px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 nav-link" id="nav-module2">2. Precision</button>
+                <button onclick="showSection('module3')" class="w-full text-left px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 nav-link" id="nav-module3">3. Blockers</button>
+                <button onclick="showSection('module4')" class="w-full text-left px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 nav-link" id="nav-module4">4. Offline Flow</button>
+                
+                <div class="pt-2 pb-1">
+                    <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider">Resources</p>
+                </div>
+                <button onclick="showSection('vocabulary')" class="w-full text-left px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 nav-link" id="nav-vocabulary">Vocabulary Bank</button>
+            </nav>
+            <div class="p-4 border-t border-gray-100">
+                <div class="bg-gray-50 rounded-lg p-3">
+                    <p class="text-xs text-gray-500 uppercase font-bold mb-1">Current Progress</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-600 h-2 rounded-full" style="width: 25%"></div>
+                    </div>
+                    <p class="text-xs mt-2 text-gray-600 italic">Module 1 in progress...</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto relative">
+            
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="p-8 max-w-6xl mx-auto">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900">Welcome back, Developer</h2>
+                    <p class="text-gray-600 mt-2">Equipping you with the vocabulary and grammar to dominate your daily scrum.</p>
+                </header>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800">Your Stand-up Skill Profile</h3>
+                        <div class="chart-container">
+                            <canvas id="skillChart"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-4 text-center">This chart reflects the core competencies covered in the 4 Modules of this course.</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-blue-600 p-6 rounded-xl text-white shadow-lg">
+                            <h3 class="font-bold text-xl mb-2">Today's Focus</h3>
+                            <p class="text-blue-100 mb-4">Master Module 1: Anatomy of a Stand-up. Focus on the "Three Questions" structure.</p>
+                            <button onclick="showSection('module1')" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-50 transition-colors">Start Learning</button>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                            <h3 class="font-semibold text-gray-800 mb-3">Target Level</h3>
+                            <div class="flex items-center gap-3">
+                                <span class="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold">CEFR B1/B2</span>
+                                <span class="text-sm text-gray-600">Intermediate to Upper-Intermediate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Curriculum Explorer Section -->
+            <section id="curriculum" class="p-8 max-w-6xl mx-auto hidden-section">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900">Course Journey</h2>
+                    <p class="text-gray-600 mt-2">A roadmap from Agile basics to managing difficult boardroom interactions.</p>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Module 1 -->
+                    <div onclick="showSection('module1')" class="module-card cursor-pointer bg-white p-6 rounded-xl border-l-4 border-blue-500 shadow-sm hover:border-blue-600">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-gray-800">1. The Anatomy</h3>
+                            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Active</span>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-2 mb-4">
+                            <li>• Agile structure & purpose</li>
+                            <li>• The "Three Questions" format</li>
+                            <li>• Essential Dev Vocabulary</li>
+                        </ul>
+                    </div>
+
+                    <!-- Module 2 -->
+                    <div onclick="showSection('module2')" class="module-card cursor-pointer bg-white p-6 rounded-xl border-l-4 border-blue-400 shadow-sm hover:border-blue-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-gray-800">2. Precision</h3>
+                            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Active</span>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• Past Simple vs. Present Perfect</li>
+                            <li>• The Art of Conciseness</li>
+                            <li>• Reporting progress accurately</li>
+                        </ul>
+                    </div>
+
+                    <!-- Module 3 -->
+                    <div onclick="showSection('module3')" class="module-card cursor-pointer bg-white p-6 rounded-xl border-l-4 border-blue-400 shadow-sm hover:border-blue-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-gray-800">3. Blockers</h3>
+                            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Active</span>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• Articulating technical dependencies</li>
+                            <li>• Polite requests for help</li>
+                            <li>• Offering assistance to peers</li>
+                        </ul>
+                    </div>
+
+                    <!-- Module 4 -->
+                    <div onclick="showSection('module4')" class="module-card cursor-pointer bg-white p-6 rounded-xl border-l-4 border-blue-400 shadow-sm hover:border-blue-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-gray-800">4. Offline Flow</h3>
+                            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Active</span>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• "Taking it offline" strategies</li>
+                            <li>• Managing interruptions</li>
+                            <li>• Advanced active listening</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Module 1 Deep Dive -->
+            <section id="module1" class="p-8 max-w-4xl mx-auto hidden-section">
+                <div class="mb-10 text-center">
+                    <span class="text-blue-600 font-bold tracking-widest text-sm uppercase">Module 1</span>
+                    <h2 class="text-4xl font-black text-gray-900 mt-2">The Anatomy of a Stand-up</h2>
+                    <p class="text-gray-500 mt-4 max-w-2xl mx-auto">Learn why we have stand-ups, master essential Agile terms, and practice the 'Three Core Questions'.</p>
+                </div>
+
+                <!-- Warm-up Activity -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-12">
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <span class="bg-amber-100 text-amber-600 p-1 rounded">?</span>
+                        Warm-Up: True Purpose or Mistake?
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-6 italic">Click the statements to categorize them based on the core goal of a Stand-up.</p>
+                    
+                    <div class="space-y-4" id="purpose-container">
+                        <div class="p-4 border rounded-xl flex items-center justify-between hover:border-blue-300 transition-colors" id="q1">
+                            <span>"To solve complex coding problems during the meeting."</span>
+                            <div class="flex gap-2">
+                                <button onclick="checkPurpose('q1', 'mistake')" class="px-4 py-1 text-xs border rounded-full hover:bg-gray-100">Common Mistake</button>
+                                <button onclick="checkPurpose('q1', 'purpose')" class="px-4 py-1 text-xs border rounded-full hover:bg-gray-100">True Purpose</button>
+                            </div>
+                        </div>
+                        <div class="p-4 border rounded-xl flex items-center justify-between hover:border-blue-300 transition-colors" id="q2">
+                            <span>"To identify blockers and ask for help."</span>
+                            <div class="flex gap-2">
+                                <button onclick="checkPurpose('q2', 'mistake')" class="px-4 py-1 text-xs border rounded-full hover:bg-gray-100">Common Mistake</button>
+                                <button onclick="checkPurpose('q2', 'purpose')" class="px-4 py-1 text-xs border rounded-full hover:bg-gray-100">True Purpose</button>
+                            </div>
+                        </div>
+                        <div class="p-4 border rounded-xl flex items-center justify-between hover:border-blue-300 transition-colors" id="q3">
+                            <span>"To give a detailed status report to the manager."</span>
+                            <div class="flex gap-2">
+                                <button onclick="checkPurpose('q3', 'mistake')" class="px-4 py-1 text-xs border rounded-full hover:bg-gray-100">Common Mistake</button>
+                                <button onclick="checkPurpose('q3', 'purpose')" class="px-4 py-1 text-xs border rounded-full hover:bg-gray-100">True Purpose</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="purpose-feedback" class="mt-6 p-4 rounded-xl hidden text-sm font-medium"></div>
+                </div>
+
+                <!-- Three Questions Example -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-gray-900 rounded-2xl p-8 text-white">
+                        <h3 class="text-xl font-bold mb-4">The Standard Flow</h3>
+                        <div class="space-y-6">
+                            <div class="flex gap-4">
+                                <span class="w-8 h-8 rounded-full bg-blue-500 flex-shrink-0 flex items-center justify-center font-bold">1</span>
+                                <p><span class="text-blue-400 font-bold">Completed Yesterday:</span> Focus on results, not struggle.</p>
+                            </div>
+                            <div class="flex gap-4">
+                                <span class="w-8 h-8 rounded-full bg-blue-500 flex-shrink-0 flex items-center justify-center font-bold">2</span>
+                                <p><span class="text-blue-400 font-bold">Plan for Today:</span> The top priority ticket you're tackling.</p>
+                            </div>
+                            <div class="flex gap-4">
+                                <span class="w-8 h-8 rounded-full bg-blue-500 flex-shrink-0 flex items-center justify-center font-bold">3</span>
+                                <p><span class="text-blue-400 font-bold">Blockers:</span> Anything preventing progress.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border-2 border-dashed border-gray-200 rounded-2xl p-8">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Mock Task Board</h3>
+                        <div class="space-y-3">
+                            <div class="p-3 bg-green-50 border border-green-100 rounded text-xs">
+                                <span class="font-bold text-green-700">DONE:</span> Ticket #442 - Fix CSS alignment on "Submit Order"
+                            </div>
+                            <div class="p-3 bg-blue-50 border border-blue-100 rounded text-xs">
+                                <span class="font-bold text-blue-700">IN PROGRESS:</span> Ticket #445 - Integrate Stripe API
+                            </div>
+                            <div class="p-3 bg-red-50 border border-red-100 rounded text-xs flex justify-between items-center">
+                                <span class="font-bold text-red-700">BLOCKED:</span> Waiting for DevOps keys
+                                <span class="text-[10px] bg-red-200 text-red-800 px-1 rounded uppercase">Priority</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-6 border-t">
+                            <p class="text-xs text-gray-500 italic mb-2">Write your update based on this board:</p>
+                            <textarea id="standup-input" rows="3" class="w-full p-3 border border-gray-300 rounded-lg text-sm mb-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Yesterday I... Today I will... I am blocked by..."></textarea>
+                            <button onclick="evaluateStandup()" id="eval-btn" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors">
+                                <span id="eval-btn-icon">✨</span> <span id="eval-btn-text">Analyze with AI Coach</span>
+                            </button>
+                            <!-- AI Feedback Container -->
+                            <div id="ai-feedback" class="mt-4 p-5 bg-blue-50 rounded-lg text-sm text-gray-800 hidden border border-blue-200 prose prose-sm max-w-none prose-p:leading-snug prose-li:my-0 prose-strong:text-blue-800"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Module 2 Deep Dive -->
+            <section id="module2" class="p-8 max-w-4xl mx-auto hidden-section">
+                <div class="mb-10 text-center">
+                    <span class="text-blue-600 font-bold tracking-widest text-sm uppercase">Module 2</span>
+                    <h2 class="text-4xl font-black text-gray-900 mt-2">Precision & Conciseness</h2>
+                    <p class="text-gray-500 mt-4 max-w-2xl mx-auto">Master the Past Simple vs. Present Perfect to report completed work, and practice concise delivery.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-indigo-50 rounded-2xl p-8 border border-indigo-100">
+                        <h3 class="text-xl font-bold text-indigo-900 mb-4">Grammar: Past vs. Present Perfect</h3>
+                        <div class="space-y-4 text-sm text-indigo-800">
+                            <div>
+                                <strong class="text-indigo-900">Past Simple (Finished action):</strong>
+                                <p class="italic">"I fixed the bug in the login module yesterday."</p>
+                            </div>
+                            <div>
+                                <strong class="text-indigo-900">Present Perfect (Action relevant NOW):</strong>
+                                <p class="italic">"I have updated the documentation." (Meaning: it is ready for you to read now).</p>
+                            </div>
+                            <div class="pt-4 border-t border-indigo-200">
+                                <strong class="text-indigo-900 text-xs uppercase">Pro-Tip:</strong> Never use "Yesterday I have done...". It is always "Yesterday I did...".
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Conciseness Challenge</h3>
+                        <div class="bg-gray-50 p-3 rounded-lg border border-gray-200 mb-4">
+                            <p class="text-sm text-gray-600"><strong>The Rambler:</strong> "Yesterday I spent three hours looking at line 452 in the auth controller because the token wasn't refreshing, and then I realized it was a typo in the config, so I changed it and pushed it."</p>
+                        </div>
+                        <p class="text-xs text-gray-500 italic mb-2">Rewrite this update to be <strong>under 15 words</strong>:</p>
+                        <textarea id="concise-input" rows="2" class="w-full p-3 border border-gray-300 rounded-lg text-sm mb-3 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Make it concise..."></textarea>
+                        <button onclick="evaluateConciseness()" id="concise-btn" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-bold text-sm hover:bg-indigo-700 transition-colors">
+                            <span id="concise-btn-text">Check Conciseness with AI</span>
+                        </button>
+                        <div id="concise-feedback" class="mt-4 p-4 bg-indigo-50 rounded-lg text-sm text-gray-800 hidden border border-indigo-200 prose prose-sm max-w-none prose-p:leading-snug"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Module 3 Deep Dive -->
+            <section id="module3" class="p-8 max-w-4xl mx-auto hidden-section">
+                <div class="mb-10 text-center">
+                    <span class="text-blue-600 font-bold tracking-widest text-sm uppercase">Module 3</span>
+                    <h2 class="text-4xl font-black text-gray-900 mt-2">Articulating Blockers</h2>
+                    <p class="text-gray-500 mt-4 max-w-2xl mx-auto">Learn to express difficulties clearly and make polite, specific requests for assistance.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-12">
+                    <h3 class="text-xl font-bold mb-6 text-gray-800">Polite Requests (Modal Verbs)</h3>
+                    <p class="text-sm text-gray-600 mb-6">In English, direct demands ("Review my code") sound rude and unprofessional. Use modal verbs (Could, Can, Would) to ask for help.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 border rounded-xl bg-gray-50 hover:border-blue-300 transition-colors">
+                            <span class="text-sm font-bold text-gray-700 sm:w-1/3">Asking for a PR review:</span>
+                            <select id="mod3-q1" class="flex-1 p-3 border rounded-lg border-gray-300 text-sm outline-none focus:ring-2 focus:ring-blue-500" onchange="checkMod3()">
+                                <option value="">Choose the best phrasing...</option>
+                                <option value="bad">I need you to look at my PR.</option>
+                                <option value="good">Could someone take a look at my PR today?</option>
+                                <option value="bad">Look at my code.</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 border rounded-xl bg-gray-50 hover:border-blue-300 transition-colors">
+                            <span class="text-sm font-bold text-gray-700 sm:w-1/3">Asking for a discussion:</span>
+                            <select id="mod3-q2" class="flex-1 p-3 border rounded-lg border-gray-300 text-sm outline-none focus:ring-2 focus:ring-blue-500" onchange="checkMod3()">
+                                <option value="">Choose the best phrasing...</option>
+                                <option value="bad">We must talk about the database.</option>
+                                <option value="good">Do you have five minutes after this to discuss the schema?</option>
+                                <option value="bad">Tell me about the database now.</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="mod3-feedback" class="mt-6 p-4 rounded-xl hidden text-sm font-medium text-center"></div>
+                </div>
+            </section>
+
+            <!-- Module 4 Deep Dive -->
+            <section id="module4" class="p-8 max-w-4xl mx-auto hidden-section">
+                <div class="mb-10 text-center">
+                    <span class="text-blue-600 font-bold tracking-widest text-sm uppercase">Module 4</span>
+                    <h2 class="text-4xl font-black text-gray-900 mt-2">Managing "Offline Flow"</h2>
+                    <p class="text-gray-500 mt-4 max-w-2xl mx-auto">Master strategies for handling interruptions and parking deep technical discussions for after the stand-up.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div class="col-span-1 bg-amber-50 rounded-2xl p-6 border border-amber-100">
+                        <h3 class="text-lg font-bold text-amber-900 mb-4">The "Parking Lot"</h3>
+                        <p class="text-xs text-amber-800 mb-4 italic">Use these phrases to pause a conversation that is taking too long.</p>
+                        <ul class="space-y-4 text-sm text-amber-900 font-medium">
+                            <li class="flex items-start gap-3"><span class="text-lg leading-none">📌</span> "Let's take this offline."</li>
+                            <li class="flex items-start gap-3"><span class="text-lg leading-none">📌</span> "Can we sync up after the meeting?"</li>
+                            <li class="flex items-start gap-3"><span class="text-lg leading-none">📌</span> "Let's put a pin in that for now."</li>
+                            <li class="flex items-start gap-3"><span class="text-lg leading-none">📌</span> "We're getting a bit into the weeds."</li>
+                        </ul>
+                    </div>
+
+                    <div class="col-span-2 bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Scenario Matcher</h3>
+                        <p class="text-sm text-gray-600 mb-6">Click the best response for each scenario to keep the stand-up moving.</p>
+                        
+                        <div class="space-y-4">
+                            <div class="p-5 border border-gray-200 rounded-xl transition-colors duration-300" id="scenario1">
+                                <p class="text-sm font-bold text-gray-800 mb-3">Scenario 1: A coworker starts explaining the entire history of a legacy bug during your update.</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <button onclick="checkMod4('scenario1', 'wrong')" class="px-4 py-2 text-xs border border-gray-300 rounded-full hover:bg-gray-100 font-medium">"Stop talking, it's my turn."</button>
+                                    <button onclick="checkMod4('scenario1', 'correct')" class="px-4 py-2 text-xs border border-gray-300 rounded-full hover:bg-gray-100 font-medium">"Let's put a pin in that and sync up after."</button>
+                                </div>
+                            </div>
+                            <div class="p-5 border border-gray-200 rounded-xl transition-colors duration-300" id="scenario2">
+                                <p class="text-sm font-bold text-gray-800 mb-3">Scenario 2: You and the backend dev start arguing about API payload structures.</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <button onclick="checkMod4('scenario2', 'correct')" class="px-4 py-2 text-xs border border-gray-300 rounded-full hover:bg-gray-100 font-medium">"We're getting into the weeds. Let's take this offline."</button>
+                                    <button onclick="checkMod4('scenario2', 'wrong')" class="px-4 py-2 text-xs border border-gray-300 rounded-full hover:bg-gray-100 font-medium">"Let's figure this out right now."</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vocabulary Bank -->
+            <section id="vocabulary" class="p-8 max-w-6xl mx-auto hidden-section">
+                <header class="mb-10">
+                    <h2 class="text-3xl font-bold text-gray-900">Jargon Buster</h2>
+                    <p class="text-gray-600 mt-2">Essential terminology for the Agile environment. Click to reveal definitions.</p>
+                </header>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="flashcard-grid">
+                    <!-- Cards generated via JS -->
+                </div>
+            </section>
+
+            <!-- Fixed Floating Footer for Navigation -->
+            <div class="md:hidden fixed bottom-4 left-4 right-4 bg-white shadow-2xl border border-gray-200 rounded-2xl p-2 flex justify-around">
+                <button onclick="showSection('dashboard')" class="p-3 text-blue-600">🏠</button>
+                <button onclick="showSection('curriculum')" class="p-3">📚</button>
+                <button onclick="showSection('module1')" class="p-3">🎓</button>
+                <button onclick="showSection('vocabulary')" class="p-3">📖</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- Navigation Logic ---
+        function showSection(sectionId) {
+            document.querySelectorAll('main > section').forEach(section => {
+                section.classList.add('hidden-section');
+            });
+            document.getElementById(sectionId).classList.remove('hidden-section');
+            
+            // Update nav active states
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('bg-blue-50', 'text-blue-700');
+                link.classList.add('text-gray-600');
+            });
+            const activeNav = document.getElementById('nav-' + sectionId);
+            if (activeNav) {
+                activeNav.classList.remove('text-gray-600');
+                activeNav.classList.add('bg-blue-50', 'text-blue-700');
+            }
+        }
+
+        // --- Chart Initialization ---
+        const ctx = document.getElementById('skillChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Technical Jargon', 'Verb Tenses', 'Conciseness', 'Blocker Articulation', 'Active Listening', 'Agile Flow'],
+                datasets: [{
+                    label: 'Target Mastery',
+                    data: [90, 85, 95, 80, 75, 100],
+                    fill: true,
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    borderColor: 'rgb(59, 130, 246)',
+                    pointBackgroundColor: 'rgb(59, 130, 246)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(59, 130, 246)'
+                }, {
+                    label: 'Starting Baseline',
+                    data: [50, 60, 40, 30, 65, 50],
+                    fill: true,
+                    backgroundColor: 'rgba(209, 213, 219, 0.2)',
+                    borderColor: 'rgb(156, 163, 175)',
+                    pointBackgroundColor: 'rgb(156, 163, 175)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(156, 163, 175)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { display: false },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                }
+            }
+        });
+
+        // --- Vocabulary Data & Logic ---
+        const vocabData = [
+            { term: "PR (Pull Request)", def: "A method of submitting code contributions. Example: 'I submitted a PR for the login bug.'", type: "Artifact" },
+            { term: "Blocked", def: "Unable to continue task due to a dependency. Example: 'I am blocked because the API is down.'", type: "Status" },
+            { term: "Backlog", def: "Prioritized list of work items. Example: 'We can move that feature to the backlog.'", type: "Artifact" },
+            { term: "Merge", def: "Combining code changes with main codebase. Example: 'I am ready to merge my branch into main.'", type: "Action" },
+            { term: "Deploy", def: "Moving code to production. Example: 'We will deploy the hotfix this afternoon.'", type: "Action" },
+            { term: "Sprint", def: "A set period (e.g., 2 weeks) during which specific work is completed.", type: "Event" }
+        ];
+
+        const flashcardGrid = document.getElementById('flashcard-grid');
+        vocabData.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'h-48 relative group perspective-1000';
+            card.innerHTML = `
+                <div class="flashcard-inner relative w-full h-full text-center transition-transform duration-500 shadow-sm border border-gray-200 rounded-xl bg-white flex items-center justify-center p-6" onclick="this.parentElement.classList.toggle('flashcard-flipped')">
+                    <div class="flashcard-front absolute w-full h-full backface-hidden flex flex-col items-center justify-center p-4">
+                        <span class="text-xs font-bold text-blue-500 uppercase tracking-widest mb-2">${item.type}</span>
+                        <h4 class="text-xl font-black text-gray-800">${item.term}</h4>
+                        <p class="text-[10px] text-gray-400 mt-4">Click to Flip</p>
+                    </div>
+                    <div class="flashcard-back absolute w-full h-full backface-hidden flex flex-col items-center justify-center p-6 bg-blue-600 text-white rounded-xl">
+                        <button onclick="playTTS('${item.term}. ${item.def.replace(/'/g, "\\'")}', event)" class="absolute top-3 right-3 bg-white/20 hover:bg-white/40 p-2 rounded-full transition-colors z-10 flex items-center justify-center w-10 h-10 shadow-sm" title="Listen to pronunciation">🔊</button>
+                        <p class="text-sm font-medium leading-relaxed">${item.def}</p>
+                    </div>
+                </div>
+            `;
+            flashcardGrid.appendChild(card);
+        });
+
+        // --- Interaction Logic: Warm-up ---
+        function checkPurpose(id, choice) {
+            const element = document.getElementById(id);
+            const feedback = document.getElementById('purpose-feedback');
+            feedback.classList.remove('hidden', 'bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700');
+
+            const answers = {
+                q1: 'mistake',
+                q2: 'purpose',
+                q3: 'mistake'
+            };
+
+            if (choice === answers[id]) {
+                element.classList.add('bg-green-50', 'border-green-300');
+                element.classList.remove('bg-red-50', 'border-red-300');
+                feedback.innerHTML = "<strong>Correct!</strong> Stand-ups are for high-level alignment, not deep technical debugging or reporting to management.";
+                feedback.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                element.classList.add('bg-red-50', 'border-red-300');
+                element.classList.remove('bg-green-50', 'border-green-300');
+                feedback.innerHTML = "<strong>Not quite.</strong> Remember: Focus on alignment and unblocking. Deep problem-solving happens after the meeting.";
+                feedback.classList.add('bg-red-100', 'text-red-700');
+            }
+        }
+
+        // --- Module 2 Logic ---
+        async function evaluateConciseness() {
+            const inputEl = document.getElementById('concise-input');
+            const text = inputEl.value.trim();
+            const feedbackEl = document.getElementById('concise-feedback');
+            const btnText = document.getElementById('concise-btn-text');
+
+            if (!text) {
+                feedbackEl.innerHTML = "<p class='text-red-600 font-bold m-0'>Please write a shortened version first.</p>";
+                feedbackEl.classList.remove('hidden');
+                return;
+            }
+
+            btnText.innerHTML = "Checking...";
+            feedbackEl.classList.add('hidden');
+
+            const systemPrompt = `You are a communication coach. The user is rewriting this rambling stand-up update: "Yesterday I spent three hours looking at line 452 in the auth controller because the token wasn't refreshing, and then I realized it was a typo in the config, so I changed it and pushed it."
+            Evaluate their rewritten text based on 3 rules:
+            1. Is it under 15 words?
+            2. Does it use the Past Simple correctly?
+            3. Does it capture the core message (fixed auth token typo)?
+            Provide brief, encouraging feedback in Markdown. Max 50 words.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: text }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    feedbackEl.innerHTML = marked.parse(candidate.content.parts[0].text);
+                    feedbackEl.classList.remove('hidden');
+                }
+            } catch (err) {
+                feedbackEl.innerHTML = "<p class='text-red-600 font-bold'>AI Coach is offline right now. Try again later.</p>";
+                feedbackEl.classList.remove('hidden');
+            } finally {
+                btnText.innerHTML = "Check Conciseness with AI";
+            }
+        }
+
+        // --- Module 3 Logic ---
+        function checkMod3() {
+            const q1 = document.getElementById('mod3-q1').value;
+            const q2 = document.getElementById('mod3-q2').value;
+            const feedback = document.getElementById('mod3-feedback');
+            
+            if (!q1 || !q2) return; // Wait until both dropdowns are answered
+
+            feedback.classList.remove('hidden', 'bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700');
+            
+            if (q1 === 'good' && q2 === 'good') {
+                feedback.innerHTML = "<strong>Excellent!</strong> Modal verbs like 'Could' and polite questions ('Do you have five minutes?') make you sound professional, collaborative, and easy to work with.";
+                feedback.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                feedback.innerHTML = "<strong>Keep trying.</strong> Direct demands sound very rude in English. Try to use phrases that ask for someone's time politely.";
+                feedback.classList.add('bg-red-100', 'text-red-700');
+            }
+        }
+
+        // --- Module 4 Logic ---
+        function checkMod4(scenarioId, choice) {
+            const el = document.getElementById(scenarioId);
+            // Reset existing colors
+            el.classList.remove('border-green-400', 'bg-green-50', 'border-red-400', 'bg-red-50', 'border-gray-200');
+            
+            if (choice === 'correct') {
+                el.classList.add('border-green-400', 'bg-green-50');
+            } else {
+                el.classList.add('border-red-400', 'bg-red-50');
+            }
+        }
+
+        const apiKey = "";
+
+        async function evaluateStandup() {
+            const inputEl = document.getElementById('standup-input');
+            const text = inputEl.value.trim();
+            const feedbackEl = document.getElementById('ai-feedback');
+            const btnIcon = document.getElementById('eval-btn-icon');
+            const btnText = document.getElementById('eval-btn-text');
+
+            if (!text) {
+                feedbackEl.classList.remove('hidden');
+                feedbackEl.innerHTML = "<p class='text-red-600 font-bold m-0'>Please write your stand-up update before analyzing!</p>";
+                return;
+            }
+
+            // Set loading state
+            btnIcon.innerHTML = "⏳";
+            btnText.innerHTML = "Analyzing...";
+            feedbackEl.classList.add('hidden');
+            feedbackEl.innerHTML = "";
+
+            const systemPrompt = `You are an expert English communication coach for software developers.
+            The user is submitting a text version of their daily stand-up update based on this Mock Jira board:
+            - DONE: Ticket #442 - Fix CSS alignment on "Submit Order"
+            - IN PROGRESS: Ticket #445 - Integrate Stripe API
+            - BLOCKED: Waiting for DevOps keys
+            
+            Evaluate their update based on 3 criteria:
+            1. Did they cover Yesterday, Today, and Blockers accurately based on the mock board?
+            2. Is the grammar correct? (Specifically check for past simple vs present/future tenses)
+            3. Is it concise?
+            
+            Provide brief, encouraging, and highly constructive feedback formatted in Markdown. Keep it strictly under 150 words.`;
+
+            const payload = {
+                contents: [{ parts: [{ text: text }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+                
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    const aiResponseText = candidate.content.parts[0].text;
+                    feedbackEl.innerHTML = marked.parse(aiResponseText);
+                    feedbackEl.classList.remove('hidden');
+                } else {
+                    throw new Error("Unexpected response structure");
+                }
+            } catch (err) {
+                console.error("Evaluation Error:", err);
+                feedbackEl.innerHTML = "<p class='text-red-600 font-bold m-0'>Oops! The AI Coach is temporarily offline. Please try again later.</p>";
+                feedbackEl.classList.remove('hidden');
+            } finally {
+                btnIcon.innerHTML = "✨";
+                btnText.innerHTML = "Analyze with AI Coach";
+            }
+        }
+
+        async function playTTS(text, event) {
+            event.stopPropagation(); // Prevent flashcard from flipping when clicking the audio button
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '⏳'; 
+
+            try {
+                const payload = {
+                    contents: [{ parts: [{ text: "Read the following term and definition clearly and professionally: " + text }] }],
+                    generationConfig: {
+                        responseModalities: ["AUDIO"],
+                        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Charon" } } }
+                    },
+                    model: "gemini-2.5-flash-preview-tts"
+                };
+                
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType;
+
+                if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                    const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
+                    
+                    const pcmData = base64ToArrayBuffer(audioData);
+                    const pcm16 = new Int16Array(pcmData);
+                    const wavBlob = pcmToWav(pcm16, sampleRate);
+                    const audioUrl = URL.createObjectURL(wavBlob);
+                    
+                    const audio = new Audio(audioUrl);
+                    audio.onended = () => { btn.innerHTML = originalText; };
+                    audio.play();
+                    btn.innerHTML = '🎶'; 
+                } else {
+                    throw new Error("No audio data returned");
+                }
+            } catch (err) {
+                console.error("TTS Error:", err);
+                btn.innerHTML = '❌';
+                setTimeout(() => btn.innerHTML = originalText, 2000);
+            }
+        }
+
+        function base64ToArrayBuffer(base64) {
+            const binaryString = window.atob(base64);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function pcmToWav(pcmData, sampleRate) {
+            const numChannels = 1;
+            const bitsPerSample = 16;
+            const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+            const blockAlign = numChannels * (bitsPerSample / 8);
+            const dataSize = pcmData.length * 2; 
+            const buffer = new ArrayBuffer(44 + dataSize);
+            const view = new DataView(buffer);
+
+            const writeString = (v, offset, string) => {
+                for (let i = 0; i < string.length; i++) {
+                    v.setUint8(offset + i, string.charCodeAt(i));
+                }
+            };
+
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + dataSize, true);
+            writeString(view, 8, 'WAVE');
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, bitsPerSample, true);
+            writeString(view, 36, 'data');
+            view.setUint32(40, dataSize, true);
+
+            let offset = 44;
+            for (let i = 0; i < pcmData.length; i++, offset += 2) {
+                view.setInt16(offset, pcmData[i], true);
+            }
+
+            return new Blob([view], { type: 'audio/wav' });
+        }
+    </script>
+</body>
+</html>
