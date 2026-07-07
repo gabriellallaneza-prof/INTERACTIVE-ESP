@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Generative Mind - Interactive Linguistics Module</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Plus Jakarta Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Achievements -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f172a;
+            color: #f1f5f9;
+        }
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        .parameter-switch:checked + .switch-label {
+            background-color: #4f46e5;
+        }
+        .parameter-switch:checked + .switch-label .switch-dot {
+            transform: translateX(1.5rem);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="w-full md:w-80 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-800 flex flex-col shrink-0">
+        <!-- Brand Header -->
+        <div class="p-6 border-b border-slate-800">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-indigo-600/20 text-indigo-400 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg text-slate-100 tracking-tight">The Generative Mind</h1>
+                    <span class="text-xs text-indigo-400 font-semibold tracking-wider uppercase">Teacher Academy</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Tracker -->
+        <div class="px-6 py-4 bg-slate-950/40 border-b border-slate-800/60">
+            <div class="flex justify-between text-xs mb-1 font-semibold text-slate-400">
+                <span>MODULE PROGRESS</span>
+                <span id="overall-progress-text">0%</span>
+            </div>
+            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div id="overall-progress-bar" class="bg-indigo-500 h-full w-0 transition-all duration-500"></div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 bg-slate-800 text-indigo-400 shadow-sm border border-indigo-500/10">
+                <div class="flex items-center gap-3">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" /></svg>
+                    <span>Overview & Podcast</span>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-indigo-400" id="dot-dashboard"></span>
+            </button>
+
+            <button onclick="switchTab('frameworks')" id="nav-frameworks" class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800/50 hover:text-slate-200">
+                <div class="flex items-center gap-3">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                    <span>1. Historical Frameworks</span>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-slate-700" id="dot-frameworks"></span>
+            </button>
+
+            <button onclick="switchTab('blueprint')" id="nav-blueprint" class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800/50 hover:text-slate-200">
+                <div class="flex items-center gap-3">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    <span>2. Innateness & UG</span>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-slate-700" id="dot-blueprint"></span>
+            </button>
+
+            <button onclick="switchTab('switchboard')" id="nav-switchboard" class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800/50 hover:text-slate-200">
+                <div class="flex items-center gap-3">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
+                    <span>3. Interactive Switchboard</span>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-slate-700" id="dot-switchboard"></span>
+            </button>
+
+            <button onclick="switchTab('classroom')" id="nav-classroom" class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800/50 hover:text-slate-200">
+                <div class="flex items-center gap-3">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479L12 14zm0 0L5.84 10.578a12.082 12.082 0 00-.665 6.479L12 14zm-4 6v-7.5l4-2.222 4 2.222V20" /></svg>
+                    <span>4. Classroom Application</span>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-slate-700" id="dot-classroom"></span>
+            </button>
+
+            <button onclick="switchTab('exam')" id="nav-exam" class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800/50 hover:text-slate-200">
+                <div class="flex items-center gap-3">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>5. Certification Exam</span>
+                </div>
+                <span class="w-2 h-2 rounded-full bg-slate-700" id="dot-exam"></span>
+            </button>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="p-6 border-t border-slate-800 bg-slate-950/20 text-xs text-slate-500">
+            <p>Built with ❤️ for Teacher Trainees</p>
+            <p class="mt-1">© 2026 Educational Tech Labs</p>
+        </div>
+    </aside>
+
+    <!-- CONTENT AREA -->
+    <main class="flex-1 overflow-y-auto p-6 md:p-10 max-w-7xl mx-auto w-full transition-all duration-300">
+
+        <!-- TAB: DASHBOARD -->
+        <section id="tab-dashboard" class="space-y-8">
+            <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-2 text-indigo-400 text-xs font-bold tracking-wider uppercase">
+                    <span>Introduction Dashboard</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-100 tracking-tight">How Does the Mind Learn to Speak?</h2>
+                <p class="text-slate-400 max-w-3xl">Welcome to your immersive training space. As educators, our methodology relies on our understanding of how child language develops. Are they mimicking adults, or decoding an internal blueprint? Let's find out.</p>
+            </div>
+
+            <!-- Podcast Audio Resource Card -->
+            <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-950 to-slate-900 border border-indigo-500/20 p-6 md:p-8 shadow-xl">
+                <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                    </svg>
+                </div>
+                <div class="max-w-2xl space-y-4">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                        <span class="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-ping"></span>
+                        FEATURED LECTURE PODCAST
+                    </span>
+                    <h3 class="text-xl md:text-2xl font-extrabold text-slate-100">Chomsky and the Universal Grammar Blueprint</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">Listen to our detailed conversational breakdown of the linguistic shift from Behaviorism to Generative Linguistics. Learn about "colorless green ideas," child overgeneralization, and why the "poverty of stimulus" demands a universal factory setting in our minds.</p>
+                    
+                    <!-- Audio Player -->
+                    <div class="pt-4 flex flex-col sm:flex-row items-center gap-4">
+                        <audio controls class="w-full sm:w-96 rounded-lg bg-slate-800 text-slate-100 border border-slate-700 p-1">
+                            <source src="http://googleusercontent.com/file_content/0" type="audio/x-m4a">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <span class="text-xs text-slate-400 font-medium italic">Duration: ~15 mins (Audio Uploaded)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trainee Curriculum Path -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between hover:border-indigo-500/20 transition duration-300">
+                    <div class="space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                        </div>
+                        <h4 class="font-bold text-slate-100">1. Historical Frameworks</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Contrast Saussure's semiological model of structuralism with Chomsky's cognitive revolution. Examine why Skinner's behaviorist stimulus-response paradigm fell apart.</p>
+                    </div>
+                    <button onclick="switchTab('frameworks')" class="mt-6 text-xs text-indigo-400 font-semibold flex items-center gap-1.5 hover:text-indigo-300 group">
+                        Explore Frameworks <span class="group-hover:translate-x-1 transition-transform">→</span>
+                    </button>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between hover:border-indigo-500/20 transition duration-300">
+                    <div class="space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" /></svg>
+                        </div>
+                        <h4 class="font-bold text-slate-100">2. Innateness & UG</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Understand the "Poverty of the Stimulus" argument and why child developmental errors prove language is generative, ending with the famous case of Christopher.</p>
+                    </div>
+                    <button onclick="switchTab('blueprint')" class="mt-6 text-xs text-indigo-400 font-semibold flex items-center gap-1.5 hover:text-indigo-300 group">
+                        Unpack Innateness <span class="group-hover:translate-x-1 transition-transform">→</span>
+                    </button>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between hover:border-indigo-500/20 transition duration-300">
+                    <div class="space-y-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
+                        </div>
+                        <h4 class="font-bold text-slate-100">3. Interactive Switchboard</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Operate the virtual cognitive parameter console. Toggle head-directionality, pro-drop options, and investigate Deep vs. Surface structural transformations.</p>
+                    </div>
+                    <button onclick="switchTab('switchboard')" class="mt-6 text-xs text-indigo-400 font-semibold flex items-center gap-1.5 hover:text-indigo-300 group">
+                        Test Sandbox <span class="group-hover:translate-x-1 transition-transform">→</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Trainee Checklist -->
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h3 class="font-extrabold text-slate-100 flex items-center gap-2 text-lg">
+                    <svg class="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+                    Learning Path Checklist
+                </h3>
+                <ul class="space-y-3 text-sm text-slate-300">
+                    <li class="flex items-start gap-3">
+                        <input type="checkbox" id="check-intro" class="mt-1 rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4" onchange="updateCurriculumStatus('dashboard')">
+                        <label for="check-intro" class="cursor-pointer">Listen to the featured lecture podcast and review the introductory objectives.</label>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <input type="checkbox" id="check-historical" class="mt-1 rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4" onchange="updateCurriculumStatus('frameworks')">
+                        <label for="check-historical" class="cursor-pointer">Compare Saussurean structuralism and Behaviorism on the Historical Frameworks page.</label>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <input type="checkbox" id="check-innate" class="mt-1 rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4" onchange="updateCurriculumStatus('blueprint')">
+                        <label for="check-innate" class="cursor-pointer">Understand Universal Grammar, Poverty of Stimulus, and Christopher's Case Study.</label>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <input type="checkbox" id="check-sandbox" class="mt-1 rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4" onchange="updateCurriculumStatus('switchboard')">
+                        <label for="check-sandbox" class="cursor-pointer">Simulate Head-Directionality and Deep structure transformations in the switchboard sandbox.</label>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <input type="checkbox" id="check-pedagogy" class="mt-1 rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4" onchange="updateCurriculumStatus('classroom')">
+                        <label for="check-pedagogy" class="cursor-pointer">Examine pedagogical implications of child syntax errors and complete classroom practices.</label>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- TAB: FRAMEWORKS -->
+        <section id="tab-frameworks" class="hidden space-y-8">
+            <div class="flex flex-col gap-2">
+                <span class="text-indigo-400 text-xs font-bold tracking-wider uppercase">Module 1: The Historical Pivot</span>
+                <h2 class="text-3xl font-extrabold text-slate-100 tracking-tight">Saussure, Skinner, & The Chomskyan Shift</h2>
+                <p class="text-slate-400 max-w-3xl">Linguistics was not always cognitive. Before Chomsky, language was seen as either a static social chess game or an automatic reflex learned through animal-like conditioning.</p>
+            </div>
+
+            <!-- Saussure vs Chomsky Side-by-Side comparison cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Saussure Card -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition duration-300 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-slate-100">Ferdinand de Saussure</h3>
+                            <span class="px-2.5 py-1 text-xs font-semibold bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">STRUCTURALISM</span>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">Saussure argued that language is a social system of signs. It operates like a game of chess, where elements have no positive, absolute value, but rather obtain value purely by their relative difference from other pieces in the system.</p>
+                        
+                        <div class="pt-2 space-y-3">
+                            <div class="flex gap-3 text-sm">
+                                <span class="font-extrabold text-emerald-400">langue vs. parole:</span>
+                                <p class="text-slate-400">langue is the virtual system shared by a speech community; parole is the physical execution of speech by individuals.</p>
+                            </div>
+                            <div class="flex gap-3 text-sm">
+                                <span class="font-extrabold text-emerald-400">Arbitrary Sign:</span>
+                                <p class="text-slate-400">The connection between the Signifier (acoustic image/sound) and the Signified (mental concept) is completely arbitrary.</p>
+                            </div>
+                            <div class="flex gap-3 text-sm">
+                                <span class="font-extrabold text-emerald-400">Synchronic Lens:</span>
+                                <p class="text-slate-400">Strong focus on studying a state of language (*état de langue*) at a specific, frozen slice of time.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-800/80 text-xs text-slate-400 italic">
+                        Key Work: Cours de linguistique générale (1916, posthumous)
+                    </div>
+                </div>
+
+                <!-- Chomsky Card -->
+                <div class="bg-slate-900 border border-indigo-500/10 rounded-2xl p-6 hover:border-indigo-500/30 transition duration-300 flex flex-col justify-between shadow-lg shadow-indigo-950/20">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-bold text-slate-100">Noam Chomsky</h3>
+                            <span class="px-2.5 py-1 text-xs font-semibold bg-indigo-500/10 text-indigo-400 rounded-full border border-indigo-500/20">GENERATIVE COGNITIVISM</span>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">Chomsky shifted the pivot from a social system to an internal cognitive model. Language is not a frozen social system of signs, but a biological, generative engine operating within the individual mind.</p>
+                        
+                        <div class="pt-2 space-y-3">
+                            <div class="flex gap-3 text-sm">
+                                <span class="font-extrabold text-indigo-400">competence vs. performance:</span>
+                                <p class="text-slate-400">competence is the internalized perfect grammar in the brain; performance is the noisy, real-world spoken reality constrained by human memory and breath.</p>
+                            </div>
+                            <div class="flex gap-3 text-sm">
+                                <span class="font-extrabold text-indigo-400">Deep vs. Surface:</span>
+                                <p class="text-slate-400">A distinction showing how underlying, unambiguous cognitive meanings are transformed into surface-level spoken expressions.</p>
+                            </div>
+                            <div class="flex gap-3 text-sm">
+                                <span class="font-extrabold text-indigo-400">Generative Core:</span>
+                                <p class="text-slate-400">Using finite cognitive resources (recursive grammatical rules), the mind can generate an infinite number of grammatical sentences.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-800/80 text-xs text-slate-400 italic">
+                        Key Work: Syntactic Structures (1957)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skinner's Behaviorism Critique Interactive Zone -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6">
+                <div>
+                    <h3 class="text-xl font-extrabold text-slate-100 flex items-center gap-2">
+                        <span class="text-red-400 text-lg">💡</span>
+                        The Fall of Skinner's Behaviorism
+                    </h3>
+                    <p class="text-slate-400 text-sm mt-1">Behaviorist Leonard Bloomfield and psychologist B.F. Skinner argued that language is a mechanical response to environmental stimuli. Here is how Chomsky refuted their arguments:</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-slate-950/40 border border-slate-800/80 p-5 rounded-xl space-y-2">
+                        <span class="text-xs font-bold text-red-400 uppercase tracking-wide">1. Skinner's Argument</span>
+                        <h4 class="font-bold text-slate-200">Stimulus-Response Loops</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Skinner argued that a word like 'red' is spoken because the visual stimulus of redness triggers a physical verbal response in the vocal cords, which gets reinforced by social approval.</p>
+                    </div>
+
+                    <div class="bg-slate-950/40 border border-slate-800/80 p-5 rounded-xl space-y-2">
+                        <span class="text-xs font-bold text-indigo-400 uppercase tracking-wide">2. Chomsky's Refutation</span>
+                        <h4 class="font-bold text-slate-200">The Infinite Canvas</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Chomsky demonstrated that if you look at a painting, you don't automatically yell "Paint!". You might say, "It clashes with the wallpaper," or "A bit overpriced." Skinner's stimulus properties are circular inventions created after the fact.</p>
+                    </div>
+
+                    <div class="bg-slate-950/40 border border-slate-800/80 p-5 rounded-xl space-y-2">
+                        <span class="text-xs font-bold text-indigo-400 uppercase tracking-wide">3. The Creativity Proof</span>
+                        <h4 class="font-bold text-slate-200">Linguistic Creativity</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Every day, children hear and generate brand new sentences they've never encountered before. If language were purely conditioned, we would only reproduce identical conditioned sequences of our parents.</p>
+                    </div>
+                </div>
+
+                <!-- Interactive Demonstration: Nonsense vs. Ungrammatical -->
+                <div class="border-t border-slate-800/60 pt-6 space-y-4">
+                    <h4 class="font-extrabold text-slate-200 text-sm">Chomsky's Famous Experiment: Grammaticality Independent of Meaning</h4>
+                    <p class="text-xs text-slate-400">Click to evaluate how the human brain instinctively processes these two identical word sets based on their internal syntax:</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div onclick="testGrammaticality('sentence-a')" class="bg-slate-950/60 hover:bg-slate-950/80 border border-slate-800 hover:border-indigo-500/20 p-4 rounded-xl cursor-pointer transition flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] font-bold text-slate-500">SENTENCE A</span>
+                                <p id="sentence-a-text" class="text-sm font-semibold text-slate-200 italic mt-0.5">"Colorless green ideas sleep furiously."</p>
+                            </div>
+                            <span id="sentence-a-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400">Click to evaluate</span>
+                        </div>
+
+                        <div onclick="testGrammaticality('sentence-b')" class="bg-slate-950/60 hover:bg-slate-950/80 border border-slate-800 hover:border-indigo-500/20 p-4 rounded-xl cursor-pointer transition flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] font-bold text-slate-500">SENTENCE B</span>
+                                <p id="sentence-b-text" class="text-sm font-semibold text-slate-200 italic mt-0.5">"Furiously sleep ideas green colorless."</p>
+                            </div>
+                            <span id="sentence-b-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400">Click to evaluate</span>
+                        </div>
+                    </div>
+
+                    <div id="grammaticality-explanation" class="hidden p-4 rounded-xl text-xs bg-indigo-500/5 border border-indigo-500/10 text-indigo-300 leading-relaxed">
+                        <!-- Dynamic explanation -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: BLUEPRINT -->
+        <section id="tab-blueprint" class="hidden space-y-8">
+            <div class="flex flex-col gap-2">
+                <span class="text-indigo-400 text-xs font-bold tracking-wider uppercase">Module 2: The Innate Blueprint</span>
+                <h2 class="text-3xl font-extrabold text-slate-100 tracking-tight">Universal Grammar & The Poverty of Stimulus</h2>
+                <p class="text-slate-400 max-w-3xl">Are children blank slates waiting to be filled, or are they born with an incredible biological switchboard already wired in their brains? Let's unpack the evidence.</p>
+            </div>
+
+            <!-- UG Core Concepts -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-extrabold">1</div>
+                    <h3 class="font-extrabold text-slate-200">The Poverty of Stimulus</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Adult language input is chaotic, incomplete, and grammatically messy ("meager and degenerate data"). Despite hearing fractured sentences, stuttering, and slang, children construct perfect, rich, abstract grammatical systems within months. This demonstrates they are mapping raw input to an existing template.</p>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center font-extrabold">2</div>
+                    <h3 class="font-extrabold text-slate-200">Universal Grammar (UG)</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Since language is biologically hardwired, all human languages share a deep, fundamental structure in the mind. Chomsky argued that beneath the superficial differences in sounds and vocabulary, a common structural framework is shared across all human brains.</p>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-extrabold">3</div>
+                    <h3 class="font-extrabold text-slate-200">The Levels of Adequacy</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Chomsky's ultimate goal for a linguist was reaching <strong>Explanatory Adequacy</strong>. This means a theory must select the best possible grammar by showing how it aligns with the built-in, innate Universal Grammar constraints, rather than just describing surface-level rules.</p>
+                </div>
+            </div>
+
+            <!-- Case Study: Christopher the Polyglot Savant -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 flex flex-col lg:flex-row gap-8 items-start">
+                <div class="space-y-4 lg:w-2/3">
+                    <span class="px-2.5 py-1 text-[10px] font-bold bg-purple-500/10 text-purple-400 rounded-full border border-purple-500/20 uppercase tracking-wider">Historical Case Study</span>
+                    <h3 class="text-xl font-extrabold text-slate-100">Christopher: The Limits of the Mental Blueprint</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">Christopher was a man who suffered from severe cognitive and motor delays, leaving him unable to live independently or play simple games. Yet, linguistically, he was a savant capable of learning unfamiliar natural languages with stunning speed and fluency.</p>
+                    
+                    <p class="text-sm text-slate-300 leading-relaxed">To test the boundaries of his Universal Grammar, researchers invented a language called <strong>Epun</strong>. Epun deliberately violated the biological constraints of human language: its rules relied on counting words in a sentence rather than structural phrases (non-structure-dependent rules).</p>
+                    
+                    <div class="p-4 bg-slate-950/60 rounded-xl border border-slate-800/80 text-xs text-slate-400 leading-relaxed">
+                        <strong class="text-slate-200">The Result:</strong> While Christopher could master incredibly complex natural languages like Turkish or Lithuanian effortlessly, his mind completely hit a brick wall when attempting Epun. Because Epun did not align with the structural blueprints of Universal Grammar, his brain physically could not process it. It was like trying to run Macintosh software on a PC.
+                    </div>
+                </div>
+
+                <!-- Case Study Visualization Graphic -->
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 lg:w-1/3 w-full space-y-4 text-center">
+                    <div class="w-16 h-16 bg-purple-500/10 text-purple-400 rounded-full flex items-center justify-center mx-auto text-xl font-black">🧠</div>
+                    <h4 class="font-bold text-slate-200">The Christopher Experiment</h4>
+                    <div class="space-y-2 text-xs">
+                        <div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-2.5 rounded-lg flex items-center justify-between">
+                            <span>Natural Languages</span>
+                            <span class="font-extrabold">PASS (Easy)</span>
+                        </div>
+                        <div class="bg-red-500/10 border border-red-500/20 text-red-400 p-2.5 rounded-lg flex items-center justify-between">
+                            <span>Invented "Epun"</span>
+                            <span class="font-extrabold">FAIL (Impossible)</span>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-slate-500 leading-normal">Proof that the human language engine is biologically bound to structure-dependent rules, rather than general mathematical processing.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: SWITCHBOARD (SANDBOX) -->
+        <section id="tab-switchboard" class="hidden space-y-8">
+            <div class="flex flex-col gap-2">
+                <span class="text-indigo-400 text-xs font-bold tracking-wider uppercase">Module 3: Generative Mechanics</span>
+                <h2 class="text-3xl font-extrabold text-slate-100 tracking-tight">The Principles & Parameters Sandbox</h2>
+                <p class="text-slate-400 max-w-3xl">Universal Grammar is like a switchboard: every brain has identical wiring (Principles), but different languages require toggling different toggles (Parameters). Play with the sandbox below to understand how.</p>
+            </div>
+
+            <!-- Interactive Sandbox Switchboard Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Left: Toggles and Switched state -->
+                <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-extrabold text-slate-100 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                            Parameter Switches
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1">Act as a child's brain selecting language settings. Flip the toggles to see the structural rules set in real-time.</p>
+                    </div>
+
+                    <!-- Switches -->
+                    <div class="space-y-5">
+                        <!-- Switch 1: Head Directionality -->
+                        <div class="flex items-center justify-between p-4 bg-slate-950/40 rounded-xl border border-slate-800">
+                            <div class="space-y-0.5">
+                                <span class="text-xs font-bold text-slate-200">Head Directionality</span>
+                                <p class="text-[10px] text-slate-500">Does the verb precede its object complement?</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-bold text-slate-400" id="head-dir-val">Initial (English)</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="param-head-direction" class="sr-only parameter-switch" onchange="runSandbox()">
+                                    <span class="w-11 h-6 bg-slate-800 rounded-full border border-slate-700 transition duration-200 switch-label relative">
+                                        <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-slate-100 rounded-full transition duration-200 transform switch-dot flex items-center justify-center"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Switch 2: Pro-Drop (Null Subject) -->
+                        <div class="flex items-center justify-between p-4 bg-slate-950/40 rounded-xl border border-slate-800">
+                            <div class="space-y-0.5">
+                                <span class="text-xs font-bold text-slate-200">Pro-Drop (Null Subject)</span>
+                                <p class="text-[10px] text-slate-500">Are silent, unspoken subjects allowed?</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-bold text-slate-400" id="pro-drop-val">Not Allowed</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="param-pro-drop" class="sr-only parameter-switch" onchange="runSandbox()">
+                                    <span class="w-11 h-6 bg-slate-800 rounded-full border border-slate-700 transition duration-200 switch-label relative">
+                                        <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-slate-100 rounded-full transition duration-200 transform switch-dot flex items-center justify-center"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Switch 3: Wh-Movement -->
+                        <div class="flex items-center justify-between p-4 bg-slate-950/40 rounded-xl border border-slate-800">
+                            <div class="space-y-0.5">
+                                <span class="text-xs font-bold text-slate-200">Wh-Movement</span>
+                                <p class="text-[10px] text-slate-500">Do question words move to the front?</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-bold text-slate-400" id="wh-move-val">Fronted</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="param-wh-move" class="sr-only parameter-switch" onchange="runSandbox()">
+                                    <span class="w-11 h-6 bg-slate-800 rounded-full border border-slate-700 transition duration-200 switch-label relative">
+                                        <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-slate-100 rounded-full transition duration-200 transform switch-dot flex items-center justify-center"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preset Selector -->
+                    <div class="pt-4 border-t border-slate-800">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Language Profiles</span>
+                        <div class="grid grid-cols-3 gap-2 text-xs">
+                            <button onclick="setLanguagePreset('english')" class="py-2 px-3 bg-slate-950 border border-slate-800 hover:border-indigo-500/30 rounded-lg text-slate-300 font-bold transition">English</button>
+                            <button onclick="setLanguagePreset('japanese')" class="py-2 px-3 bg-slate-950 border border-slate-800 hover:border-indigo-500/30 rounded-lg text-slate-300 font-bold transition">Japanese</button>
+                            <button onclick="setLanguagePreset('spanish')" class="py-2 px-3 bg-slate-950 border border-slate-800 hover:border-indigo-500/30 rounded-lg text-slate-300 font-bold transition">Spanish</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Visual output of sentences -->
+                <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-6">
+                    <div>
+                        <h3 class="text-lg font-extrabold text-slate-100 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                            Generated Cognitive Map
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1">Witness how the toggled settings completely redefine structural expressions and rules.</p>
+                    </div>
+
+                    <!-- Sentence Visualizer Screen -->
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-6 flex flex-col justify-center items-center min-h-[220px] text-center space-y-4">
+                        <div class="space-y-1">
+                            <span class="text-[10px] font-semibold text-indigo-400 tracking-wider uppercase block" id="sandbox-profile-title">Active Settings Map</span>
+                            <div id="sandbox-sentence-box" class="text-2xl font-extrabold text-slate-100 tracking-tight transition duration-300">
+                                <!-- Dynamic sentence construction -->
+                            </div>
+                        </div>
+                        <div id="sandbox-sentence-breakdown" class="text-xs text-slate-400 max-w-md leading-relaxed">
+                            <!-- Dynamic rule breakdown text -->
+                        </div>
+                    </div>
+
+                    <!-- Interactive Tree Diagram Simulation -->
+                    <div class="p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-xl space-y-2">
+                        <span class="text-xs font-bold text-indigo-400 flex items-center gap-1">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                            Syntactic Structural Mapping (Phrase-Structure Rule)
+                        </span>
+                        <pre id="sandbox-tree-diagram" class="text-[10px] font-mono text-slate-300 leading-normal bg-slate-950/80 p-3 rounded-lg overflow-x-auto">
+<!-- Dynamic structural phrase tree visual -->
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transformations & Structural Ambiguity deep dive -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6">
+                <div>
+                    <h3 class="text-xl font-extrabold text-slate-100 flex items-center gap-2">
+                        <span class="text-lg">🎭</span>
+                        Transformations: Deep vs. Surface Structure
+                    </h3>
+                    <p class="text-slate-400 text-sm mt-1">How does the mind handle ambiguity? Evaluate Chomsky's landmark structural ambiguity example below to visualize the separation of meaning (Deep Structure) and output (Surface Structure).</p>
+                </div>
+
+                <div class="bg-slate-950 border border-slate-800/80 p-5 rounded-xl space-y-4 text-center">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">THE SURFACE STRUCTURE (S-Structure)</span>
+                    <p class="text-xl font-extrabold text-indigo-300 italic">"The shooting of the hunters"</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div onclick="selectDeepStructure(1)" id="deep-struct-1" class="bg-slate-950/40 hover:bg-slate-950/60 border border-slate-800 hover:border-indigo-500/20 p-5 rounded-xl space-y-3 cursor-pointer transition">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">Deep Structure A (Interpretation A)</span>
+                            <span class="w-4 h-4 rounded-full border border-indigo-500 flex items-center justify-center p-0.5" id="deep-struct-1-radio"></span>
+                        </div>
+                        <h4 class="font-bold text-slate-200">The Active Agent Scenario</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">The hunters are actively shooting at someone or something. Under this meaning, "hunters" represents the underlying subject of the verb "shoot".</p>
+                    </div>
+
+                    <div onclick="selectDeepStructure(2)" id="deep-struct-2" class="bg-slate-950/40 hover:bg-slate-950/60 border border-slate-800 hover:border-indigo-500/20 p-5 rounded-xl space-y-3 cursor-pointer transition">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">Deep Structure B (Interpretation B)</span>
+                            <span class="w-4 h-4 rounded-full border border-slate-700 flex items-center justify-center p-0.5" id="deep-struct-2-radio"></span>
+                        </div>
+                        <h4 class="font-bold text-slate-200">The Passive Recipient Scenario</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed">Someone is actively shooting at the hunters. Under this meaning, "hunters" is the direct object of the verb "shoot".</p>
+                    </div>
+                </div>
+
+                <div id="deep-structure-insight" class="p-4 rounded-xl text-xs bg-indigo-500/5 border border-indigo-500/10 text-indigo-300 leading-relaxed">
+                    Choose one of the deep structures above to decode how the mind transforms it into the exact same surface expression.
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: CLASSROOM APPLICATION -->
+        <section id="tab-classroom" class="hidden space-y-8">
+            <div class="flex flex-col gap-2">
+                <span class="text-indigo-400 text-xs font-bold tracking-wider uppercase">Module 4: Classroom Practice</span>
+                <h2 class="text-3xl font-extrabold text-slate-100 tracking-tight">The "Intelligent Error" Decoder</h2>
+                <p class="text-slate-400 max-w-3xl">As future educators, how should we react to developmental mistakes? Use this practical tool to decode typical student mistakes and build positive, scientifically sound responses.</p>
+            </div>
+
+            <!-- Interactive Errors Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Left: List of errors -->
+                <div class="lg:col-span-5 space-y-3">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Common Classroom Utterances</span>
+                    
+                    <button onclick="decodeError('runned')" id="err-btn-runned" class="w-full flex items-center justify-between p-4 bg-slate-900 border border-indigo-500/10 hover:border-indigo-500/30 rounded-xl text-left transition duration-200">
+                        <div>
+                            <span class="text-[10px] font-bold text-indigo-400 uppercase">Child Utterance A</span>
+                            <p class="text-sm font-extrabold text-slate-200 italic">"I runned away from the dog!"</p>
+                        </div>
+                        <span class="text-xs text-indigo-400 font-bold">Decode</span>
+                    </button>
+
+                    <button onclick="decodeError('sheeps')" id="err-btn-sheeps" class="w-full flex items-center justify-between p-4 bg-slate-900 border border-slate-800 hover:border-indigo-500/30 rounded-xl text-left transition duration-200">
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-500">Child Utterance B</span>
+                            <p class="text-sm font-extrabold text-slate-200 italic">"I saw two sheeps outside!"</p>
+                        </div>
+                        <span class="text-xs text-slate-400 font-bold">Decode</span>
+                    </button>
+
+                    <button onclick="decodeError('readed')" id="err-btn-readed" class="w-full flex items-center justify-between p-4 bg-slate-900 border border-slate-800 hover:border-indigo-500/30 rounded-xl text-left transition duration-200">
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-500">Child Utterance C</span>
+                            <p class="text-sm font-extrabold text-slate-200 italic">"Daddy readed my favorite book!"</p>
+                        </div>
+                        <span class="text-xs text-slate-400 font-bold">Decode</span>
+                    </button>
+                </div>
+
+                <!-- Right: Decoder panel showing Behaviorist vs Generative interpretations -->
+                <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-6">
+                    <div>
+                        <h3 class="text-lg font-extrabold text-slate-100 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                            Cognitive Diagnosis
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1">Examine how different paradigms classify this developmental error.</p>
+                    </div>
+
+                    <!-- Behaviorist vs Generative -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-2">
+                            <span class="text-[10px] font-bold text-red-400 uppercase tracking-wider">BEHAVIORIST PERSPECTIVE</span>
+                            <h4 class="font-bold text-slate-200">Conditioned Reflex Deficit</h4>
+                            <p id="decoder-behaviorist" class="text-xs text-slate-400 leading-relaxed">
+                                The child is copying incorrect models or has failed to receive strong social conditioning (reinforcement) for proper irregular verb forms. Bad habit to break.
+                            </p>
+                        </div>
+
+                        <div class="bg-indigo-500/5 border border-indigo-500/10 p-4 rounded-xl space-y-2">
+                            <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">GENERATIVE PERSPECTIVE</span>
+                            <h4 class="font-bold text-slate-200">Intelligent Overgeneralization</h4>
+                            <p id="decoder-generative" class="text-xs text-indigo-200 leading-relaxed">
+                                The child has never heard an adult say "runned." They are demonstrating cognitive genius: they independently discovered the algebraic past-tense rule (Suffix +ed) and applied it systematically!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Teacher Response Guidance -->
+                    <div id="decoder-response" class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <svg class="h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            Recommended Pedagogical Response
+                        </span>
+                        <p class="text-xs text-slate-300 leading-relaxed italic" id="decoder-response-text">
+                            Do not scold or give explicit grammatical grammar drills. Model the correct irregular naturally: "Yes! You ran very fast from that dog!"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: EXAM & CERTIFICATION -->
+        <section id="tab-exam" class="hidden space-y-8">
+            <div class="flex flex-col gap-2">
+                <span class="text-indigo-400 text-xs font-bold tracking-wider uppercase">Module 5: Certification Exam</span>
+                <h2 class="text-3xl font-extrabold text-slate-100 tracking-tight">Generative Linguistics Qualification</h2>
+                <p class="text-slate-400 max-w-3xl">Test your knowledge. Complete the official 20-question exam based directly on the generative linguistics syllabus to earn your downloadable certificate of completion.</p>
+            </div>
+
+            <!-- Start Exam Screen -->
+            <div id="exam-start-screen" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-10 text-center space-y-6">
+                <div class="w-20 h-20 bg-indigo-500/10 text-indigo-400 rounded-full flex items-center justify-center mx-auto text-3xl">🏆</div>
+                <div class="max-w-md mx-auto space-y-2">
+                    <h3 class="text-2xl font-extrabold text-slate-100">Ready to take the challenge?</h3>
+                    <p class="text-sm text-slate-400 leading-relaxed">This exam consists of 20 multiple-choice questions testing your comprehension of Chomskyan syntax, structuralism, Universal Grammar, and parameters.</p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-sm mx-auto">
+                    <input type="text" id="trainee-name" placeholder="Enter Your Full Name for Certificate" class="w-full bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500">
+                    <button onclick="startExam()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-slate-100 font-bold px-6 py-3 rounded-xl shadow-lg shadow-indigo-950/20 transition whitespace-nowrap">Start Exam</button>
+                </div>
+            </div>
+
+            <!-- Active Exam Screen -->
+            <div id="exam-active-screen" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Exam content -->
+                <div class="lg:col-span-8 bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6">
+                    <div class="flex justify-between items-center text-xs text-slate-400">
+                        <span class="font-bold text-indigo-400 uppercase tracking-wide">Linguistics Assessment</span>
+                        <span id="question-counter">Question 1 of 20</span>
+                    </div>
+
+                    <!-- Question Prompt -->
+                    <div class="space-y-3">
+                        <h3 id="exam-question-text" class="text-xl font-bold text-slate-100 leading-snug">
+                            Question prompt will appear here...
+                        </h3>
+                        <p onclick="showQuestionHint()" class="inline-flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 cursor-pointer font-medium italic">
+                            <span class="text-xs">💡</span> Show Hint
+                        </p>
+                        <p id="exam-hint-text" class="hidden p-3 rounded-lg bg-indigo-500/5 border border-indigo-500/10 text-xs text-indigo-300 leading-relaxed italic">
+                            Hint content will go here...
+                        </p>
+                    </div>
+
+                    <!-- Options -->
+                    <div class="space-y-3" id="exam-options-container">
+                        <!-- Dynamic options will be rendered here -->
+                    </div>
+
+                    <!-- Next button and feedback space -->
+                    <div class="pt-4 border-t border-slate-800 flex justify-between items-center">
+                        <div id="exam-explanation" class="text-xs text-slate-400 max-w-md hidden">
+                            <!-- Correct/Incorrect Rationale -->
+                        </div>
+                        <button onclick="nextQuestion()" id="exam-next-btn" class="hidden bg-indigo-600 hover:bg-indigo-500 text-slate-100 font-bold px-6 py-2.5 rounded-xl transition">
+                            Next Question →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Exam Status/Progress panel -->
+                <div class="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-slate-100 text-sm">Exam Tracker</h4>
+                        
+                        <!-- Mini Stepper grid -->
+                        <div class="grid grid-cols-5 gap-2" id="exam-stepper-grid">
+                            <!-- Stepper buttons generated dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-slate-800 space-y-2">
+                        <div class="flex justify-between text-xs text-slate-400">
+                            <span>Score:</span>
+                            <span class="font-extrabold text-slate-200" id="exam-score-display">0 / 20</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div id="exam-progress-bar" class="bg-emerald-500 h-full w-0 transition-all duration-300"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Exam Score & Certificate Generation Screen -->
+            <div id="exam-results-screen" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-10 space-y-8">
+                <div class="text-center space-y-2">
+                    <div class="w-20 h-20 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-3xl">🎓</div>
+                    <h3 class="text-3xl font-extrabold text-slate-100">Exam Completed!</h3>
+                    <p class="text-sm text-slate-400">Excellent progress. Review your structural assessment analysis below.</p>
+                </div>
+
+                <!-- Scores layout -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center max-w-3xl mx-auto">
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase">Correct Answers</span>
+                        <p class="text-3xl font-extrabold text-emerald-400 mt-1" id="results-correct-count">0</p>
+                    </div>
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase">Accuracy Rate</span>
+                        <p class="text-3xl font-extrabold text-indigo-400 mt-1" id="results-accuracy-rate">0%</p>
+                    </div>
+                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase">Status</span>
+                        <p class="text-2xl font-extrabold text-purple-400 mt-2" id="results-pass-status">PASSED</p>
+                    </div>
+                </div>
+
+                <!-- Certificate Display and Download section -->
+                <div id="certificate-container" class="hidden max-w-2xl mx-auto bg-slate-950 p-8 rounded-2xl border-4 border-indigo-900/60 shadow-xl relative text-center space-y-6">
+                    <!-- Elegant visual borders inside -->
+                    <div class="absolute inset-2 border border-indigo-500/10 rounded-xl pointer-events-none"></div>
+                    
+                    <div class="space-y-1">
+                        <span class="text-xs font-bold text-indigo-400 tracking-widest uppercase">CERTIFICATE OF ACHIEVEMENT</span>
+                        <p class="text-slate-500 text-[10px] uppercase font-semibold">Generative Linguistics Teacher Academy</p>
+                    </div>
+
+                    <div class="py-4 space-y-2">
+                        <p class="text-xs text-slate-400 italic">This official credential certifies that</p>
+                        <h4 id="cert-trainee-name" class="text-2xl font-extrabold text-slate-100 tracking-tight">John Doe</h4>
+                        <p class="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">has successfully mastered the generative syntax syllabus, principles & parameters methodology, and child developmental linguistic diagnosis criteria.</p>
+                    </div>
+
+                    <!-- Certificate footer signatures/seals -->
+                    <div class="flex justify-between items-center text-left pt-6 border-t border-slate-800/80 max-w-md mx-auto text-[10px] text-slate-500">
+                        <div>
+                            <span class="block text-slate-400 font-extrabold">Noam Chomsky (Faculty)</span>
+                            <span>Generative Cognitives Board</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="block text-slate-400 font-extrabold" id="cert-date">July 2026</span>
+                            <span>Date of Completion</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex justify-center gap-4">
+                        <button onclick="window.print()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-slate-100 text-xs font-bold rounded-lg transition flex items-center gap-1.5">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
+                            Print Certificate
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- CORE JAVASCRIPT FOR DYNAMIC SYSTEM -->
+    <script>
+        // Track visual navigation & course progress
+        let progressTrack = {
+            dashboard: false,
+            frameworks: false,
+            blueprint: false,
+            switchboard: false,
+            classroom: false,
+            exam: false
+        };
+
+        function switchTab(tabId) {
+            // Hide all tabs
+            const tabs = ['dashboard', 'frameworks', 'blueprint', 'switchboard', 'classroom', 'exam'];
+            tabs.forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`nav-${t}`).className = "w-full flex items-center justify-between px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 text-slate-400 hover:bg-slate-800/50 hover:text-slate-200";
+            });
+
+            // Show active tab
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`nav-${tabId}`).className = "w-full flex items-center justify-between px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 bg-slate-800 text-indigo-400 shadow-sm border border-indigo-500/10";
+            
+            // Mark tab as visited/completed and calculate progress
+            progressTrack[tabId] = true;
+            updateOverallProgressBar();
+        }
+
+        function updateOverallProgressBar() {
+            let total = Object.keys(progressTrack).length;
+            let completed = Object.values(progressTrack).filter(val => val === true).length;
+            let percent = Math.round((completed / total) * 100);
+
+            // Update DOM progress
+            document.getElementById('overall-progress-text').innerText = `${percent}%`;
+            document.getElementById('overall-progress-bar').style.width = `${percent}%`;
+
+            // Update little lights on navigation buttons
+            Object.keys(progressTrack).forEach(t => {
+                if(progressTrack[t]) {
+                    document.getElementById(`dot-${t}`).className = "w-2 h-2 rounded-full bg-indigo-400";
+                }
+            });
+        }
+
+        function updateCurriculumStatus(tabId) {
+            progressTrack[tabId] = true;
+            updateOverallProgressBar();
+        }
+
+        // --- MODULE 1: HISTORICAL FRAMEWORKS ---
+        function testGrammaticality(type) {
+            const explanationBox = document.getElementById('grammaticality-explanation');
+            explanationBox.classList.remove('hidden');
+
+            const badgeA = document.getElementById('sentence-a-badge');
+            const badgeB = document.getElementById('sentence-b-badge');
+
+            if (type === 'sentence-a') {
+                badgeA.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+                badgeA.innerText = "Grammatical";
+                explanationBox.innerHTML = `
+                    <strong class="text-slate-100 block mb-1">Sentence A Diagnosis: Grammatical but Nonsensical</strong>
+                    "Colorless green ideas sleep furiously" obeys the exact structural hierarchy of English syntax (Adjective + Adjective + Noun + Verb + Adverb). Even though the concept makes no sense, the human language acquisition device easily reads, files, and parses it. Grammaticality is completely independent of semantics or real-world experience.
+                `;
+            } else {
+                badgeB.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20";
+                badgeB.innerText = "Ungrammatical";
+                explanationBox.innerHTML = `
+                    <strong class="text-slate-100 block mb-1">Sentence B Diagnosis: Ungrammatical and Nonsensical</strong>
+                    "Furiously sleep ideas green colorless" violates our internal structural blueprint rules completely. The human mind automatically rejects it as ungrammatical. Notice that it contains the exact same words as Sentence A, proving syntax operates entirely independently of word probability or simple definitions.
+                `;
+            }
+        }
+
+        // --- MODULE 3: THE SWITCHBOARD SANDBOX ---
+        let languagePresets = {
+            english: { headInitial: true, proDrop: false, whMove: true },
+            japanese: { headInitial: false, proDrop: true, whMove: false },
+            spanish: { headInitial: true, proDrop: true, whMove: true }
+        };
+
+        function setLanguagePreset(lang) {
+            const preset = languagePresets[lang];
+            document.getElementById('param-head-direction').checked = !preset.headInitial; // Switch checked = headFinal
+            document.getElementById('param-pro-drop').checked = preset.proDrop;
+            document.getElementById('param-wh-move').checked = !preset.whMove; // Switch checked = whInSitu
+            
+            runSandbox(lang);
+        }
+
+        function runSandbox(customPresetName = null) {
+            const headFinal = document.getElementById('param-head-direction').checked;
+            const proDrop = document.getElementById('param-pro-drop').checked;
+            const whInSitu = document.getElementById('param-wh-move').checked;
+
+            // Update UI switch value labels
+            document.getElementById('head-dir-val').innerText = headFinal ? "Final (Japanese)" : "Initial (English)";
+            document.getElementById('pro-drop-val').innerText = proDrop ? "Allowed (Spanish)" : "Not Allowed";
+            document.getElementById('wh-move-val').innerText = whInSitu ? "In-Situ (Mandarin)" : "Fronted";
+
+            // Determine active custom profile or generated name
+            let profileName = "Custom Configuration";
+            if (customPresetName) {
+                profileName = customPresetName.toUpperCase() + " SETTING";
+            } else {
+                if (!headFinal && !proDrop && !whInSitu) profileName = "ENGLISH-LIKE CONFIGURATION";
+                if (headFinal && proDrop && whInSitu) profileName = "JAPANESE-LIKE CONFIGURATION";
+                if (!headFinal && proDrop && !whInSitu) profileName = "SPANISH-LIKE CONFIGURATION";
+            }
+            document.getElementById('sandbox-profile-title').innerText = profileName;
+
+            // Generate Output sentence based on triggers
+            let verb = headFinal ? "apples eat" : "eat apples";
+            let subject = proDrop ? "[Unspoken Subject]" : "I";
+            let question = whInSitu ? "see what?" : "What see?";
+
+            let finalSentence = `${subject} ${verb} ... ${question}`;
+            document.getElementById('sandbox-sentence-box').innerText = finalSentence;
+
+            // Create breakdown logic
+            let breakdown = "Structural parameters explain syntax diversity using basic logical settings. ";
+            if (headFinal) {
+                breakdown += "Because you selected <strong>Head-Final</strong>, verbs anchor at the very end of their phrases. ";
+            } else {
+                breakdown += "With <strong>Head-Initial</strong>, heads like verbs precede complements. ";
+            }
+
+            if (proDrop) {
+                breakdown += "<strong>Pro-Drop is allowed</strong>, meaning silent subjects are syntactically projected in the brain, though unspoken. ";
+            } else {
+                breakdown += "<strong>Pro-Drop is NOT allowed</strong>, demanding explicit subject markers. ";
+            }
+            document.getElementById('sandbox-sentence-breakdown').innerHTML = breakdown;
+
+            // Update visual ASCII hierarchy tree
+            let tree = "";
+            if (headFinal) {
+                tree = `
+      S (Sentence)
+     / \\
+   NP   VP (Verb Phrase)
+   |    /  \\
+  (I)  NP   V (Head)
+       |    |
+    apples eat
+                `;
+            } else {
+                tree = `
+      S (Sentence)
+     / \\
+   NP   VP (Verb Phrase)
+   |    /  \\
+  (I)  V    NP (Complement)
+       |    |
+      eat apples
+                `;
+            }
+            document.getElementById('sandbox-tree-diagram').innerText = tree;
+        }
+
+        // Deep Structure Visualizer trigger
+        function selectDeepStructure(id) {
+            const block1 = document.getElementById('deep-struct-1');
+            const block2 = document.getElementById('deep-struct-2');
+            const r1 = document.getElementById('deep-struct-1-radio');
+            const r2 = document.getElementById('deep-struct-2-radio');
+            const insights = document.getElementById('deep-structure-insight');
+
+            if (id === 1) {
+                block1.className = "bg-indigo-500/5 border border-indigo-500/20 p-5 rounded-xl space-y-3 cursor-pointer transition shadow-sm";
+                block2.className = "bg-slate-950/40 border border-slate-800 p-5 rounded-xl space-y-3 cursor-pointer transition";
+                r1.className = "w-4 h-4 rounded-full border border-indigo-500 flex items-center justify-center p-0.5 bg-indigo-500";
+                r2.className = "w-4 h-4 rounded-full border border-slate-700 flex items-center justify-center p-0.5";
+                
+                insights.innerHTML = `
+                    <strong class="text-slate-100 block mb-1">Deep Structure A decoded: The Hunters are Shooters</strong>
+                    Here, the brain projects "the hunters" as the syntactic *agent* or subject performing the verb "shoot" at the deep conceptual layer. During passivization transformations, this structure transitions into the ambiguous surface structure output we hear: "The shooting of the hunters."
+                `;
+            } else {
+                block2.className = "bg-indigo-500/5 border border-indigo-500/20 p-5 rounded-xl space-y-3 cursor-pointer transition shadow-sm";
+                block1.className = "bg-slate-950/40 border border-slate-800 p-5 rounded-xl space-y-3 cursor-pointer transition";
+                r2.className = "w-4 h-4 rounded-full border border-indigo-500 flex items-center justify-center p-0.5 bg-indigo-500";
+                r1.className = "w-4 h-4 rounded-full border border-slate-700 flex items-center justify-center p-0.5";
+
+                insights.innerHTML = `
+                    <strong class="text-slate-100 block mb-1">Deep Structure B decoded: The Hunters are Targets</strong>
+                    Here, some outside agent is actively shooting at the hunters. The hunters are the structural *direct object* of "shoot" at the deep layer of representation. Transformations output this exact same surface expression, creating cognitive ambiguity.
+                `;
+            }
+        }
+
+        // --- MODULE 4: CLASSROOM APPLICATION ---
+        let errorData = {
+            runned: {
+                behaviorist: "The child lacks strong social reinforcements for proper irregular past-tense usage, resulting in improper imitation habits. Drills needed.",
+                generative: "The child has never heard 'runned' from adults. This is a stroke of computational genius: they systematically deduced the rule for past tenses (verb + ed) and applied it algebraic-style across verbs they haven't memorized. Overgeneralization represents healthy progress!",
+                response: "Acknowledge the content naturally without critical drills: 'Yes! You ran very fast from that dog!'"
+            },
+            sheeps: {
+                behaviorist: "The child lacks training on plural exceptions and requires card repetitions of sheep/sheeps to reinforce memory boundaries.",
+                generative: "This error shows that the child has constructed an internal grammatical system. They have extracted the abstract rule for pluralization (Noun + s) and are applying it logically. They are testing rule boundaries, which is a key part of cognitive growth.",
+                response: "Focus on modeling correctness rather than direct feedback: 'Wow, you saw two sheep? Were they fluffy?'"
+            },
+            readed: {
+                behaviorist: "The child is producing a low-probability conditioned output and requires auditory reinforcement to correct the habit loop.",
+                generative: "The child has successfully mapped past action concepts to past syntactic forms (verb + ed). This regular past-tense overgeneralization proves their grammar engine operates on abstract generative rules rather than memory-only behavior.",
+                response: "Model the target form warmly: 'Oh! Your mommy read you your favorite book? That's so nice!'"
+            }
+        };
+
+        function decodeError(key) {
+            const data = errorData[key];
+            
+            // Toggle active styling on buttons
+            const buttons = ['runned', 'sheeps', 'readed'];
+            buttons.forEach(b => {
+                document.getElementById(`err-btn-${b}`).className = b === key 
+                    ? "w-full flex items-center justify-between p-4 bg-indigo-500/5 border border-indigo-500/20 rounded-xl text-left transition duration-200 shadow-sm"
+                    : "w-full flex items-center justify-between p-4 bg-slate-900 border border-slate-800 hover:border-indigo-500/30 rounded-xl text-left transition duration-200";
+            });
+
+            // Update content in decoder panel
+            document.getElementById('decoder-behaviorist').innerText = data.behaviorist;
+            document.getElementById('decoder-generative').innerText = data.generative;
+            document.getElementById('decoder-response-text').innerText = data.response;
+        }
+
+        // Initialize state sandbox on page load
+        window.onload = function() {
+            runSandbox();
+            decodeError('runned');
+        };
+
+        // --- MODULE 5: THE CERTIFICATION ASSESSMENT ENGINE ---
+        // Importing 20 comprehensive questions with complete hint/rationale directly from linguistics-quiz.docx
+        const quizSyllabus = [
+            {
+                q: "Which specific work by Noam Chomsky is credited with initiating the transition from descriptivism to generative grammar in 1957?",
+                options: ["Verbal Behavior", "Syntactic Structures", "The Minimalist Programme", "Aspects of the Theory of Syntax"],
+                ans: 1,
+                hint: "Think of the publication date mentioned as the very beginning of the revolution.",
+                rationale: "This short 1957 volume introduced the concept of generative grammar and set a new trajectory for the field of linguistics."
+            },
+            {
+                q: "According to the generative approach, what is the primary goal of a linguist when constructing a grammar?",
+                options: [
+                    "To create a device that produces all and only the grammatical sentences of a language.",
+                    "To document and classify every sentence found in a large linguistic corpus.",
+                    "To map the relationship between linguistic signs and their external referents in the environment.",
+                    "To determine the statistical probability of specific word sequences appearing in speech."
+                ],
+                ans: 0,
+                hint: "The term 'generative' implies a mechanism capable of producing specific outputs.",
+                rationale: "Generative grammar aims to model the finite system that allows for the production of an infinite set of valid sentences."
+            },
+            {
+                q: "How did Chomsky's 'Colorless green ideas sleep furiously' example challenge the prevailing views of the North American Descriptivists?",
+                options: [
+                    "It demonstrated that sentences are only grammatical if they have been previously recorded in a corpus.",
+                    "It proved that semantics is the most critical component of syntactic structure.",
+                    "It showed that ungrammatical sentences are easier to process than grammatical ones.",
+                    "It illustrated that grammaticality is independent of both meaning and statistical frequency."
+                ],
+                ans: 3,
+                hint: "Consider why a sentence that makes no sense can still 'sound' like a proper English sentence.",
+                rationale: "By being nonsensical yet syntactically sound, the sentence shows that our internal grammar doesn't rely on probability or logic."
+            },
+            {
+                q: "In the context of Chomsky’s critique of Skinner, why is the behaviourist explanation of stimulus and response considered 'circular'?",
+                options: [
+                    "Because children eventually stop responding to reinforcements as they grow older.",
+                    "Because it assumes that the mind is a blank slate at birth.",
+                    "Because it relies on the speaker's internal state to define the external stimulus after the fact.",
+                    "Because lab rats and humans process language using identical neural pathways."
+                ],
+                ans: 2,
+                hint: "Think about how a behaviourist identifies which 'stimulus' caused a response like 'That painting is beautiful'.",
+                rationale: "Chomsky argued that behaviourists simply invent a 'stimulus' property (like 'chairness') to explain whatever response a person happens to give."
+            },
+            {
+                q: "What does Chomsky's 'explanatory adequacy' require of a linguistic theory beyond just describing a native speaker's intuitions?",
+                options: [
+                    "It must demonstrate how meaning is derived from external social interactions.",
+                    "It must provide a complete history of the language's evolution over centuries.",
+                    "It must be compatible with the principles of Universal Grammar.",
+                    "It must account for every possible dialect and variation within a single language family."
+                ],
+                ans: 2,
+                hint: "This is the highest level of adequacy and involves the 'mental blueprint' all humans share.",
+                rationale: "Explanatory adequacy is achieved when a grammar is chosen because it aligns with innate, universal constraints that children don't have to learn."
+            },
+            {
+                q: "In early generative grammar, which mechanism explains why humans can produce an infinite number of sentences using a finite set of rules?",
+                options: ["Phonemic analysis", "Recursion", "Reinforcement learning", "Statistical probability"],
+                ans: 1,
+                hint: "Think of the structure found in 'The House that Jack Built'.",
+                rationale: "Recursion allows a constituent to be embedded within another of the same type, theoretically allowing a sentence to expand forever."
+            },
+            {
+                q: "What is the primary difference between 'competence' and 'performance' in the Chomskyan framework?",
+                options: [
+                    "Competence is the internalized knowledge of grammar, while performance is the actual application of that knowledge in speech.",
+                    "Competence varies wildly between individuals, while performance is identical for all native speakers.",
+                    "Competence is learned through education, while performance is an innate biological reflex.",
+                    "Competence refers to written language, while performance refers to spoken language."
+                ],
+                ans: 0,
+                hint: "Consider the difference between knowing the rules of a game and actually playing it while tired or distracted.",
+                rationale: "Performance is subject to real-world constraints like memory or breath, which do not limit the underlying ideal grammar (competence)."
+            },
+            {
+                q: "How does early generative grammar account for the ambiguity in the phrase 'The shooting of the hunters'?",
+                options: [
+                    "By evaluating the statistical frequency of hunters being shooters versus targets.",
+                    "By analyzing the surface structure of the sentence as it is spoken.",
+                    "By tracing the phrase back to two distinct deep structures.",
+                    "By applying the head-directionality parameter to the noun phrase."
+                ],
+                ans: 2,
+                hint: "Look for the term that describes the 'underlying' meaning structure before it becomes what we say.",
+                rationale: "One deep structure involves the hunters as the subject (doing the shooting), while the other involves them as the object (being shot)."
+            },
+            {
+                q: "In later generative models, what is the 'head-directionality parameter' used to explain?",
+                options: [
+                    "Why some languages have more phonemes than others.",
+                    "The language-specific choice of whether a 'head' precedes or follows its complements.",
+                    "The universal rule that all phrases must contain a noun.",
+                    "The biological mechanism that allows a child to learn any language."
+                ],
+                ans: 1,
+                hint: "Consider the difference in word order between English 'wall on' (incorrect) and Japanese 'wall on' (correct).",
+                rationale: "This parameter explains why English is head-initial (e.g., 'read a book') while Japanese is head-final (e.g., 'Japanese am')."
+            },
+            {
+                q: "Which piece of evidence is commonly cited by generativists to support the 'Innateness Hypothesis'?",
+                options: [
+                    "The ability of adults to learn second languages with the same ease as children.",
+                    "The observation that children make 'intelligent' errors like 'readed' or 'sheeps'.",
+                    "The fact that children require explicit correction from adults to learn grammar.",
+                    "The finding that linguistic universals are identical to cultural universals."
+                ],
+                ans: 1,
+                hint: "Look for a sign that children are creating their own internal rules rather than just mimicking.",
+                rationale: "These errors show children are applying internalized rules they have deduced, rather than simply imitating what they hear."
+            },
+            {
+                q: "What does the case of 'Christopher' suggest about the nature of the language faculty, according to the text?",
+                options: [
+                    "That any logical system can be learned as a 'natural' language if introduced early.",
+                    "That language learning is entirely dependent on general intelligence (IQ).",
+                    "That the human brain is only capable of learning structure-dependent linguistic operations.",
+                    "That the 'blank slate' theory best explains adult language acquisition."
+                ],
+                ans: 2,
+                hint: "Christopher could learn real languages but failed at a specifically 'unnatural' invented one.",
+                rationale: "Christopher's failure to learn the invented language 'Epun' indicates that our innate blueprint only accepts specific, structure-dependent rules."
+            },
+            {
+                q: "What is 'convergent evolution' in the context of linguistic theory, and how does it challenge Universal Grammar?",
+                options: [
+                    "It is a generative term for the process by which deep structure becomes surface structure.",
+                    "It argues that Universal Grammar is only found in highly evolved civilizations.",
+                    "It suggests that all languages are slowly merging into one global tongue.",
+                    "It proposes that linguistic universals arise from common needs and constraints rather than an innate blueprint."
+                ],
+                ans: 3,
+                hint: "Think of it as different cultures independently 'inventing' the same tool because it's the most practical design.",
+                rationale: "This view suggests that unrelated languages independently find similar 'engineering solutions' to the problem of communication."
+            },
+            {
+                q: "Critics like Geoffrey Sampson argue that the generative focus on a 'single, sterile formal framework' has what negative effect on the field?",
+                options: [
+                    "It encourages linguists to ignore the urgent task of documenting endangered, diverse languages.",
+                    "It makes linguistics too easy for non-experts to understand.",
+                    "It focuses too much on how meaning is constructed in social contexts.",
+                    "It prevents the integration of linguistics with modern computer science."
+                ],
+                ans: 0,
+                hint: "Think about what might be lost when researchers only look for things that all languages have in common.",
+                rationale: "Sampson argued that seeking universals in a few languages distracts from the empirical study of the world's vanishing linguistic diversity."
+            },
+            {
+                q: "How does the 'Minimalist Programme' differ from earlier 'Transformational-Generative' models?",
+                options: [
+                    "It introduces more complex layers of structure like 'D-structure' and 'S-structure'.",
+                    "It attempts to simplify the theory by removing structural layers and relying on general constraints.",
+                    "It seeks to maximize the number of language-specific rules to improve descriptive accuracy.",
+                    "It rejects the idea of Universal Grammar in favor of behaviourist principles."
+                ],
+                ans: 1,
+                hint: "The name of the programme itself suggests its main objective.",
+                rationale: "Minimalism is the most recent phase of Chomskyan theory, emphasizing efficiency and the reduction of theoretical 'machinery'."
+            },
+            {
+                q: "Why did Chomsky conclude that the behaviourist model cannot explain the linguistic abilities of children?",
+                options: [
+                    "Because children only learn language through formal schooling and reading.",
+                    "Because children's brains are not yet developed enough to form stimulus-response bonds.",
+                    "Because language is too simple a task to require environmental stimuli.",
+                    "Because children do not receive enough reinforcement to learn every possible sentence."
+                ],
+                ans: 3,
+                hint: "Think about the 'novelty' of a child's speech and whether they've heard every sentence before.",
+                rationale: "This is known as the 'poverty of the stimulus' argument: children produce sentences they've never been reinforced for saying."
+            },
+            {
+                q: "What is a 'parameter' in the Principles and Parameters framework?",
+                options: [
+                    "A rule that defines how words are pronounced in different dialects.",
+                    "A method for recording data from native speakers in the field.",
+                    "A universal law that is identical across every human language without exception.",
+                    "A limited set of choices or 'switches' that determine how universal principles apply in a specific language."
+                ],
+                ans: 3,
+                hint: "Think of a 'toggle' or 'setting' on a machine that changes its output within certain limits.",
+                rationale: "Parameters allow for variation (like word order) within a system governed by universal principles."
+            },
+            {
+                q: "In Chomsky's 'three levels of adequacy,' which level is concerned with capturing the underlying 'why' of language acquisition?",
+                options: ["Explanatory Adequacy", "Structural Adequacy", "Descriptive Adequacy", "Observational Adequacy"],
+                ans: 0,
+                hint: "This level looks for the 'best' grammar among many, based on its fit with innate principles.",
+                rationale: "Explanatory adequacy is the highest level, aiming to show how the chosen grammar relates to the innate Universal Grammar."
+            },
+            {
+                q: "According to the text, what is the 'equi-complexity hypothesis'?",
+                options: [
+                    "The proposal that all languages maintain a similar level of overall grammatical complexity.",
+                    "The belief that learning two languages is exactly twice as difficult as learning one.",
+                    "The idea that linguistic complexity is directly tied to the biological complexity of the speaker.",
+                    "The theory that some languages are naturally more sophisticated than others."
+                ],
+                ans: 0,
+                hint: "This term appears in the context of research questions regarding linguistic diversity.",
+                rationale: "This hypothesis suggests that if one area of a language is simple, another area is likely to be more complex to maintain a balance."
+            },
+            {
+                q: "How do critics challenge the generative assumption that grammaticality judgments are based solely on 'competence'?",
+                options: [
+                    "By demonstrating that children never make mistakes in their performance.",
+                    "By arguing that only linguists have 'competence', while regular speakers only have 'performance'.",
+                    "By proving that no native speaker can actually tell if a sentence is grammatical.",
+                    "By suggesting that complex sentences might be rejected due to processing limits rather than grammatical violations."
+                ],
+                ans: 3,
+                hint: "Consider if a sentence like 'The rat the cat the dog chased caught ate the cheese' is hard to judge because of rules or because it's confusing.",
+                rationale: "Critics argue that 'performance' factors (like memory or complexity) might cause a speaker to reject a perfectly grammatical sentence."
+            },
+            {
+                q: "What is 'structure dependency' in the context of children learning language?",
+                options: [
+                    "The child's total dependence on their parents for the structure of their speech.",
+                    "The tendency of children to only use simple sentences like 'Noun-Verb'.",
+                    "The rule that sentences must follow a strict Subject-Verb-Object order in all languages.",
+                    "The realization that rules apply to syntactic groups (like Noun Phrases) rather than just individual words."
+                ],
+                ans: 3,
+                hint: "Think whether a child replaces one word or a whole group of words with a pronoun like 'He'.",
+                rationale: "A child knows 'He' replaces 'The tall man with the umbrella', showing they understand the sentence is built of structured blocks."
+            }
+        ];
+
+        let activeQuestionIndex = 0;
+        let examScore = 0;
+        let selectedOption = null;
+        let answeredArray = [];
+
+        function startExam() {
+            const name = document.getElementById('trainee-name').value.trim();
+            if(!name) {
+                alert("Please enter your name to start the exam.");
+                return;
+            }
+
+            document.getElementById('exam-start-screen').classList.add('hidden');
+            document.getElementById('exam-active-screen').classList.remove('hidden');
+
+            activeQuestionIndex = 0;
+            examScore = 0;
+            answeredArray = new Array(quizSyllabus.length).fill(null);
+
+            buildStepperGrid();
+            loadQuestion();
+        }
+
+        function buildStepperGrid() {
+            const grid = document.getElementById('exam-stepper-grid');
+            grid.innerHTML = "";
+            quizSyllabus.forEach((_, i) => {
+                const btn = document.createElement('button');
+                btn.id = `stepper-btn-${i}`;
+                btn.innerText = i + 1;
+                btn.className = "py-2 bg-slate-950 border border-slate-800 rounded text-xs font-bold text-slate-400 cursor-not-allowed disabled:opacity-50";
+                btn.disabled = true;
+                grid.appendChild(btn);
+            });
+        }
+
+        function loadQuestion() {
+            const qData = quizSyllabus[activeQuestionIndex];
+            
+            // Update question info UI
+            document.getElementById('question-counter').innerText = `Question ${activeQuestionIndex + 1} of ${quizSyllabus.length}`;
+            document.getElementById('exam-question-text').innerText = qData.q;
+            document.getElementById('exam-hint-text').classList.add('hidden');
+            document.getElementById('exam-hint-text').innerText = qData.hint;
+            document.getElementById('exam-explanation').classList.add('hidden');
+            document.getElementById('exam-next-btn').classList.add('hidden');
+
+            // Render options
+            const container = document.getElementById('exam-options-container');
+            container.innerHTML = "";
+            
+            qData.options.forEach((opt, idx) => {
+                const optBtn = document.createElement('button');
+                optBtn.id = `opt-btn-${idx}`;
+                optBtn.onclick = () => selectOptionHandler(idx);
+                optBtn.className = "w-full text-left p-4 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-950 text-xs text-slate-300 font-semibold transition flex items-center justify-between";
+                optBtn.innerHTML = `
+                    <span>${opt}</span>
+                    <span class="w-4 h-4 rounded-full border border-slate-700 shrink-0"></span>
+                `;
+                container.appendChild(optBtn);
+            });
+
+            // Update Stepper focus
+            quizSyllabus.forEach((_, i) => {
+                const stepBtn = document.getElementById(`stepper-btn-${i}`);
+                if (i === activeQuestionIndex) {
+                    stepBtn.className = "py-2 bg-indigo-600 border-indigo-500 rounded text-xs font-bold text-slate-100 shadow-lg shadow-indigo-950/20";
+                } else if (answeredArray[i] !== null) {
+                    stepBtn.className = answeredArray[i] 
+                        ? "py-2 bg-emerald-500/20 border-emerald-500/20 rounded text-xs font-bold text-emerald-400"
+                        : "py-2 bg-red-500/20 border-red-500/20 rounded text-xs font-bold text-red-400";
+                } else {
+                    stepBtn.className = "py-2 bg-slate-950 border border-slate-800 rounded text-xs font-bold text-slate-400";
+                }
+            });
+
+            selectedOption = null;
+        }
+
+        function showQuestionHint() {
+            document.getElementById('exam-hint-text').classList.toggle('hidden');
+        }
+
+        function selectOptionHandler(idx) {
+            const qData = quizSyllabus[activeQuestionIndex];
+            if (selectedOption !== null) return; // Prevent double answering
+
+            selectedOption = idx;
+            const correct = (idx === qData.ans);
+            answeredArray[activeQuestionIndex] = correct;
+
+            // Increment Score
+            if(correct) examScore++;
+
+            // Highlight chosen & correct/incorrect visualizers
+            qData.options.forEach((_, i) => {
+                const btn = document.getElementById(`opt-btn-${i}`);
+                if (i === qData.ans) {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 font-semibold text-xs flex items-center justify-between";
+                    btn.innerHTML = `<span>${btn.innerText}</span> <span class="w-4 h-4 rounded-full bg-emerald-500 border border-emerald-400"></span>`;
+                } else if (i === idx) {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-red-500/30 bg-red-500/10 text-red-300 font-semibold text-xs flex items-center justify-between";
+                    btn.innerHTML = `<span>${btn.innerText}</span> <span class="w-4 h-4 rounded-full bg-red-500 border border-red-400"></span>`;
+                } else {
+                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-800 bg-slate-950/10 text-slate-500 font-semibold text-xs flex items-center justify-between cursor-not-allowed";
+                }
+            });
+
+            // Display Rationale / Feedback
+            const feedbackBox = document.getElementById('exam-explanation');
+            feedbackBox.classList.remove('hidden');
+            if (correct) {
+                feedbackBox.innerHTML = `
+                    <span class="text-xs font-bold text-emerald-400 block mb-1">✓ Correct Answer!</span>
+                    <p class="leading-relaxed text-slate-400 text-[11px]">${qData.rationale}</p>
+                `;
+            } else {
+                feedbackBox.innerHTML = `
+                    <span class="text-xs font-bold text-red-400 block mb-1">✗ Incorrect</span>
+                    <p class="leading-relaxed text-slate-400 text-[11px]">${qData.rationale}</p>
+                `;
+            }
+
+            // Update Score Tracker & Bar
+            document.getElementById('exam-score-display').innerText = `${examScore} / ${quizSyllabus.length}`;
+            let progressWidth = Math.round(((activeQuestionIndex + 1) / quizSyllabus.length) * 100);
+            document.getElementById('exam-progress-bar').style.width = `${progressWidth}%`;
+
+            // Display Next button
+            document.getElementById('exam-next-btn').classList.remove('hidden');
+            if (activeQuestionIndex === quizSyllabus.length - 1) {
+                document.getElementById('exam-next-btn').innerText = "Finish Exam";
+            } else {
+                document.getElementById('exam-next-btn').innerText = "Next Question →";
+            }
+        }
+
+        function nextQuestion() {
+            if (activeQuestionIndex < quizSyllabus.length - 1) {
+                activeQuestionIndex++;
+                loadQuestion();
+            } else {
+                finishExam();
+            }
+        }
+
+        function finishExam() {
+            document.getElementById('exam-active-screen').classList.add('hidden');
+            document.getElementById('exam-results-screen').classList.remove('hidden');
+
+            // Set outcomes metrics
+            document.getElementById('results-correct-count').innerText = examScore;
+            let percent = Math.round((examScore / quizSyllabus.length) * 100);
+            document.getElementById('results-accuracy-rate').innerText = `${percent}%`;
+
+            const status = document.getElementById('results-pass-status');
+            const certBox = document.getElementById('certificate-container');
+            const name = document.getElementById('trainee-name').value.trim();
+
+            if (percent >= 70) {
+                status.innerText = "PASSED";
+                status.className = "text-2xl font-extrabold text-emerald-400 mt-2";
+                certBox.classList.remove('hidden');
+                document.getElementById('cert-trainee-name').innerText = name;
+                
+                // Get Current Date
+                const d = new Date();
+                const options = { year: 'numeric', month: 'long' };
+                document.getElementById('cert-date').innerText = d.toLocaleDateString('en-US', options);
+
+                // Burst visual achievement confetti!
+                confetti({
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 }
+                });
+            } else {
+                status.innerText = "RETAKE NEEDED";
+                status.className = "text-2xl font-extrabold text-red-400 mt-2";
+                certBox.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
