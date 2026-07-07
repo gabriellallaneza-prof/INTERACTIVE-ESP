@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFL in EFL Education: A Comprehensive Interactive Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+        }
+        .editorial-shadow {
+            box-shadow: 0 10px 30px -15px rgba(15, 23, 42, 0.08);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased leading-relaxed">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 backdrop-blur-md bg-white/90">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <span class="bg-slate-900 text-white p-2 rounded text-xs font-bold tracking-wider uppercase">WC III</span>
+                    <div>
+                        <h1 class="text-lg font-bold text-slate-900">SFL in EFL Education</h1>
+                        <p class="text-[10px] text-slate-500 font-medium tracking-wide">Course: Written Communication III • Mgtr. Gabriela A. Llaneza</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-6 text-sm text-slate-600 font-medium">
+                    <a href="#intro" class="hover:text-slate-900 transition">Introduction</a>
+                    <a href="#video-preview-section" class="hover:text-slate-900 transition">Video Preview</a>
+                    <a href="#reading" class="hover:text-slate-900 transition">The Strata Text</a>
+                    <a href="#vocabulary-game" class="hover:text-slate-900 transition">Vocab Game</a>
+                    <a href="#quiz-section" class="hover:text-slate-900 transition">SFL Quiz</a>
+                </nav>
+                <div class="flex items-center space-x-2">
+                    <button onclick="openHelpModal()" class="text-slate-400 hover:text-slate-600 transition" title="Instructions">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </button>
+                    <a href="#portfolio-summary" class="bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-slate-800 transition">Download Score</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+        
+        <section id="intro" class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 editorial-shadow grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-7 space-y-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-amber-600">Overview & Warm-Up</span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">What do you know about Language? What makes meaning?</h2>
+                <p class="text-slate-600 text-base md:text-lg">
+                    Welcome to this advanced workspace dedicated to <strong>Systemic Functional Linguistics (SFL)</strong> inside English as a Foreign Language Education. Developed by Michael Halliday, SFL re-envisions language not as rules to memorize, but as a rich, layered semiotic potential designed to instantiate meaning within cultural situations.
+                </p>
+                <div class="bg-slate-50 border-l-4 border-slate-900 p-4 rounded-r-lg space-y-2">
+                    <h4 class="font-bold text-sm text-slate-800">Warm-up Questions:</h4>
+                    <ul class="list-disc list-inside text-xs text-slate-600 space-y-1">
+                        <li>What is the difference between a traditional perspective of grammar and a functional choice-based paradigm?</li>
+                        <li>How do the strata of Semantics, Lexicogrammar, and Phonology/Graphology align with the Context of Situation?</li>
+                    </ul>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                    <a href="#video-preview-section" class="inline-flex items-center justify-center px-5 py-3 text-sm font-semibold rounded-lg text-white bg-slate-900 hover:bg-slate-800 transition">
+                        Start Video Preview Activity
+                    </a>
+                    <a href="#reading" class="inline-flex items-center justify-center px-5 py-3 border border-slate-300 text-sm font-semibold rounded-lg text-slate-700 bg-white hover:bg-slate-50 transition">
+                        Skip to Academic Reading
+                    </a>
+                </div>
+            </div>
+            
+            <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
+                <div class="bg-amber-50/60 border border-amber-200 rounded-xl p-5 space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <span class="p-1.5 bg-amber-100 rounded-lg text-amber-800 font-bold text-xs">INTRO REFLECTION</span>
+                        <h4 class="font-bold text-slate-800 text-sm">Observe & Reflect</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-normal">
+                        Examine the system maps below. Use this reflection workspace to articulate how the <strong>Stratified Model</strong> links the <strong>Context of Situation (Register)</strong> to concrete <strong>Lexicogrammar choices</strong>.
+                    </p>
+                    <textarea id="reflection-task-1" class="w-full h-28 p-3 text-xs border border-amber-200 rounded-lg focus:ring-1 focus:ring-slate-900 bg-white" placeholder="Write your initial observations here. This will be added to your downloadable portfolio..."></textarea>
+                    <div class="flex justify-between items-center text-[10px] text-amber-700">
+                        <span>Auto-saved in report</span>
+                        <button onclick="saveReflectionNotification()" class="font-semibold underline hover:text-amber-900">Lock Entry</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="video-preview-section" class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 editorial-shadow space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <span class="text-xs font-bold text-amber-600 uppercase tracking-widest">Active Listening Preview</span>
+                <h2 class="text-2xl font-bold text-slate-900 mt-1">SFL Conceptual Introduction Video</h2>
+                <p class="text-xs text-slate-500">Watch the embedded lecture excerpt and complete the reflection questions below to prepare for the academic readings.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Video player frame container -->
+                <div class="lg:col-span-7 space-y-3">
+                    <div class="aspect-video w-full rounded-xl overflow-hidden shadow-md border border-slate-200 bg-black">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/V81kB0RMSww?si=o2TYorNU34sxzGeD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <p class="text-[11px] text-slate-500 italic text-center">
+                        Video Source: Introduction to Systemic Functional Linguistics (SFL) and Core Hallidayan Concepts.
+                    </p>
+                </div>
+
+                <!-- Video reflection questionnaire form -->
+                <div class="lg:col-span-5 bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <span class="p-1.5 bg-sky-100 text-sky-800 rounded font-bold text-xs uppercase">Interactive Worksheet</span>
+                        <h3 class="font-bold text-slate-900 text-sm">Video Observations</h3>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <label class="block text-xs font-semibold text-slate-700">
+                            1. How does the speaker in the video differentiate SFL from structuralist approaches to grammar?
+                        </label>
+                        <textarea id="video-q1" class="w-full h-20 p-2.5 text-xs border border-slate-200 rounded-lg focus:ring-1 focus:ring-slate-900 bg-white" placeholder="Type your observations here..."></textarea>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="block text-xs font-semibold text-slate-700">
+                            2. List any specific mentions of Register variables (Field, Tenor, Mode) or the Metafunctions highlighted in the clip.
+                        </label>
+                        <textarea id="video-q2" class="w-full h-20 p-2.5 text-xs border border-slate-200 rounded-lg focus:ring-1 focus:ring-slate-900 bg-white" placeholder="Type your observations here..."></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-200">
+                        <span class="text-[10px] text-slate-500" id="video-status-text">Status: Saved Locally</span>
+                        <button onclick="lockVideoAnswers()" class="text-xs bg-slate-900 text-white font-semibold py-2 px-4 rounded-lg hover:bg-slate-800 transition">
+                            Submit and Lock Answers
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Diagram Card 1: Stratified Model -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 editorial-shadow flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Linguistic Architecture</span>
+                        <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[10px] font-semibold">Visual 1</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900">Systemic Functional Linguistics: Stratified Model</h3>
+                    <p class="text-xs text-slate-500">
+                        This diagram displays the realization axis where Context of Culture (Genre) shapes Situation (Register), filtering through Semantics, Lexicogrammar, and final Phonetic expression.
+                    </p>
+                </div>
+                <div class="my-6 relative bg-slate-900 rounded-xl overflow-hidden p-4 border border-slate-800 group transition-all">
+                    <!-- Referencing designated file "9263320605933571469.png" strictly per guidelines -->
+                    <img src="9263320605933571469.png" alt="Systemic Functional Linguistics Framework Diagram" class="w-full max-h-[380px] object-contain rounded-lg block mx-auto transition-transform duration-500 group-hover:scale-105" onerror="this.onerror=null; this.src='https://placehold.co/800x600/0f172a/ffffff?text=SFL+Stratified+Framework+Model'">
+                    <div class="absolute bottom-2 right-2 bg-slate-950/70 text-[9px] text-slate-400 px-2 py-1 rounded">
+                        Reference: Image 9263320605933571469.png
+                    </div>
+                </div>
+                <div class="text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-150">
+                    <strong>Realization axis:</strong> The social purpose of a text is realized by choices in meaning (Semantics), which are in turn realized by choices in wording and structure (Lexicogrammar).
+                </div>
+            </div>
+
+            <!-- Diagram Card 2: Interactive SFL Metafunctions -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 editorial-shadow flex flex-col justify-between">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Semantic Weave</span>
+                        <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[10px] font-semibold">Interactive Map</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900">The 3 Metafunctions of Language</h3>
+                    <p class="text-xs text-slate-500">
+                        SFL posits that all language involves three simultaneously generated strands of meaning. Click each tab to explore details.
+                    </p>
+                </div>
+                
+                <div class="my-6 space-y-4">
+                    <div class="flex space-x-2">
+                        <button onclick="toggleMetaDetail('ideational')" class="meta-btn active-meta flex-1 text-xs py-2 px-3 border border-slate-200 rounded-lg text-slate-750 bg-slate-100 font-semibold transition hover:bg-slate-50" id="btn-ideational">🌎 Ideational</button>
+                        <button onclick="toggleMetaDetail('interpersonal')" class="meta-btn flex-1 text-xs py-2 px-3 border border-slate-200 rounded-lg text-slate-700 bg-white font-semibold transition hover:bg-slate-50" id="btn-interpersonal">💬 Interpersonal</button>
+                        <button onclick="toggleMetaDetail('textual')" class="meta-btn flex-1 text-xs py-2 px-3 border border-slate-200 rounded-lg text-slate-700 bg-white font-semibold transition hover:bg-slate-50" id="btn-textual">🔗 Textual</button>
+                    </div>
+
+                    <!-- Details Area -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 min-h-[160px] flex flex-col justify-center">
+                        <div id="meta-ideational" class="meta-detail-pane space-y-2">
+                            <h4 class="font-bold text-sm text-slate-900 flex items-center">
+                                <span class="w-3 h-3 bg-sky-500 rounded-full mr-2"></span>
+                                Ideational Metafunction: Representing Experience
+                            </h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Construes human experience. It models external realities (actions, events) and internal realities (feelings, thoughts). It is realized primarily through the system of <strong>Transitivity</strong> (Processes, Participants, and Circumstances).
+                            </p>
+                            <p class="text-xs bg-sky-50 text-sky-800 p-2 rounded border border-sky-100 font-medium">
+                                <em>Grammatical Realization:</em> Process types (material, mental, relational) + Participants + Circumstances.
+                            </p>
+                        </div>
+                        <div id="meta-interpersonal" class="meta-detail-pane hidden space-y-2">
+                            <h4 class="font-bold text-sm text-slate-900 flex items-center">
+                                <span class="w-3 h-3 bg-emerald-500 rounded-full mr-2"></span>
+                                Interpersonal Metafunction: Enacting Relationships
+                            </h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Negotiates social status, roles, relationships, formality, and attitude. It focuses on language as exchange (demanding or giving information/goods & services).
+                            </p>
+                            <p class="text-xs bg-emerald-50 text-emerald-800 p-2 rounded border border-emerald-100 font-medium">
+                                <em>Grammatical Realization:</em> MOOD system (Declarative, Interrogative, Imperative) & Modality.
+                            </p>
+                        </div>
+                        <div id="meta-textual" class="meta-detail-pane hidden space-y-2">
+                            <h4 class="font-bold text-sm text-slate-900 flex items-center">
+                                <span class="w-3 h-3 bg-amber-500 rounded-full mr-2"></span>
+                                Textual Metafunction: Weaving the Message
+                            </h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Weaves ideational and interpersonal meanings into a coherent, fluent message that fits its context. This enables a text to "hang together."
+                            </p>
+                            <p class="text-xs bg-amber-50 text-amber-800 p-2 rounded border border-amber-100 font-medium">
+                                <em>Grammatical Realization:</em> THEME/Rheme structures, Cohesion, and Cohesive reference.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+                    <div class="space-y-1">
+                        <span class="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Clause Example Analysis</span>
+                        <p class="text-xs font-mono text-slate-200">
+                            [Last Night]<span class="text-amber-400 text-[10px] font-sans">Theme</span> the scientist [conducted]<span class="text-sky-400 text-[10px] font-sans">Process</span> the experiment.
+                        </p>
+                    </div>
+                    <span class="text-[10px] font-semibold text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">Co-realization</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="reading" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200 p-6 md:p-8 editorial-shadow space-y-6">
+                <div class="border-b border-slate-200 pb-4">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Main Academic Reading</span>
+                    <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Systemic Functional Linguistics in EFL Education</h2>
+                    <p class="text-slate-500 text-xs">Authored by Mgtr. Gabriela A. Llaneza • Comprehensive course syllabus text.</p>
+                </div>
+
+                <!-- Academic Content Panel with custom typography -->
+                <div class="prose prose-slate text-sm leading-relaxed text-slate-700 max-w-none space-y-4 max-h-[600px] overflow-y-auto pr-4">
+                    <h3 class="text-lg font-bold text-slate-900">I. The Architecture of Meaning: Core Principles of SFL</h3>
+                    <p>
+                        Systemic Functional Linguistics (SFL) offers a profound theoretical framework for understanding language not as an abstract set of rules, but as a dynamic, socially-situated resource for making meaning. Developed primarily by Michael Halliday, SFL provides a comprehensive model of how language is structured for use, providing a powerful analytical lens for its application in diverse fields, most notably in education. To comprehend its impact on English as a Foreign Language (EFL) pedagogy, it is first necessary to examine the intricate architecture of the theory itself, from its foundational principles of systemic choice to its multi-layered modeling of language, meaning, and context.
+                    </p>
+
+                    <h4 class="text-base font-bold text-slate-900">1.1 The Hallidayan Revolution: From Structure to Systemic Choice</h4>
+                    <p>
+                        The intellectual origins of SFL are situated within the London School of linguistics, building upon the work of J. R. Firth and his concept of the "context of situation," as well as Bronisław Malinowski's anthropological view of language as a mode of action. Firth proposed that systems are possibilities subordinated to structure. Halliday, his student, enacted a pivotal theoretical shift: he "liberated" the concept of choice from its subordination to structure and repositioned it as the central organizing dimension of his linguistic theory. This move marked a departure from many linguistic approaches that place structure and the syntagmatic axis (the sequential arrangement of elements) foremost. Instead, SFL adopts the paradigmatic axis—the range of available alternatives—as its fundamental point of departure.
+                    </p>
+                    <p>
+                        This paradigmatic orientation is encapsulated in the core tenet that "meaning is choice." From an SFL perspective, language is conceived not as a static inventory of rules but as a vast, dynamic "network of interrelated choices." Every time a person speaks or writes, they are selecting from a system of options that arise in the environment of other options. The power of language, therefore, resides in its organization as this immense potential for making-meaning. This frames language as an open, dynamic system that co-evolves with its users and their culture.
+                    </p>
+
+                    <h4 class="text-base font-bold text-slate-900">1.2 Language as a Social Semiotic: A Stratified and Instantiated Model</h4>
+                    <p>
+                        SFL models language as a social semiotic system, meaning it is one of several systems (along with gestures, images, etc.) that humans use to create and exchange meaning within a social and cultural context. To account for the complexity of this process, the theory employs a multi-layered or stratified model, where abstract levels of context are progressively realized through more concrete levels of language.
+                    </p>
+                    <p>
+                        Connecting the abstract system of language with its concrete use in texts is the concept of the <strong>"cline of instantiation"</strong>. This concept models the relationship between the language system as a whole (the potential) and any specific text (the instance). It shows a continuum from the total meaning potential of a language, through sub-potentials such as registers (e.g., the language of academic discussion), to the actual instances of language use in specific texts. This model is not static; it incorporates a dynamic feedback loop whereby the act of using the system (creating instances) can modify the system itself over time.
+                    </p>
+                    <p>
+                        Within the stratum of lexicogrammar, SFL organizes units syntagmatically according to a rank scale, where units at a higher rank are composed of units at the rank below: <strong>Clause > Group/Phrase > Word > Morpheme</strong>. The clause is afforded a central position in SFL analysis because it is the primary site where the different strands of meaning—the metafunctions—are woven together.
+                    </p>
+
+                    <h4 class="text-base font-bold text-slate-900">1.3 Modeling Context: The Relationship Between Genre and Register</h4>
+                    <p>
+                        SFL provides a sophisticated model for analyzing the relationship between language and context, distinguishing between the immediate context of situation and the broader context of culture. This distinction is captured in the concepts of <strong>Register</strong> and <strong>Genre</strong>.
+                    </p>
+                    <p>
+                        Register refers to the context of situation—the immediate environment in which a text is produced and functions, defined by three variables:
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 pl-4 text-xs">
+                        <li><strong>Field:</strong> What is happening, the nature of the social action taking place, or the subject matter of the text. This directly influences the Ideational metafunction.</li>
+                        <li><strong>Tenor:</strong> Who is taking part in the interaction, including their social roles, relationships, and statuses. This influences the Interpersonal metafunction.</li>
+                        <li><strong>Mode:</strong> The role that language is playing in the interaction, including the channel of communication (spoken, written, multimodal). This influences the Textual metafunction.</li>
+                    </ul>
+                    <p>
+                        Genre, in SFL theory, refers to the broader context of culture. It is defined as a staged, goal-oriented social process. Genres are the conventional text types through which a culture accomplishes its social purposes—the linguistic resources for "getting things done" (e.g., everyday interactions like buying a coffee, or highly structured academic forms like research articles or lab reports).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Side Interactive Workspace: Metafunctions and trinocular paradigms -->
+            <div class="lg:col-span-4 space-y-6">
+                <div class="bg-slate-900 text-slate-100 rounded-2xl p-6 shadow-xl space-y-4">
+                    <span class="text-amber-400 text-xs font-bold uppercase tracking-wider">Interactive Grammar Guide</span>
+                    <h3 class="text-lg font-bold text-white">SFL Syntactic Transformations</h3>
+                    <p class="text-xs text-slate-300">
+                        In SFL, we often perform critical restructuring like <strong>Cleft Sentences</strong> and <strong>Nominalizations</strong> to redistribute focus:
+                    </p>
+                    <div class="space-y-3 text-xs bg-slate-950 p-4 rounded-lg border border-slate-850">
+                        <div class="border-b border-slate-800 pb-2">
+                            <span class="font-bold text-sky-400">1. Cleft Sentences (It cleft):</span>
+                            <p class="text-[11px] text-slate-300 mt-1">Formula: <em>It + be + [focused element] + that/who + [rest of clause]</em>.</p>
+                            <p class="text-[11px] text-slate-400 italic">E.g., "Instantiation actualizes choices" ➔ "It is through instantiation that choices are actualized."</p>
+                        </div>
+                        <div>
+                            <span class="font-bold text-emerald-400">2. Nominalization:</span>
+                            <p class="text-[11px] text-slate-300 mt-1">Transforming verbs/adjectives into nouns/noun phrases to increase academic density.</p>
+                            <p class="text-[11px] text-slate-400 italic">E.g., "SFL shifts the focus..." ➔ "The focus shift within SFL..."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-indigo-50 to-slate-100 border border-slate-200 rounded-2xl p-6 space-y-4">
+                    <h4 class="font-bold text-slate-900 text-sm">Trinocular View Framework</h4>
+                    <p class="text-xs text-slate-600">
+                        Mgtr. Gabriela asks us to view language learning through three simultaneous viewpoints:
+                    </p>
+                    <div class="grid grid-cols-3 gap-2 text-center text-[10px] font-bold">
+                        <div class="bg-white p-2 rounded-lg border shadow-sm">
+                            <span class="block text-slate-400">From Below</span>
+                            <span class="text-red-600">Rules & Forms</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg border shadow-sm">
+                            <span class="block text-slate-400">From Above</span>
+                            <span class="text-sky-600">Context & Genre</span>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg border shadow-sm">
+                            <span class="block text-slate-400">From Within</span>
+                            <span class="text-emerald-600">Choice Systems</span>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-slate-500 italic text-center">
+                        "Traditional grammar locks learners 'below rules'. SFL empowers learners 'within choice systems'."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="vocabulary-game" class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 editorial-shadow space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <span class="text-xs font-bold text-amber-600 uppercase tracking-widest">Interactive Game</span>
+                <h2 class="text-2xl font-bold text-slate-900 mt-1">SFL Key Terminology Matching</h2>
+                <p class="text-xs text-slate-500">Click a terminology card on the left, then click its corresponding systemic definition on the right to match them.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Left: Terms -->
+                <div class="space-y-3" id="vocab-terms-container">
+                    <!-- Javascript will dynamically inject shuffled terms here -->
+                </div>
+
+                <!-- Right: Definitions -->
+                <div class="space-y-3" id="vocab-defs-container">
+                    <!-- Javascript will dynamically inject shuffled definitions here -->
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center bg-slate-50 p-4 rounded-xl border">
+                <span class="text-xs text-slate-500" id="game-status">Matches made: 0 / 5</span>
+                <button onclick="resetVocabGame()" class="text-xs bg-slate-900 text-white font-semibold py-2 px-4 rounded hover:bg-slate-800 transition">Reset Matching Game</button>
+            </div>
+        </section>
+
+        <section id="quiz-section" class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 editorial-shadow space-y-6">
+            <div class="border-b border-slate-100 pb-4 flex justify-between items-center">
+                <div>
+                    <span class="text-xs font-bold text-sky-600 uppercase tracking-widest">Verification Assessment</span>
+                    <h2 class="text-2xl font-bold text-slate-900 mt-1">SFL in EFL Core Concepts Quiz</h2>
+                </div>
+                <div class="text-xs text-slate-500" id="quiz-step">Question 1 of 10</div>
+            </div>
+
+            <!-- Quiz Main Panel -->
+            <div id="quiz-container" class="space-y-6">
+                <!-- JS will inject questions step-by-step -->
+            </div>
+
+            <!-- Quiz Stepper Controls -->
+            <div class="flex justify-between items-center pt-4 border-t border-slate-100">
+                <button id="prev-quiz-btn" onclick="prevQuizQuestion()" class="hidden text-xs font-semibold py-2 px-4 rounded border border-slate-200 text-slate-600 hover:bg-slate-50 transition">Previous</button>
+                <button id="next-quiz-btn" onclick="nextQuizQuestion()" class="ml-auto text-xs font-semibold py-2 px-4 rounded bg-slate-900 text-white hover:bg-slate-800 transition">Next Question</button>
+            </div>
+        </section>
+
+        <section id="portfolio-summary" class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 editorial-shadow space-y-8">
+            <div class="border-b border-slate-200 pb-4">
+                <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">Student Workspace Portfolio</span>
+                <h2 class="text-2xl font-bold text-slate-900 mt-1">Interactive Lesson Portfolio Summary</h2>
+                <p class="text-xs text-slate-500">Examine your workspace accomplishments and download your customized assessment score report.</p>
+            </div>
+
+            <!-- Live Score Integration Panel -->
+            <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 space-y-6">
+                <h3 class="text-lg font-bold text-slate-900">Interactive Student Portfolio Summary</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <div class="bg-white p-4 rounded-lg border">
+                        <span class="block text-xs text-slate-400 font-semibold uppercase">Video Prep Questions</span>
+                        <span id="summary-video-status" class="text-lg font-extrabold text-amber-600">Unresolved</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border">
+                        <span class="block text-xs text-slate-400 font-semibold uppercase">Vocab Matches</span>
+                        <span id="summary-vocab" class="text-lg font-extrabold text-slate-900">0 / 5</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border">
+                        <span class="block text-xs text-slate-400 font-semibold uppercase">Reading Quiz Grade</span>
+                        <span id="summary-quiz" class="text-lg font-extrabold text-slate-900">0%</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button onclick="downloadPortfolioFile()" class="text-xs bg-slate-950 text-white font-semibold py-2.5 px-6 rounded-lg hover:bg-slate-900 transition flex items-center">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Download Full Score & Text Portfolio
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="help-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4">
+            <h3 class="text-lg font-bold text-slate-900 border-b pb-2">Help & Instructions</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+                This app is an SFL interactive course module for <strong>Written Communication III</strong>. Complete each task sequentially:
+            </p>
+            <ul class="list-decimal list-inside text-xs text-slate-600 space-y-2 pl-2">
+                <li>Write a brief initial reflection in the Intro card.</li>
+                <li>Watch the Video Preview lesson clip and answer the questionnaire.</li>
+                <li>Verify your terminology knowledge in the matching block.</li>
+                <li>Complete the 10 core concepts assessment quiz.</li>
+                <li>Click <strong>Download Full Score</strong> to generate your submission report.</li>
+            </ul>
+            <div class="flex justify-end">
+                <button onclick="closeHelpModal()" class="text-xs bg-slate-900 text-white px-4 py-2 rounded hover:bg-slate-800">Get Started</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Standard HTML alert replacement popup -->
+    <div id="custom-alert" class="fixed bottom-6 right-6 bg-slate-900 text-white text-xs py-3 px-5 rounded-xl shadow-2xl z-50 transition-all duration-300 transform translate-y-20 opacity-0 border border-slate-700">
+        <span id="custom-alert-msg">Notification text</span>
+    </div>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-4">
+            <p class="text-sm font-semibold text-white">From Rules to Resources: Language as Choice</p>
+            <p class="text-xs max-w-xl mx-auto leading-relaxed">
+                Written Communication III module. Conforms to the requirements for Systemic Functional Linguistics in EFL Education curriculum portfolio. All submissions are client-side compiled.
+            </p>
+            <p class="text-[10px] text-slate-500">© 2026 Mgtr. Gabriela A. Llaneza. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables for tracking performance state
+        let currentQuizIndex = 0;
+        let quizAnswers = Array(10).fill(null);
+        let selectedVocabTermId = null;
+        let selectedVocabDefId = null;
+        let matchedVocabCount = 0;
+        let videoAnswersLocked = false;
+
+        // Static vocab definition pairs
+        const vocabPairs = [
+            { id: 1, term: "Realization", definition: "The process whereby abstract levels of social meaning/context are manifested systematically as concrete lexicogrammar structures." },
+            { id: 2, term: "Cline of Instantiation", definition: "A continuum linking the absolute potential of the entire language system down to actual instances found in a text." },
+            { id: 3, term: "Genre", definition: "A staged, goal-oriented, purposeful social process established within the context of culture." },
+            { id: 4, term: "Register", definition: "The context of situation characterized by three variables: Field (what), Tenor (who), and Mode (how)." },
+            { id: 5, term: "Paradigmatic Axis", definition: "The underlying network of choices or alternatives system-wide, emphasizing meaning as choice over structure." }
+        ];
+
+        // SFL Concepts Quiz Data
+        const quizData = [
+            {
+                question: "A teacher asks students to analyze how an advertisement uses questions and commands to persuade the audience. Which SFL metafunction is the primary focus of this analysis?",
+                options: ["The Ideational Metafunction", "The Interpersonal Metafunction", "The Textual Metafunction", "The Grammatical Metafunction"],
+                correct: 1,
+                hint: "Think about how language is used to interact with and influence others.",
+                rationale: "The Interpersonal Metafunction is concerned with how language is used to enact social relationships, express attitudes, and influence behavior, which aligns with analyzing persuasion."
+            },
+            {
+                question: "In the sentence, 'Last night, the scientist carefully conducted the experiment,' what part primarily serves the Textual metafunction?",
+                options: ["'the scientist'", "'conducted the experiment'", "'Last night,'", "'carefully'"],
+                correct: 2,
+                hint: "Which part of the sentence orients the reader by setting up the context for the main message?",
+                rationale: "'Last night,' serves as the Theme, establishing the temporal starting point for the clause and thus organizing the message for the reader."
+            },
+            {
+                question: "According to the principles of SFL, grammar is primarily viewed as a...",
+                options: ["set of rigid rules to be memorized.", "system of logical structures separate from meaning.", "resource for making meaning in context.", "secondary element less important than vocabulary."],
+                correct: 2,
+                hint: "SFL shifts the focus from correctness to effectiveness. How does it see the role of grammar in this shift?",
+                rationale: "SFL sees grammar as a functional resource for making meaning in context. Choices are dictated by communicative purposes."
+            },
+            {
+                question: "In a genre-based teaching cycle, what is the primary activity during the 'Deconstruction' phase?",
+                options: ["Students write their own text from scratch.", "The teacher and students analyze a model text together.", "The class collaborates on writing a single text.", "Students complete isolated grammar exercises."],
+                correct: 1,
+                hint: "Before students can build something new, what must they do with an existing model?",
+                rationale: "Deconstruction involves taking apart an exemplar text with the teacher to understand its structural stages and lexicogrammatical features."
+            },
+            {
+                question: "A student analyzes the sentence 'The powerful engine propelled the rocket.' by identifying 'The powerful engine' and 'the rocket' as Participants and 'propelled' as a Process. This analysis focuses on which metafunction?",
+                options: ["Ideational", "Interpersonal", "Textual", "Contextual"],
+                correct: 0,
+                hint: "This type of analysis breaks down the sentence into 'who did what to whom,' which represents an event in the world.",
+                rationale: "The Ideational Metafunction deals with constructing experiences, using the Transitivity system (Processes, Participants, Circumstances)."
+            },
+            {
+                question: "Based on the infographic data, which group of EFL learners typically shows the most significant improvement when taught using SFL methods?",
+                options: ["Absolute Beginners", "Intermediate Learners", "Advanced Learners", "Only young learners"],
+                correct: 1,
+                hint: "Consider which group has enough foundational knowledge to benefit from learning about complex text structure.",
+                rationale: "Intermediate learners show massive gains since they already possess vocabulary and basic syntax, enabling them to leap into structural genre and register coherence."
+            },
+            {
+                question: "What is a major challenge cited in the implementation of SFL pedagogy in schools?",
+                options: ["Students find it too simple and boring.", "It only works for teaching writing, not reading.", "The need for in-depth teacher training and resources.", "It is less effective than traditional grammar drills."],
+                correct: 2,
+                hint: "Think about what teachers need before they can confidently teach a complex new approach.",
+                rationale: "The complex metalanguage and the requirement of systematic professional development and customized resources present hurdles."
+            },
+            {
+                question: "Which of the following sentences best demonstrates a strong use of modality to serve the Interpersonal metafunction?",
+                options: ["The report was submitted yesterday.", "She is the manager.", "You should definitely consider this option.", "The sun rises in the east."],
+                correct: 2,
+                hint: "Look for the sentence that expresses the speaker's degree of certainty or judgment most clearly.",
+                rationale: "'should definitely' communicates interpersonal obligation and strong modal conviction."
+            },
+            {
+                question: "The primary goal of the 'Joint Construction' phase in the SFL teaching cycle is to...",
+                options: ["assess the student's final understanding.", "introduce the topic for the first time.", "scaffold the writing process with teacher guidance.", "allow for creative and unstructured writing."],
+                correct: 2,
+                hint: "This phase acts as a bridge between understanding and independent use. What does a bridge do?",
+                rationale: "Joint construction provides scaffolded practice where the instructor guides the group to draft a text within the genre collectively."
+            },
+            {
+                question: "SFL's focus on 'genre' is important because it teaches students that...",
+                options: ["all academic writing follows the exact same rules.", "language choices depend on the social context and purpose.", "creative writing is more important than academic writing.", "grammar is not important as long as the message is clear."],
+                correct: 1,
+                hint: "Why is it more useful to learn how to write a 'scientific report' versus just a generic 'essay'?",
+                rationale: "Genre instructs that structural types are goal-oriented social processes; hence vocabulary and grammar depend directly on context."
+            }
+        ];
+
+        window.onload = function() {
+            renderQuizQuestion();
+            resetVocabGame();
+            triggerAlert("Interactive SFL Workspace ready for use!");
+        };
+
+        function triggerAlert(msg) {
+            const popup = document.getElementById('custom-alert');
+            const inner = document.getElementById('custom-alert-msg');
+            inner.textContent = msg;
+            popup.classList.remove('translate-y-20', 'opacity-0');
+            popup.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                popup.classList.remove('translate-y-0', 'opacity-100');
+                popup.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+
+        function toggleMetaDetail(metaId) {
+            document.querySelectorAll('.meta-detail-pane').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`meta-${metaId}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.meta-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-900', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-700');
+            });
+            document.getElementById(`btn-${metaId}`).classList.remove('bg-white', 'text-slate-700');
+            document.getElementById(`btn-${metaId}`).classList.add('bg-slate-900', 'text-white');
+        }
+
+        function lockVideoAnswers() {
+            const q1Val = document.getElementById('video-q1').value.trim();
+            const q2Val = document.getElementById('video-q2').value.trim();
+            
+            if (!q1Val || !q2Val) {
+                triggerAlert("Please answer both reflection questions before locking!");
+                return;
+            }
+            
+            videoAnswersLocked = true;
+            document.getElementById('video-status-text').textContent = "Status: Locked and Submitted ✓";
+            document.getElementById('video-status-text').className = "text-[10px] text-emerald-600 font-bold";
+            
+            // Disable textareas to simulate locked worksheet state
+            document.getElementById('video-q1').disabled = true;
+            document.getElementById('video-q2').disabled = true;
+            
+            // Update scorecard
+            document.getElementById('summary-video-status').textContent = "Completed ✓";
+            document.getElementById('summary-video-status').className = "text-lg font-extrabold text-emerald-600";
+            
+            triggerAlert("Video observations locked successfully!");
+        }
+
+        // Shuffler for Game setup
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function resetVocabGame() {
+            matchedVocabCount = 0;
+            selectedVocabTermId = null;
+            selectedVocabDefId = null;
+            document.getElementById('game-status').textContent = "Matches made: 0 / 5";
+            document.getElementById('summary-vocab').textContent = "0 / 5";
+            
+            const shuffledTerms = shuffleArray([...vocabPairs]);
+            const shuffledDefs = shuffleArray([...vocabPairs]);
+
+            const termContainer = document.getElementById('vocab-terms-container');
+            const defContainer = document.getElementById('vocab-defs-container');
+
+            termContainer.innerHTML = '';
+            defContainer.innerHTML = '';
+
+            shuffledTerms.forEach(item => {
+                termContainer.innerHTML += `
+                    <div id="term-${item.id}" onclick="selectVocabTerm(${item.id})" class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 cursor-pointer hover:border-slate-400 transition">
+                        ${item.term}
+                    </div>
+                `;
+            });
+
+            shuffledDefs.forEach(item => {
+                defContainer.innerHTML += `
+                    <div id="def-${item.id}" onclick="selectVocabDef(${item.id})" class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] leading-relaxed text-slate-600 cursor-pointer hover:border-slate-400 transition">
+                        ${item.definition}
+                    </div>
+                `;
+            });
+        }
+
+        function selectVocabTerm(id) {
+            if (selectedVocabTermId) {
+                const prev = document.getElementById(`term-${selectedVocabTermId}`);
+                if (prev) prev.classList.replace('border-slate-800', 'border-slate-200');
+            }
+            selectedVocabTermId = id;
+            const card = document.getElementById(`term-${id}`);
+            card.classList.replace('border-slate-200', 'border-slate-800');
+            card.classList.add('ring-1', 'ring-slate-900');
+            checkMatch();
+        }
+
+        function selectVocabDef(id) {
+            if (selectedVocabDefId) {
+                const prev = document.getElementById(`def-${selectedVocabDefId}`);
+                if (prev) prev.classList.replace('border-slate-800', 'border-slate-200');
+            }
+            selectedVocabDefId = id;
+            const card = document.getElementById(`def-${id}`);
+            card.classList.replace('border-slate-200', 'border-slate-800');
+            card.classList.add('ring-1', 'ring-slate-900');
+            checkMatch();
+        }
+
+        function checkMatch() {
+            if (selectedVocabTermId && selectedVocabDefId) {
+                if (selectedVocabTermId === selectedVocabDefId) {
+                    // Success Match
+                    const termEl = document.getElementById(`term-${selectedVocabTermId}`);
+                    const defEl = document.getElementById(`def-${selectedVocabDefId}`);
+                    
+                    termEl.className = "p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-xs font-semibold text-emerald-800 opacity-60 pointer-events-none";
+                    defEl.className = "p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-[11px] leading-relaxed text-emerald-700 opacity-60 pointer-events-none";
+                    
+                    matchedVocabCount++;
+                    document.getElementById('game-status').textContent = `Matches made: ${matchedVocabCount} / 5`;
+                    document.getElementById('summary-vocab').textContent = `${matchedVocabCount} / 5`;
+                    triggerAlert("Correct system term connection!");
+                } else {
+                    // Incorrect Match
+                    const t = selectedVocabTermId;
+                    const d = selectedVocabDefId;
+                    setTimeout(() => {
+                        const termEl = document.getElementById(`term-${t}`);
+                        const defEl = document.getElementById(`def-${d}`);
+                        if (termEl) termEl.className = "p-3 bg-red-50 border border-red-300 rounded-xl text-xs font-semibold text-slate-800 cursor-pointer transition";
+                        if (defEl) defEl.className = "p-3 bg-red-50 border border-red-300 rounded-xl text-[11px] leading-relaxed text-slate-600 cursor-pointer transition";
+                    }, 500);
+                    triggerAlert("Incorrect link, try again.");
+                }
+                selectedVocabTermId = null;
+                selectedVocabDefId = null;
+            }
+        }
+
+        function renderQuizQuestion() {
+            const stepTitle = document.getElementById('quiz-step');
+            stepTitle.textContent = `Question ${currentQuizIndex + 1} of 10`;
+
+            const current = quizData[currentQuizIndex];
+            const container = document.getElementById('quiz-container');
+
+            let optionsHtml = '';
+            current.options.forEach((opt, index) => {
+                const isSelected = quizAnswers[currentQuizIndex] === index;
+                optionsHtml += `
+                    <label class="flex items-start p-3 rounded-xl border border-slate-200 hover:bg-slate-50 transition cursor-pointer ${isSelected ? 'bg-indigo-50/50 border-indigo-300' : ''}">
+                        <input type="radio" name="quiz-opt" value="${index}" ${isSelected ? 'checked' : ''} onchange="saveQuizAnswer(${index})" class="mt-1 mr-3 h-4 w-4 text-slate-900 border-slate-300 focus:ring-slate-900">
+                        <span class="text-xs text-slate-700 leading-normal">${opt}</span>
+                    </label>
+                `;
+            });
+
+            container.innerHTML = `
+                <div class="space-y-4">
+                    <p class="text-sm font-bold text-slate-900">${current.question}</p>
+                    <p class="text-[10px] text-amber-600 italic">Hint: ${current.hint}</p>
+                    <div class="grid grid-cols-1 gap-2">
+                        ${optionsHtml}
+                    </div>
+                </div>
+            `;
+
+            // Adjust navigation visibility
+            document.getElementById('prev-quiz-btn').style.display = currentQuizIndex > 0 ? 'block' : 'none';
+            document.getElementById('next-quiz-btn').textContent = currentQuizIndex === 9 ? 'Finish Assessment' : 'Next Question';
+        }
+
+        function saveQuizAnswer(val) {
+            quizAnswers[currentQuizIndex] = val;
+            calculateQuizGrade();
+        }
+
+        function prevQuizQuestion() {
+            if (currentQuizIndex > 0) {
+                currentQuizIndex--;
+                renderQuizQuestion();
+            }
+        }
+
+        function nextQuizQuestion() {
+            if (currentQuizIndex < 9) {
+                currentQuizIndex++;
+                renderQuizQuestion();
+            } else {
+                // Completed Quiz
+                calculateQuizGrade();
+                triggerAlert("Quiz fully completed. See grades below!");
+            }
+        }
+
+        function calculateQuizGrade() {
+            let correctCount = 0;
+            quizAnswers.forEach((ans, index) => {
+                if (ans === quizData[index].correct) correctCount++;
+            });
+            const percent = Math.round((correctCount / 10) * 100);
+            document.getElementById('summary-quiz').textContent = `${percent}%`;
+        }
+
+        function openHelpModal() {
+            document.getElementById('help-modal').classList.remove('hidden');
+        }
+
+        function closeHelpModal() {
+            document.getElementById('help-modal').classList.add('hidden');
+        }
+
+        function saveReflectionNotification() {
+            triggerAlert("Intro reflection saved locally.");
+        }
+
+        function downloadPortfolioFile() {
+            const r1 = document.getElementById('reflection-task-1').value;
+            const vQ1 = document.getElementById('video-q1').value;
+            const vQ2 = document.getElementById('video-q2').value;
+
+            const videoCompleted = videoAnswersLocked ? "Completed" : "Incomplete (Ensure you click Lock Answers)";
+            const vocabScore = document.getElementById('summary-vocab').textContent;
+            const quizPercent = document.getElementById('summary-quiz').textContent;
+
+            const quizBreakdown = quizAnswers.map((ans, idx) => {
+                const q = quizData[idx];
+                const selectedText = ans !== null ? q.options[ans] : "[No answer]";
+                const correctText = q.options[q.correct];
+                return `Q${idx + 1}: ${q.question}\nSelected: ${selectedText}\nCorrect: ${correctText}\nStatus: ${ans === q.correct ? "PASSED" : "FAILED"}\nRationale: ${q.rationale}\n`;
+            }).join('\n');
+
+            const content = `========================================================
+SFL IN EFL CONCEPTS SYSTEMIC WORKSPACE - PORTFOLIO REPORT
+========================================================
+Course: Written Communication III
+Instructor: Mgtr. Gabriela A. Llaneza
+Generated on: ${new Date().toLocaleString()}
+--------------------------------------------------------
+
+SUMMARY OF SCORES:
+- Video Reflection Tasks Status: ${videoCompleted}
+- Shuffled Vocab Matches Made: ${vocabScore}
+- Reading Concept Quiz Score: ${percentToQuizStars(quizPercent)} (${quizPercent})
+
+--------------------------------------------------------
+INTRO REFLECTION RESPONSE:
+${r1 || "[No response provided]"}
+
+--------------------------------------------------------
+VIDEO PREVIEW WORKSHEET RESPONSES:
+Question 1 (SFL vs structuralist models):
+${vQ1 || "[No response provided]"}
+
+Question 2 (Register variables / Metafunctions mentioned):
+${vQ2 || "[No response provided]"}
+
+--------------------------------------------------------
+QUIZ ASSESSMENT BREAKDOWN:
+${quizBreakdown}
+
+========================================================
+CONGRATULATIONS ON COMPLETING THE SFL EFL STUDY PORTFOLIO!
+========================================================`;
+
+            // Download trigger using client-side Blob architecture
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `SFL_EFL_Student_Portfolio_${new Date().toISOString().slice(0, 10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            triggerAlert("Course portfolio document downloaded successfully!");
+        }
+
+        function percentToQuizStars(percentStr) {
+            const val = parseInt(percentStr);
+            if (val >= 90) return "★★★★★ (Outstanding Mastery)";
+            if (val >= 70) return "★★★★☆ (Advanced)";
+            if (val >= 50) return "★★★☆☆ (Competent)";
+            return "★★☆☆☆ (Developing)";
+        }
+    </script>
+</body>
+</html>
